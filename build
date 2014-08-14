@@ -1,0 +1,12 @@
+#!/bin/sh -e
+
+package="bitbucket.org/yyuu/bs"
+export GOBIN="$PWD/bin"
+export GOPATH="$PWD/gopath"
+
+if [ ! -e "$GOPATH/src/$package" ]; then
+  mkdir -p "$(dirname "$GOPATH/src/$package")"
+  ln -s ../../../.. "$GOPATH/src/$package"
+fi
+
+go install "$package"
