@@ -1,0 +1,6 @@
+#!/bin/sh -e
+
+. ./build
+
+go test -i ./strscan
+go test -v ./strscan
