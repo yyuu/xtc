@@ -198,14 +198,11 @@ func (self *Lexer) readBlockComment() *Token {
   if s == "" {
     return nil
   }
-  for {
-    more := self.scanner.ScanUntil("\\*/")
-    s += more
-    if more != "" {
-      break
-    }
+  more := self.scanner.ScanUntil("\\*/")
+  if more == "" {
+    panic("lexer error")
   }
-  return &Token { BLOCK_COMMENT, s }
+  return &Token { BLOCK_COMMENT, s + more }
 }
 
 func (self *Lexer) readLineComment() *Token {
@@ -213,14 +210,11 @@ func (self *Lexer) readLineComment() *Token {
   if s == "" {
     return nil
   }
-  for {
-    more := self.scanner.ScanUntil("(\n|\r\n|\r)")
-    s += more
-    if more != "" {
-      break
-    }
+  more := self.scanner.ScanUntil("(\n|\r\n|\r)")
+  if more == "" {
+    panic("lexer error")
   }
-  return &Token { LINE_COMMENT, s }
+  return &Token { LINE_COMMENT, s + more }
 }
 
 func (self *Lexer) readSpaces() *Token {
@@ -262,15 +256,12 @@ func (self *Lexer) readCharacter() *Token {
   if s == "" {
     return nil
   }
-  for {
-    // TODO: handle escape character properly
-    more := self.scanner.ScanUntil("'")
-    s += more
-    if more != "" {
-      break
-    }
+  // TODO: handle escape character properly
+  more := self.scanner.ScanUntil("'")
+  if more == "" {
+    panic("lexer error")
   }
-  return &Token { CHARACTER, s }
+  return &Token { CHARACTER, s + more }
 }
 
 func (self *Lexer) readString() *Token {
@@ -278,15 +269,12 @@ func (self *Lexer) readString() *Token {
   if s == "" {
     return nil
   }
-  for {
-    // TODO: handle escape character properly
-    more := self.scanner.ScanUntil("\"")
-    s += more
-    if more != "" {
-      break
-    }
+  // TODO: handle escape character properly
+  more := self.scanner.ScanUntil("\"")
+  if more == "" {
+    panic("lexer error")
   }
-  return &Token { STRING, s }
+  return &Token { STRING, s + more }
 }
 
 func (self *Lexer) readOperator() *Token {
