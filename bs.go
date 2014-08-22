@@ -5,7 +5,7 @@ import (
   "fmt"
   "io/ioutil"
   "os"
-  "bitbucket.org/yyuu/bs/strscan"
+  "bitbucket.org/yyuu/bs/parser"
 )
 
 var flagSet = flag.NewFlagSet(os.Args[0], 1)
@@ -21,6 +21,13 @@ func main() {
       fmt.Fprintln(os.Stderr, err)
       os.Exit(1)
     }
-    strscan.NewStringScanner(string(cs))
+    lexer := parser.NewLexer(files[i], string(cs))
+    for {
+      t := lexer.GetToken()
+      if t == nil {
+        break
+      }
+      fmt.Println("Token:", t.ToString())
+    }
   }
 }
