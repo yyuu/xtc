@@ -3,6 +3,7 @@ package parser
 import (
   "fmt"
   "regexp"
+  "strings"
   "bitbucket.org/yyuu/bs/strscan"
 )
 
@@ -85,28 +86,35 @@ var id2name map[int]string = map[int]string {
 }
 
 type Lexer struct {
-  filename string
   scanner strscan.StringScanner
+  filename string
+  lineNumber int
+  lineOffset int
 }
 
 type Token struct {
   Id int
   Literal string
+  filename string
+  lineNumber int
+  lineOffset int
 }
 
 func (t *Token) ToString() string {
   name, ok := id2name[t.Id]
   if ok {
-    return fmt.Sprintf("<Token:%s %q>", name, t.Literal)
+    return fmt.Sprintf("<Token:%s (%s:%d,%d) %q>", name, t.filename, t.lineNumber, t.lineOffset, t.Literal)
   } else {
-    return fmt.Sprintf("<Token:%d %q>", t.Id, t.Literal)
+    return fmt.Sprintf("<Token:%d (%s:%d,%d) %q>", t.Id, t.filename, t.lineNumber, t.lineOffset, t.Literal)
   }
 }
 
 func NewLexer(filename string, source string) *Lexer {
   return &Lexer {
-    filename: filename,
     scanner: strscan.NewStringScanner(source),
+    filename: filename,
+    lineNumber: 0,
+    lineOffset: 0,
   }
 }
 
@@ -193,6 +201,26 @@ func (self *Lexer) GetToken() (t *Token) {
   panic("lexer error")
 }
 
+func (self *Lexer) newToken(id int, literal string) (t *Token) {
+  t = &Token {
+    Id: id,
+    Literal: literal,
+    filename: self.filename,
+    lineNumber: self.lineNumber,
+    lineOffset: self.lineOffset,
+  }
+
+  self.lineNumber += strings.Count(literal, "\n")
+  i := strings.LastIndex(literal, "\n")
+  if i < 0 {
+    self.lineOffset += len(literal)
+  } else {
+    self.lineOffset = len(literal[i:])
+  }
+
+  return t
+}
+
 func (self *Lexer) readBlockComment() *Token {
   s := self.scanner.Scan("/\\*")
   if s == "" {
@@ -202,7 +230,7 @@ func (self *Lexer) readBlockComment() *Token {
   if more == "" {
     panic("lexer error")
   }
-  return &Token { BLOCK_COMMENT, s + more }
+  return self.newToken(BLOCK_COMMENT, s + more)
 }
 
 func (self *Lexer) readLineComment() *Token {
@@ -214,7 +242,7 @@ func (self *Lexer) readLineComment() *Token {
   if more == "" {
     panic("lexer error")
   }
-  return &Token { LINE_COMMENT, s + more }
+  return self.newToken(LINE_COMMENT, s + more)
 }
 
 func (self *Lexer) readSpaces() *Token {
@@ -222,7 +250,7 @@ func (self *Lexer) readSpaces() *Token {
   if s == "" {
     return nil
   }
-  return &Token { SPACES, s }
+  return self.newToken(SPACES, s)
 }
 
 func (self *Lexer) readIdentifier() *Token {
@@ -230,7 +258,7 @@ func (self *Lexer) readIdentifier() *Token {
   if s == "" {
     return nil
   }
-  return &Token { IDENTIFIER, s }
+  return self.newToken(IDENTIFIER, s)
 }
 
 func (self *Lexer) readInteger() *Token {
@@ -238,14 +266,14 @@ func (self *Lexer) readInteger() *Token {
   if s == "" {
     return nil
   }
-  return &Token { INTEGER, s }
+  return self.newToken(INTEGER, s)
 }
 
 func (self *Lexer) readKeyword() *Token {
   for keyword, id := range keywords {
     s := self.scanner.Scan(regexp.QuoteMeta(keyword))
     if s != "" {
-      return &Token { id, s }
+      return self.newToken(id, s)
     }
   }
   return nil
@@ -261,7 +289,7 @@ func (self *Lexer) readCharacter() *Token {
   if more == "" {
     panic("lexer error")
   }
-  return &Token { CHARACTER, s + more }
+  return self.newToken(CHARACTER, s + more)
 }
 
 func (self *Lexer) readString() *Token {
@@ -274,7 +302,7 @@ func (self *Lexer) readString() *Token {
   if more == "" {
     panic("lexer error")
   }
-  return &Token { STRING, s + more }
+  return self.newToken(STRING, s + more)
 }
 
 func (self *Lexer) readOperator() *Token {
@@ -288,7 +316,7 @@ func (self *Lexer) readOperator() *Token {
   for i := range operators {
     s := self.scanner.Scan(regexp.QuoteMeta(operators[i]))
     if s != "" {
-      return &Token { OPERATOR, s }
+      return self.newToken(OPERATOR, s)
     }
   }
   return nil
