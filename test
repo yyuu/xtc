@@ -5,5 +5,5 @@
 go test -i ./strscan
 go test -v ./strscan
 
-go test -i ./parser
-go test -v ./parser
+go test -i ./lexer
+go test -v ./lexer

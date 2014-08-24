@@ -5,7 +5,7 @@ import (
   "fmt"
   "io/ioutil"
   "os"
-  "bitbucket.org/yyuu/bs/parser"
+  "bitbucket.org/yyuu/bs/lexer"
 )
 
 var flagSet = flag.NewFlagSet(os.Args[0], 1)
@@ -21,7 +21,7 @@ func main() {
       fmt.Fprintln(os.Stderr, err)
       os.Exit(1)
     }
-    lexer := parser.NewLexer(files[i], string(cs))
+    lexer := lexer.NewLexer(files[i], string(cs))
     for {
       t := lexer.GetToken()
       if t == nil {
