@@ -7,3 +7,9 @@ go test -v ./strscan
 
 go test -i ./lexer
 go test -v ./lexer
+
+#go test -i ./parser
+#go test -v ./parser
+
+#go test -i ./ast
+#go test -v ./ast

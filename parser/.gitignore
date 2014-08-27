@@ -1,0 +1,4 @@
+*.swo
+*.swp
+/parser.go
+/y.output

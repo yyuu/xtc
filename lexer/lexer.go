@@ -87,34 +87,34 @@ var id2name map[int]string = map[int]string {
 
 type Lexer struct {
   scanner strscan.StringScanner
-  filename string
-  lineNumber int
-  lineOffset int
+  Filename string
+  LineNumber int
+  LineOffset int
 }
 
 type Token struct {
   Id int
   Literal string
-  filename string
-  lineNumber int
-  lineOffset int
+  Filename string
+  LineNumber int
+  LineOffset int
 }
 
 func (t *Token) ToString() string {
   name, ok := id2name[t.Id]
   if ok {
-    return fmt.Sprintf("<Token:%s (%s:%d,%d) %q>", name, t.filename, t.lineNumber, t.lineOffset, t.Literal)
+    return fmt.Sprintf("<Token:%s (%s:%d,%d) %q>", name, t.Filename, t.LineNumber, t.LineOffset, t.Literal)
   } else {
-    return fmt.Sprintf("<Token:%d (%s:%d,%d) %q>", t.Id, t.filename, t.lineNumber, t.lineOffset, t.Literal)
+    return fmt.Sprintf("<Token:%d (%s:%d,%d) %q>", t.Id, t.Filename, t.LineNumber, t.LineOffset, t.Literal)
   }
 }
 
 func NewLexer(filename string, source string) *Lexer {
   return &Lexer {
     scanner: strscan.NewStringScanner(source),
-    filename: filename,
-    lineNumber: 0,
-    lineOffset: 0,
+    Filename: filename,
+    LineNumber: 0,
+    LineOffset: 0,
   }
 }
 
@@ -205,17 +205,17 @@ func (self *Lexer) newToken(id int, literal string) (t *Token) {
   t = &Token {
     Id: id,
     Literal: literal,
-    filename: self.filename,
-    lineNumber: self.lineNumber,
-    lineOffset: self.lineOffset,
+    Filename: self.Filename,
+    LineNumber: self.LineNumber,
+    LineOffset: self.LineOffset,
   }
 
-  self.lineNumber += strings.Count(literal, "\n")
+  self.LineNumber += strings.Count(literal, "\n")
   i := strings.LastIndex(literal, "\n")
   if i < 0 {
-    self.lineOffset += len(literal)
+    self.LineOffset += len(literal)
   } else {
-    self.lineOffset = len(literal[i:])
+    self.LineOffset = len(literal[i:])
   }
 
   return t
