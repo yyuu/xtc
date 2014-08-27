@@ -58,10 +58,15 @@ func (self *StringScanner) Match(pattern string) int {
 
 func (self *StringScanner) Peek(length int) string {
   // Extracts a string corresponding to string[pos,len], without advancing the scan pointer.
-  if !self.IsEOS() {
-    return self.String[self.offset:self.offset+length]
+  n := len(self.String)
+  switch {
+    case self.offset+length < n:
+      return self.String[self.offset:self.offset+length]
+    case self.offset < n:
+      return self.String[self.offset:]
+    default:
+      return ""
   }
-  return ""
 }
 
 func (self *StringScanner) Pos() int {

@@ -1,4 +1,4 @@
-package lexer
+package parser
 
 import (
   "fmt"
@@ -7,89 +7,18 @@ import (
   "bitbucket.org/yyuu/bs/strscan"
 )
 
-const (
-  SPACES = iota
-  BLOCK_COMMENT
-  LINE_COMMENT
-  VOID
-  CHAR
-  SHORT
-  INT
-  LONG
-  STRUCT
-  UNION
-  ENUM
-  STATIC
-  EXTERN
-  CONST
-  SIGNED
-  UNSIGNED
-  IF
-  ELSE
-  SWITCH
-  CASE
-  DEFAULT
-  WHILE
-  DO
-  FOR
-  RETURN
-  BREAK
-  CONTINUE
-  GOTO
-  TYPEDEF
-  IMPORT
-  SIZEOF
-  IDENTIFIER
-  INTEGER
-  CHARACTER
-  STRING
-  OPERATOR
-)
-
-var id2name map[int]string = map[int]string {
-  SPACES: "SPACES",
-  BLOCK_COMMENT: "BLOCK_COMMENT",
-  LINE_COMMENT: "LINE_COMMENT",
-  VOID: "VOID",
-  CHAR: "CHAR",
-  SHORT: "",
-  INT: "INT",
-  LONG: "LONG",
-  STRUCT: "STRUCT",
-  UNION: "UNION",
-  ENUM: "ENUM",
-  STATIC: "STATIC",
-  EXTERN: "EXTERN",
-  CONST: "CONST",
-  SIGNED: "SIGNED",
-  UNSIGNED: "UNSIGNED",
-  IF: "IF",
-  ELSE: "ELSE",
-  SWITCH: "SWITCH",
-  CASE: "CASE",
-  DEFAULT: "DEFAULT",
-  WHILE: "WHILE",
-  DO: "DO",
-  FOR: "FOR",
-  RETURN: "RETURN",
-  BREAK: "BREAK",
-  CONTINUE: "CONTINUE",
-  GOTO: "GOTO",
-  TYPEDEF: "TYPEDEF",
-  IMPORT: "IMPORT",
-  SIZEOF: "SIZEOF",
-  IDENTIFIER: "IDENTIFIER",
-  INTEGER: "INTEGER",
-  CHARACTER: "CHARACTER",
-  STRING: "STRING",
-  OPERATOR: "OPERATOR",
-}
-
 type Lexer struct {
   scanner strscan.StringScanner
   Filename string
   LineNumber int
   LineOffset int
+  ignoreSpaces bool
+  ignoreComments bool
+}
+
+func (self Lexer) String() string {
+  source := fmt.Sprintf("%s...", self.scanner.Peek(32))
+  return fmt.Sprintf("%s:%d: %q", self.Filename, self.LineNumber, source)
 }
 
 type Token struct {
@@ -100,13 +29,48 @@ type Token struct {
   LineOffset int
 }
 
-func (t *Token) ToString() string {
-  name, ok := id2name[t.Id]
-  if ok {
-    return fmt.Sprintf("<Token:%s (%s:%d,%d) %q>", name, t.Filename, t.LineNumber, t.LineOffset, t.Literal)
-  } else {
-    return fmt.Sprintf("<Token:%d (%s:%d,%d) %q>", t.Id, t.Filename, t.LineNumber, t.LineOffset, t.Literal)
+func (self Token) String() string {
+  t := "UNKNOWN"
+  switch self.Id {
+    case SPACES:        t = "SPACES"
+    case BLOCK_COMMENT: t = "BLOCK_COMMENT"
+    case LINE_COMMENT:  t = "LINE_COMMENT"
+    case VOID:          t = "VOID"
+    case CHAR:          t = "CHAR"
+    case SHORT:         t = "SHORT"
+    case INT:           t = "INT"
+    case LONG:          t = "LONG"
+    case STRUCT:        t = "STRUCT"
+    case UNION:         t = "UNION"
+    case ENUM:          t = "ENUM"
+    case STATIC:        t = "STATIC"
+    case EXTERN:        t = "EXTERN"
+    case CONST:         t = "CONST"
+    case SIGNED:        t = "SIGNED"
+    case UNSIGNED:      t = "UNSIGNED"
+    case IF:            t = "IF"
+    case ELSE:          t = "ELSE"
+    case SWITCH:        t = "SWITCH"
+    case CASE:          t = "CASE"
+    case DEFAULT:       t = "DEFAULT"
+    case WHILE:         t = "WHILE"
+    case DO:            t = "DO"
+    case FOR:           t = "FOR"
+    case RETURN:        t = "RETURN"
+    case BREAK:         t = "BREAK"
+    case CONTINUE:      t = "CONTINUE"
+    case GOTO:          t = "GOTO"
+    case TYPEDEF:       t = "TYPEDEF"
+    case IMPORT:        t = "IMPORT"
+    case SIZEOF:        t = "SIZEOF"
+    case IDENTIFIER:    t = "IDENTIFIER"
+    case INTEGER:       t = "INTEGER"
+    case CHARACTER:     t = "CHARACTER"
+    case STRING:        t = "STRING"
+    case OPERATOR:      t = "OPERATOR"
   }
+  return fmt.Sprintf("#<Token:%s %s:%d,%d %q>", t, self.Filename, self.LineNumber, self.LineOffset, self.Literal)
+
 }
 
 func NewLexer(filename string, source string) *Lexer {
@@ -115,6 +79,8 @@ func NewLexer(filename string, source string) *Lexer {
     Filename: filename,
     LineNumber: 0,
     LineOffset: 0,
+    ignoreSpaces: true,
+    ignoreComments: true,
   }
 }
 
@@ -156,16 +122,28 @@ func (self *Lexer) GetToken() (t *Token) {
 
   t = self.readSpaces()
   if t != nil {
-    return t
+    if ! self.ignoreSpaces {
+      return t
+    } else {
+      t = nil // ignore token
+    }
   }
 
   t = self.readBlockComment()
   if t != nil {
-    return t
+    if ! self.ignoreComments {
+      return t
+    } else {
+      t = nil // ignore token
+    }
   }
   t = self.readLineComment()
   if t != nil {
-    return t
+    if ! self.ignoreComments {
+      return t
+    } else {
+      t = nil // ignore token
+    }
   }
 
   t = self.readKeyword()
@@ -198,7 +176,7 @@ func (self *Lexer) GetToken() (t *Token) {
     return t
   }
 
-  panic("lexer error")
+  return self.GetToken()
 }
 
 func (self *Lexer) newToken(id int, literal string) (t *Token) {
@@ -228,7 +206,7 @@ func (self *Lexer) readBlockComment() *Token {
   }
   more := self.scanner.ScanUntil("\\*/")
   if more == "" {
-    panic("lexer error")
+    panic(fmt.Errorf("lexer error: %s", self))
   }
   return self.newToken(BLOCK_COMMENT, s + more)
 }
@@ -240,7 +218,7 @@ func (self *Lexer) readLineComment() *Token {
   }
   more := self.scanner.ScanUntil("(\n|\r\n|\r)")
   if more == "" {
-    panic("lexer error")
+    panic(fmt.Errorf("lexer error: %s", self))
   }
   return self.newToken(LINE_COMMENT, s + more)
 }
@@ -287,7 +265,7 @@ func (self *Lexer) readCharacter() *Token {
   // TODO: handle escape character properly
   more := self.scanner.ScanUntil("'")
   if more == "" {
-    panic("lexer error")
+    panic(fmt.Errorf("lexer error: %s", self))
   }
   return self.newToken(CHARACTER, s + more)
 }
@@ -300,7 +278,7 @@ func (self *Lexer) readString() *Token {
   // TODO: handle escape character properly
   more := self.scanner.ScanUntil("\"")
   if more == "" {
-    panic("lexer error")
+    panic(fmt.Errorf("lexer error: %s", self))
   }
   return self.newToken(STRING, s + more)
 }

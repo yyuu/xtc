@@ -6,7 +6,6 @@ import (
   "os"
   "strconv"
   "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/lexer"
 )
 %}
 
@@ -82,66 +81,22 @@ expr: STRING
 
 const EOF = 0
 
-type lex struct {
-  lex *lexer.Lexer
-}
-
-func (self *lex) Lex(lval *yySymType) int {
+func (self *Lexer) Lex(lval *yySymType) int {
   for {
-    t := self.lex.GetToken()
+    t := self.GetToken()
     if t == nil {
       return EOF
     }
-    if id, ok := id2id[t.Id]; ok {
-      lval.literal = t.Literal
-      return id
-    }
+    lval.literal = t.Literal
+    return t.Id
   }
 }
 
-func (self *lex) Error(s string) {
-  fmt.Fprintf(os.Stderr, "parse error: %s at %s:%d,%d\n", s, self.lex.Filename, self.lex.LineNumber, self.lex.LineOffset)
-}
-
-var id2id map[int]int = map[int]int {
-//lexer.SPACES: SPACES,
-//lexer.BLOCK_COMMENT: BLOCK_COMMENT,
-//lexer.LINE_COMMENT: LINE_COMMENT,
-  lexer.VOID: VOID,
-  lexer.CHAR: CHAR,
-  lexer.SHORT: SHORT,
-  lexer.INT: INT,
-  lexer.LONG: LONG,
-  lexer.STRUCT: STRUCT,
-  lexer.UNION: UNION,
-  lexer.ENUM: ENUM,
-  lexer.STATIC: STATIC,
-  lexer.EXTERN: EXTERN,
-  lexer.CONST: CONST,
-  lexer.SIGNED: SIGNED,
-  lexer.UNSIGNED: UNSIGNED,
-  lexer.IF: IF,
-  lexer.ELSE: ELSE,
-  lexer.SWITCH: SWITCH,
-  lexer.CASE: CASE,
-  lexer.DEFAULT: DEFAULT,
-  lexer.WHILE: WHILE,
-  lexer.DO: DO,
-  lexer.FOR: FOR,
-  lexer.RETURN: RETURN,
-  lexer.BREAK: BREAK,
-  lexer.CONTINUE: CONTINUE,
-  lexer.GOTO: GOTO,
-  lexer.TYPEDEF: TYPEDEF,
-  lexer.IMPORT: IMPORT,
-  lexer.SIZEOF: SIZEOF,
-  lexer.IDENTIFIER: IDENTIFIER,
-  lexer.INTEGER: INTEGER,
-  lexer.CHARACTER: CHARACTER,
-  lexer.STRING: STRING,
-  lexer.OPERATOR: OPERATOR,
+func (self *Lexer) Error(s string) {
+  fmt.Fprintf(os.Stderr, "%s: %s\n", *self, s)
+  os.Exit(1)
 }
 
 func ParseExpr(s string) {
-  yyParse(&lex { lexer.NewLexer("-", s) })
+  yyParse(NewLexer("main.cb", s))
 }
