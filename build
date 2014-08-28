@@ -9,4 +9,5 @@ if [ ! -e "$GOPATH/src/$package" ]; then
   ln -s ../../../.. "$GOPATH/src/$package"
 fi
 
+make -C parser
 go install "$package"
