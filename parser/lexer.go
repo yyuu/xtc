@@ -278,7 +278,7 @@ func (self *Lexer) scanOperator() *Token {
   }
 
   // use next rune as an operator if available
-  s := self.scanner.Peek(1)
+  s := self.scanner.Scan(".")
   if s != "" {
     r, _ := utf8.DecodeRuneInString(s)
     return self.consume(int(r), s)

@@ -2,6 +2,7 @@ package strscan
 
 import (
   "regexp"
+  "unicode/utf8"
 )
 
 type StringScanner struct {
@@ -37,7 +38,8 @@ func (self *StringScanner) CheckUntil(pattern string) string {
     if s != "" {
       return self.Peek(offset - self.offset + len(s))
     }
-    offset += 1
+    _, size := utf8.DecodeRuneInString(self.String[offset:])
+    offset += size
   }
   return ""
 }
@@ -58,15 +60,15 @@ func (self *StringScanner) Match(pattern string) int {
 
 func (self *StringScanner) Peek(length int) string {
   // Extracts a string corresponding to string[pos,len], without advancing the scan pointer.
-  n := len(self.String)
-  switch {
-    case self.offset+length < n:
-      return self.String[self.offset:self.offset+length]
-    case self.offset < n:
-      return self.String[self.offset:]
-    default:
-      return ""
+  var s string
+  for i, offset := 0, self.offset; i < length && offset < len(self.String); i++ {
+    r, size := utf8.DecodeRuneInString(self.String[offset:])
+    offset += size
+    p := make([]byte, size)
+    utf8.EncodeRune(p, r)
+    s += string(p)
   }
+  return s
 }
 
 func (self *StringScanner) Pos() int {
@@ -139,6 +141,7 @@ func mustCompile(pattern string) *regexp.Regexp {
 
 func (self *StringScanner) skipRune() {
   if !self.IsEOS() {
-    self.offset += 1
+    _, size := utf8.DecodeRuneInString(self.String[self.offset:])
+    self.offset += size
   }
 }
