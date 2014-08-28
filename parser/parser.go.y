@@ -171,7 +171,13 @@ unary: PLUSPLUS unary
 
 postfix: primary
        | primary PLUSPLUS
+       {
+         $$.node = ast.SuffixOpNode("++", $1.node)
+       }
        | primary MINUSMINUS
+       {
+         $$.node = ast.SuffixOpNode("--", $1.node)
+       }
        | primary '[' expr ']'
        | primary '.' name
        | primary ARROW name

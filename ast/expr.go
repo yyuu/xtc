@@ -179,6 +179,10 @@ type suffixOpNode struct {
   Expr IExprNode
 }
 
+func SuffixOpNode(operator string, expr IExprNode) suffixOpNode {
+  return suffixOpNode { operator, expr }
+}
+
 func (self suffixOpNode) String() string {
   switch self.Operator {
     case "++": return fmt.Sprintf("(+ %s 1)", self.Expr)
