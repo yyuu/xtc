@@ -109,6 +109,9 @@ opassign_op: PLUSEQ
 
 expr10: expr9
       | expr9 '?' expr ':' expr10
+      {
+        $$.node = ast.CondExprNode($1.node, $3.node, $5.node)
+      }
       ;
 
 expr9: expr8

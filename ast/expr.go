@@ -59,6 +59,10 @@ type condExprNode struct {
   ElseExpr IExprNode
 }
 
+func CondExprNode(cond IExprNode, thenExpr IExprNode, elseExpr IExprNode) condExprNode {
+  return condExprNode { cond, thenExpr, elseExpr }
+}
+
 func (self condExprNode) String() string {
   return fmt.Sprintf("(if %s %s %s)", self.Cond, self.ThenExpr, self.ElseExpr)
 }
