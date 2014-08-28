@@ -111,7 +111,7 @@ func (self *lex) GetToken() (t *token) {
     if ! self.ignoreSpaces {
       return t
     } else {
-      t = nil // ignore token
+      return self.GetToken()
     }
   }
 
@@ -120,7 +120,7 @@ func (self *lex) GetToken() (t *token) {
     if ! self.ignoreComments {
       return t
     } else {
-      t = nil // ignore token
+      return self.GetToken()
     }
   }
   t = self.scanLineComment()
@@ -128,7 +128,7 @@ func (self *lex) GetToken() (t *token) {
     if ! self.ignoreComments {
       return t
     } else {
-      t = nil // ignore token
+      return self.GetToken()
     }
   }
 
@@ -162,7 +162,7 @@ func (self *lex) GetToken() (t *token) {
     return t
   }
 
-  return self.GetToken()
+  panic(fmt.Errorf("lexer error: %s", self))
 }
 
 func (self *lex) consume(id int, literal string) (t *token) {
