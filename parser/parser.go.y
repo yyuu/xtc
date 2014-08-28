@@ -92,22 +92,53 @@ block: '{' defvar_list stmts '}'
      ;
 
 defvar_list:
+           | defvar_list defvars
            ;
 
-/*
-defvars: storage type name ( '=' expr )? (',' name ( '=' expr )? )* ';'
+defvars: storage type defvars_names ';'
+       ;
+
+defvars_names: name
+             | name '=' expr
+             | defvars_names ',' name
+             | defvars_names ',' name '=' expr
+             ;
+
+storage: 
+       | STATIC
        ;
 
 type: typeref
     ;
 
-typeref:
+typeref: typeref_base
+       | typeref '[' ']'
+       | typeref '[' INTEGER ']'
+       | typeref '*'
+       | typeref '(' param_typerefs ')'
        ;
 
-storage:
-       | STATIC
-       ;
- */
+param_typerefs: VOID
+              | fixedparam_typerefs
+              ;
+
+fixedparam_typerefs: typeref
+                   | fixedparam_typerefs ',' typeref
+                   ;
+
+typeref_base: VOID
+            | CHAR
+            | SHORT
+            | INT
+            | LONG
+            | UNSIGNED CHAR
+            | UNSIGNED SHORT
+            | UNSIGNED INT
+            | UNSIGNED LONG
+            | STRUCT IDENTIFIER
+            | UNION IDENTIFIER
+            | IDENTIFIER
+            ;
 
 stmts:
      | stmts stmt
