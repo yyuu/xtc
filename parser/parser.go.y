@@ -67,9 +67,9 @@ import (
 %token ARROW
 %token DIVEQ
 %token LSHIFT
-%token LE
+%token LTEQ
 %token EQEQ
-%token GE
+%token GTEQ
 %token RSHIFT
 %token XOREQ
 %token OREQ
@@ -90,12 +90,60 @@ stmt: expr
     }
     ;
 
-expr: expr2
-    {
-      // FIXME:
-      $$.node = $1.node
-    }
+expr: term '=' expr
+    | term opassign_op expr
+    | expr10
     ;
+
+opassign_op: PLUSEQ
+           | MINUSEQ
+           | MULEQ
+           | DIVEQ
+           | MODEQ
+           | ANDEQ
+           | OREQ
+           | XOREQ
+           | LSHIFTEQ
+           | RSHIFTEQ
+           ;
+
+expr10: expr9
+      | expr9 '?' expr ':' expr10
+      ;
+
+expr9: expr8
+     | expr8 OROR expr8
+     ;
+
+expr8: expr7
+     | expr7 ANDAND expr7
+     ;
+
+expr7: expr6
+     | expr6 '>' expr6
+     | expr6 '<' expr6
+     | expr6 GTEQ expr6
+     | expr6 LTEQ expr6
+     | expr6 EQEQ expr6
+     | expr6 NEQ expr6
+     ;
+
+expr6: expr5
+     | expr5 '|' expr5
+     ;
+
+expr5: expr4
+     | expr4 '^' expr4
+     ;
+
+expr4: expr3
+     | expr3 '&' expr3
+     ;
+
+expr3: expr2
+     | expr2 RSHIFT expr2
+     | expr2 LSHIFT expr2
+     ;
 
 expr2: expr1
      | expr1 '+' expr1
@@ -143,6 +191,7 @@ primary: INTEGER
        }
        | CHARACTER
        {
+         // TODO: decode character literal
          $$.node = ast.IntegerLiteralNode($1.token.Literal)
        }
        | STRING
