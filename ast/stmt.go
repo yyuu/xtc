@@ -39,6 +39,28 @@ func (self blockNode) String() string {
   }
 }
 
+type breakNode struct {
+}
+
+func BreakNode() breakNode {
+  return breakNode { }
+}
+
+func (self breakNode) String() string {
+  return "(break)"
+}
+
+type continueNode struct {
+}
+
+func ContinueNode() continueNode {
+  return continueNode { }
+}
+
+func (self continueNode) String() string {
+  return "(continue)"
+}
+
 type caseNode struct {
   Values []IExprNode
   Body blockNode
@@ -54,9 +76,6 @@ func (self caseNode) String() string {
     case 1:  return fmt.Sprintf("(%s %s)", sValues[0], self.Body)
     default: return fmt.Sprintf("((or %s) %s)", strings.Join(sValues, " "), self.Body)
   }
-}
-
-type continueNode struct {
 }
 
 type doWhileNode struct {
@@ -93,6 +112,14 @@ func (self forNode) String() string {
 
 type gotoNode struct {
   Target string
+}
+
+func GotoNode(target string) gotoNode {
+  return gotoNode { target }
+}
+
+func (self gotoNode) String() string {
+  return fmt.Sprintf("(goto %s)", self.Target)
 }
 
 type ifNode struct {

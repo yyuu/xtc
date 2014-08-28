@@ -123,6 +123,9 @@ stmt: ';'
     | while_stmt
     | dowhile_stmt
     | for_stmt
+    | break_stmt
+    | continue_stmt
+    | goto_stmt
     ;
 
 if_stmt: IF '(' expr ')' stmt ELSE stmt
@@ -148,6 +151,24 @@ for_stmt: FOR '(' expr ';' expr ';' expr ')' stmt
           $$.node = ast.ForNode($3.node, $5.node, $7.node, $9.node)
         }
         ;
+
+break_stmt: BREAK ';'
+          {
+            $$.node = ast.BreakNode()
+          }
+          ;
+
+continue_stmt: CONTINUE ';'
+             {
+               $$.node = ast.ContinueNode()
+             }
+             ;
+
+goto_stmt: GOTO IDENTIFIER ';'
+         {
+           $$.node = ast.GotoNode($2.token.Literal)
+         }
+         ;
 
 expr: term '=' expr
     {
