@@ -48,6 +48,9 @@ func (self binaryOpNode) String() string {
     case "||": return fmt.Sprintf("(or %s %s)", self.Left, self.Right)
     case "==": return fmt.Sprintf("(= %s %s)", self.Left, self.Right)
     case "!=": return fmt.Sprintf("(not (= %s %s))", self.Left, self.Right)
+    case "<<": return fmt.Sprintf("(bitwise-arithmetic-left %s %s)", self.Left, self.Right)
+    case ">>": return fmt.Sprintf("(bitwise-arithmetic-right %s %s)", self.Left, self.Right)
+    case "%":  return fmt.Sprintf("(modulo %s %s)", self.Left, self.Right)
     default:   return fmt.Sprintf("(%s %s %s)", self.Operator, self.Left, self.Right)
   }
 }
