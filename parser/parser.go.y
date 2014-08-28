@@ -137,7 +137,6 @@ typeref_base: VOID
             | UNSIGNED LONG
             | STRUCT IDENTIFIER
             | UNION IDENTIFIER
-            | IDENTIFIER
             ;
 
 stmts:
