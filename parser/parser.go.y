@@ -86,7 +86,7 @@ stmts:
 
 stmt: expr
     {
-      fmt.Println($1.node.DumpString())
+      fmt.Println($1.node)
     }
     ;
 

@@ -11,14 +11,14 @@ type BlockNode struct {
   Stmts []IStmtNode
 }
 
-func (self BlockNode) DumpString() string {
+func (self BlockNode) String() string {
   sVariables := make([]string, len(self.Variables))
   for i := range self.Variables {
-    sVariables[i] = fmt.Sprintf("(a%d %s)", i, self.Variables[i].DumpString())
+    sVariables[i] = fmt.Sprintf("(a%d %s)", i, self.Variables[i])
   }
   sStmts := make([]string, len(self.Stmts))
   for j := range self.Stmts {
-    sStmts[j] = self.Stmts[j].DumpString()
+    sStmts[j] = fmt.Sprintf("%s", self.Stmts[j])
   }
   switch len(sStmts) {
     case 0:  return fmt.Sprintf("(let* (%s))", strings.Join(sVariables, " "))
@@ -32,15 +32,15 @@ type CaseNode struct {
   Body BlockNode
 }
 
-func (self CaseNode) DumpString() string {
+func (self CaseNode) String() string {
   sValues := make([]string, len(self.Values))
   for i := range self.Values {
-    sValues[i] = fmt.Sprintf("(= a %s)", self.Values[i].DumpString())
+    sValues[i] = fmt.Sprintf("(= a %s)", self.Values[i])
   }
   switch len(sValues) {
-    case 0:  return fmt.Sprintf("(() %s)", self.Body.DumpString())
-    case 1:  return fmt.Sprintf("(%s %s)", sValues[0], self.Body.DumpString())
-    default: return fmt.Sprintf("((or %s) %s)", strings.Join(sValues, " "), self.Body.DumpString())
+    case 0:  return fmt.Sprintf("(() %s)", self.Body)
+    case 1:  return fmt.Sprintf("(%s %s)", sValues[0], self.Body)
+    default: return fmt.Sprintf("((or %s) %s)", strings.Join(sValues, " "), self.Body)
   }
 }
 
@@ -52,8 +52,8 @@ type DoWhileNode struct {
   Cond IExprNode
 }
 
-func (self DoWhileNode) DumpString() string {
-  return fmt.Sprintf("(let loop () (begin %s (if %s (loop))))", self.Body.DumpString(), self.Cond.DumpString())
+func (self DoWhileNode) String() string {
+  return fmt.Sprintf("(let loop () (begin %s (if %s (loop))))", self.Body, self.Cond)
 }
 
 type ExprStmtNode struct {
@@ -77,8 +77,8 @@ type IfNode struct {
   ElseBody IStmtNode
 }
 
-func (self IfNode) DumpString() string {
-  return fmt.Sprintf("(if %s %s %s)", self.Cond.DumpString(), self.ThenBody.DumpString(), self.ElseBody.DumpString())
+func (self IfNode) String() string {
+  return fmt.Sprintf("(if %s %s %s)", self.Cond, self.ThenBody, self.ElseBody)
 }
 
 type LabelNode struct {
@@ -90,8 +90,8 @@ type ReturnNode struct {
   Expr IExprNode
 }
 
-func (self ReturnNode) DumpString() string {
-  return self.Expr.DumpString()
+func (self ReturnNode) String() string {
+  return fmt.Sprintf("%s", self.Expr)
 }
 
 type SwitchNode struct {
@@ -99,15 +99,15 @@ type SwitchNode struct {
   Cases []CaseNode
 }
 
-func (self SwitchNode) DumpString() string {
+func (self SwitchNode) String() string {
   sCases := make([]string, len(self.Cases))
   for i := range self.Cases {
-    sCases[i] = self.Cases[i].DumpString()
+    sCases[i] = fmt.Sprintf("%s", self.Cases[i])
   }
   if len(sCases) == 0 {
-    return fmt.Sprintf("(let ((a %s)) ())", self.Cond.DumpString())
+    return fmt.Sprintf("(let ((a %s)) ())", self.Cond)
   } else {
-    return fmt.Sprintf("(let ((a %s)) (cond %s))", self.Cond.DumpString(), strings.Join(sCases, " "))
+    return fmt.Sprintf("(let ((a %s)) (cond %s))", self.Cond, strings.Join(sCases, " "))
   }
 }
 
@@ -116,6 +116,6 @@ type WhileNode struct {
   Body IStmtNode
 }
 
-func (self WhileNode) DumpString() string {
-  return fmt.Sprintf("(let loop ((a %s)) (if a (begin %s (loop %s))))", self.Cond.DumpString(), self.Body.DumpString(), self.Cond.DumpString())
+func (self WhileNode) String() string {
+  return fmt.Sprintf("(let loop ((a %s)) (if a (begin %s (loop %s))))", self.Cond, self.Body, self.Cond)
 }
