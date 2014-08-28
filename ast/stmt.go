@@ -83,6 +83,14 @@ type forNode struct {
   Body IStmtNode
 }
 
+func ForNode(init INode, cond INode, incr INode, body INode) forNode {
+  return forNode { init.(IExprNode), cond.(IExprNode), incr.(IExprNode), body.(IExprNode) }
+}
+
+func (self forNode) String() string {
+  return fmt.Sprintf("(let loop ((a %s)) (if %s (begin %s (loop %s))))", self.Init, self.Cond, self.Body, self.Incr)
+}
+
 type gotoNode struct {
   Target string
 }
