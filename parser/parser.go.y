@@ -169,7 +169,8 @@ unary: PLUSPLUS unary
      | postfix
      ;
 
-postfix: primary PLUSPLUS
+postfix: primary
+       | primary PLUSPLUS
        | primary MINUSMINUS
        | primary '[' expr ']'
        | primary '.' name

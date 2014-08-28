@@ -18,7 +18,7 @@ type lex struct {
 }
 
 func (self lex) String() string {
-  source := fmt.Sprintf("%s%s...", self.scanner.Matched(), self.scanner.Peek(32))
+  source := fmt.Sprintf("%s...", self.scanner.Peek(16))
   return fmt.Sprintf("%s:%d: %q", self.Filename, self.LineNumber, source)
 }
 
