@@ -1,10 +1,12 @@
 package main
 
 import (
+  "bufio"
   "flag"
   "fmt"
   "io/ioutil"
   "os"
+  "strings"
   "bitbucket.org/yyuu/bs/parser"
 )
 
@@ -15,12 +17,38 @@ func main() {
   flagSet.Parse(os.Args[1:])
 
   files := flagSet.Args()
-  for i := range files {
-    cs, err := ioutil.ReadFile(files[i])
-    if err != nil {
-      fmt.Fprintln(os.Stderr, err)
-      os.Exit(1)
+  if 0 < len(files) {
+    for i := range files {
+      cs, err := ioutil.ReadFile(files[i])
+      if err != nil {
+        fmt.Fprintln(os.Stderr, err)
+        os.Exit(1)
+      }
+      parser.ParseExpr(string(cs))
     }
-    parser.ParseExpr(string(cs))
+  } else {
+    repl()
+  }
+}
+
+func repl() {
+  defer func() {
+    if s := recover(); s != nil {
+      fmt.Fprintf(os.Stderr, "recovered: %s\n", s)
+      repl()
+    }
+  }()
+  in  := bufio.NewReader(os.Stdin)
+  out := bufio.NewWriter(os.Stdout)
+  for {
+    out.WriteString("> ")
+    out.Flush()
+    s, err := in.ReadString('\n')
+    if err != nil {
+      break
+    }
+    if strings.TrimSpace(s) != "" {
+      parser.ParseExpr(s)
+    }
   }
 }

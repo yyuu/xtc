@@ -3,7 +3,6 @@ package parser
 
 import (
   "fmt"
-  "os"
   "bitbucket.org/yyuu/bs/ast"
 )
 %}
@@ -219,8 +218,7 @@ func (self *Lexer) Lex(lval *yySymType) int {
 }
 
 func (self *Lexer) Error(s string) {
-  fmt.Fprintf(os.Stderr, "%s: %s\n", *self, s)
-  os.Exit(1)
+  panic(fmt.Errorf("%s: %s", self, s))
 }
 
 func ParseExpr(s string) {
