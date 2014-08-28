@@ -210,10 +210,7 @@ case_clause: cases case_body
            }
            ;
 
-cases: CASE primary ':'
-     {
-       $$.nodes = append($$.nodes, $2.node)
-     }
+cases:
      | cases CASE primary ':'
      {
        $$.nodes = append($1.nodes, $3.node)
