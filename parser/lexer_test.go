@@ -4,22 +4,22 @@ import (
   "testing"
 )
 
-func assertToken(t *testing.T, token *Token, id int, literal string) {
-  if token == nil {
+func assertToken(t *testing.T, tok *token, id int, literal string) {
+  if tok == nil {
     t.Error("insufficient token")
   } else {
-    if token.Id != id {
-      t.Errorf("invalid token id: %s: expected %d, got %d", token, id, token.Id)
+    if tok.Id != id {
+      t.Errorf("invalid token id: %s: expected %d, got %d", tok, id, tok.Id)
     }
-    if token.Literal != literal {
-      t.Errorf("invalid token literal: %s: expected %q, got %q", token, literal, token.Literal)
+    if tok.Literal != literal {
+      t.Errorf("invalid token literal: %s: expected %q, got %q", tok, literal, tok.Literal)
     }
   }
 }
 
-func assertTokenNull(t *testing.T, token *Token) {
-  if token != nil {
-    t.Errorf("surplus token: %s", token)
+func assertTokenNull(t *testing.T, tok *token) {
+  if tok != nil {
+    t.Errorf("surplus token: %s", tok)
   }
 }
 

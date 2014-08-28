@@ -9,8 +9,8 @@ import (
 %}
 
 %union {
-  literal string
   node ast.INode
+  token token
 }
 
 %token SPACES
@@ -92,11 +92,11 @@ stmt: expr
 
 expr: STRING
     {
-      $$.node = ast.StringLiteralNode($1.literal)
+      $$.node = ast.StringLiteralNode($1.token.Literal)
     }
     | INTEGER
     {
-      $$.node = ast.IntegerLiteralNode($1.literal)
+      $$.node = ast.IntegerLiteralNode($1.token.Literal)
     }
     ;
 
@@ -109,7 +109,7 @@ func (self *Lexer) Lex(lval *yySymType) int {
   if t == nil {
     return EOF
   } else {
-    lval.literal = t.Literal
+    lval.token = *t
     return t.Id
   }
 }
