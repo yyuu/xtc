@@ -91,21 +91,51 @@ stmt: expr
     ;
 
 expr: term '=' expr
-    | term opassign_op expr
+    {
+      $$.node = ast.AssignNode($1.node, $3.node)
+    }
+    | term PLUSEQ expr
+    {
+      $$.node = ast.OpAssignNode("+", $1.node, $3.node)
+    }
+    | term MINUSEQ expr
+    {
+      $$.node = ast.OpAssignNode("-", $1.node, $3.node)
+    }
+    | term MULEQ expr
+    {
+      $$.node = ast.OpAssignNode("*", $1.node, $3.node)
+    }
+    | term DIVEQ expr
+    {
+      $$.node = ast.OpAssignNode("/", $1.node, $3.node)
+    }
+    | term MODEQ expr
+    {
+      $$.node = ast.OpAssignNode("%", $1.node, $3.node)
+    }
+    | term ANDEQ expr
+    {
+      $$.node = ast.OpAssignNode("&", $1.node, $3.node)
+    }
+    | term OREQ expr
+    {
+      $$.node = ast.OpAssignNode("|", $1.node, $3.node)
+    }
+    | term XOREQ expr
+    {
+      $$.node = ast.OpAssignNode("^", $1.node, $3.node)
+    }
+    | term LSHIFTEQ expr
+    {
+      $$.node = ast.OpAssignNode("<<", $1.node, $3.node)
+    }
+    | term RSHIFTEQ expr
+    {
+      $$.node = ast.OpAssignNode(">>", $1.node, $3.node)
+    }
     | expr10
     ;
-
-opassign_op: PLUSEQ
-           | MINUSEQ
-           | MULEQ
-           | DIVEQ
-           | MODEQ
-           | ANDEQ
-           | OREQ
-           | XOREQ
-           | LSHIFTEQ
-           | RSHIFTEQ
-           ;
 
 expr10: expr9
       | expr9 '?' expr ':' expr10
