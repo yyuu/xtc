@@ -5,6 +5,7 @@ import (
   "regexp"
   "strings"
   "unicode/utf8"
+  "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/strscan"
 )
 
@@ -15,6 +16,7 @@ type lex struct {
   LineOffset int
   ignoreSpaces bool
   ignoreComments bool
+  nodes []ast.INode
 }
 
 func (self lex) String() string {
@@ -42,6 +44,7 @@ func lexer(filename string, source string) *lex {
     LineOffset: 0,
     ignoreSpaces: true,
     ignoreComments: true,
+    nodes: []ast.INode { },
   }
 }
 

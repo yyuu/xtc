@@ -2,6 +2,7 @@
 package parser
 
 import (
+  "errors"
   "fmt"
   "bitbucket.org/yyuu/bs/ast"
 )
@@ -79,8 +80,10 @@ import (
 
 program: stmts
        {
-         for i := range $1.nodes {
-           fmt.Println($1.nodes[i])
+         if lex, ok := yylex.(*lex); ok {
+           lex.nodes = $1.nodes
+         } else {
+           panic("parser is broken")
          }
        }
        ;
@@ -508,6 +511,11 @@ func (self *lex) Error(s string) {
   panic(fmt.Errorf("%s: %s", self, s))
 }
 
-func ParseExpr(s string) {
-  yyParse(lexer("main.cb", s))
+func ParseExpr(s string) ([]ast.INode, error) {
+  lex := lexer("main.c", s)
+  if yyParse(lex) == 0 {
+    return lex.nodes, nil
+  } else {
+    return nil, errors.New("parse error") // TODO: get error via lexer
+  }
 }

@@ -7,6 +7,7 @@ import (
   "io/ioutil"
   "os"
   "strings"
+  "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/parser"
 )
 
@@ -24,7 +25,7 @@ func main() {
         fmt.Fprintln(os.Stderr, err)
         os.Exit(1)
       }
-      parser.ParseExpr(string(cs))
+      p(parser.ParseExpr(string(cs)))
     }
   } else {
     repl()
@@ -48,7 +49,16 @@ func repl() {
       break
     }
     if strings.TrimSpace(s) != "" {
-      parser.ParseExpr(s)
+      p(parser.ParseExpr(s))
     }
+  }
+}
+
+func p(nodes []ast.INode, err error) {
+  if err != nil {
+    panic(err)
+  }
+  for i := range nodes {
+    fmt.Println(nodes[i])
   }
 }
