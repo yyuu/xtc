@@ -5,7 +5,7 @@ import (
 )
 
 func TestCheck(t *testing.T) {
-  s := NewStringScanner("Fri Dec 12 1975 14:39")
+  s := New("Fri Dec 12 1975 14:39")
   var matched string
 
   matched = s.Check("Fri")
@@ -22,7 +22,7 @@ func TestCheck(t *testing.T) {
 }
 
 func TestCheckUntil(t *testing.T) {
-  s := NewStringScanner("Fri Dec 12 1975 14:39")
+  s := New("Fri Dec 12 1975 14:39")
   var matched string
 
   matched = s.CheckUntil("12")
@@ -35,14 +35,14 @@ func TestCheckUntil(t *testing.T) {
 }
 
 func TestIsEOS(t *testing.T) {
-  s := NewStringScanner("")
+  s := New("")
   if !s.IsEOS() {
     t.Errorf("should be EOS: peek(1) == %q", s.Peek(1))
   }
 }
 
 func TestIsEOS2(t *testing.T) {
-  s := NewStringScanner("abcdef")
+  s := New("abcdef")
   if s.IsEOS() {
     t.Errorf("should not be EOS: peek(1) == %q", s.Peek(1))
   }
@@ -59,7 +59,7 @@ func TestIsEOS2(t *testing.T) {
 }
 
 func TestMatch(t *testing.T) {
-  s := NewStringScanner("test string")
+  s := New("test string")
   if s.Match("[A-Za-z]+") != 4 {
     t.Fail()
   }
@@ -72,7 +72,7 @@ func TestMatch(t *testing.T) {
 }
 
 func TestPeek(t *testing.T) {
-  s := NewStringScanner("test string")
+  s := New("test string")
   if s.Peek(7) != "test st" {
     t.Fail()
   }
@@ -82,7 +82,7 @@ func TestPeek(t *testing.T) {
 }
 
 func TestScan(t *testing.T) {
-  s := NewStringScanner("test string")
+  s := New("test string")
   if s.Scan("[A-Za-z]+") != "test" {
     t.Fail()
   }
@@ -101,7 +101,7 @@ func TestScan(t *testing.T) {
 }
 
 func TestScanUntil(t *testing.T) {
-  s := NewStringScanner("Fri Dec 12 1975 14:39")
+  s := New("Fri Dec 12 1975 14:39")
   if s.ScanUntil("1") != "Fri Dec 1" {
     t.Fail()
   }
@@ -111,7 +111,7 @@ func TestScanUntil(t *testing.T) {
 }
 
 func TestSkip(t *testing.T) {
-  s := NewStringScanner("test string")
+  s := New("test string")
   if s.Skip("[A-Za-z]+") != 4 {
     t.Fail()
   }

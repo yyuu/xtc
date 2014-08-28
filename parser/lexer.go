@@ -18,7 +18,7 @@ type Lexer struct {
 }
 
 func (self Lexer) String() string {
-  source := fmt.Sprintf("%s...", self.scanner.Peek(32))
+  source := fmt.Sprintf("%s%s...", self.scanner.Matched(), self.scanner.Peek(32))
   return fmt.Sprintf("%s:%d: %q", self.Filename, self.LineNumber, source)
 }
 
@@ -36,7 +36,7 @@ func (self token) String() string {
 
 func NewLexer(filename string, source string) *Lexer {
   return &Lexer {
-    scanner: strscan.NewStringScanner(source),
+    scanner: strscan.New(source),
     Filename: filename,
     LineNumber: 0,
     LineOffset: 0,

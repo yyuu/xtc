@@ -10,14 +10,16 @@ type StringScanner struct {
   offset int
   lineNumber int
   lineOffset int
+  matched string
 }
 
-func NewStringScanner(s string) StringScanner {
+func New(s string) StringScanner {
   return StringScanner {
     String: s, 
     offset: 0,
     lineNumber: 0,
     lineOffset: 0,
+    matched: "",
   }
 }
 
@@ -34,9 +36,10 @@ func (self *StringScanner) CheckUntil(pattern string) string {
   offset := self.offset
   re := mustCompile(pattern)
   for !self.IsEOS() {
-    s := re.FindString(self.String[offset:])
-    if s != "" {
-      return self.Peek(offset - self.offset + len(s))
+    matched := re.FindString(self.String[offset:])
+    if matched != "" {
+      self.matched = matched
+      return self.Peek(offset - self.offset + len(matched))
     }
     _, size := utf8.DecodeRuneInString(self.String[offset:])
     offset += size
@@ -52,10 +55,17 @@ func (self *StringScanner) Match(pattern string) int {
   // Tests whether the given pattern is matched from the current scan pointer. Returns the length of the match, or nil. The scan pointer is not advanced.
   re := mustCompile(pattern)
   if !self.IsEOS() {
-    s := re.FindString(self.String[self.offset:])
-    return len(s)
+    matched := re.FindString(self.String[self.offset:])
+    if matched != "" {
+      self.matched = matched
+      return len(matched)
+    }
   }
   return 0
+}
+
+func (self *StringScanner) Matched() string {
+  return self.matched
 }
 
 func (self *StringScanner) Peek(length int) string {
@@ -84,9 +94,12 @@ func (self *StringScanner) Scan(pattern string) string {
   // Tries to match with pattern at the current position. If there’s a match, the scanner advances the “scan pointer” and returns the matched string. Otherwise, the scanner returns nil.
   re := mustCompile(pattern)
   if !self.IsEOS() {
-    s := re.FindString(self.String[self.offset:])
-    self.offset += len(s)
-    return s
+    matched := re.FindString(self.String[self.offset:])
+    if matched != "" {
+      self.offset += len(matched)
+      self.matched = matched
+      return matched
+    }
   }
   return ""
 }
@@ -95,10 +108,11 @@ func (self *StringScanner) ScanUntil(pattern string) string {
   offset := self.offset
   re := mustCompile(pattern)
   for !self.IsEOS() {
-    s := re.FindString(self.String[self.offset:])
-    self.offset += len(s)
-    if s != "" {
-      return self.String[offset:self.offset]
+    matched := re.FindString(self.String[self.offset:])
+    if matched != "" {
+      self.offset += len(matched)
+      self.matched = self.String[offset:self.offset]
+      return self.matched
     }
     self.skipRune()
   }
@@ -109,9 +123,12 @@ func (self *StringScanner) Skip(pattern string) int {
   // Attempts to skip over the given pattern beginning with the scan pointer. If it matches, the scan pointer is advanced to the end of the match, and the length of the match is returned. Otherwise, nil is returned.
   re := mustCompile(pattern)
   if !self.IsEOS() {
-    s := re.FindString(self.String[self.offset:])
-    self.offset += len(s)
-    return len(s)
+    matched := re.FindString(self.String[self.offset:])
+    if matched != "" {
+      self.offset += len(matched)
+      self.matched = matched
+      return len(matched)
+    }
   }
   return 0
 }
@@ -124,10 +141,11 @@ func (self *StringScanner) SkipUntil(pattern string) int {
   // It’s similar to scan_until, but without returning the intervening string.
   re := mustCompile(pattern)
   for !self.IsEOS() {
-    s := re.FindString(self.String[self.offset:])
-    self.offset += len(s)
-    if s != "" {
-      return len(s)
+    matched := re.FindString(self.String[self.offset:])
+    if matched != "" {
+      self.offset += len(matched)
+      self.matched = matched
+      return len(matched)
     }
     self.skipRune()
   }
