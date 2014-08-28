@@ -8,7 +8,7 @@ import (
   "bitbucket.org/yyuu/bs/strscan"
 )
 
-type Lexer struct {
+type lex struct {
   scanner strscan.StringScanner
   Filename string
   LineNumber int
@@ -17,7 +17,7 @@ type Lexer struct {
   ignoreComments bool
 }
 
-func (self Lexer) String() string {
+func (self lex) String() string {
   source := fmt.Sprintf("%s%s...", self.scanner.Matched(), self.scanner.Peek(32))
   return fmt.Sprintf("%s:%d: %q", self.Filename, self.LineNumber, source)
 }
@@ -34,8 +34,8 @@ func (self token) String() string {
   return fmt.Sprintf("#<token:%d %s:%d,%d %q>", self.Id, self.Filename, self.LineNumber, self.LineOffset, self.Literal)
 }
 
-func NewLexer(filename string, source string) *Lexer {
-  return &Lexer {
+func lexer(filename string, source string) *lex {
+  return &lex {
     scanner: strscan.New(source),
     Filename: filename,
     LineNumber: 0,
@@ -101,7 +101,7 @@ var operators map[string]int = map[string]int {
   regexp.QuoteMeta("||"):       OROR,
 }
 
-func (self *Lexer) GetToken() (t *token) {
+func (self *lex) GetToken() (t *token) {
   if self.scanner.IsEOS() {
     return nil
   }
@@ -165,7 +165,7 @@ func (self *Lexer) GetToken() (t *token) {
   return self.GetToken()
 }
 
-func (self *Lexer) consume(id int, literal string) (t *token) {
+func (self *lex) consume(id int, literal string) (t *token) {
   t = &token {
     Id: id,
     Literal: literal,
@@ -185,7 +185,7 @@ func (self *Lexer) consume(id int, literal string) (t *token) {
   return t
 }
 
-func (self *Lexer) scanBlockComment() *token {
+func (self *lex) scanBlockComment() *token {
   s := self.scanner.Scan("/\\*")
   if s == "" {
     return nil
@@ -197,7 +197,7 @@ func (self *Lexer) scanBlockComment() *token {
   return self.consume(BLOCK_COMMENT, s + more)
 }
 
-func (self *Lexer) scanLineComment() *token {
+func (self *lex) scanLineComment() *token {
   s := self.scanner.Scan("//")
   if s == "" {
     return nil
@@ -209,7 +209,7 @@ func (self *Lexer) scanLineComment() *token {
   return self.consume(LINE_COMMENT, s + more)
 }
 
-func (self *Lexer) scanSpaces() *token {
+func (self *lex) scanSpaces() *token {
   s := self.scanner.Scan("[ \t\n\r\f]+")
   if s == "" {
     return nil
@@ -217,7 +217,7 @@ func (self *Lexer) scanSpaces() *token {
   return self.consume(SPACES, s)
 }
 
-func (self *Lexer) scanIdentifier() *token {
+func (self *lex) scanIdentifier() *token {
   s := self.scanner.Scan("[_A-Za-z][_0-9A-Za-z]*")
   if s == "" {
     return nil
@@ -225,7 +225,7 @@ func (self *Lexer) scanIdentifier() *token {
   return self.consume(IDENTIFIER, s)
 }
 
-func (self *Lexer) scanInteger() *token {
+func (self *lex) scanInteger() *token {
   s := self.scanner.Scan("([1-9][0-9]*U?L?|0[Xx][0-9A-Fa-f]+U?L?|0[0-7]*U?L?)")
   if s == "" {
     return nil
@@ -233,7 +233,7 @@ func (self *Lexer) scanInteger() *token {
   return self.consume(INTEGER, s)
 }
 
-func (self *Lexer) scanKeyword() *token {
+func (self *lex) scanKeyword() *token {
   for r, id := range keywords {
     s := self.scanner.Scan(r)
     if s != "" {
@@ -243,7 +243,7 @@ func (self *Lexer) scanKeyword() *token {
   return nil
 }
 
-func (self *Lexer) scanCharacter() *token {
+func (self *lex) scanCharacter() *token {
   s := self.scanner.Scan("'")
   if s == "" {
     return nil
@@ -256,7 +256,7 @@ func (self *Lexer) scanCharacter() *token {
   return self.consume(CHARACTER, s + more)
 }
 
-func (self *Lexer) scanString() *token {
+func (self *lex) scanString() *token {
   s := self.scanner.Scan("\"")
   if s == "" {
     return nil
@@ -269,7 +269,7 @@ func (self *Lexer) scanString() *token {
   return self.consume(STRING, s + more)
 }
 
-func (self *Lexer) scanOperator() *token {
+func (self *lex) scanOperator() *token {
   for r, id := range operators {
     s := self.scanner.Scan(r)
     if s != "" {

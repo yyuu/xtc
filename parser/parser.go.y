@@ -204,7 +204,7 @@ primary: INTEGER
 const EOF = 0
 const DEBUG = true
 
-func (self *Lexer) Lex(lval *yySymType) int {
+func (self *lex) Lex(lval *yySymType) int {
   t := self.GetToken()
   if t == nil {
     return EOF
@@ -217,10 +217,10 @@ func (self *Lexer) Lex(lval *yySymType) int {
   }
 }
 
-func (self *Lexer) Error(s string) {
+func (self *lex) Error(s string) {
   panic(fmt.Errorf("%s: %s", self, s))
 }
 
 func ParseExpr(s string) {
-  yyParse(NewLexer("main.cb", s))
+  yyParse(lexer("main.cb", s))
 }
