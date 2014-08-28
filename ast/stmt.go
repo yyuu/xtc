@@ -32,9 +32,17 @@ func (self blockNode) String() string {
   for j := range self.Stmts {
     sStmts[j] = fmt.Sprintf("%s", self.Stmts[j])
   }
+
+  stmts := ""
   switch len(sStmts) {
-    case 0:  return fmt.Sprintf("(let* (%s))", strings.Join(sVariables, " "))
-    case 1:  return fmt.Sprintf("(let* (%s) %s)", strings.Join(sVariables, " "), sStmts[0])
+    case 0:  stmts = ""
+    case 1:  stmts = fmt.Sprintf("%s", sStmts[0])
+    default: stmts = fmt.Sprintf("(begin %s)", strings.Join(sStmts, " "))
+  }
+
+  switch len(sVariables) {
+    case 0:  return stmts
+    case 1:  return fmt.Sprintf("(let (%s) %s)", strings.Join(sVariables, " "), stmts)
     default: return fmt.Sprintf("(let* (%s) (begin %s))", strings.Join(sVariables, " "), strings.Join(sStmts, " "))
   }
 }
@@ -88,7 +96,7 @@ func DoWhileNode(body INode, cond INode) doWhileNode {
 }
 
 func (self doWhileNode) String() string {
-  return fmt.Sprintf("(let loop () (begin %s (if %s (loop))))", self.Body, self.Cond)
+  return fmt.Sprintf("(let do-while-loop () (begin %s (if %s (do-while-loop))))", self.Body, self.Cond)
 }
 
 type exprStmtNode struct {
@@ -115,7 +123,7 @@ func ForNode(init INode, cond INode, incr INode, body INode) forNode {
 }
 
 func (self forNode) String() string {
-  return fmt.Sprintf("(let loop ((a %s)) (if %s (begin %s (loop %s))))", self.Init, self.Cond, self.Body, self.Incr)
+  return fmt.Sprintf("(let for-loop (%s) (if %s (begin %s (for-loop %s))))", self.Init, self.Cond, self.Body, self.Incr)
 }
 
 type gotoNode struct {
@@ -172,9 +180,9 @@ func (self switchNode) String() string {
     sCases[i] = fmt.Sprintf("%s", self.Cases[i])
   }
   if len(sCases) == 0 {
-    return fmt.Sprintf("(let ((a %s)) ())", self.Cond)
+    return fmt.Sprintf("(let ((switch-cond %s)) ())", self.Cond)
   } else {
-    return fmt.Sprintf("(let ((a %s)) (cond %s))", self.Cond, strings.Join(sCases, " "))
+    return fmt.Sprintf("(let ((switch-cond %s)) (cond %s))", self.Cond, strings.Join(sCases, " "))
   }
 }
 
@@ -188,5 +196,5 @@ func WhileNode(cond INode, body INode) whileNode {
 }
 
 func (self whileNode) String() string {
-  return fmt.Sprintf("(let loop ((a %s)) (if a (begin %s (loop %s))))", self.Cond, self.Body, self.Cond)
+  return fmt.Sprintf("(let while-loop ((while-cond %s)) (if while-cond (begin %s (while-loop %s))))", self.Cond, self.Body, self.Cond)
 }
