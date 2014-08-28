@@ -80,11 +80,11 @@ type funcallNode struct {
   Args []IExprNode
 }
 
-func FuncallNode(node INode, nodes []INode) funcallNode {
-  expr := node.(IExprNode)
-  args := make([]IExprNode, len(nodes))
-  for i := range nodes {
-    args[i] = nodes[i].(IExprNode)
+func FuncallNode(_expr INode, _args []INode) funcallNode {
+  expr := _expr.(IExprNode)
+  args := make([]IExprNode, len(_args))
+  for i := range _args {
+    args[i] = _args[i].(IExprNode)
   }
   return funcallNode { expr, args }
 }

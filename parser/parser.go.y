@@ -85,6 +85,30 @@ program: stmts
        }
        ;
 
+block: '{' defvar_list stmts '}'
+     {
+       $$.node = ast.BlockNode($2.nodes, $3.nodes)
+     }
+     ;
+
+defvar_list:
+           ;
+
+/*
+defvars: storage type name ( '=' expr )? (',' name ( '=' expr )? )* ';'
+       ;
+
+type: typeref
+    ;
+
+typeref:
+       ;
+
+storage:
+       | STATIC
+       ;
+ */
+
 stmts:
      | stmts stmt
      {
@@ -92,7 +116,9 @@ stmts:
      }
      ;
 
-stmt: expr ';'
+stmt: ';'
+    | expr ';'
+    | block
     ;
 
 expr: term '=' expr
