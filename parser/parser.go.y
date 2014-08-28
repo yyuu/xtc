@@ -16,6 +16,12 @@ import (
 %token SPACES
 %token BLOCK_COMMENT
 %token LINE_COMMENT
+%token IDENTIFIER
+%token INTEGER
+%token CHARACTER
+%token STRING
+
+/* keywords */
 %token VOID
 %token CHAR
 %token SHORT
@@ -44,11 +50,30 @@ import (
 %token TYPEDEF
 %token IMPORT
 %token SIZEOF
-%token IDENTIFIER
-%token INTEGER
-%token CHARACTER
-%token STRING
-%token OPERATOR
+
+/* operators */
+%token DOTDOTDOT
+%token SHIFTLEFTEQ
+%token SHIFTRIGHTEQ
+%token NEQ
+%token MODEQ
+%token ANDAND
+%token ANDEQ
+%token MULEQ
+%token PLUSPLUS
+%token PLUSEQ
+%token MINUSMINUS
+%token MINUSEQ
+%token MINUSGT
+%token DIVEQ
+%token SHIFTLEFT
+%token LE
+%token EQEQ
+%token GE
+%token SHIFTRIGHT
+%token XOREQ
+%token OREQ
+%token OROR
 
 %%
 

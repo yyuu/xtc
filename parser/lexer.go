@@ -4,6 +4,7 @@ import (
   "fmt"
   "regexp"
   "strings"
+  "unicode/utf8"
   "bitbucket.org/yyuu/bs/strscan"
 )
 
@@ -30,47 +31,7 @@ type Token struct {
 }
 
 func (self Token) String() string {
-  t := "UNKNOWN"
-  switch self.Id {
-    case SPACES:        t = "SPACES"
-    case BLOCK_COMMENT: t = "BLOCK_COMMENT"
-    case LINE_COMMENT:  t = "LINE_COMMENT"
-    case VOID:          t = "VOID"
-    case CHAR:          t = "CHAR"
-    case SHORT:         t = "SHORT"
-    case INT:           t = "INT"
-    case LONG:          t = "LONG"
-    case STRUCT:        t = "STRUCT"
-    case UNION:         t = "UNION"
-    case ENUM:          t = "ENUM"
-    case STATIC:        t = "STATIC"
-    case EXTERN:        t = "EXTERN"
-    case CONST:         t = "CONST"
-    case SIGNED:        t = "SIGNED"
-    case UNSIGNED:      t = "UNSIGNED"
-    case IF:            t = "IF"
-    case ELSE:          t = "ELSE"
-    case SWITCH:        t = "SWITCH"
-    case CASE:          t = "CASE"
-    case DEFAULT:       t = "DEFAULT"
-    case WHILE:         t = "WHILE"
-    case DO:            t = "DO"
-    case FOR:           t = "FOR"
-    case RETURN:        t = "RETURN"
-    case BREAK:         t = "BREAK"
-    case CONTINUE:      t = "CONTINUE"
-    case GOTO:          t = "GOTO"
-    case TYPEDEF:       t = "TYPEDEF"
-    case IMPORT:        t = "IMPORT"
-    case SIZEOF:        t = "SIZEOF"
-    case IDENTIFIER:    t = "IDENTIFIER"
-    case INTEGER:       t = "INTEGER"
-    case CHARACTER:     t = "CHARACTER"
-    case STRING:        t = "STRING"
-    case OPERATOR:      t = "OPERATOR"
-  }
-  return fmt.Sprintf("#<Token:%s %s:%d,%d %q>", t, self.Filename, self.LineNumber, self.LineOffset, self.Literal)
-
+  return fmt.Sprintf("#<Token:%d %s:%d,%d %q>", self.Id, self.Filename, self.LineNumber, self.LineOffset, self.Literal)
 }
 
 func NewLexer(filename string, source string) *Lexer {
@@ -85,34 +46,59 @@ func NewLexer(filename string, source string) *Lexer {
 }
 
 var keywords map[string]int = map[string]int {
-  "void": VOID,
-  "char": CHAR,
-  "short": SHORT,
-  "int": INT,
-  "long": LONG,
-  "struct": STRUCT,
-  "union": UNION,
-  "enum": ENUM,
-  "static": STATIC,
-  "extern": EXTERN,
-  "const": CONST,
-  "signed": SIGNED,
-  "unsigned": UNSIGNED,
-  "if": IF,
-  "else": ELSE,
-  "switch": SWITCH,
-  "case": CASE,
-  "default": DEFAULT,
-  "while": WHILE,
-  "do": DO,
-  "for": FOR,
-  "return": RETURN,
-  "break": BREAK,
-  "continue": CONTINUE,
-  "goto": GOTO,
-  "typedef": TYPEDEF,
-  "import": IMPORT,
-  "sizeof": SIZEOF,
+  regexp.QuoteMeta("void"):     VOID,
+  regexp.QuoteMeta("char"):     CHAR,
+  regexp.QuoteMeta("short"):    SHORT,
+  regexp.QuoteMeta("int"):      INT,
+  regexp.QuoteMeta("long"):     LONG,
+  regexp.QuoteMeta("struct"):   STRUCT,
+  regexp.QuoteMeta("union"):    UNION,
+  regexp.QuoteMeta("enum"):     ENUM,
+  regexp.QuoteMeta("static"):   STATIC,
+  regexp.QuoteMeta("extern"):   EXTERN,
+  regexp.QuoteMeta("const"):    CONST,
+  regexp.QuoteMeta("signed"):   SIGNED,
+  regexp.QuoteMeta("unsigned"): UNSIGNED,
+  regexp.QuoteMeta("if"):       IF,
+  regexp.QuoteMeta("else"):     ELSE,
+  regexp.QuoteMeta("switch"):   SWITCH,
+  regexp.QuoteMeta("case"):     CASE,
+  regexp.QuoteMeta("default"):  DEFAULT,
+  regexp.QuoteMeta("while"):    WHILE,
+  regexp.QuoteMeta("do"):       DO,
+  regexp.QuoteMeta("for"):      FOR,
+  regexp.QuoteMeta("return"):   RETURN,
+  regexp.QuoteMeta("break"):    BREAK,
+  regexp.QuoteMeta("continue"): CONTINUE,
+  regexp.QuoteMeta("goto"):     GOTO,
+  regexp.QuoteMeta("typedef"):  TYPEDEF,
+  regexp.QuoteMeta("import"):   IMPORT,
+  regexp.QuoteMeta("sizeof"):   SIZEOF,
+}
+
+var operators map[string]int = map[string]int {
+  regexp.QuoteMeta("..."):      DOTDOTDOT,
+  regexp.QuoteMeta("<<="):      SHIFTLEFTEQ,
+  regexp.QuoteMeta(">>="):      SHIFTRIGHTEQ,
+  regexp.QuoteMeta("!="):       NEQ,
+  regexp.QuoteMeta("%="):       MODEQ,
+  regexp.QuoteMeta("&&"):       ANDAND,
+  regexp.QuoteMeta("&="):       ANDEQ,
+  regexp.QuoteMeta("*="):       MULEQ,
+  regexp.QuoteMeta("++"):       PLUSPLUS,
+  regexp.QuoteMeta("+="):       PLUSEQ,
+  regexp.QuoteMeta("--"):       MINUSMINUS,
+  regexp.QuoteMeta("-="):       MINUSEQ,
+  regexp.QuoteMeta("->"):       MINUSGT,
+  regexp.QuoteMeta("/="):       DIVEQ,
+  regexp.QuoteMeta("<<"):       SHIFTLEFT,
+  regexp.QuoteMeta("<="):       LE,
+  regexp.QuoteMeta("=="):       EQEQ,
+  regexp.QuoteMeta(">="):       GE,
+  regexp.QuoteMeta(">>"):       SHIFTRIGHT,
+  regexp.QuoteMeta("^="):       XOREQ,
+  regexp.QuoteMeta("|="):       OREQ,
+  regexp.QuoteMeta("||"):       OROR,
 }
 
 func (self *Lexer) GetToken() (t *Token) {
@@ -120,7 +106,7 @@ func (self *Lexer) GetToken() (t *Token) {
     return nil
   }
 
-  t = self.readSpaces()
+  t = self.scanSpaces()
   if t != nil {
     if ! self.ignoreSpaces {
       return t
@@ -129,7 +115,7 @@ func (self *Lexer) GetToken() (t *Token) {
     }
   }
 
-  t = self.readBlockComment()
+  t = self.scanBlockComment()
   if t != nil {
     if ! self.ignoreComments {
       return t
@@ -137,7 +123,7 @@ func (self *Lexer) GetToken() (t *Token) {
       t = nil // ignore token
     }
   }
-  t = self.readLineComment()
+  t = self.scanLineComment()
   if t != nil {
     if ! self.ignoreComments {
       return t
@@ -146,32 +132,32 @@ func (self *Lexer) GetToken() (t *Token) {
     }
   }
 
-  t = self.readKeyword()
+  t = self.scanKeyword()
   if t != nil {
     return t
   }
 
-  t = self.readIdentifier()
+  t = self.scanIdentifier()
   if t != nil {
     return t
   }
 
-  t = self.readInteger()
+  t = self.scanInteger()
   if t != nil {
     return t
   }
 
-  t = self.readCharacter()
+  t = self.scanCharacter()
   if t != nil {
     return t
   }
 
-  t = self.readString()
+  t = self.scanString()
   if t != nil {
     return t
   }
 
-  t = self.readOperator()
+  t = self.scanOperator()
   if t != nil {
     return t
   }
@@ -179,7 +165,7 @@ func (self *Lexer) GetToken() (t *Token) {
   return self.GetToken()
 }
 
-func (self *Lexer) newToken(id int, literal string) (t *Token) {
+func (self *Lexer) consume(id int, literal string) (t *Token) {
   t = &Token {
     Id: id,
     Literal: literal,
@@ -199,7 +185,7 @@ func (self *Lexer) newToken(id int, literal string) (t *Token) {
   return t
 }
 
-func (self *Lexer) readBlockComment() *Token {
+func (self *Lexer) scanBlockComment() *Token {
   s := self.scanner.Scan("/\\*")
   if s == "" {
     return nil
@@ -208,10 +194,10 @@ func (self *Lexer) readBlockComment() *Token {
   if more == "" {
     panic(fmt.Errorf("lexer error: %s", self))
   }
-  return self.newToken(BLOCK_COMMENT, s + more)
+  return self.consume(BLOCK_COMMENT, s + more)
 }
 
-func (self *Lexer) readLineComment() *Token {
+func (self *Lexer) scanLineComment() *Token {
   s := self.scanner.Scan("//")
   if s == "" {
     return nil
@@ -220,44 +206,44 @@ func (self *Lexer) readLineComment() *Token {
   if more == "" {
     panic(fmt.Errorf("lexer error: %s", self))
   }
-  return self.newToken(LINE_COMMENT, s + more)
+  return self.consume(LINE_COMMENT, s + more)
 }
 
-func (self *Lexer) readSpaces() *Token {
+func (self *Lexer) scanSpaces() *Token {
   s := self.scanner.Scan("[ \t\n\r\f]+")
   if s == "" {
     return nil
   }
-  return self.newToken(SPACES, s)
+  return self.consume(SPACES, s)
 }
 
-func (self *Lexer) readIdentifier() *Token {
+func (self *Lexer) scanIdentifier() *Token {
   s := self.scanner.Scan("[_A-Za-z][_0-9A-Za-z]*")
   if s == "" {
     return nil
   }
-  return self.newToken(IDENTIFIER, s)
+  return self.consume(IDENTIFIER, s)
 }
 
-func (self *Lexer) readInteger() *Token {
+func (self *Lexer) scanInteger() *Token {
   s := self.scanner.Scan("([1-9][0-9]*U?L?|0[Xx][0-9A-Fa-f]+U?L?|0[0-7]*U?L?)")
   if s == "" {
     return nil
   }
-  return self.newToken(INTEGER, s)
+  return self.consume(INTEGER, s)
 }
 
-func (self *Lexer) readKeyword() *Token {
-  for keyword, id := range keywords {
-    s := self.scanner.Scan(regexp.QuoteMeta(keyword))
+func (self *Lexer) scanKeyword() *Token {
+  for r, id := range keywords {
+    s := self.scanner.Scan(r)
     if s != "" {
-      return self.newToken(id, s)
+      return self.consume(id, s)
     }
   }
   return nil
 }
 
-func (self *Lexer) readCharacter() *Token {
+func (self *Lexer) scanCharacter() *Token {
   s := self.scanner.Scan("'")
   if s == "" {
     return nil
@@ -267,10 +253,10 @@ func (self *Lexer) readCharacter() *Token {
   if more == "" {
     panic(fmt.Errorf("lexer error: %s", self))
   }
-  return self.newToken(CHARACTER, s + more)
+  return self.consume(CHARACTER, s + more)
 }
 
-func (self *Lexer) readString() *Token {
+func (self *Lexer) scanString() *Token {
   s := self.scanner.Scan("\"")
   if s == "" {
     return nil
@@ -280,22 +266,22 @@ func (self *Lexer) readString() *Token {
   if more == "" {
     panic(fmt.Errorf("lexer error: %s", self))
   }
-  return self.newToken(STRING, s + more)
+  return self.consume(STRING, s + more)
 }
 
-func (self *Lexer) readOperator() *Token {
-  operators := []string {
-    "<<=", ">>=", "...",
-    "+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=",
-    "||", "&&", ">=", "<=", "==", "!=", "++", "--", ">>", "<<", "->",
-    "=", ">", "<", ":", ";", "?", "{", "}", "(", ")", "+", "-", "!", "~",
-    "*", "&", "|", "^", "&", "+", "-", "*", "/", "%", "[", "]", ".", ",",
-  }
-  for i := range operators {
-    s := self.scanner.Scan(regexp.QuoteMeta(operators[i]))
+func (self *Lexer) scanOperator() *Token {
+  for r, id := range operators {
+    s := self.scanner.Scan(r)
     if s != "" {
-      return self.newToken(OPERATOR, s)
+      return self.consume(id, s)
     }
+  }
+
+  // use next rune as an operator if available
+  s := self.scanner.Peek(1)
+  if s != "" {
+    r, _ := utf8.DecodeRuneInString(s)
+    return self.consume(int(r), s)
   }
   return nil
 }
