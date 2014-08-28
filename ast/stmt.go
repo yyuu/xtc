@@ -64,6 +64,10 @@ type doWhileNode struct {
   Cond IExprNode
 }
 
+func DoWhileNode(body INode, cond INode) doWhileNode {
+  return doWhileNode { body.(IStmtNode), cond.(IExprNode) }
+}
+
 func (self doWhileNode) String() string {
   return fmt.Sprintf("(let loop () (begin %s (if %s (loop))))", self.Body, self.Cond)
 }

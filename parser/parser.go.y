@@ -121,6 +121,7 @@ stmt: ';'
     | block
     | if_stmt
     | while_stmt
+    | dowhile_stmt
     ;
 
 if_stmt: IF '(' expr ')' stmt ELSE stmt
@@ -134,6 +135,12 @@ while_stmt: WHILE '(' expr ')' stmt
             $$.node = ast.WhileNode($3.node, $5.node)
           }
           ;
+
+dowhile_stmt: DO stmt WHILE '(' expr ')' ';'
+            {
+              $$.node = ast.DoWhileNode($2.node, $5.node)
+            }
+            ;
 
 expr: term '=' expr
     {
