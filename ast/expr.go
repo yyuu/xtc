@@ -171,7 +171,7 @@ func StringLiteralNode(literal string) stringLiteralNode {
 }
 
 func (self stringLiteralNode) String() string {
-  return fmt.Sprintf("%q", self.Value)
+  return self.Value
 }
 
 type SuffixOpNode struct {
