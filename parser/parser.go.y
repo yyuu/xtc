@@ -112,93 +112,99 @@ expr10: expr9
       ;
 
 expr9: expr8
-     | expr8 OROR expr8
+     | expr9 OROR expr8
+     {
+       $$.node = ast.LogicalOrNode($1.node, $3.node)
+     }
      ;
 
 expr8: expr7
-     | expr7 ANDAND expr7
+     | expr8 ANDAND expr7
+     {
+       $$.node = ast.LogicalAndNode($1.node, $3.node)
+     }
      ;
 
 expr7: expr6
-     | expr6 '>' expr6
+     | expr7 '>' expr6
      {
        $$.node = ast.BinaryOpNode(">", $1.node, $3.node)
      }
-     | expr6 '<' expr6
+     | expr7 '<' expr6
      {
        $$.node = ast.BinaryOpNode("<", $1.node, $3.node)
      }
-     | expr6 GTEQ expr6
+     | expr7 GTEQ expr6
      {
        $$.node = ast.BinaryOpNode(">=", $1.node, $3.node)
      }
-     | expr6 LTEQ expr6
+     | expr7 LTEQ expr6
      {
        $$.node = ast.BinaryOpNode("<=", $1.node, $3.node)
      }
-     | expr6 EQEQ expr6
+     | expr7 EQEQ expr6
      {
        $$.node = ast.BinaryOpNode("==", $1.node, $3.node)
      }
-     | expr6 NEQ expr6
+     | expr7 NEQ expr6
      {
        $$.node = ast.BinaryOpNode("!=", $1.node, $3.node)
      }
      ;
 
 expr6: expr5
-     | expr5 '|' expr5
+     | expr6 '|' expr5
      {
        $$.node = ast.BinaryOpNode("|", $1.node, $3.node)
      }
      ;
 
 expr5: expr4
-     | expr4 '^' expr4
+     | expr5 '^' expr4
      {
        $$.node = ast.BinaryOpNode("^", $1.node, $3.node)
      }
      ;
 
 expr4: expr3
-     | expr3 '&' expr3
+     | expr4 '&' expr3
      {
        $$.node = ast.BinaryOpNode("&", $1.node, $3.node)
      }
      ;
 
 expr3: expr2
-     | expr2 RSHIFT expr2
+     | expr3 RSHIFT expr2
      {
        $$.node = ast.BinaryOpNode(">>", $1.node, $3.node)
      }
-     | expr2 LSHIFT expr2
+     | expr3 LSHIFT expr2
      {
        $$.node = ast.BinaryOpNode("<<", $1.node, $3.node)
      }
      ;
 
 expr2: expr1
-     | expr1 '+' expr1
+     | expr2 '+' expr1
      {
        $$.node = ast.BinaryOpNode("+", $1.node, $3.node)
      }
-     | expr1 '-' expr1
+     | expr2 '-' expr1
      {
        $$.node = ast.BinaryOpNode("-", $1.node, $3.node)
      }
      ;
 
 expr1: term
-     | term '*' term
+     | expr1 '*' term
      {
        $$.node = ast.BinaryOpNode("*", $1.node, $3.node)
      }
-     | term '/' term
+     | expr1 '/' term
      {
        $$.node = ast.BinaryOpNode("/", $1.node, $3.node)
      }
-     | term '%' term
+     | expr1 '%' term
      {
        $$.node = ast.BinaryOpNode("%", $1.node, $3.node)
      }

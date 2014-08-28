@@ -107,6 +107,10 @@ type logicalAndNode struct {
   Right IExprNode
 }
 
+func LogicalAndNode(left IExprNode, right IExprNode) logicalAndNode {
+  return logicalAndNode { left, right }
+}
+
 func (self logicalAndNode) String() string {
   return fmt.Sprintf("(and %s %s)", self.Left, self.Right)
 }
@@ -114,6 +118,10 @@ func (self logicalAndNode) String() string {
 type logicalOrNode struct {
   Left IExprNode
   Right IExprNode
+}
+
+func LogicalOrNode(left IExprNode, right IExprNode) logicalOrNode {
+  return logicalOrNode { left, right }
 }
 
 func (self logicalOrNode) String() string {
