@@ -68,6 +68,10 @@ type funcallNode struct {
   Args []IExprNode
 }
 
+func FuncallNode(expr IExprNode, args []IExprNode) funcallNode {
+  return funcallNode { expr, args }
+}
+
 func (self funcallNode) String() string {
   sArgs := make([]string, len(self.Args))
   for i := range self.Args {

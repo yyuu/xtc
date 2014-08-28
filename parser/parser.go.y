@@ -9,6 +9,7 @@ import (
 
 %union {
   node ast.INode
+  nodes []ast.INode
   token token
 }
 
@@ -182,13 +183,22 @@ postfix: primary
        | primary '.' name
        | primary ARROW name
        | primary '(' args ')'
+       {
+         $$.node = ast.FuncallNode(ast.AsExprNode($1.node), ast.AsExprNodeList($3.nodes))
+       }
        ;
 
 name: IDENTIFIER
     ;
 
 args: expr
+    {
+      $$.nodes = []ast.INode { $1.node }
+    }
     | args ',' expr
+    {
+      $$.nodes = append($1.nodes, $3.node)
+    }
     ;
 
 primary: INTEGER
