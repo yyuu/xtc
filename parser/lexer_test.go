@@ -9,7 +9,7 @@ func assertToken(t *testing.T, token *Token, id int, literal string) {
     t.Error("insufficient token")
   } else {
     if token.Id != id {
-      t.Errorf("invalid token id: %s: expected %d, got %d: %s", token, id, token.Id)
+      t.Errorf("invalid token id: %s: expected %d, got %d", token, id, token.Id)
     }
     if token.Literal != literal {
       t.Errorf("invalid token literal: %s: expected %q, got %q", token, literal, token.Literal)
@@ -71,7 +71,7 @@ func TestKeyword1(t *testing.T) {
   assertToken(t, lex.GetToken(), INT, "int")
 //assertToken(t, lex.GetToken(), SPACES, " ")
   assertToken(t, lex.GetToken(), IDENTIFIER, "foo")
-  assertToken(t, lex.GetToken(), OPERATOR, ";")
+  assertToken(t, lex.GetToken(), ';', ";")
 //assertToken(t, lex.GetToken(), SPACES, "\n")
   assertTokenNull(t, lex.GetToken())
 }
@@ -81,21 +81,21 @@ func TestKeyword2(t *testing.T) {
 //assertToken(t, lex.GetToken(), SPACES, "\n\n")
   assertToken(t, lex.GetToken(), IF, "if")
 //assertToken(t, lex.GetToken(), SPACES, " ")
-  assertToken(t, lex.GetToken(), OPERATOR, "(")
+  assertToken(t, lex.GetToken(), '(', "(")
 //assertToken(t, lex.GetToken(), SPACES, " ")
   assertToken(t, lex.GetToken(), IDENTIFIER, "foo")
 //assertToken(t, lex.GetToken(), SPACES, " ")
-  assertToken(t, lex.GetToken(), OPERATOR, ")")
+  assertToken(t, lex.GetToken(), ')', ")")
 //assertToken(t, lex.GetToken(), SPACES, " ")
-  assertToken(t, lex.GetToken(), OPERATOR, "{")
+  assertToken(t, lex.GetToken(), '{', "{")
 //assertToken(t, lex.GetToken(), SPACES, "\n  ")
   assertToken(t, lex.GetToken(), IDENTIFIER, "bar")
-  assertToken(t, lex.GetToken(), OPERATOR, ";")
+  assertToken(t, lex.GetToken(), ';', ";")
 //assertToken(t, lex.GetToken(), SPACES, "\n")
-  assertToken(t, lex.GetToken(), OPERATOR, "}")
+  assertToken(t, lex.GetToken(), '}', "}")
 //assertToken(t, lex.GetToken(), SPACES, "\n")
   assertToken(t, lex.GetToken(), IDENTIFIER, "baz")
-  assertToken(t, lex.GetToken(), OPERATOR, ";")
+  assertToken(t, lex.GetToken(), ';', ";")
 //assertToken(t, lex.GetToken(), SPACES, "\n")
   assertTokenNull(t, lex.GetToken())
 }
@@ -166,15 +166,15 @@ func TestInteger3(t *testing.T) {
 
 func TestCharacter1(t *testing.T) {
   lex := NewLexer("-", "{'f', 'o', 'o'}")
-  assertToken(t, lex.GetToken(), OPERATOR, "{")
+  assertToken(t, lex.GetToken(), '{', "{")
   assertToken(t, lex.GetToken(), CHARACTER, "'f'")
-  assertToken(t, lex.GetToken(), OPERATOR, ",")
+  assertToken(t, lex.GetToken(), ',', ",")
 //assertToken(t, lex.GetToken(), SPACES, " ")
   assertToken(t, lex.GetToken(), CHARACTER, "'o'")
-  assertToken(t, lex.GetToken(), OPERATOR, ",")
+  assertToken(t, lex.GetToken(), ',', ",")
 //assertToken(t, lex.GetToken(), SPACES, " ")
   assertToken(t, lex.GetToken(), CHARACTER, "'o'")
-  assertToken(t, lex.GetToken(), OPERATOR, "}")
+  assertToken(t, lex.GetToken(), '}', "}")
   assertTokenNull(t, lex.GetToken())
 }
 
@@ -192,15 +192,15 @@ func TestString1(t *testing.T) {
 
 func TestOperator1(t *testing.T) {
   lex := NewLexer("-", "+++....<<<<===&=&&")
-  assertToken(t, lex.GetToken(), OPERATOR, "++")
-  assertToken(t, lex.GetToken(), OPERATOR, "+")
-  assertToken(t, lex.GetToken(), OPERATOR, "...")
-  assertToken(t, lex.GetToken(), OPERATOR, ".")
-  assertToken(t, lex.GetToken(), OPERATOR, "<<")
-  assertToken(t, lex.GetToken(), OPERATOR, "<<=")
-  assertToken(t, lex.GetToken(), OPERATOR, "==")
-  assertToken(t, lex.GetToken(), OPERATOR, "&=")
-  assertToken(t, lex.GetToken(), OPERATOR, "&&")
+  assertToken(t, lex.GetToken(), PLUSPLUS, "++")
+  assertToken(t, lex.GetToken(), '+', "+")
+  assertToken(t, lex.GetToken(), DOTDOTDOT, "...")
+  assertToken(t, lex.GetToken(), '.', ".")
+  assertToken(t, lex.GetToken(), SHIFTLEFT, "<<")
+  assertToken(t, lex.GetToken(), SHIFTLEFTEQ, "<<=")
+  assertToken(t, lex.GetToken(), EQEQ, "==")
+  assertToken(t, lex.GetToken(), ANDEQ, "&=")
+  assertToken(t, lex.GetToken(), ANDAND, "&&")
   assertTokenNull(t, lex.GetToken())
 }
 
@@ -208,14 +208,14 @@ func TestOperator2(t *testing.T) {
   lex := NewLexer("-", "foo ? bar : baz;\n")
   assertToken(t, lex.GetToken(), IDENTIFIER, "foo")
 //assertToken(t, lex.GetToken(), SPACES, " ")
-  assertToken(t, lex.GetToken(), OPERATOR, "?")
+  assertToken(t, lex.GetToken(), '?', "?")
 //assertToken(t, lex.GetToken(), SPACES, " ")
   assertToken(t, lex.GetToken(), IDENTIFIER, "bar")
 //assertToken(t, lex.GetToken(), SPACES, " ")
-  assertToken(t, lex.GetToken(), OPERATOR, ":")
+  assertToken(t, lex.GetToken(), ':', ":")
 //assertToken(t, lex.GetToken(), SPACES, " ")
   assertToken(t, lex.GetToken(), IDENTIFIER, "baz")
-  assertToken(t, lex.GetToken(), OPERATOR, ";")
+  assertToken(t, lex.GetToken(), ';', ";")
 //assertToken(t, lex.GetToken(), SPACES, "\n")
   assertTokenNull(t, lex.GetToken())
 }
