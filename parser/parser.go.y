@@ -289,7 +289,7 @@ postfix: primary
        }
        | primary '(' args ')'
        {
-         $$.node = ast.FuncallNode(ast.AsExprNode($1.node), ast.AsExprNodeList($3.nodes))
+         $$.node = ast.FuncallNode($1.node, $3.nodes)
        }
        ;
 
