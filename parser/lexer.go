@@ -45,60 +45,69 @@ func lexer(filename string, source string) *lex {
   }
 }
 
-var keywords map[string]int = map[string]int {
-  regexp.QuoteMeta("void"):     VOID,
-  regexp.QuoteMeta("char"):     CHAR,
-  regexp.QuoteMeta("short"):    SHORT,
-  regexp.QuoteMeta("int"):      INT,
-  regexp.QuoteMeta("long"):     LONG,
-  regexp.QuoteMeta("struct"):   STRUCT,
-  regexp.QuoteMeta("union"):    UNION,
-  regexp.QuoteMeta("enum"):     ENUM,
-  regexp.QuoteMeta("static"):   STATIC,
-  regexp.QuoteMeta("extern"):   EXTERN,
-  regexp.QuoteMeta("const"):    CONST,
-  regexp.QuoteMeta("signed"):   SIGNED,
-  regexp.QuoteMeta("unsigned"): UNSIGNED,
-  regexp.QuoteMeta("if"):       IF,
-  regexp.QuoteMeta("else"):     ELSE,
-  regexp.QuoteMeta("switch"):   SWITCH,
-  regexp.QuoteMeta("case"):     CASE,
-  regexp.QuoteMeta("default"):  DEFAULT,
-  regexp.QuoteMeta("while"):    WHILE,
-  regexp.QuoteMeta("do"):       DO,
-  regexp.QuoteMeta("for"):      FOR,
-  regexp.QuoteMeta("return"):   RETURN,
-  regexp.QuoteMeta("break"):    BREAK,
-  regexp.QuoteMeta("continue"): CONTINUE,
-  regexp.QuoteMeta("goto"):     GOTO,
-  regexp.QuoteMeta("typedef"):  TYPEDEF,
-  regexp.QuoteMeta("import"):   IMPORT,
-  regexp.QuoteMeta("sizeof"):   SIZEOF,
+type key struct {
+  re string
+  id int
 }
 
-var operators map[string]int = map[string]int {
-  regexp.QuoteMeta("..."):      DOTDOTDOT,
-  regexp.QuoteMeta("<<="):      LSHIFTEQ,
-  regexp.QuoteMeta(">>="):      RSHIFTEQ,
-  regexp.QuoteMeta("!="):       NEQ,
-  regexp.QuoteMeta("%="):       MODEQ,
-  regexp.QuoteMeta("&&"):       ANDAND,
-  regexp.QuoteMeta("&="):       ANDEQ,
-  regexp.QuoteMeta("*="):       MULEQ,
-  regexp.QuoteMeta("++"):       PLUSPLUS,
-  regexp.QuoteMeta("+="):       PLUSEQ,
-  regexp.QuoteMeta("--"):       MINUSMINUS,
-  regexp.QuoteMeta("-="):       MINUSEQ,
-  regexp.QuoteMeta("->"):       ARROW,
-  regexp.QuoteMeta("/="):       DIVEQ,
-  regexp.QuoteMeta("<<"):       LSHIFT,
-  regexp.QuoteMeta("<="):       LTEQ,
-  regexp.QuoteMeta("=="):       EQEQ,
-  regexp.QuoteMeta(">="):       GTEQ,
-  regexp.QuoteMeta(">>"):       RSHIFT,
-  regexp.QuoteMeta("^="):       XOREQ,
-  regexp.QuoteMeta("|="):       OREQ,
-  regexp.QuoteMeta("||"):       OROR,
+func fixed_key(s string, n int) key {
+  return key { regexp.QuoteMeta(s), n }
+}
+
+var keywords []key = []key {
+  fixed_key("void",     VOID),
+  fixed_key("char",     CHAR),
+  fixed_key("short",    SHORT),
+  fixed_key("int",      INT),
+  fixed_key("long",     LONG),
+  fixed_key("struct",   STRUCT),
+  fixed_key("union",    UNION),
+  fixed_key("enum",     ENUM),
+  fixed_key("static",   STATIC),
+  fixed_key("extern",   EXTERN),
+  fixed_key("const",    CONST),
+  fixed_key("signed",   SIGNED),
+  fixed_key("unsigned", UNSIGNED),
+  fixed_key("if",       IF),
+  fixed_key("else",     ELSE),
+  fixed_key("switch",   SWITCH),
+  fixed_key("case",     CASE),
+  fixed_key("default",  DEFAULT),
+  fixed_key("while",    WHILE),
+  fixed_key("do",       DO),
+  fixed_key("for",      FOR),
+  fixed_key("return",   RETURN),
+  fixed_key("break",    BREAK),
+  fixed_key("continue", CONTINUE),
+  fixed_key("goto",     GOTO),
+  fixed_key("typedef",  TYPEDEF),
+  fixed_key("import",   IMPORT),
+  fixed_key("sizeof",   SIZEOF),
+}
+
+var operators []key = []key {
+  fixed_key("...",      DOTDOTDOT),
+  fixed_key("<<=",      LSHIFTEQ),
+  fixed_key(">>=",      RSHIFTEQ),
+  fixed_key("!=",       NEQ),
+  fixed_key("%=",       MODEQ),
+  fixed_key("&&",       ANDAND),
+  fixed_key("&=",       ANDEQ),
+  fixed_key("*=",       MULEQ),
+  fixed_key("++",       PLUSPLUS),
+  fixed_key("+=",       PLUSEQ),
+  fixed_key("--",       MINUSMINUS),
+  fixed_key("-=",       MINUSEQ),
+  fixed_key("->",       ARROW),
+  fixed_key("/=",       DIVEQ),
+  fixed_key("<<",       LSHIFT),
+  fixed_key("<=",       LTEQ),
+  fixed_key("==",       EQEQ),
+  fixed_key(">=",       GTEQ),
+  fixed_key(">>",       RSHIFT),
+  fixed_key("^=",       XOREQ),
+  fixed_key("|=",       OREQ),
+  fixed_key("||",       OROR),
 }
 
 func (self *lex) GetToken() (t *token) {
@@ -234,10 +243,11 @@ func (self *lex) scanInteger() *token {
 }
 
 func (self *lex) scanKeyword() *token {
-  for r, id := range keywords {
-    s := self.scanner.Scan(r)
+  for i := range keywords {
+    x := keywords[i]
+    s := self.scanner.Scan(x.re)
     if s != "" {
-      return self.consume(id, s)
+      return self.consume(x.id, s)
     }
   }
   return nil
@@ -270,10 +280,11 @@ func (self *lex) scanString() *token {
 }
 
 func (self *lex) scanOperator() *token {
-  for r, id := range operators {
-    s := self.scanner.Scan(r)
+  for i := range operators {
+    x := operators[i]
+    s := self.scanner.Scan(x.re)
     if s != "" {
-      return self.consume(id, s)
+      return self.consume(x.id, s)
     }
   }
 
