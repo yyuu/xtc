@@ -34,6 +34,10 @@ type binaryOpNode struct {
   Right IExprNode
 }
 
+func BinaryOpNode(operator string, left IExprNode, right IExprNode) binaryOpNode {
+  return binaryOpNode { operator, left, right }
+}
+
 func (self binaryOpNode) String() string {
   switch self.Operator {
     case "&&": return fmt.Sprintf("(and %s %s)", self.Left, self.Right)

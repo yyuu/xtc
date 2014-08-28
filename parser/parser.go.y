@@ -121,39 +121,87 @@ expr8: expr7
 
 expr7: expr6
      | expr6 '>' expr6
+     {
+       $$.node = ast.BinaryOpNode(">", $1.node, $3.node)
+     }
      | expr6 '<' expr6
+     {
+       $$.node = ast.BinaryOpNode("<", $1.node, $3.node)
+     }
      | expr6 GTEQ expr6
+     {
+       $$.node = ast.BinaryOpNode(">=", $1.node, $3.node)
+     }
      | expr6 LTEQ expr6
+     {
+       $$.node = ast.BinaryOpNode("<=", $1.node, $3.node)
+     }
      | expr6 EQEQ expr6
+     {
+       $$.node = ast.BinaryOpNode("==", $1.node, $3.node)
+     }
      | expr6 NEQ expr6
+     {
+       $$.node = ast.BinaryOpNode("!=", $1.node, $3.node)
+     }
      ;
 
 expr6: expr5
      | expr5 '|' expr5
+     {
+       $$.node = ast.BinaryOpNode("|", $1.node, $3.node)
+     }
      ;
 
 expr5: expr4
      | expr4 '^' expr4
+     {
+       $$.node = ast.BinaryOpNode("^", $1.node, $3.node)
+     }
      ;
 
 expr4: expr3
      | expr3 '&' expr3
+     {
+       $$.node = ast.BinaryOpNode("&", $1.node, $3.node)
+     }
      ;
 
 expr3: expr2
      | expr2 RSHIFT expr2
+     {
+       $$.node = ast.BinaryOpNode(">>", $1.node, $3.node)
+     }
      | expr2 LSHIFT expr2
+     {
+       $$.node = ast.BinaryOpNode("<<", $1.node, $3.node)
+     }
      ;
 
 expr2: expr1
      | expr1 '+' expr1
+     {
+       $$.node = ast.BinaryOpNode("+", $1.node, $3.node)
+     }
      | expr1 '-' expr1
+     {
+       $$.node = ast.BinaryOpNode("-", $1.node, $3.node)
+     }
      ;
 
 expr1: term
      | term '*' term
+     {
+       $$.node = ast.BinaryOpNode("*", $1.node, $3.node)
+     }
      | term '/' term
+     {
+       $$.node = ast.BinaryOpNode("/", $1.node, $3.node)
+     }
      | term '%' term
+     {
+       $$.node = ast.BinaryOpNode("%", $1.node, $3.node)
+     }
      ;
 
 term: unary
