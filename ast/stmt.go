@@ -5,13 +5,13 @@ import (
   "strings"
 )
 
-type BlockNode struct {
+type blockNode struct {
 // Variables []DefinedVariable
   Variables []IExprNode
   Stmts []IStmtNode
 }
 
-func (self BlockNode) String() string {
+func (self blockNode) String() string {
   sVariables := make([]string, len(self.Variables))
   for i := range self.Variables {
     sVariables[i] = fmt.Sprintf("(a%d %s)", i, self.Variables[i])
@@ -27,12 +27,12 @@ func (self BlockNode) String() string {
   }
 }
 
-type CaseNode struct {
+type caseNode struct {
   Values []IExprNode
-  Body BlockNode
+  Body blockNode
 }
 
-func (self CaseNode) String() string {
+func (self caseNode) String() string {
   sValues := make([]string, len(self.Values))
   for i := range self.Values {
     sValues[i] = fmt.Sprintf("(= a %s)", self.Values[i])
@@ -44,62 +44,62 @@ func (self CaseNode) String() string {
   }
 }
 
-type ContinueNode struct {
+type continueNode struct {
 }
 
-type DoWhileNode struct {
+type doWhileNode struct {
   Body IStmtNode
   Cond IExprNode
 }
 
-func (self DoWhileNode) String() string {
+func (self doWhileNode) String() string {
   return fmt.Sprintf("(let loop () (begin %s (if %s (loop))))", self.Body, self.Cond)
 }
 
-type ExprStmtNode struct {
+type exprStmtNode struct {
   Expr IExprNode
 }
 
-type ForNode struct {
+type forNode struct {
   Init IExprNode
   Cond IExprNode
   Incr IExprNode
   Body IStmtNode
 }
 
-type GotoNode struct {
+type gotoNode struct {
   Target string
 }
 
-type IfNode struct {
+type ifNode struct {
   Cond IExprNode
   ThenBody IStmtNode
   ElseBody IStmtNode
 }
 
-func (self IfNode) String() string {
+func (self ifNode) String() string {
   return fmt.Sprintf("(if %s %s %s)", self.Cond, self.ThenBody, self.ElseBody)
 }
 
-type LabelNode struct {
+type labelNode struct {
   Name string
   Stmt IStmtNode
 }
 
-type ReturnNode struct {
+type returnNode struct {
   Expr IExprNode
 }
 
-func (self ReturnNode) String() string {
+func (self returnNode) String() string {
   return fmt.Sprintf("%s", self.Expr)
 }
 
-type SwitchNode struct {
+type switchNode struct {
   Cond IExprNode
-  Cases []CaseNode
+  Cases []caseNode
 }
 
-func (self SwitchNode) String() string {
+func (self switchNode) String() string {
   sCases := make([]string, len(self.Cases))
   for i := range self.Cases {
     sCases[i] = fmt.Sprintf("%s", self.Cases[i])
@@ -111,11 +111,11 @@ func (self SwitchNode) String() string {
   }
 }
 
-type WhileNode struct {
+type whileNode struct {
   Cond IExprNode
   Body IStmtNode
 }
 
-func (self WhileNode) String() string {
+func (self whileNode) String() string {
   return fmt.Sprintf("(let loop ((a %s)) (if a (begin %s (loop %s))))", self.Cond, self.Body, self.Cond)
 }

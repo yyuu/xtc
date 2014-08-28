@@ -6,35 +6,35 @@ import (
   "strings"
 )
 
-type AddressNode struct {
+type addressNode struct {
   Expr IExprNode
 }
 
-type ArefNode struct {
+type arefNode struct {
   Expr IExprNode
   Index IExprNode
 }
 
-func (self ArefNode) String() string {
+func (self arefNode) String() string {
   return fmt.Sprintf("(vector-ref %s %s)", self.Expr, self.Index)
 }
 
-type AssignNode struct {
+type assignNode struct {
   Lhs IExprNode
   Rhs IExprNode
 }
 
-func (self AssignNode) String() string {
+func (self assignNode) String() string {
   return fmt.Sprintf("(define %s %s)", self.Lhs, self.Rhs)
 }
 
-type BinaryOpNode struct {
+type binaryOpNode struct {
   Operator string
   Left IExprNode
   Right IExprNode
 }
 
-func (self BinaryOpNode) String() string {
+func (self binaryOpNode) String() string {
   switch self.Operator {
     case "&&": return fmt.Sprintf("(and %s %s)", self.Left, self.Right)
     case "||": return fmt.Sprintf("(or %s %s)", self.Left, self.Right)
@@ -44,31 +44,31 @@ func (self BinaryOpNode) String() string {
   }
 }
 
-type CastNode struct {
+type castNode struct {
   Type ITypeNode
   Expr IExprNode
 }
 
-type CondExprNode struct {
+type condExprNode struct {
   Cond IExprNode
   ThenExpr IExprNode
   ElseExpr IExprNode
 }
 
-func (self CondExprNode) String() string {
+func (self condExprNode) String() string {
   return fmt.Sprintf("(if %s %s %s)", self.Cond, self.ThenExpr, self.ElseExpr)
 }
 
-type DereferenceNode struct {
+type dereferenceNode struct {
   Expr IExprNode
 }
 
-type FuncallNode struct {
+type funcallNode struct {
   Expr IExprNode
   Args []IExprNode
 }
 
-func (self FuncallNode) String() string {
+func (self funcallNode) String() string {
   sArgs := make([]string, len(self.Args))
   for i := range self.Args {
     sArgs[i] = fmt.Sprintf("%s", self.Args[i])
@@ -94,48 +94,48 @@ func (self integerLiteralNode) String() string {
   return strconv.Itoa(self.Value)
 }
 
-type LogicalAndNode struct {
+type logicalAndNode struct {
   Left IExprNode
   Right IExprNode
 }
 
-func (self LogicalAndNode) String() string {
+func (self logicalAndNode) String() string {
   return fmt.Sprintf("(and %s %s)", self.Left, self.Right)
 }
 
-type LogicalOrNode struct {
+type logicalOrNode struct {
   Left IExprNode
   Right IExprNode
 }
 
-func (self LogicalOrNode) String() string {
+func (self logicalOrNode) String() string {
   return fmt.Sprintf("(or %s %s)", self.Left, self.Right)
 }
 
-type MemberNode struct {
+type memberNode struct {
   Expr IExprNode
   Member string
 }
 
-func (self MemberNode) String() string {
+func (self memberNode) String() string {
   return fmt.Sprintf("(slot-ref %s '%s)", self.Expr, self.Member)
 }
 
-type OpAssignNode struct {
+type opAssignNode struct {
   Lhs IExprNode
   Rhs IExprNode
 }
 
-func (self OpAssignNode) String() string {
+func (self opAssignNode) String() string {
   return fmt.Sprintf("(define %s %s)", self.Lhs, self.Rhs)
 }
 
-type PrefixOpNode struct {
+type prefixOpNode struct {
   Operator string
   Expr IExprNode
 }
 
-func (self PrefixOpNode) String() string {
+func (self prefixOpNode) String() string {
   switch self.Operator {
     case "++": return fmt.Sprintf("(+ 1 %s)", self.Expr)
     case "--": return fmt.Sprintf("(- 1 %s)", self.Expr)
@@ -143,21 +143,21 @@ func (self PrefixOpNode) String() string {
   }
 }
 
-type PtrMemberNode struct {
+type ptrMemberNode struct {
   Expr IExprNode
   Member string
 }
 
-func (self PtrMemberNode) String() string {
+func (self ptrMemberNode) String() string {
   return fmt.Sprintf("(slot-ref %s '%s)", self.Expr, self.Member)
 }
 
-type SizeofExprNode struct {
+type sizeofExprNode struct {
   Expr IExprNode
   Type ITypeNode
 }
 
-type SizeofTypeNode struct {
+type sizeofTypeNode struct {
   Type ITypeNode
   Operand ITypeNode
 }
@@ -174,12 +174,12 @@ func (self stringLiteralNode) String() string {
   return self.Value
 }
 
-type SuffixOpNode struct {
+type suffixOpNode struct {
   Operator string
   Expr IExprNode
 }
 
-func (self SuffixOpNode) String() string {
+func (self suffixOpNode) String() string {
   switch self.Operator {
     case "++": return fmt.Sprintf("(+ %s 1)", self.Expr)
     case "--": return fmt.Sprintf("(- %s 1)", self.Expr)
@@ -187,10 +187,10 @@ func (self SuffixOpNode) String() string {
   }
 }
 
-type VariableNode struct {
+type variableNode struct {
   Name string
 }
 
-func (self VariableNode) String() string {
+func (self variableNode) String() string {
   return self.Name
 }
