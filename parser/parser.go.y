@@ -81,12 +81,12 @@ program: stmts
 
 stmts:
      | stmts stmt
+     {
+       fmt.Println($2.node)
+     }
      ;
 
 stmt: expr
-    {
-      fmt.Println($1.node)
-    }
     ;
 
 expr: term '=' expr
@@ -197,6 +197,14 @@ primary: INTEGER
        | STRING
        {
          $$.node = ast.StringLiteralNode($1.token.Literal)
+       }
+       | IDENTIFIER
+       {
+         $$.node = ast.VariableNode($1.token.Literal)
+       }
+       | '(' expr ')'
+       {
+         $$.node = $2.node
        }
        ;
 

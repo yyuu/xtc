@@ -191,6 +191,10 @@ type variableNode struct {
   Name string
 }
 
+func VariableNode(name string) variableNode {
+  return variableNode { name }
+}
+
 func (self variableNode) String() string {
   return self.Name
 }
