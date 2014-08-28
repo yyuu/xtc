@@ -156,6 +156,7 @@ stmt: ';'
     | while_stmt
     | dowhile_stmt
     | for_stmt
+    | switch_stmt
     | break_stmt
     | continue_stmt
     | goto_stmt
@@ -186,6 +187,55 @@ for_stmt: FOR '(' expr ';' expr ';' expr ')' stmt
         }
         ;
 
+switch_stmt: SWITCH '(' expr ')' '{' case_clauses '}'
+           {
+             $$.node = ast.SwitchNode($3.node, $6.nodes)
+           }
+           ;
+
+case_clauses:
+            | case_clauses case_clause
+            {
+              $$.nodes = append($1.nodes, $2.node)
+            }
+            | case_clauses default_clause
+            {
+              $$.nodes = append($1.nodes, $2.node)
+            }
+            ;
+
+case_clause: cases case_body
+           {
+             $$.node = ast.CaseNode($1.nodes, $2.node)
+           }
+           ;
+
+cases: CASE primary ':'
+     {
+       $$.nodes = append($$.nodes, $2.node)
+     }
+     | cases CASE primary ':'
+     {
+       $$.nodes = append($1.nodes, $3.node)
+     }
+     ;
+
+default_clause: DEFAULT ':' case_body
+              {
+                _default := []ast.INode { ast.StringLiteralNode("default") } // FIXME:
+                $$.node = ast.CaseNode(_default, $3.node)
+              }
+              ;
+
+case_body: stmt
+
+goto_stmt: GOTO IDENTIFIER ';'
+         {
+           $$.node = ast.GotoNode($2.token.Literal)
+         }
+         ;
+
+
 break_stmt: BREAK ';'
           {
             $$.node = ast.BreakNode()
@@ -197,12 +247,6 @@ continue_stmt: CONTINUE ';'
                $$.node = ast.ContinueNode()
              }
              ;
-
-goto_stmt: GOTO IDENTIFIER ';'
-         {
-           $$.node = ast.GotoNode($2.token.Literal)
-         }
-         ;
 
 return_stmt: RETURN expr ';'
            {
@@ -411,10 +455,7 @@ postfix: primary
 name: IDENTIFIER
     ;
 
-args: expr
-    {
-      $$.nodes = []ast.INode { $1.node }
-    }
+args:
     | args ',' expr
     {
       $$.nodes = append($1.nodes, $3.node)

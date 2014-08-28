@@ -71,7 +71,15 @@ func (self continueNode) String() string {
 
 type caseNode struct {
   Values []IExprNode
-  Body blockNode
+  Body IStmtNode
+}
+
+func CaseNode(_values []INode, body INode) caseNode {
+  values := make([]IExprNode, len(_values))
+  for i := range _values {
+    values[i] = _values[i].(IExprNode)
+  }
+  return caseNode { values, body.(IStmtNode) }
 }
 
 func (self caseNode) String() string {
@@ -172,6 +180,14 @@ func (self returnNode) String() string {
 type switchNode struct {
   Cond IExprNode
   Cases []caseNode
+}
+
+func SwitchNode(cond INode, _cases []INode) switchNode {
+  cases := make([]caseNode, len(_cases))
+  for i := range _cases {
+    cases[i] = _cases[i].(caseNode)
+  }
+  return switchNode { cond.(IExprNode), cases }
 }
 
 func (self switchNode) String() string {
