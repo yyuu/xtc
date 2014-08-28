@@ -4,14 +4,13 @@ package parser
 import (
   "fmt"
   "os"
-  "strconv"
   "bitbucket.org/yyuu/bs/ast"
 )
 %}
 
 %union {
-  node ast.INode
   literal string
+  node ast.INode
 }
 
 %token SPACES
@@ -68,12 +67,11 @@ stmt: expr
 
 expr: STRING
     {
-      $$.node = ast.StringLiteralNode { $1.literal }
+      $$.node = ast.StringLiteralNode($1.literal)
     }
     | INTEGER
     {
-      i, _ := strconv.Atoi($1.literal)
-      $$.node = ast.IntegerLiteralNode { i }
+      $$.node = ast.IntegerLiteralNode($1.literal)
     }
     ;
 
@@ -82,11 +80,10 @@ expr: STRING
 const EOF = 0
 
 func (self *Lexer) Lex(lval *yySymType) int {
-  for {
-    t := self.GetToken()
-    if t == nil {
-      return EOF
-    }
+  t := self.GetToken()
+  if t == nil {
+    return EOF
+  } else {
     lval.literal = t.Literal
     return t.Id
   }

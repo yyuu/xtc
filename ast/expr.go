@@ -80,11 +80,17 @@ func (self FuncallNode) DumpString() string {
   }
 }
 
-type IntegerLiteralNode struct {
+type integerLiteralNode struct {
   Value int
 }
 
-func (self IntegerLiteralNode) DumpString() string {
+func IntegerLiteralNode(literal string) integerLiteralNode {
+  value, err := strconv.Atoi(literal)
+  if err != nil { panic(err) }
+  return integerLiteralNode { value }
+}
+
+func (self integerLiteralNode) DumpString() string {
   return strconv.Itoa(self.Value)
 }
 
@@ -156,11 +162,15 @@ type SizeofTypeNode struct {
   Operand ITypeNode
 }
 
-type StringLiteralNode struct {
+type stringLiteralNode struct {
   Value string
 }
 
-func (self StringLiteralNode) DumpString() string {
+func StringLiteralNode(literal string) stringLiteralNode {
+  return stringLiteralNode { literal }
+}
+
+func (self stringLiteralNode) DumpString() string {
   return fmt.Sprintf("%q", self.Value)
 }
 
