@@ -446,6 +446,10 @@ postfix: primary
        {
          $$.node = ast.SuffixOpNode("--", $1.node)
        }
+       | primary '(' ')'
+       {
+         $$.node = ast.FuncallNode($1.node, []ast.INode { })
+       }
        | primary '(' args ')'
        {
          $$.node = ast.FuncallNode($1.node, $3.nodes)
@@ -455,7 +459,7 @@ postfix: primary
 name: IDENTIFIER
     ;
 
-args:
+args: expr
     | args ',' expr
     {
       $$.nodes = append($1.nodes, $3.node)
