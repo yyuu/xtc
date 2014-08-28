@@ -145,6 +145,10 @@ type returnNode struct {
   Expr IExprNode
 }
 
+func ReturnNode(expr INode) returnNode {
+  return returnNode { expr.(IExprNode) }
+}
+
 func (self returnNode) String() string {
   return fmt.Sprintf("%s", self.Expr)
 }

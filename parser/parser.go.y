@@ -126,6 +126,7 @@ stmt: ';'
     | break_stmt
     | continue_stmt
     | goto_stmt
+    | return_stmt
     ;
 
 if_stmt: IF '(' expr ')' stmt ELSE stmt
@@ -169,6 +170,12 @@ goto_stmt: GOTO IDENTIFIER ';'
            $$.node = ast.GotoNode($2.token.Literal)
          }
          ;
+
+return_stmt: RETURN expr ';'
+           {
+             $$.node = ast.ReturnNode($2.node)
+           }
+           ;
 
 expr: term '=' expr
     {
