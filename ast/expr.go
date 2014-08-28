@@ -139,6 +139,10 @@ type prefixOpNode struct {
   Expr IExprNode
 }
 
+func PrefixOpNode(operator string, expr IExprNode) prefixOpNode {
+  return prefixOpNode { operator, expr }
+}
+
 func (self prefixOpNode) String() string {
   switch self.Operator {
     case "++": return fmt.Sprintf("(+ 1 %s)", self.Expr)
@@ -192,6 +196,22 @@ func (self suffixOpNode) String() string {
     case "++": return fmt.Sprintf("(+ %s 1)", self.Expr)
     case "--": return fmt.Sprintf("(- %s 1)", self.Expr)
     default:   return fmt.Sprintf("(%s %s)", self.Operator, self.Expr)
+  }
+}
+
+type unaryOpNode struct {
+  Operator string
+  Expr IExprNode
+}
+
+func UnaryOpNode(operator string, expr IExprNode) unaryOpNode {
+  return unaryOpNode { operator, expr }
+}
+
+func (self unaryOpNode) String() string {
+  switch self.Operator {
+    case "!": return fmt.Sprintf("(not %s)", self.Expr)
+    default:  return fmt.Sprintf("(%s %s)", self.Operator, self.Expr)
   }
 }
 

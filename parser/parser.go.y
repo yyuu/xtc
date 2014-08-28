@@ -160,13 +160,29 @@ term: unary
     ;
 
 unary: PLUSPLUS unary
+     {
+       $$.node = ast.PrefixOpNode("++", $2.node)
+     }
      | MINUSMINUS unary
+     {
+       $$.node = ast.PrefixOpNode("--", $2.node)
+     }
      | '+' term
+     {
+       $$.node = ast.UnaryOpNode("+", $2.node)
+     }
      | '-' term
+     {
+       $$.node = ast.UnaryOpNode("-", $2.node)
+     }
      | '!' term
+     {
+       $$.node = ast.UnaryOpNode("!", $2.node)
+     }
      | '~' term
-     | '*' term
-     | '&' term
+     {
+       $$.node = ast.UnaryOpNode("~", $2.node)
+     }
      | postfix
      ;
 
@@ -179,9 +195,6 @@ postfix: primary
        {
          $$.node = ast.SuffixOpNode("--", $1.node)
        }
-       | primary '[' expr ']'
-       | primary '.' name
-       | primary ARROW name
        | primary '(' args ')'
        {
          $$.node = ast.FuncallNode(ast.AsExprNode($1.node), ast.AsExprNodeList($3.nodes))
