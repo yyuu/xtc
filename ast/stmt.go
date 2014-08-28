@@ -132,6 +132,10 @@ type whileNode struct {
   Body IStmtNode
 }
 
+func WhileNode(cond INode, body INode) whileNode {
+  return whileNode { cond.(IExprNode), body.(IStmtNode) }
+}
+
 func (self whileNode) String() string {
   return fmt.Sprintf("(let loop ((a %s)) (if a (begin %s (loop %s))))", self.Cond, self.Body, self.Cond)
 }

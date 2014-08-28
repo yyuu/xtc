@@ -120,6 +120,7 @@ stmt: ';'
     | expr ';'
     | block
     | if_stmt
+    | while_stmt
     ;
 
 if_stmt: IF '(' expr ')' stmt ELSE stmt
@@ -127,6 +128,12 @@ if_stmt: IF '(' expr ')' stmt ELSE stmt
          $$.node = ast.IfNode($3.node, $5.node, $7.node)
        }
        ;
+
+while_stmt: WHILE '(' expr ')' stmt
+          {
+            $$.node = ast.WhileNode($3.node, $5.node)
+          }
+          ;
 
 expr: term '=' expr
     {
