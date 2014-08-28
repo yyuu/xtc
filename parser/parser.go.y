@@ -78,16 +78,21 @@ import (
 %%
 
 program: stmts
+       {
+         for i := range $1.nodes {
+           fmt.Println($1.nodes[i])
+         }
+       }
        ;
 
 stmts:
      | stmts stmt
      {
-       fmt.Println($2.node)
+       $$.nodes = append($1.nodes, $2.node)
      }
      ;
 
-stmt: expr
+stmt: expr ';'
     ;
 
 expr: term '=' expr
