@@ -119,7 +119,14 @@ stmts:
 stmt: ';'
     | expr ';'
     | block
+    | if_stmt
     ;
+
+if_stmt: IF '(' expr ')' stmt ELSE stmt
+       {
+         $$.node = ast.IfNode($3.node, $5.node, $7.node)
+       }
+       ;
 
 expr: term '=' expr
     {

@@ -89,6 +89,10 @@ type ifNode struct {
   ElseBody IStmtNode
 }
 
+func IfNode(cond INode, thenBody INode, elseBody INode) ifNode {
+  return ifNode { cond.(IExprNode), thenBody.(IStmtNode), elseBody.(IStmtNode) }
+}
+
 func (self ifNode) String() string {
   return fmt.Sprintf("(if %s %s %s)", self.Cond, self.ThenBody, self.ElseBody)
 }
