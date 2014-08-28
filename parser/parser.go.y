@@ -53,8 +53,8 @@ import (
 
 /* operators */
 %token DOTDOTDOT
-%token SHIFTLEFTEQ
-%token SHIFTRIGHTEQ
+%token LSHIFTEQ
+%token RSHIFTEQ
 %token NEQ
 %token MODEQ
 %token ANDAND
@@ -64,13 +64,13 @@ import (
 %token PLUSEQ
 %token MINUSMINUS
 %token MINUSEQ
-%token MINUSGT
+%token ARROW
 %token DIVEQ
-%token SHIFTLEFT
+%token LSHIFT
 %token LE
 %token EQEQ
 %token GE
-%token SHIFTRIGHT
+%token RSHIFT
 %token XOREQ
 %token OREQ
 %token OROR
@@ -86,29 +86,84 @@ stmts:
 
 stmt: expr
     {
-      fmt.Println($1.node)
+      fmt.Println($1.node.DumpString())
     }
     ;
 
-expr: STRING
+expr: expr2
     {
-      $$.node = ast.StringLiteralNode($1.token.Literal)
-    }
-    | INTEGER
-    {
-      $$.node = ast.IntegerLiteralNode($1.token.Literal)
+      // FIXME:
+      $$.node = $1.node
     }
     ;
+
+expr2: expr1
+     | expr1 '+' expr1
+     | expr1 '-' expr1
+     ;
+
+expr1: term
+     | term '*' term
+     | term '/' term
+     | term '%' term
+     ;
+
+term: unary
+    ;
+
+unary: PLUSPLUS unary
+     | MINUSMINUS unary
+     | '+' term
+     | '-' term
+     | '!' term
+     | '~' term
+     | '*' term
+     | '&' term
+     | postfix
+     ;
+
+postfix: primary PLUSPLUS
+       | primary MINUSMINUS
+       | primary '[' expr ']'
+       | primary '.' name
+       | primary ARROW name
+       | primary '(' args ')'
+       ;
+
+name: IDENTIFIER
+    ;
+
+args: expr
+    | args ',' expr
+    ;
+
+primary: INTEGER
+       {
+         $$.node = ast.IntegerLiteralNode($1.token.Literal)
+       }
+       | CHARACTER
+       {
+         $$.node = ast.IntegerLiteralNode($1.token.Literal)
+       }
+       | STRING
+       {
+         $$.node = ast.StringLiteralNode($1.token.Literal)
+       }
+       ;
 
 %%
 
 const EOF = 0
+const DEBUG = true
 
 func (self *Lexer) Lex(lval *yySymType) int {
   t := self.GetToken()
   if t == nil {
     return EOF
   } else {
+    if DEBUG {
+      fmt.Println("token:", t)
+    }
     lval.token = *t
     return t.Id
   }
