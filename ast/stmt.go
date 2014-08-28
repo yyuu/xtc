@@ -95,6 +95,14 @@ type exprStmtNode struct {
   Expr IExprNode
 }
 
+func ExprStmtNode(expr INode) exprStmtNode {
+  return exprStmtNode { expr.(IExprNode) }
+}
+
+func (self exprStmtNode) String() string {
+  return fmt.Sprintf("%s", self.Expr)
+}
+
 type forNode struct {
   Init IExprNode
   Cond IExprNode

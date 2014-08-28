@@ -149,6 +149,9 @@ stmts:
 
 stmt: ';'
     | expr ';'
+    {
+      $$.node = ast.ExprStmtNode($1.node)
+    }
     | block
     | if_stmt
     | while_stmt
