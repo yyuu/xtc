@@ -2,11 +2,94 @@ package parser
 
 import (
   "testing"
+  "bitbucket.org/yyuu/bs/ast"
 )
+
+func assertEqualsAST(t *testing.T, got ast.AST, expected ast.AST) {
+  if ! ast.Equals(got, expected) {
+    t.Errorf("\n;;;; expected ;;;;\n%s\n;;;; got ;;;;\n%s\n", expected, got)
+    t.Fail()
+  }
+}
 
 func TestParseEmpty(t *testing.T) {
   _, err := ParseExpr("")
   if err != nil {
     t.Fail()
   }
+}
+
+func loc(lineNumber int, lineOffset int) ast.Location {
+  return ast.Location { SourceName: "-", LineNumber: lineNumber, LineOffset: lineOffset }
+}
+
+func TestParseFuncallWithoutArguments(t *testing.T) {
+  s := `
+gets( );
+  `
+  a, err := ParseExpr(s)
+  if err != nil {
+    t.Fail()
+  }
+  assertEqualsAST(t, *a,
+    ast.AST {
+      []ast.IStmtNode {
+        ast.ExprStmtNode(loc(1,1),
+          ast.FuncallNode(loc(1,1),
+                          ast.VariableNode(loc(1,1), "gets"),
+                          []ast.IExprNode {
+                          })),
+      },
+    },
+  )
+}
+
+func TestParseFuncallWithSingleArgument(t *testing.T) {
+  s := `
+    println("hello, world");
+  `
+  a, err := ParseExpr(s)
+  if err != nil {
+    t.Fail()
+  }
+  assertEqualsAST(t, *a,
+    ast.AST {
+      []ast.IStmtNode {
+        ast.ExprStmtNode(loc(1,5),
+          ast.FuncallNode(loc(1,5),
+                          ast.VariableNode(loc(1,5), "println"),
+                          []ast.IExprNode {
+                            ast.StringLiteralNode(loc(1,13), "\"hello, world\""),
+                          })),
+      },
+    },
+  )
+}
+
+func TestParseFuncallWithMultipleArguments(t *testing.T) {
+  s := `
+
+    println(
+      "hello, %s",
+      "world"
+    );
+
+  `
+  a, err := ParseExpr(s)
+  if err != nil {
+    t.Fail()
+  }
+  assertEqualsAST(t, *a,
+    ast.AST {
+      []ast.IStmtNode {
+        ast.ExprStmtNode(loc(2,5),
+          ast.FuncallNode(loc(2,5),
+                          ast.VariableNode(loc(2,5), "println"),
+                          []ast.IExprNode {
+                            ast.StringLiteralNode(loc(3,7), "\"hello, %s\""),
+                            ast.StringLiteralNode(loc(4,7), "\"world\""),
+                          })),
+      },
+    },
+  )
 }
