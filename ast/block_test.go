@@ -11,9 +11,10 @@ func TestBlock1(t *testing.T) {
   }
  */
   x := BlockNode(
+    LOC,
     []IExprNode { },
     []IStmtNode {
-      ExprStmtNode(FuncallNode(VariableNode("println"), []IExprNode { StringLiteralNode("\"hello, world\"") })),
+      ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "println"), []IExprNode { StringLiteralNode(LOC, "\"hello, world\"") })),
     },
   )
   s := `
@@ -30,11 +31,12 @@ func TestBlock2(t *testing.T) {
   }
  */
   x := BlockNode(
+    LOC,
     []IExprNode {
-      AssignNode(VariableNode("n"), IntegerLiteralNode("12345")),
+      AssignNode(LOC, VariableNode(LOC, "n"), IntegerLiteralNode(LOC, "12345")),
     },
     []IStmtNode {
-      ExprStmtNode(FuncallNode(VariableNode("printf"), []IExprNode { StringLiteralNode("\"%d\""), VariableNode("n") })),
+      ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "printf"), []IExprNode { StringLiteralNode(LOC, "\"%d\""), VariableNode(LOC, "n") })),
     },
   )
   s := `
@@ -54,13 +56,14 @@ func TestBlock3(t *testing.T) {
   }
  */
   x := BlockNode(
+    LOC,
     []IExprNode {
-      AssignNode(VariableNode("n"), IntegerLiteralNode("12345")),
-      AssignNode(VariableNode("m"), IntegerLiteralNode("67890")),
+      AssignNode(LOC, VariableNode(LOC, "n"), IntegerLiteralNode(LOC, "12345")),
+      AssignNode(LOC, VariableNode(LOC, "m"), IntegerLiteralNode(LOC, "67890")),
     },
     []IStmtNode {
-      ExprStmtNode(FuncallNode(VariableNode("printf"), []IExprNode { StringLiteralNode("\"%d\""), VariableNode("n") })),
-      ExprStmtNode(FuncallNode(VariableNode("printf"), []IExprNode { StringLiteralNode("\"%d\""), VariableNode("m") })),
+      ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "printf"), []IExprNode { StringLiteralNode(LOC, "\"%d\""), VariableNode(LOC, "n") })),
+      ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "printf"), []IExprNode { StringLiteralNode(LOC, "\"%d\""), VariableNode(LOC, "m") })),
     },
   )
   s := `

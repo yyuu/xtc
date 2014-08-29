@@ -9,11 +9,12 @@ func TestCondExpr(t *testing.T) {
   (n < 2) ? 1 : (f(n-1)+f(n-2))
  */
   x := CondExprNode(
-    BinaryOpNode("<", VariableNode("n"), IntegerLiteralNode("2")),
-    IntegerLiteralNode("1"),
-    BinaryOpNode("+",
-                 FuncallNode(VariableNode("f"), []IExprNode { BinaryOpNode("-", VariableNode("n"), IntegerLiteralNode("1")) }),
-                 FuncallNode(VariableNode("f"), []IExprNode { BinaryOpNode("-", VariableNode("n"), IntegerLiteralNode("2")) })))
+    LOC,
+    BinaryOpNode(LOC, "<", VariableNode(LOC, "n"), IntegerLiteralNode(LOC, "2")),
+    IntegerLiteralNode(LOC, "1"),
+    BinaryOpNode(LOC, "+",
+                 FuncallNode(LOC, VariableNode(LOC, "f"), []IExprNode { BinaryOpNode(LOC, "-", VariableNode(LOC, "n"), IntegerLiteralNode(LOC, "1")) }),
+                 FuncallNode(LOC, VariableNode(LOC, "f"), []IExprNode { BinaryOpNode(LOC, "-", VariableNode(LOC, "n"), IntegerLiteralNode(LOC, "2")) })))
   assertEquals(t, x.String(), "(if (< n 2) 1 (+ (f (- n 1)) (f (- n 2))))")
 }
 
@@ -26,9 +27,10 @@ func TestIf(t *testing.T) {
   }
  */
   x := IfNode(
-    BinaryOpNode("==", BinaryOpNode("%", VariableNode("n"), IntegerLiteralNode("2")), IntegerLiteralNode("0")),
-    ExprStmtNode(FuncallNode(VariableNode("println"), []IExprNode { StringLiteralNode("\"even\"") })),
-    ExprStmtNode(FuncallNode(VariableNode("println"), []IExprNode { StringLiteralNode("\"odd\"") })),
+    LOC,
+    BinaryOpNode(LOC, "==", BinaryOpNode(LOC, "%", VariableNode(LOC, "n"), IntegerLiteralNode(LOC, "2")), IntegerLiteralNode(LOC, "0")),
+    ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "println"), []IExprNode { StringLiteralNode(LOC, "\"even\"") })),
+    ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "println"), []IExprNode { StringLiteralNode(LOC, "\"odd\"") })),
   )
   s := `
     (if (= (modulo n 2) 0)
@@ -47,19 +49,23 @@ func TestSwitch(t *testing.T) {
   }
    */
   x := SwitchNode(
-    VariableNode("n"),
+    LOC,
+    VariableNode(LOC, "n"),
     []IStmtNode {
       CaseNode(
-        []IExprNode { IntegerLiteralNode("1") },
-        ExprStmtNode(FuncallNode(VariableNode("println"), []IExprNode { StringLiteralNode("\"one\"") })),
+        LOC,
+        []IExprNode { IntegerLiteralNode(LOC, "1") },
+        ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "println"), []IExprNode { StringLiteralNode(LOC, "\"one\"") })),
       ),
       CaseNode(
-        []IExprNode { IntegerLiteralNode("2") },
-        ExprStmtNode(FuncallNode(VariableNode("println"), []IExprNode { StringLiteralNode("\"two\"") })),
+        LOC, 
+        []IExprNode { IntegerLiteralNode(LOC, "2") },
+        ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "println"), []IExprNode { StringLiteralNode(LOC, "\"two\"") })),
       ),
       CaseNode(
+        LOC,
         []IExprNode { },
-        ExprStmtNode(FuncallNode(VariableNode("println"), []IExprNode { StringLiteralNode("\"plentiful\"") })),
+        ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "println"), []IExprNode { StringLiteralNode(LOC, "\"plentiful\"") })),
       ),
     },
   )

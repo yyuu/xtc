@@ -24,5 +24,4 @@ type ILocation interface {
   GetSourceName() string
   GetLineNumber() int
   GetLineOffset() int
-  String() string
 }

@@ -10,7 +10,7 @@ func TestAddressNode(t *testing.T) {
  */
 
 func TestArefNode(t *testing.T) {
-  x := ArefNode(VariableNode("a"), IntegerLiteralNode("12345"))
+  x := ArefNode(LOC, VariableNode(LOC, "a"), IntegerLiteralNode(LOC, "12345"))
   assertEquals(t, x.String(), "(vector-ref a 12345)")
 }
 
@@ -20,24 +20,24 @@ func TestDereferenceNode(t *testing.T) {
  */
 
 func TestFuncallNode(t *testing.T) {
-  x := FuncallNode(VariableNode("a"), []IExprNode { IntegerLiteralNode("12345"), IntegerLiteralNode("67890") })
+  x := FuncallNode(LOC, VariableNode(LOC, "a"), []IExprNode { IntegerLiteralNode(LOC, "12345"), IntegerLiteralNode(LOC, "67890") })
   assertEquals(t, x.String(), "(a 12345 67890)")
 
-  y := FuncallNode(VariableNode("b"), []IExprNode { })
+  y := FuncallNode(LOC, VariableNode(LOC, "b"), []IExprNode { })
   assertEquals(t, y.String(), "(b)")
 }
 
 func TestMemberNode(t *testing.T) {
-  x := MemberNode(VariableNode("a"), "b")
+  x := MemberNode(LOC, VariableNode(LOC, "a"), "b")
   assertEquals(t, x.String(), "(slot-ref a 'b)")
 }
 
 func TestPtrMemberNode(t *testing.T) {
-  x := PtrMemberNode(VariableNode("a"), "b")
+  x := PtrMemberNode(LOC, VariableNode(LOC, "a"), "b")
   assertEquals(t, x.String(), "(slot-ref a 'b)")
 }
 
 func TestVariableNode(t *testing.T) {
-  x := VariableNode("a")
+  x := VariableNode(LOC, "a")
   assertEquals(t, x.String(), "a")
 }
