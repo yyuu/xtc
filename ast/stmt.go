@@ -165,6 +165,14 @@ type labelNode struct {
   Stmt IStmtNode
 }
 
+func LabelNode(name string, stmt INode) labelNode {
+  return labelNode { name, stmt.(IStmtNode) }
+}
+
+func (self labelNode) String() string {
+  panic("not implemented")
+}
+
 type returnNode struct {
   Expr IExprNode
 }
