@@ -9,6 +9,16 @@ func TestBinaryOp(t *testing.T) {
   assertEquals(t, x.String(), "(* (modulo a b) c)")
 }
 
+func TestCondExpr(t *testing.T) {
+  x := CondExprNode(
+    BinaryOpNode("<", VariableNode("n"), IntegerLiteralNode("2")),
+    IntegerLiteralNode("1"),
+    BinaryOpNode("+",
+                 FuncallNode(VariableNode("f"), []INode { BinaryOpNode("-", VariableNode("n"), IntegerLiteralNode("1")) }),
+                 FuncallNode(VariableNode("f"), []INode { BinaryOpNode("-", VariableNode("n"), IntegerLiteralNode("2")) })))
+  assertEquals(t, x.String(), "(if (< n 2) 1 (+ (f (- n 1)) (f (- n 2))))")
+}
+
 func TestLogicalAndNode(t *testing.T) {
   x := LogicalAndNode(VariableNode("a"), LogicalAndNode(VariableNode("b"), VariableNode("c")))
   assertEquals(t, x.String(), "(and a (and b c))")
