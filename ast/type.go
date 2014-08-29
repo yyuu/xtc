@@ -19,7 +19,7 @@ func (self castNode) IsExpr() bool {
   return true
 }
 
-func (self castNode) Location() ILocation {
+func (self castNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -42,7 +42,7 @@ func (self sizeofExprNode) IsExpr() bool {
   return true
 }
 
-func (self sizeofExprNode) Location() ILocation {
+func (self sizeofExprNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -65,6 +65,6 @@ func (self sizeofTypeNode) IsExpr() bool {
   return true
 }
 
-func (self sizeofTypeNode) Location() ILocation {
+func (self sizeofTypeNode) GetLocation() ILocation {
   return self.location
 }

@@ -21,7 +21,7 @@ func (self breakNode) IsStmt() bool {
   return true
 }
 
-func (self breakNode) Location() ILocation {
+func (self breakNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -42,7 +42,7 @@ func (self continueNode) IsStmt() bool {
   return true
 }
 
-func (self continueNode) Location() ILocation {
+func (self continueNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -64,7 +64,7 @@ func (self exprStmtNode) IsStmt() bool {
   return true
 }
 
-func (self exprStmtNode) Location() ILocation {
+func (self exprStmtNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -86,7 +86,7 @@ func (self gotoNode) IsStmt() bool {
   return true
 }
 
-func (self gotoNode) Location() ILocation {
+func (self gotoNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -109,7 +109,7 @@ func (self labelNode) IsStmt() bool {
   return true
 }
 
-func (self labelNode) Location() ILocation {
+func (self labelNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -131,6 +131,6 @@ func (self returnNode) IsStmt() bool {
   return true
 }
 
-func (self returnNode) Location() ILocation {
+func (self returnNode) GetLocation() ILocation {
   return self.location
 }

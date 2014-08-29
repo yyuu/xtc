@@ -45,6 +45,6 @@ func (self blockNode) IsStmt() bool {
   return true
 }
 
-func (self blockNode) Location() ILocation {
+func (self blockNode) GetLocation() ILocation {
   return self.location
 }

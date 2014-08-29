@@ -24,7 +24,7 @@ func (self integerLiteralNode) IsExpr() bool {
   return true
 }
 
-func (self integerLiteralNode) Location() ILocation {
+func (self integerLiteralNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -46,6 +46,6 @@ func (self stringLiteralNode) IsExpr() bool {
   return true
 }
 
-func (self stringLiteralNode) Location() ILocation {
+func (self stringLiteralNode) GetLocation() ILocation {
   return self.location
 }

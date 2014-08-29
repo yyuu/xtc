@@ -2,7 +2,7 @@ package ast
 
 type INode interface {
   String() string
-  Location() ILocation
+  GetLocation() ILocation
 }
 
 type IExprNode interface {

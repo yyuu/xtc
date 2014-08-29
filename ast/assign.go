@@ -23,7 +23,7 @@ func (self assignNode) IsExpr() bool {
   return true
 }
 
-func (self assignNode) Location() ILocation {
+func (self assignNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -47,6 +47,6 @@ func (self opAssignNode) IsExpr() bool {
   return true
 }
 
-func (self opAssignNode) Location() ILocation {
+func (self opAssignNode) GetLocation() ILocation {
   return self.location
 }

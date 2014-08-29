@@ -23,7 +23,7 @@ func (self addressNode) IsExpr() bool {
   return true
 }
 
-func (self addressNode) Location() ILocation {
+func (self addressNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -46,7 +46,7 @@ func (self arefNode) IsExpr() bool {
   return true
 }
 
-func (self arefNode) Location() ILocation {
+func (self arefNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -77,7 +77,7 @@ func (self funcallNode) IsExpr() bool {
   return true
 }
 
-func (self funcallNode) Location() ILocation {
+func (self funcallNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -100,7 +100,7 @@ func (self memberNode) IsExpr() bool {
   return true
 }
 
-func (self memberNode) Location() ILocation {
+func (self memberNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -123,7 +123,7 @@ func (self ptrMemberNode) IsExpr() bool {
   return true
 }
 
-func (self ptrMemberNode) Location() ILocation {
+func (self ptrMemberNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -145,6 +145,6 @@ func (self variableNode) IsExpr() bool {
   return true
 }
 
-func (self variableNode) Location() ILocation {
+func (self variableNode) GetLocation() ILocation {
   return self.location
 }

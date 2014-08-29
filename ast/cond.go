@@ -25,7 +25,7 @@ func (self condExprNode) IsExpr() bool {
   return true
 }
 
-func (self condExprNode) Location() ILocation {
+func (self condExprNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -56,7 +56,7 @@ func (self caseNode) IsStmt() bool {
   return true
 }
 
-func (self caseNode) Location() ILocation {
+func (self caseNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -80,7 +80,7 @@ func (self ifNode) IsStmt() bool {
   return true
 }
 
-func (self ifNode) Location() ILocation {
+func (self ifNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -115,6 +115,6 @@ func (self switchNode) IsStmt() bool {
   return true
 }
 
-func (self switchNode) Location() ILocation {
+func (self switchNode) GetLocation() ILocation {
   return self.location
 }

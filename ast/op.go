@@ -33,7 +33,7 @@ func (self binaryOpNode) IsExpr() bool {
   return true
 }
 
-func (self binaryOpNode) Location() ILocation {
+func (self binaryOpNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -56,7 +56,7 @@ func (self logicalAndNode) IsExpr() bool {
   return true
 }
 
-func (self logicalAndNode) Location() ILocation {
+func (self logicalAndNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -79,7 +79,7 @@ func (self logicalOrNode) IsExpr() bool {
   return true
 }
 
-func (self logicalOrNode) Location() ILocation {
+func (self logicalOrNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -106,7 +106,7 @@ func (self prefixOpNode) IsExpr() bool {
   return true
 }
 
-func (self prefixOpNode) Location() ILocation {
+func (self prefixOpNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -133,7 +133,7 @@ func (self suffixOpNode) IsExpr() bool {
   return true
 }
 
-func (self suffixOpNode) Location() ILocation {
+func (self suffixOpNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -159,6 +159,6 @@ func (self unaryOpNode) IsExpr() bool {
   return true
 }
 
-func (self unaryOpNode) Location() ILocation {
+func (self unaryOpNode) GetLocation() ILocation {
   return self.location
 }

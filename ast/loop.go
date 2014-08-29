@@ -23,7 +23,7 @@ func (self doWhileNode) IsStmt() bool {
   return true
 }
 
-func (self doWhileNode) Location() ILocation {
+func (self doWhileNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -48,7 +48,7 @@ func (self forNode) IsStmt() bool {
   return true
 }
 
-func (self forNode) Location() ILocation {
+func (self forNode) GetLocation() ILocation {
   return self.location
 }
 
@@ -71,6 +71,6 @@ func (self whileNode) IsStmt() bool {
   return true
 }
 
-func (self whileNode) Location() ILocation {
+func (self whileNode) GetLocation() ILocation {
   return self.location
 }
