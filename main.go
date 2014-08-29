@@ -54,11 +54,9 @@ func repl() {
   }
 }
 
-func p(nodes []ast.IStmtNode, err error) {
+func p(ast *ast.AST, err error) {
   if err != nil {
     panic(err)
   }
-  for i := range nodes {
-    fmt.Println(nodes[i])
-  }
+  fmt.Print(*ast)
 }

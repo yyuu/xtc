@@ -5,11 +5,8 @@ import (
 )
 
 func TestParseEmpty(t *testing.T) {
-  nodes, err := ParseExpr("")
+  _, err := ParseExpr("")
   if err != nil {
-    t.Fail()
-  }
-  if 0 < len(nodes) {
     t.Fail()
   }
 }

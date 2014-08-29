@@ -83,7 +83,7 @@ import (
 program: stmts
        {
          if lex, ok := yylex.(*lex); ok {
-           lex.nodes = $1.stmts
+           lex.ast = &ast.AST { $1.stmts }
          } else {
            panic("parser is broken")
          }
@@ -513,10 +513,10 @@ func (self *lex) Error(s string) {
   panic(fmt.Errorf("%s: %s", self, s))
 }
 
-func ParseExpr(s string) ([]ast.IStmtNode, error) {
+func ParseExpr(s string) (*ast.AST, error) {
   lex := lexer("main.c", s)
   if yyParse(lex) == 0 {
-    return lex.nodes, nil // success
+    return lex.ast, nil // success
   } else {
     if lex.error == nil {
       panic("must not happen")

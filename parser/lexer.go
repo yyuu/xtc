@@ -16,7 +16,7 @@ type lex struct {
   lineOffset int
   ignoreSpaces bool
   ignoreComments bool
-  nodes []ast.IStmtNode
+  ast *ast.AST
   error error
 }
 
@@ -57,7 +57,7 @@ func lexer(filename string, source string) *lex {
     lineOffset: 0,
     ignoreSpaces: true,
     ignoreComments: true,
-    nodes: nil,
+    ast: nil,
     error: nil,
   }
 }
