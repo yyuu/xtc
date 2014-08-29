@@ -26,7 +26,7 @@ func BlockNode(_variables []INode, _stmts []INode) blockNode {
 func (self blockNode) String() string {
   sVariables := make([]string, len(self.Variables))
   for i := range self.Variables {
-    sVariables[i] = fmt.Sprintf("(a%d %s)", i, self.Variables[i])
+    sVariables[i] = fmt.Sprintf("%s", self.Variables[i])
   }
   sStmts := make([]string, len(self.Stmts))
   for j := range self.Stmts {
