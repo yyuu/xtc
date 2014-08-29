@@ -11,7 +11,7 @@ func TestDoWhile(t *testing.T) {
   } while (a < 100);
  */
   x := DoWhileNode(
-    ExprStmtNode(FuncallNode("b", []INode { VariableNode("a") })),
+    ExprStmtNode(FuncallNode(VariableNode("b"), []INode { VariableNode("a") })),
     BinaryOpNode("<", VariableNode("a"), IntegerLiteralNode("100")),
   )
   s := `

@@ -1,6 +1,7 @@
 package ast
 
 type INode interface {
+  String() string
 }
 
 type IExprNode interface {
