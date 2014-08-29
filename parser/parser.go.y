@@ -496,7 +496,7 @@ const EOF = 0
 const DEBUG = true
 
 func (self *lex) Lex(lval *yySymType) int {
-  t := self.GetToken()
+  t := self.getToken()
   if t == nil {
     return EOF
   } else {

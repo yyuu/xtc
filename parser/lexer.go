@@ -127,7 +127,7 @@ var operators []key = []key {
   fixed_key("||",       OROR),
 }
 
-func (self *lex) GetToken() (t *token) {
+func (self *lex) getToken() (t *token) {
   if self.scanner.IsEOS() {
     return nil
   }
@@ -137,7 +137,7 @@ func (self *lex) GetToken() (t *token) {
     if ! self.ignoreSpaces {
       return t
     } else {
-      return self.GetToken()
+      return self.getToken()
     }
   }
 
@@ -146,7 +146,7 @@ func (self *lex) GetToken() (t *token) {
     if ! self.ignoreComments {
       return t
     } else {
-      return self.GetToken()
+      return self.getToken()
     }
   }
   t = self.scanLineComment()
@@ -154,7 +154,7 @@ func (self *lex) GetToken() (t *token) {
     if ! self.ignoreComments {
       return t
     } else {
-      return self.GetToken()
+      return self.getToken()
     }
   }
 
