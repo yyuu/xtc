@@ -11,7 +11,7 @@ func TestDoWhile(t *testing.T) {
   } while (a < 100);
  */
   x := DoWhileNode(
-    ExprStmtNode(FuncallNode(VariableNode("b"), []INode { VariableNode("a") })),
+    ExprStmtNode(FuncallNode(VariableNode("b"), []IExprNode { VariableNode("a") })),
     BinaryOpNode("<", VariableNode("a"), IntegerLiteralNode("100")),
   )
   s := `
@@ -34,7 +34,7 @@ func TestFor(t *testing.T) {
     AssignNode(VariableNode("i"), IntegerLiteralNode("0")),
     BinaryOpNode("<", VariableNode("i"), IntegerLiteralNode("100")),
     SuffixOpNode("++", VariableNode("i")),
-    ExprStmtNode(FuncallNode(VariableNode("f"), []INode { VariableNode("i") })),
+    ExprStmtNode(FuncallNode(VariableNode("f"), []IExprNode { VariableNode("i") })),
   )
   s := `
     (let for-loop ((i 0))
@@ -54,7 +54,7 @@ func TestWhile(t *testing.T) {
  */
   x := WhileNode(
     UnaryOpNode("!", VariableNode("eof")),
-    ExprStmtNode(FuncallNode(VariableNode("gets"), []INode { })),
+    ExprStmtNode(FuncallNode(VariableNode("gets"), []IExprNode { })),
   )
   s := `
     (let while-loop ((while-cond (not eof)))

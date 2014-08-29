@@ -10,12 +10,8 @@ type caseNode struct {
   Body IStmtNode
 }
 
-func CaseNode(_values []INode, body INode) caseNode {
-  values := make([]IExprNode, len(_values))
-  for i := range _values {
-    values[i] = _values[i].(IExprNode)
-  }
-  return caseNode { values, body.(IStmtNode) }
+func CaseNode(values []IExprNode, body IStmtNode) caseNode {
+  return caseNode { values, body }
 }
 
 func (self caseNode) String() string {
@@ -36,8 +32,8 @@ type ifNode struct {
   ElseBody IStmtNode
 }
 
-func IfNode(cond INode, thenBody INode, elseBody INode) ifNode {
-  return ifNode { cond.(IExprNode), thenBody.(IStmtNode), elseBody.(IStmtNode) }
+func IfNode(cond IExprNode, thenBody IStmtNode, elseBody IStmtNode) ifNode {
+  return ifNode { cond, thenBody, elseBody }
 }
 
 func (self ifNode) String() string {
@@ -49,12 +45,12 @@ type switchNode struct {
   Cases []caseNode
 }
 
-func SwitchNode(cond INode, _cases []INode) switchNode {
+func SwitchNode(cond IExprNode, _cases []IStmtNode) switchNode {
   cases := make([]caseNode, len(_cases))
   for i := range _cases {
     cases[i] = _cases[i].(caseNode)
   }
-  return switchNode { cond.(IExprNode), cases }
+  return switchNode { cond, cases }
 }
 
 func (self switchNode) String() string {

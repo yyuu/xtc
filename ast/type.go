@@ -9,8 +9,8 @@ type castNode struct {
   Expr IExprNode
 }
 
-func CastNode(t INode, expr INode) castNode {
-  return castNode { t.(ITypeNode), expr.(IExprNode) }
+func CastNode(t ITypeNode, expr IExprNode) castNode {
+  return castNode { t, expr }
 }
 
 func (self castNode) String() string {
@@ -36,8 +36,8 @@ type sizeofExprNode struct {
   Type ITypeNode
 }
 
-func SizeofExprNode(expr INode, t INode) sizeofExprNode {
-  return sizeofExprNode { expr.(IExprNode), t.(ITypeNode) }
+func SizeofExprNode(expr IExprNode, t ITypeNode) sizeofExprNode {
+  return sizeofExprNode { expr, t }
 }
 
 func (self sizeofExprNode) String() string {
@@ -49,8 +49,8 @@ type sizeofTypeNode struct {
   Operand ITypeNode
 }
 
-func SizeofTypeNode(t INode, operand INode) sizeofTypeNode {
-  return sizeofTypeNode { t.(ITypeNode), operand.(ITypeNode) }
+func SizeofTypeNode(t ITypeNode, operand ITypeNode) sizeofTypeNode {
+  return sizeofTypeNode { t, operand }
 }
 
 func (self sizeofTypeNode) String() string {

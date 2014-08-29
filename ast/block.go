@@ -11,15 +11,7 @@ type blockNode struct {
   Stmts []IStmtNode
 }
 
-func BlockNode(_variables []INode, _stmts []INode) blockNode {
-  variables := make([]IExprNode, len(_variables))
-  stmts := make([]IStmtNode, len(_stmts))
-  for i := range _variables {
-    variables[i] = _variables[i].(IExprNode)
-  }
-  for j := range _stmts {
-    stmts[j] = _stmts[j].(IStmtNode)
-  }
+func BlockNode(variables []IExprNode, stmts []IStmtNode) blockNode {
   return blockNode { variables, stmts }
 }
 
