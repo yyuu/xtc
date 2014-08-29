@@ -14,7 +14,7 @@ func TestContinue(t *testing.T) {
   assertEquals(t, x.String(), "(continue)")
 }
 
-func TestExptStmt(t *testing.T) {
+func TestExprStmt(t *testing.T) {
   x := ExprStmtNode(BinaryOpNode("+", IntegerLiteralNode("1"), IntegerLiteralNode("1")))
   assertEquals(t, x.String(), "(+ 1 1)")
 }
