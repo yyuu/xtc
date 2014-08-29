@@ -7,7 +7,7 @@ import (
 
 type INode interface {
   String() string
-  GetLocation() ILocation
+  GetLocation() Location
 }
 
 type IExprNode interface {
@@ -25,10 +25,10 @@ type ITypeNode interface {
   IsType() bool
 }
 
-type ILocation interface {
-  GetSourceName() string
-  GetLineNumber() int
-  GetLineOffset() int
+type Location struct {
+  SourceName string
+  LineNumber int
+  LineOffset int
 }
 
 type AST struct {
@@ -40,7 +40,7 @@ func (self AST) String() string {
   for i := range self.Stmts {
     stmt := self.Stmts[i]
     location := stmt.GetLocation()
-    xs[i] = fmt.Sprintf(";; %s:%d,%d\n%s", location.GetSourceName(), location.GetLineNumber()+1, location.GetLineOffset()+1, stmt)
+    xs[i] = fmt.Sprintf(";; %s:%d,%d\n%s", location.SourceName, location.LineNumber+1, location.LineOffset+1, stmt)
   }
   return strings.Join(xs, "\n")
 }

@@ -7,13 +7,13 @@ import (
 
 // BlockNode
 type blockNode struct {
-  location ILocation
+  location Location
 // Variables []DefinedVariable
   Variables []IExprNode
   Stmts []IStmtNode
 }
 
-func BlockNode(location ILocation, variables []IExprNode, stmts []IStmtNode) blockNode {
+func BlockNode(location Location, variables []IExprNode, stmts []IStmtNode) blockNode {
   return blockNode { location, variables, stmts }
 }
 
@@ -45,6 +45,6 @@ func (self blockNode) IsStmt() bool {
   return true
 }
 
-func (self blockNode) GetLocation() ILocation {
+func (self blockNode) GetLocation() Location {
   return self.location
 }

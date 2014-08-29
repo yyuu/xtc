@@ -28,30 +28,12 @@ func (self lex) String() string {
 type token struct {
   id int
   literal string
-  location location
+  location ast.Location
 }
 
 func (self token) String() string {
   location := self.location
-  return fmt.Sprintf("#<token:%d %s:%d,%d %q>", self.id, location.sourceName, location.lineNumber, location.lineOffset, self.literal)
-}
-
-type location struct {
-  sourceName string
-  lineNumber int
-  lineOffset int
-}
-
-func (self location) GetSourceName() string {
-  return self.sourceName
-}
-
-func (self location) GetLineNumber() int {
-  return self.lineNumber
-}
-
-func (self location) GetLineOffset() int {
-  return self.lineOffset
+  return fmt.Sprintf("#<token:%d %s:%d,%d %q>", self.id, location.SourceName, location.LineNumber, location.LineOffset, self.literal)
 }
 
 func lexer(filename string, source string) *lex {
@@ -200,10 +182,10 @@ func (self *lex) consume(id int, literal string) (t *token) {
   t = &token {
     id: id,
     literal: literal,
-    location: location {
-      sourceName: self.sourceName,
-      lineNumber: self.lineNumber,
-      lineOffset: self.lineOffset,
+    location: ast.Location {
+      SourceName: self.sourceName,
+      LineNumber: self.lineNumber,
+      LineOffset: self.lineOffset,
     },
   }
 

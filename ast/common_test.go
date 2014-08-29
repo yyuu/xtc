@@ -17,23 +17,8 @@ func trimSpace(s string) string {
   return re.ReplaceAllString(strings.TrimSpace(s), " ")
 }
 
-// dummy
-type location struct {
-  sourceName string
-  lineNumber int
-  lineOffset int
+var LOC = Location {
+  SourceName: "__test__",
+  LineNumber: 0,
+  LineOffset: 0,
 }
-
-func (self location) GetSourceName() string {
-  return self.sourceName
-}
-
-func (self location) GetLineNumber() int {
-  return self.lineNumber
-}
-
-func (self location) GetLineOffset() int {
-  return self.lineOffset
-}
-
-var LOC = location { "__test__", 0, 0 }

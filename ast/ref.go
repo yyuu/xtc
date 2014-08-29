@@ -7,11 +7,11 @@ import (
 
 // AddressNode
 type addressNode struct {
-  location ILocation
+  location Location
   Expr IExprNode
 }
 
-func AddressNode(location ILocation, expr IExprNode) addressNode {
+func AddressNode(location Location, expr IExprNode) addressNode {
   return addressNode { location, expr }
 }
 
@@ -23,18 +23,18 @@ func (self addressNode) IsExpr() bool {
   return true
 }
 
-func (self addressNode) GetLocation() ILocation {
+func (self addressNode) GetLocation() Location {
   return self.location
 }
 
 // ArefNode
 type arefNode struct {
-  location ILocation
+  location Location
   Expr IExprNode
   Index IExprNode
 }
 
-func ArefNode(location ILocation, expr IExprNode, index IExprNode) arefNode {
+func ArefNode(location Location, expr IExprNode, index IExprNode) arefNode {
   return arefNode { location, expr, index }
 }
 
@@ -46,18 +46,18 @@ func (self arefNode) IsExpr() bool {
   return true
 }
 
-func (self arefNode) GetLocation() ILocation {
+func (self arefNode) GetLocation() Location {
   return self.location
 }
 
 // FuncallNode
 type funcallNode struct {
-  location ILocation
+  location Location
   Expr IExprNode
   Args []IExprNode
 }
 
-func FuncallNode(location ILocation, expr IExprNode, args []IExprNode) funcallNode {
+func FuncallNode(location Location, expr IExprNode, args []IExprNode) funcallNode {
   return funcallNode { location, expr, args }
 }
 
@@ -77,18 +77,18 @@ func (self funcallNode) IsExpr() bool {
   return true
 }
 
-func (self funcallNode) GetLocation() ILocation {
+func (self funcallNode) GetLocation() Location {
   return self.location
 }
 
 // MemberNode
 type memberNode struct {
-  location ILocation
+  location Location
   Expr IExprNode
   Member string
 }
 
-func MemberNode(location ILocation, expr IExprNode, member string) memberNode {
+func MemberNode(location Location, expr IExprNode, member string) memberNode {
   return memberNode { location, expr, member }
 }
 
@@ -100,18 +100,18 @@ func (self memberNode) IsExpr() bool {
   return true
 }
 
-func (self memberNode) GetLocation() ILocation {
+func (self memberNode) GetLocation() Location {
   return self.location
 }
 
 // PtrMemberNode
 type ptrMemberNode struct {
-  location ILocation
+  location Location
   Expr IExprNode
   Member string
 }
 
-func PtrMemberNode(location ILocation, expr IExprNode, member string) ptrMemberNode {
+func PtrMemberNode(location Location, expr IExprNode, member string) ptrMemberNode {
   return ptrMemberNode { location, expr, member }
 }
 
@@ -123,17 +123,17 @@ func (self ptrMemberNode) IsExpr() bool {
   return true
 }
 
-func (self ptrMemberNode) GetLocation() ILocation {
+func (self ptrMemberNode) GetLocation() Location {
   return self.location
 }
 
 // VariableNode
 type variableNode struct {
-  location ILocation
+  location Location
   Name string
 }
 
-func VariableNode(location ILocation, name string) variableNode {
+func VariableNode(location Location, name string) variableNode {
   return variableNode { location, name }
 }
 
@@ -145,6 +145,6 @@ func (self variableNode) IsExpr() bool {
   return true
 }
 
-func (self variableNode) GetLocation() ILocation {
+func (self variableNode) GetLocation() Location {
   return self.location
 }

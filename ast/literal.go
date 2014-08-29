@@ -6,11 +6,11 @@ import (
 
 // IntegerLiteralNode
 type integerLiteralNode struct {
-  location ILocation
+  location Location
   Value int
 }
 
-func IntegerLiteralNode(location ILocation, literal string) integerLiteralNode {
+func IntegerLiteralNode(location Location, literal string) integerLiteralNode {
   value, err := strconv.Atoi(literal)
   if err != nil { panic(err) }
   return integerLiteralNode { location, value }
@@ -24,17 +24,17 @@ func (self integerLiteralNode) IsExpr() bool {
   return true
 }
 
-func (self integerLiteralNode) GetLocation() ILocation {
+func (self integerLiteralNode) GetLocation() Location {
   return self.location
 }
 
 // StringLiteralNode
 type stringLiteralNode struct {
-  location ILocation
+  location Location
   Value string
 }
 
-func StringLiteralNode(location ILocation, literal string) stringLiteralNode {
+func StringLiteralNode(location Location, literal string) stringLiteralNode {
   return stringLiteralNode { location, literal }
 }
 
@@ -46,6 +46,6 @@ func (self stringLiteralNode) IsExpr() bool {
   return true
 }
 
-func (self stringLiteralNode) GetLocation() ILocation {
+func (self stringLiteralNode) GetLocation() Location {
   return self.location
 }

@@ -6,13 +6,13 @@ import (
 
 // BinaryOpNode
 type binaryOpNode struct {
-  location ILocation
+  location Location
   Operator string
   Left IExprNode
   Right IExprNode
 }
 
-func BinaryOpNode(location ILocation, operator string, left IExprNode, right IExprNode) binaryOpNode {
+func BinaryOpNode(location Location, operator string, left IExprNode, right IExprNode) binaryOpNode {
   return binaryOpNode { location, operator, left, right }
 }
 
@@ -33,18 +33,18 @@ func (self binaryOpNode) IsExpr() bool {
   return true
 }
 
-func (self binaryOpNode) GetLocation() ILocation {
+func (self binaryOpNode) GetLocation() Location {
   return self.location
 }
 
 // LogicalAndNode
 type logicalAndNode struct {
-  location ILocation
+  location Location
   Left IExprNode
   Right IExprNode
 }
 
-func LogicalAndNode(location ILocation, left IExprNode, right IExprNode) logicalAndNode {
+func LogicalAndNode(location Location, left IExprNode, right IExprNode) logicalAndNode {
   return logicalAndNode { location, left, right }
 }
 
@@ -56,18 +56,18 @@ func (self logicalAndNode) IsExpr() bool {
   return true
 }
 
-func (self logicalAndNode) GetLocation() ILocation {
+func (self logicalAndNode) GetLocation() Location {
   return self.location
 }
 
 // LogicalOrNode
 type logicalOrNode struct {
-  location ILocation
+  location Location
   Left IExprNode
   Right IExprNode
 }
 
-func LogicalOrNode(location ILocation, left IExprNode, right IExprNode) logicalOrNode {
+func LogicalOrNode(location Location, left IExprNode, right IExprNode) logicalOrNode {
   return logicalOrNode { location, left, right }
 }
 
@@ -79,18 +79,18 @@ func (self logicalOrNode) IsExpr() bool {
   return true
 }
 
-func (self logicalOrNode) GetLocation() ILocation {
+func (self logicalOrNode) GetLocation() Location {
   return self.location
 }
 
 // PrefixOpNode
 type prefixOpNode struct {
-  location ILocation
+  location Location
   Operator string
   Expr IExprNode
 }
 
-func PrefixOpNode(location ILocation, operator string, expr IExprNode) prefixOpNode {
+func PrefixOpNode(location Location, operator string, expr IExprNode) prefixOpNode {
   return prefixOpNode { location, operator, expr }
 }
 
@@ -106,18 +106,18 @@ func (self prefixOpNode) IsExpr() bool {
   return true
 }
 
-func (self prefixOpNode) GetLocation() ILocation {
+func (self prefixOpNode) GetLocation() Location {
   return self.location
 }
 
 // SuffixOpNode
 type suffixOpNode struct {
-  location ILocation
+  location Location
   Operator string
   Expr IExprNode
 }
 
-func SuffixOpNode(location ILocation, operator string, expr IExprNode) suffixOpNode {
+func SuffixOpNode(location Location, operator string, expr IExprNode) suffixOpNode {
   return suffixOpNode { location, operator, expr }
 }
 
@@ -133,18 +133,18 @@ func (self suffixOpNode) IsExpr() bool {
   return true
 }
 
-func (self suffixOpNode) GetLocation() ILocation {
+func (self suffixOpNode) GetLocation() Location {
   return self.location
 }
 
 // UnaryOpNode
 type unaryOpNode struct {
-  location ILocation
+  location Location
   Operator string
   Expr IExprNode
 }
 
-func UnaryOpNode(location ILocation, operator string, expr IExprNode) unaryOpNode {
+func UnaryOpNode(location Location, operator string, expr IExprNode) unaryOpNode {
   return unaryOpNode { location, operator, expr }
 }
 
@@ -159,6 +159,6 @@ func (self unaryOpNode) IsExpr() bool {
   return true
 }
 
-func (self unaryOpNode) GetLocation() ILocation {
+func (self unaryOpNode) GetLocation() Location {
   return self.location
 }
