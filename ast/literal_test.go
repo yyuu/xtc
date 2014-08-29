@@ -4,12 +4,6 @@ import (
   "testing"
 )
 
-func assertEquals(t *testing.T, got interface{}, expected interface{}) {
-  if got != expected {
-    t.Errorf("not equals: expected %q, got %q", expected, got)
-  }
-}
-
 func TestDecimalIntegerLiteral(t *testing.T) {
   x := IntegerLiteralNode("12345")
   assertEquals(t, x.Value, 12345)

@@ -19,11 +19,6 @@ func TestLogicalOrNode(t *testing.T) {
   assertEquals(t, x.String(), "(or (or a b) c)")
 }
 
-func TestOpAssignNode(t *testing.T) {
-  x := OpAssignNode("+", VariableNode("a"), IntegerLiteralNode("12345"))
-  assertEquals(t, x.String(), "(a (+ a 12345))")
-}
-
 func TestPrefixOpNode(t *testing.T) {
   x := PrefixOpNode("--", VariableNode("a"))
   assertEquals(t, x.String(), "(- 1 a)")
