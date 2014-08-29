@@ -7,14 +7,14 @@ import (
 
 // CondExprNode
 type condExprNode struct {
-  Location ILocation
+  location ILocation
   Cond IExprNode
   ThenExpr IExprNode
   ElseExpr IExprNode
 }
 
-func CondExprNode(cond IExprNode, thenExpr IExprNode, elseExpr IExprNode) condExprNode {
-  return condExprNode { cond, thenExpr, elseExpr }
+func CondExprNode(location ILocation, cond IExprNode, thenExpr IExprNode, elseExpr IExprNode) condExprNode {
+  return condExprNode { location, cond, thenExpr, elseExpr }
 }
 
 func (self condExprNode) String() string {
@@ -25,15 +25,19 @@ func (self condExprNode) IsExpr() bool {
   return true
 }
 
+func (self condExprNode) Location() ILocation {
+  return self.location
+}
+
 // CaseNode
 type caseNode struct {
-  Location ILocation
+  location ILocation
   Values []IExprNode
   Body IStmtNode
 }
 
-func CaseNode(values []IExprNode, body IStmtNode) caseNode {
-  return caseNode { values, body }
+func CaseNode(location ILocation, values []IExprNode, body IStmtNode) caseNode {
+  return caseNode { location, values, body }
 }
 
 func (self caseNode) String() string {
@@ -52,16 +56,20 @@ func (self caseNode) IsStmt() bool {
   return true
 }
 
+func (self caseNode) Location() ILocation {
+  return self.location
+}
+
 // IfNode
 type ifNode struct {
-  Location ILocation
+  location ILocation
   Cond IExprNode
   ThenBody IStmtNode
   ElseBody IStmtNode
 }
 
-func IfNode(cond IExprNode, thenBody IStmtNode, elseBody IStmtNode) ifNode {
-  return ifNode { cond, thenBody, elseBody }
+func IfNode(location ILocation, cond IExprNode, thenBody IStmtNode, elseBody IStmtNode) ifNode {
+  return ifNode { location, cond, thenBody, elseBody }
 }
 
 func (self ifNode) String() string {
@@ -72,19 +80,23 @@ func (self ifNode) IsStmt() bool {
   return true
 }
 
+func (self ifNode) Location() ILocation {
+  return self.location
+}
+
 // SwitchNode
 type switchNode struct {
-  Location ILocation
+  location ILocation
   Cond IExprNode
   Cases []caseNode
 }
 
-func SwitchNode(cond IExprNode, _cases []IStmtNode) switchNode {
+func SwitchNode(location ILocation, cond IExprNode, _cases []IStmtNode) switchNode {
   cases := make([]caseNode, len(_cases))
   for i := range _cases {
     cases[i] = _cases[i].(caseNode)
   }
-  return switchNode { cond, cases }
+  return switchNode { location, cond, cases }
 }
 
 func (self switchNode) String() string {
@@ -101,4 +113,8 @@ func (self switchNode) String() string {
 
 func (self switchNode) IsStmt() bool {
   return true
+}
+
+func (self switchNode) Location() ILocation {
+  return self.location
 }

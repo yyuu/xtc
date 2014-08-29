@@ -6,11 +6,11 @@ import (
 
 // BreakNode
 type breakNode struct {
-  Location ILocation
+  location ILocation
 }
 
-func BreakNode() breakNode {
-  return breakNode { }
+func BreakNode(location ILocation) breakNode {
+  return breakNode { location }
 }
 
 func (self breakNode) String() string {
@@ -21,13 +21,17 @@ func (self breakNode) IsStmt() bool {
   return true
 }
 
-// ContinueNode
-type continueNode struct {
-  Location ILocation
+func (self breakNode) Location() ILocation {
+  return self.location
 }
 
-func ContinueNode() continueNode {
-  return continueNode { }
+// ContinueNode
+type continueNode struct {
+  location ILocation
+}
+
+func ContinueNode(location ILocation) continueNode {
+  return continueNode { location }
 }
 
 func (self continueNode) String() string {
@@ -38,14 +42,18 @@ func (self continueNode) IsStmt() bool {
   return true
 }
 
+func (self continueNode) Location() ILocation {
+  return self.location
+}
+
 // ExprStmtNode
 type exprStmtNode struct {
-  Location ILocation
+  location ILocation
   Expr IExprNode
 }
 
-func ExprStmtNode(expr IExprNode) exprStmtNode {
-  return exprStmtNode { expr }
+func ExprStmtNode(location ILocation, expr IExprNode) exprStmtNode {
+  return exprStmtNode { location, expr }
 }
 
 func (self exprStmtNode) String() string {
@@ -56,14 +64,18 @@ func (self exprStmtNode) IsStmt() bool {
   return true
 }
 
+func (self exprStmtNode) Location() ILocation {
+  return self.location
+}
+
 // GotoNode
 type gotoNode struct {
-  Location ILocation
+  location ILocation
   Target string
 }
 
-func GotoNode(target string) gotoNode {
-  return gotoNode { target }
+func GotoNode(location ILocation, target string) gotoNode {
+  return gotoNode { location, target }
 }
 
 func (self gotoNode) String() string {
@@ -74,15 +86,19 @@ func (self gotoNode) IsStmt() bool {
   return true
 }
 
+func (self gotoNode) Location() ILocation {
+  return self.location
+}
+
 // LabelNode
 type labelNode struct {
-  Location ILocation
+  location ILocation
   Name string
   Stmt IStmtNode
 }
 
-func LabelNode(name string, stmt IStmtNode) labelNode {
-  return labelNode { name, stmt }
+func LabelNode(location ILocation, name string, stmt IStmtNode) labelNode {
+  return labelNode { location, name, stmt }
 }
 
 func (self labelNode) String() string {
@@ -93,14 +109,18 @@ func (self labelNode) IsStmt() bool {
   return true
 }
 
+func (self labelNode) Location() ILocation {
+  return self.location
+}
+
 // ReturnNode
 type returnNode struct {
-  Location ILocation
+  location ILocation
   Expr IExprNode
 }
 
-func ReturnNode(expr IExprNode) returnNode {
-  return returnNode { expr }
+func ReturnNode(location ILocation, expr IExprNode) returnNode {
+  return returnNode { location, expr }
 }
 
 func (self returnNode) String() string {
@@ -109,4 +129,8 @@ func (self returnNode) String() string {
 
 func (self returnNode) IsStmt() bool {
   return true
+}
+
+func (self returnNode) Location() ILocation {
+  return self.location
 }

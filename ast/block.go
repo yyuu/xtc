@@ -7,14 +7,14 @@ import (
 
 // BlockNode
 type blockNode struct {
-  Location ILocation
+  location ILocation
 // Variables []DefinedVariable
   Variables []IExprNode
   Stmts []IStmtNode
 }
 
-func BlockNode(variables []IExprNode, stmts []IStmtNode) blockNode {
-  return blockNode { variables, stmts }
+func BlockNode(location ILocation, variables []IExprNode, stmts []IStmtNode) blockNode {
+  return blockNode { location, variables, stmts }
 }
 
 func (self blockNode) String() string {
@@ -43,4 +43,8 @@ func (self blockNode) String() string {
 
 func (self blockNode) IsStmt() bool {
   return true
+}
+
+func (self blockNode) Location() ILocation {
+  return self.location
 }

@@ -7,12 +7,12 @@ import (
 
 // AddressNode
 type addressNode struct {
-  Location ILocation
+  location ILocation
   Expr IExprNode
 }
 
-func AddressNode(expr IExprNode) addressNode {
-  return addressNode { expr }
+func AddressNode(location ILocation, expr IExprNode) addressNode {
+  return addressNode { location, expr }
 }
 
 func (self addressNode) String() string {
@@ -23,15 +23,19 @@ func (self addressNode) IsExpr() bool {
   return true
 }
 
+func (self addressNode) Location() ILocation {
+  return self.location
+}
+
 // ArefNode
 type arefNode struct {
-  Location ILocation
+  location ILocation
   Expr IExprNode
   Index IExprNode
 }
 
-func ArefNode(expr IExprNode, index IExprNode) arefNode {
-  return arefNode { expr, index }
+func ArefNode(location ILocation, expr IExprNode, index IExprNode) arefNode {
+  return arefNode { location, expr, index }
 }
 
 func (self arefNode) String() string {
@@ -42,15 +46,19 @@ func (self arefNode) IsExpr() bool {
   return true
 }
 
+func (self arefNode) Location() ILocation {
+  return self.location
+}
+
 // FuncallNode
 type funcallNode struct {
-  Location ILocation
+  location ILocation
   Expr IExprNode
   Args []IExprNode
 }
 
-func FuncallNode(expr IExprNode, args []IExprNode) funcallNode {
-  return funcallNode { expr, args }
+func FuncallNode(location ILocation, expr IExprNode, args []IExprNode) funcallNode {
+  return funcallNode { location, expr, args }
 }
 
 func (self funcallNode) String() string {
@@ -69,15 +77,19 @@ func (self funcallNode) IsExpr() bool {
   return true
 }
 
+func (self funcallNode) Location() ILocation {
+  return self.location
+}
+
 // MemberNode
 type memberNode struct {
-  Location ILocation
+  location ILocation
   Expr IExprNode
   Member string
 }
 
-func MemberNode(expr IExprNode, member string) memberNode {
-  return memberNode { expr, member }
+func MemberNode(location ILocation, expr IExprNode, member string) memberNode {
+  return memberNode { location, expr, member }
 }
 
 func (self memberNode) String() string {
@@ -88,15 +100,19 @@ func (self memberNode) IsExpr() bool {
   return true
 }
 
+func (self memberNode) Location() ILocation {
+  return self.location
+}
+
 // PtrMemberNode
 type ptrMemberNode struct {
-  Location ILocation
+  location ILocation
   Expr IExprNode
   Member string
 }
 
-func PtrMemberNode(expr IExprNode, member string) ptrMemberNode {
-  return ptrMemberNode { expr, member }
+func PtrMemberNode(location ILocation, expr IExprNode, member string) ptrMemberNode {
+  return ptrMemberNode { location, expr, member }
 }
 
 func (self ptrMemberNode) String() string {
@@ -107,14 +123,18 @@ func (self ptrMemberNode) IsExpr() bool {
   return true
 }
 
+func (self ptrMemberNode) Location() ILocation {
+  return self.location
+}
+
 // VariableNode
 type variableNode struct {
-  Location ILocation
+  location ILocation
   Name string
 }
 
-func VariableNode(name string) variableNode {
-  return variableNode { name }
+func VariableNode(location ILocation, name string) variableNode {
+  return variableNode { location, name }
 }
 
 func (self variableNode) String() string {
@@ -123,4 +143,8 @@ func (self variableNode) String() string {
 
 func (self variableNode) IsExpr() bool {
   return true
+}
+
+func (self variableNode) Location() ILocation {
+  return self.location
 }

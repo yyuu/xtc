@@ -6,13 +6,13 @@ import (
 
 // DoWhileNode
 type doWhileNode struct {
-  Location ILocation
+  location ILocation
   Body IStmtNode
   Cond IExprNode
 }
 
-func DoWhileNode(body IStmtNode, cond IExprNode) doWhileNode {
-  return doWhileNode { body, cond }
+func DoWhileNode(location ILocation, body IStmtNode, cond IExprNode) doWhileNode {
+  return doWhileNode { location, body, cond }
 }
 
 func (self doWhileNode) String() string {
@@ -23,17 +23,21 @@ func (self doWhileNode) IsStmt() bool {
   return true
 }
 
+func (self doWhileNode) Location() ILocation {
+  return self.location
+}
+
 // ForNode
 type forNode struct {
-  Location ILocation
+  location ILocation
   Init IExprNode
   Cond IExprNode
   Incr IExprNode
   Body IStmtNode
 }
 
-func ForNode(init IExprNode, cond IExprNode, incr IExprNode, body IStmtNode) forNode {
-  return forNode { init, cond, incr, body }
+func ForNode(location ILocation, init IExprNode, cond IExprNode, incr IExprNode, body IStmtNode) forNode {
+  return forNode { location, init, cond, incr, body }
 }
 
 func (self forNode) String() string {
@@ -44,15 +48,19 @@ func (self forNode) IsStmt() bool {
   return true
 }
 
+func (self forNode) Location() ILocation {
+  return self.location
+}
+
 // WhileNode
 type whileNode struct {
-  Location ILocation
+  location ILocation
   Cond IExprNode
   Body IStmtNode
 }
 
-func WhileNode(cond IExprNode, body IStmtNode) whileNode {
-  return whileNode { cond, body }
+func WhileNode(location ILocation, cond IExprNode, body IStmtNode) whileNode {
+  return whileNode { location, cond, body }
 }
 
 func (self whileNode) String() string {
@@ -61,4 +69,8 @@ func (self whileNode) String() string {
 
 func (self whileNode) IsStmt() bool {
   return true
+}
+
+func (self whileNode) Location() ILocation {
+  return self.location
 }
