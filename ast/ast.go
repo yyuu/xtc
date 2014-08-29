@@ -2,6 +2,7 @@ package ast
 
 import (
   "fmt"
+  "strings"
 )
 
 type INode interface {
@@ -35,9 +36,11 @@ type AST struct {
 }
 
 func (self AST) String() string {
-  s := ""
+  xs := make([]string, len(self.Stmts))
   for i := range self.Stmts {
-    s += fmt.Sprintf("%s\n", self.Stmts[i])
+    stmt := self.Stmts[i]
+    location := stmt.GetLocation()
+    xs[i] = fmt.Sprintf(";; %s:%d,%d\n%s", location.GetSourceName(), location.GetLineNumber()+1, location.GetLineOffset()+1, stmt)
   }
-  return s
+  return strings.Join(xs, "\n")
 }

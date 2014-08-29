@@ -58,5 +58,5 @@ func p(ast *ast.AST, err error) {
   if err != nil {
     panic(err)
   }
-  fmt.Print(*ast)
+  fmt.Println(*ast)
 }
