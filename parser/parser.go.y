@@ -222,8 +222,7 @@ cases:
 
 default_clause: DEFAULT ':' case_body
               {
-                _default := []ast.INode { ast.StringLiteralNode("default") } // FIXME:
-                $$.node = ast.CaseNode(_default, $3.node)
+                $$.node = ast.CaseNode([]ast.INode { }, $3.node)
               }
               ;
 

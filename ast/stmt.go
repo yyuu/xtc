@@ -85,10 +85,10 @@ func CaseNode(_values []INode, body INode) caseNode {
 func (self caseNode) String() string {
   sValues := make([]string, len(self.Values))
   for i := range self.Values {
-    sValues[i] = fmt.Sprintf("(= a %s)", self.Values[i])
+    sValues[i] = fmt.Sprintf("(= switch-cond %s)", self.Values[i])
   }
   switch len(sValues) {
-    case 0:  return fmt.Sprintf("(() %s)", self.Body)
+    case 0:  return fmt.Sprintf("(else %s)", self.Body)
     case 1:  return fmt.Sprintf("(%s %s)", sValues[0], self.Body)
     default: return fmt.Sprintf("((or %s) %s)", strings.Join(sValues, " "), self.Body)
   }
