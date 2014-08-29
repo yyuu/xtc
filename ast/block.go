@@ -5,6 +5,7 @@ import (
   "strings"
 )
 
+// BlockNode
 type blockNode struct {
 // Variables []DefinedVariable
   Variables []IExprNode
@@ -37,4 +38,8 @@ func (self blockNode) String() string {
     case 1:  return fmt.Sprintf("(let (%s) %s)", strings.Join(sVariables, " "), stmts)
     default: return fmt.Sprintf("(let* (%s) (begin %s))", strings.Join(sVariables, " "), strings.Join(sStmts, " "))
   }
+}
+
+func (self blockNode) IsStmt() bool {
+  return true
 }

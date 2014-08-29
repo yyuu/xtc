@@ -1,9 +1,6 @@
 package ast
 
-import (
-  "fmt"
-)
-
+// CastNode
 type castNode struct {
   Type ITypeNode
   Expr IExprNode
@@ -17,20 +14,11 @@ func (self castNode) String() string {
   panic("not implemented")
 }
 
-type condExprNode struct {
-  Cond IExprNode
-  ThenExpr IExprNode
-  ElseExpr IExprNode
+func (self castNode) IsExpr() bool {
+  return true
 }
 
-func CondExprNode(cond IExprNode, thenExpr IExprNode, elseExpr IExprNode) condExprNode {
-  return condExprNode { cond, thenExpr, elseExpr }
-}
-
-func (self condExprNode) String() string {
-  return fmt.Sprintf("(if %s %s %s)", self.Cond, self.ThenExpr, self.ElseExpr)
-}
-
+// SizeofExprNode
 type sizeofExprNode struct {
   Expr IExprNode
   Type ITypeNode
@@ -44,6 +32,11 @@ func (self sizeofExprNode) String() string {
   panic("not implemented")
 }
 
+func (self sizeofExprNode) IsExpr() bool {
+  return true
+}
+
+// SizeofTypeNode
 type sizeofTypeNode struct {
   Type ITypeNode
   Operand ITypeNode
@@ -55,4 +48,8 @@ func SizeofTypeNode(t ITypeNode, operand ITypeNode) sizeofTypeNode {
 
 func (self sizeofTypeNode) String() string {
   panic("not implemented")
+}
+
+func (self sizeofTypeNode) IsExpr() bool {
+  return true
 }

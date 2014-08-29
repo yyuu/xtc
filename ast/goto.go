@@ -4,6 +4,7 @@ import (
   "fmt"
 )
 
+// BreakNode
 type breakNode struct {
 }
 
@@ -15,6 +16,11 @@ func (self breakNode) String() string {
   return "(break)"
 }
 
+func (self breakNode) IsStmt() bool {
+  return true
+}
+
+// ContinueNode
 type continueNode struct {
 }
 
@@ -26,6 +32,11 @@ func (self continueNode) String() string {
   return "(continue)"
 }
 
+func (self continueNode) IsStmt() bool {
+  return true
+}
+
+// ExprStmtNode
 type exprStmtNode struct {
   Expr IExprNode
 }
@@ -38,6 +49,11 @@ func (self exprStmtNode) String() string {
   return fmt.Sprintf("%s", self.Expr)
 }
 
+func (self exprStmtNode) IsStmt() bool {
+  return true
+}
+
+// GotoNode
 type gotoNode struct {
   Target string
 }
@@ -50,6 +66,11 @@ func (self gotoNode) String() string {
   return fmt.Sprintf("(goto %s)", self.Target)
 }
 
+func (self gotoNode) IsStmt() bool {
+  return true
+}
+
+// LabelNode
 type labelNode struct {
   Name string
   Stmt IStmtNode
@@ -63,6 +84,11 @@ func (self labelNode) String() string {
   panic("not implemented")
 }
 
+func (self labelNode) IsStmt() bool {
+  return true
+}
+
+// ReturnNode
 type returnNode struct {
   Expr IExprNode
 }
@@ -73,4 +99,8 @@ func ReturnNode(expr IExprNode) returnNode {
 
 func (self returnNode) String() string {
   return fmt.Sprintf("%s", self.Expr)
+}
+
+func (self returnNode) IsStmt() bool {
+  return true
 }

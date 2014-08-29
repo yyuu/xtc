@@ -4,6 +4,7 @@ import (
   "strconv"
 )
 
+// IntegerLiteralNode
 type integerLiteralNode struct {
   Value int
 }
@@ -18,6 +19,11 @@ func (self integerLiteralNode) String() string {
   return strconv.Itoa(self.Value)
 }
 
+func (self integerLiteralNode) IsExpr() bool {
+  return true
+}
+
+// StringLiteralNode
 type stringLiteralNode struct {
   Value string
 }
@@ -28,4 +34,8 @@ func StringLiteralNode(literal string) stringLiteralNode {
 
 func (self stringLiteralNode) String() string {
   return self.Value
+}
+
+func (self stringLiteralNode) IsExpr() bool {
+  return true
 }

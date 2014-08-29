@@ -5,6 +5,7 @@ import (
   "strings"
 )
 
+// AddressNode
 type addressNode struct {
   Expr IExprNode
 }
@@ -17,6 +18,11 @@ func (self addressNode) String() string {
   panic("not implemented")
 }
 
+func (self addressNode) IsExpr() bool {
+  return true
+}
+
+// ArefNode
 type arefNode struct {
   Expr IExprNode
   Index IExprNode
@@ -30,6 +36,11 @@ func (self arefNode) String() string {
   return fmt.Sprintf("(vector-ref %s %s)", self.Expr, self.Index)
 }
 
+func (self arefNode) IsExpr() bool {
+  return true
+}
+
+// FuncallNode
 type funcallNode struct {
   Expr IExprNode
   Args []IExprNode
@@ -51,6 +62,11 @@ func (self funcallNode) String() string {
   }
 }
 
+func (self funcallNode) IsExpr() bool {
+  return true
+}
+
+// MemberNode
 type memberNode struct {
   Expr IExprNode
   Member string
@@ -64,6 +80,11 @@ func (self memberNode) String() string {
   return fmt.Sprintf("(slot-ref %s '%s)", self.Expr, self.Member)
 }
 
+func (self memberNode) IsExpr() bool {
+  return true
+}
+
+// PtrMemberNode
 type ptrMemberNode struct {
   Expr IExprNode
   Member string
@@ -77,6 +98,11 @@ func (self ptrMemberNode) String() string {
   return fmt.Sprintf("(slot-ref %s '%s)", self.Expr, self.Member)
 }
 
+func (self ptrMemberNode) IsExpr() bool {
+  return true
+}
+
+// VariableNode
 type variableNode struct {
   Name string
 }
@@ -87,4 +113,8 @@ func VariableNode(name string) variableNode {
 
 func (self variableNode) String() string {
   return self.Name
+}
+
+func (self variableNode) IsExpr() bool {
+  return true
 }

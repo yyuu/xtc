@@ -4,6 +4,7 @@ import (
   "fmt"
 )
 
+// DoWhileNode
 type doWhileNode struct {
   Body IStmtNode
   Cond IExprNode
@@ -17,6 +18,11 @@ func (self doWhileNode) String() string {
   return fmt.Sprintf("(let do-while-loop () (begin %s (if %s (do-while-loop))))", self.Body, self.Cond)
 }
 
+func (self doWhileNode) IsStmt() bool {
+  return true
+}
+
+// ForNode
 type forNode struct {
   Init IExprNode
   Cond IExprNode
@@ -32,6 +38,11 @@ func (self forNode) String() string {
   return fmt.Sprintf("(let for-loop (%s) (if %s (begin %s (for-loop %s))))", self.Init, self.Cond, self.Body, self.Incr)
 }
 
+func (self forNode) IsStmt() bool {
+  return true
+}
+
+// WhileNode
 type whileNode struct {
   Cond IExprNode
   Body IStmtNode
@@ -43,4 +54,8 @@ func WhileNode(cond IExprNode, body IStmtNode) whileNode {
 
 func (self whileNode) String() string {
   return fmt.Sprintf("(let while-loop ((while-cond %s)) (if while-cond (begin %s (while-loop %s))))", self.Cond, self.Body, self.Cond)
+}
+
+func (self whileNode) IsStmt() bool {
+  return true
 }

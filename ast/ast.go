@@ -6,12 +6,15 @@ type INode interface {
 
 type IExprNode interface {
   INode
+  IsExpr() bool
 }
 
 type IStmtNode interface {
   INode
+  IsStmt() bool
 }
 
 type ITypeNode interface {
   INode
+  IsType() bool
 }

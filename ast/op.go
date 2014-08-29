@@ -4,6 +4,7 @@ import (
   "fmt"
 )
 
+// BinaryOpNode
 type binaryOpNode struct {
   Operator string
   Left IExprNode
@@ -27,6 +28,11 @@ func (self binaryOpNode) String() string {
   }
 }
 
+func (self binaryOpNode) IsExpr() bool {
+  return true
+}
+
+// LogicalAndNode
 type logicalAndNode struct {
   Left IExprNode
   Right IExprNode
@@ -40,6 +46,11 @@ func (self logicalAndNode) String() string {
   return fmt.Sprintf("(and %s %s)", self.Left, self.Right)
 }
 
+func (self logicalAndNode) IsExpr() bool {
+  return true
+}
+
+// LogicalOrNode
 type logicalOrNode struct {
   Left IExprNode
   Right IExprNode
@@ -53,6 +64,11 @@ func (self logicalOrNode) String() string {
   return fmt.Sprintf("(or %s %s)", self.Left, self.Right)
 }
 
+func (self logicalOrNode) IsExpr() bool {
+  return true
+}
+
+// PrefixOpNode
 type prefixOpNode struct {
   Operator string
   Expr IExprNode
@@ -70,6 +86,11 @@ func (self prefixOpNode) String() string {
   }
 }
 
+func (self prefixOpNode) IsExpr() bool {
+  return true
+}
+
+// SuffixOpNode
 type suffixOpNode struct {
   Operator string
   Expr IExprNode
@@ -87,6 +108,11 @@ func (self suffixOpNode) String() string {
   }
 }
 
+func (self suffixOpNode) IsExpr() bool {
+  return true
+}
+
+// UnaryOpNode
 type unaryOpNode struct {
   Operator string
   Expr IExprNode
@@ -101,4 +127,8 @@ func (self unaryOpNode) String() string {
     case "!": return fmt.Sprintf("(not %s)", self.Expr)
     default:  return fmt.Sprintf("%s%s", self.Operator, self.Expr)
   }
+}
+
+func (self unaryOpNode) IsExpr() bool {
+  return true
 }

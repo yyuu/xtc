@@ -4,6 +4,7 @@ import (
   "fmt"
 )
 
+// AssignNode
 type assignNode struct {
   Lhs IExprNode
   Rhs IExprNode
@@ -17,6 +18,11 @@ func (self assignNode) String() string {
   return fmt.Sprintf("(%s %s)", self.Lhs, self.Rhs)
 }
 
+func (self assignNode) IsExpr() bool {
+  return true
+}
+
+// OpAssignNode
 type opAssignNode struct {
   Operator string
   Lhs IExprNode
@@ -29,4 +35,8 @@ func OpAssignNode(operator string, lhs IExprNode, rhs IExprNode) opAssignNode {
 
 func (self opAssignNode) String() string {
   return fmt.Sprintf("(%s (%s %s %s))", self.Lhs, self.Operator, self.Lhs, self.Rhs)
+}
+
+func (self opAssignNode) IsExpr() bool {
+  return true
 }
