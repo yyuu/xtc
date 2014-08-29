@@ -17,6 +17,7 @@ type lex struct {
   ignoreSpaces bool
   ignoreComments bool
   nodes []ast.INode
+  error error
 }
 
 func (self lex) String() string {
@@ -44,7 +45,8 @@ func lexer(filename string, source string) *lex {
     LineOffset: 0,
     ignoreSpaces: true,
     ignoreComments: true,
-    nodes: []ast.INode { },
+    nodes: nil,
+    error: nil,
   }
 }
 

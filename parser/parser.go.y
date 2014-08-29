@@ -508,14 +508,18 @@ func (self *lex) Lex(lval *yySymType) int {
 }
 
 func (self *lex) Error(s string) {
+  self.error = errors.New(s)
   panic(fmt.Errorf("%s: %s", self, s))
 }
 
 func ParseExpr(s string) ([]ast.INode, error) {
   lex := lexer("main.c", s)
   if yyParse(lex) == 0 {
-    return lex.nodes, nil
+    return lex.nodes, nil // success
   } else {
-    return nil, errors.New("parse error") // TODO: get error via lexer
+    if lex.error == nil {
+      panic("must not happen")
+    }
+    return nil, lex.error
   }
 }
