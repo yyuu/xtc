@@ -7,6 +7,7 @@ import (
 
 // CondExprNode
 type condExprNode struct {
+  Location ILocation
   Cond IExprNode
   ThenExpr IExprNode
   ElseExpr IExprNode
@@ -26,6 +27,7 @@ func (self condExprNode) IsExpr() bool {
 
 // CaseNode
 type caseNode struct {
+  Location ILocation
   Values []IExprNode
   Body IStmtNode
 }
@@ -52,6 +54,7 @@ func (self caseNode) IsStmt() bool {
 
 // IfNode
 type ifNode struct {
+  Location ILocation
   Cond IExprNode
   ThenBody IStmtNode
   ElseBody IStmtNode
@@ -71,6 +74,7 @@ func (self ifNode) IsStmt() bool {
 
 // SwitchNode
 type switchNode struct {
+  Location ILocation
   Cond IExprNode
   Cases []caseNode
 }

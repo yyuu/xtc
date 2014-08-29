@@ -33,6 +33,18 @@ type token struct {
   LineOffset int
 }
 
+func (self token) GetSourceName() string {
+  return self.Filename
+}
+
+func (self token) GetLineNumber() int {
+  return self.LineNumber
+}
+
+func (self token) GetLineOffset() int {
+  return self.LineOffset
+}
+
 func (self token) String() string {
   return fmt.Sprintf("#<token:%d %s:%d,%d %q>", self.Id, self.Filename, self.LineNumber, self.LineOffset, self.Literal)
 }

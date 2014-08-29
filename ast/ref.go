@@ -7,6 +7,7 @@ import (
 
 // AddressNode
 type addressNode struct {
+  Location ILocation
   Expr IExprNode
 }
 
@@ -24,6 +25,7 @@ func (self addressNode) IsExpr() bool {
 
 // ArefNode
 type arefNode struct {
+  Location ILocation
   Expr IExprNode
   Index IExprNode
 }
@@ -42,6 +44,7 @@ func (self arefNode) IsExpr() bool {
 
 // FuncallNode
 type funcallNode struct {
+  Location ILocation
   Expr IExprNode
   Args []IExprNode
 }
@@ -68,6 +71,7 @@ func (self funcallNode) IsExpr() bool {
 
 // MemberNode
 type memberNode struct {
+  Location ILocation
   Expr IExprNode
   Member string
 }
@@ -86,6 +90,7 @@ func (self memberNode) IsExpr() bool {
 
 // PtrMemberNode
 type ptrMemberNode struct {
+  Location ILocation
   Expr IExprNode
   Member string
 }
@@ -104,6 +109,7 @@ func (self ptrMemberNode) IsExpr() bool {
 
 // VariableNode
 type variableNode struct {
+  Location ILocation
   Name string
 }
 

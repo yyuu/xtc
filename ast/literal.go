@@ -6,6 +6,7 @@ import (
 
 // IntegerLiteralNode
 type integerLiteralNode struct {
+  Location ILocation
   Value int
 }
 
@@ -25,6 +26,7 @@ func (self integerLiteralNode) IsExpr() bool {
 
 // StringLiteralNode
 type stringLiteralNode struct {
+  Location ILocation
   Value string
 }
 

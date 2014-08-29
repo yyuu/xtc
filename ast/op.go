@@ -6,6 +6,7 @@ import (
 
 // BinaryOpNode
 type binaryOpNode struct {
+  Location ILocation
   Operator string
   Left IExprNode
   Right IExprNode
@@ -34,6 +35,7 @@ func (self binaryOpNode) IsExpr() bool {
 
 // LogicalAndNode
 type logicalAndNode struct {
+  Location ILocation
   Left IExprNode
   Right IExprNode
 }
@@ -52,6 +54,7 @@ func (self logicalAndNode) IsExpr() bool {
 
 // LogicalOrNode
 type logicalOrNode struct {
+  Location ILocation
   Left IExprNode
   Right IExprNode
 }
@@ -70,6 +73,7 @@ func (self logicalOrNode) IsExpr() bool {
 
 // PrefixOpNode
 type prefixOpNode struct {
+  Location ILocation
   Operator string
   Expr IExprNode
 }
@@ -92,6 +96,7 @@ func (self prefixOpNode) IsExpr() bool {
 
 // SuffixOpNode
 type suffixOpNode struct {
+  Location ILocation
   Operator string
   Expr IExprNode
 }
@@ -114,6 +119,7 @@ func (self suffixOpNode) IsExpr() bool {
 
 // UnaryOpNode
 type unaryOpNode struct {
+  Location ILocation
   Operator string
   Expr IExprNode
 }

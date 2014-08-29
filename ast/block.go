@@ -7,6 +7,7 @@ import (
 
 // BlockNode
 type blockNode struct {
+  Location ILocation
 // Variables []DefinedVariable
   Variables []IExprNode
   Stmts []IStmtNode

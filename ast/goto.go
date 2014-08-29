@@ -6,6 +6,7 @@ import (
 
 // BreakNode
 type breakNode struct {
+  Location ILocation
 }
 
 func BreakNode() breakNode {
@@ -22,6 +23,7 @@ func (self breakNode) IsStmt() bool {
 
 // ContinueNode
 type continueNode struct {
+  Location ILocation
 }
 
 func ContinueNode() continueNode {
@@ -38,6 +40,7 @@ func (self continueNode) IsStmt() bool {
 
 // ExprStmtNode
 type exprStmtNode struct {
+  Location ILocation
   Expr IExprNode
 }
 
@@ -55,6 +58,7 @@ func (self exprStmtNode) IsStmt() bool {
 
 // GotoNode
 type gotoNode struct {
+  Location ILocation
   Target string
 }
 
@@ -72,6 +76,7 @@ func (self gotoNode) IsStmt() bool {
 
 // LabelNode
 type labelNode struct {
+  Location ILocation
   Name string
   Stmt IStmtNode
 }
@@ -90,6 +95,7 @@ func (self labelNode) IsStmt() bool {
 
 // ReturnNode
 type returnNode struct {
+  Location ILocation
   Expr IExprNode
 }
 

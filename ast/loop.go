@@ -6,6 +6,7 @@ import (
 
 // DoWhileNode
 type doWhileNode struct {
+  Location ILocation
   Body IStmtNode
   Cond IExprNode
 }
@@ -24,6 +25,7 @@ func (self doWhileNode) IsStmt() bool {
 
 // ForNode
 type forNode struct {
+  Location ILocation
   Init IExprNode
   Cond IExprNode
   Incr IExprNode
@@ -44,6 +46,7 @@ func (self forNode) IsStmt() bool {
 
 // WhileNode
 type whileNode struct {
+  Location ILocation
   Cond IExprNode
   Body IStmtNode
 }
