@@ -461,6 +461,9 @@ name: IDENTIFIER
     ;
 
 args: expr
+    {
+      $$.exprs = []ast.IExprNode { $1.expr }
+    }
     | args ',' expr
     {
       $$.exprs = append($1.exprs, $3.expr)
