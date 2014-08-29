@@ -10,9 +10,21 @@ type addressNode struct {
   Expr IExprNode
 }
 
+func AddressNode(expr INode) addressNode {
+  return addressNode { expr.(IExprNode) }
+}
+
+func (self addressNode) String() string {
+  panic("not implemented")
+}
+
 type arefNode struct {
   Expr IExprNode
   Index IExprNode
+}
+
+func ArefNode(expr INode, index INode) arefNode {
+  return arefNode { expr.(IExprNode), index.(IExprNode) }
 }
 
 func (self arefNode) String() string {
@@ -60,6 +72,14 @@ type castNode struct {
   Expr IExprNode
 }
 
+func CastNode(t INode, expr INode) castNode {
+  return castNode { t.(ITypeNode), expr.(IExprNode) }
+}
+
+func (self castNode) String() string {
+  panic("not implemented")
+}
+
 type condExprNode struct {
   Cond IExprNode
   ThenExpr IExprNode
@@ -76,6 +96,14 @@ func (self condExprNode) String() string {
 
 type dereferenceNode struct {
   Expr IExprNode
+}
+
+func DereferenceNode(expr INode) dereferenceNode {
+  return dereferenceNode { expr.(IExprNode) }
+}
+
+func (self dereferenceNode) String() string {
+  panic("not implemented")
 }
 
 type funcallNode struct {
@@ -149,6 +177,10 @@ type memberNode struct {
   Member string
 }
 
+func MemberNode(expr INode, member string) memberNode {
+  return memberNode { expr.(IExprNode), member }
+}
+
 func (self memberNode) String() string {
   return fmt.Sprintf("(slot-ref %s '%s)", self.Expr, self.Member)
 }
@@ -189,6 +221,10 @@ type ptrMemberNode struct {
   Member string
 }
 
+func PtrMemberNode(expr INode, member string) ptrMemberNode {
+  return ptrMemberNode { expr.(IExprNode), member }
+}
+
 func (self ptrMemberNode) String() string {
   return fmt.Sprintf("(slot-ref %s '%s)", self.Expr, self.Member)
 }
@@ -198,9 +234,25 @@ type sizeofExprNode struct {
   Type ITypeNode
 }
 
+func SizeofExprNode(expr INode, t INode) sizeofExprNode {
+  return sizeofExprNode { expr.(IExprNode), t.(ITypeNode) }
+}
+
+func (self sizeofExprNode) String() string {
+  panic("not implemented")
+}
+
 type sizeofTypeNode struct {
   Type ITypeNode
   Operand ITypeNode
+}
+
+func SizeofTypeNode(t INode, operand INode) sizeofTypeNode {
+  return sizeofTypeNode { t.(ITypeNode), operand.(ITypeNode) }
+}
+
+func (self sizeofTypeNode) String() string {
+  panic("not implemented")
 }
 
 type stringLiteralNode struct {
