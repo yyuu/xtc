@@ -16,6 +16,7 @@ var verbose = flagSet.Bool("v", false, "verbose mode")
 
 func main() {
   flagSet.Parse(os.Args[1:])
+  parser.VERBOSE = *verbose
 
   files := flagSet.Args()
   if 0 < len(files) {

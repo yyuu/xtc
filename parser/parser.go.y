@@ -496,14 +496,14 @@ primary: INTEGER
 %%
 
 const EOF = 0
-const DEBUG = true
+var VERBOSE = false
 
 func (self *lex) Lex(lval *yySymType) int {
   t := self.getToken()
   if t == nil {
     return EOF
   } else {
-    if DEBUG {
+    if VERBOSE {
       fmt.Println("token:", t)
     }
     lval.token = *t
