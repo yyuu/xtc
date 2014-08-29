@@ -8,11 +8,11 @@ func assertToken(t *testing.T, tok *token, id int, literal string) {
   if tok == nil {
     t.Error("insufficient token")
   } else {
-    if tok.Id != id {
-      t.Errorf("invalid token id: %s: expected %d, got %d", tok, id, tok.Id)
+    if tok.id != id {
+      t.Errorf("invalid token id: %s: expected %d, got %d", tok, id, tok.id)
     }
-    if tok.Literal != literal {
-      t.Errorf("invalid token literal: %s: expected %q, got %q", tok, literal, tok.Literal)
+    if tok.literal != literal {
+      t.Errorf("invalid token literal: %s: expected %q, got %q", tok, literal, tok.literal)
     }
   }
 }

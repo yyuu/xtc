@@ -232,7 +232,7 @@ case_body: stmt
 
 goto_stmt: GOTO IDENTIFIER ';'
          {
-           $$.stmt = ast.GotoNode($1.token, $2.token.Literal)
+           $$.stmt = ast.GotoNode($1.token, $2.token.literal)
          }
          ;
 
@@ -469,20 +469,20 @@ args: expr
 
 primary: INTEGER
        {
-         $$.expr = ast.IntegerLiteralNode($1.token, $1.token.Literal)
+         $$.expr = ast.IntegerLiteralNode($1.token, $1.token.literal)
        }
        | CHARACTER
        {
          // TODO: decode character literal
-         $$.expr = ast.IntegerLiteralNode($1.token, $1.token.Literal)
+         $$.expr = ast.IntegerLiteralNode($1.token, $1.token.literal)
        }
        | STRING
        {
-         $$.expr = ast.StringLiteralNode($1.token, $1.token.Literal)
+         $$.expr = ast.StringLiteralNode($1.token, $1.token.literal)
        }
        | IDENTIFIER
        {
-         $$.expr = ast.VariableNode($1.token, $1.token.Literal)
+         $$.expr = ast.VariableNode($1.token, $1.token.literal)
        }
        | '(' expr ')'
        {
@@ -504,7 +504,7 @@ func (self *lex) Lex(lval *yySymType) int {
       fmt.Println("token:", t)
     }
     lval.token = *t
-    return t.Id
+    return t.id
   }
 }
 

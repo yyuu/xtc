@@ -11,9 +11,9 @@ import (
 
 type lex struct {
   scanner strscan.StringScanner
-  Filename string
-  LineNumber int
-  LineOffset int
+  sourceName string
+  lineNumber int
+  lineOffset int
   ignoreSpaces bool
   ignoreComments bool
   nodes []ast.IStmtNode
@@ -22,39 +22,39 @@ type lex struct {
 
 func (self lex) String() string {
   source := fmt.Sprintf("%s...", self.scanner.Peek(16))
-  return fmt.Sprintf("%s:%d: %q", self.Filename, self.LineNumber, source)
+  return fmt.Sprintf("%s:%d: %q", self.sourceName, self.lineNumber, source)
 }
 
 type token struct {
-  Id int
-  Literal string
-  Filename string
-  LineNumber int
-  LineOffset int
+  id int
+  literal string
+  sourceName string
+  lineNumber int
+  lineOffset int
 }
 
 func (self token) GetSourceName() string {
-  return self.Filename
+  return self.sourceName
 }
 
 func (self token) GetLineNumber() int {
-  return self.LineNumber
+  return self.lineNumber
 }
 
 func (self token) GetLineOffset() int {
-  return self.LineOffset
+  return self.lineOffset
 }
 
 func (self token) String() string {
-  return fmt.Sprintf("#<token:%d %s:%d,%d %q>", self.Id, self.Filename, self.LineNumber, self.LineOffset, self.Literal)
+  return fmt.Sprintf("#<token:%d %s:%d,%d %q>", self.id, self.sourceName, self.lineNumber, self.lineOffset, self.literal)
 }
 
 func lexer(filename string, source string) *lex {
   return &lex {
     scanner: strscan.New(source),
-    Filename: filename,
-    LineNumber: 0,
-    LineOffset: 0,
+    sourceName: filename,
+    lineNumber: 0,
+    lineOffset: 0,
     ignoreSpaces: true,
     ignoreComments: true,
     nodes: nil,
@@ -193,19 +193,19 @@ func (self *lex) GetToken() (t *token) {
 
 func (self *lex) consume(id int, literal string) (t *token) {
   t = &token {
-    Id: id,
-    Literal: literal,
-    Filename: self.Filename,
-    LineNumber: self.LineNumber,
-    LineOffset: self.LineOffset,
+    id: id,
+    literal: literal,
+    sourceName: self.sourceName,
+    lineNumber: self.lineNumber,
+    lineOffset: self.lineOffset,
   }
 
-  self.LineNumber += strings.Count(literal, "\n")
+  self.lineNumber += strings.Count(literal, "\n")
   i := strings.LastIndex(literal, "\n")
   if i < 0 {
-    self.LineOffset += len(literal)
+    self.lineOffset += len(literal)
   } else {
-    self.LineOffset = len(literal[i:])
+    self.lineOffset = len(literal[i:])
   }
 
   return t
