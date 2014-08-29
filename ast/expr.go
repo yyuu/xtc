@@ -164,7 +164,7 @@ func OpAssignNode(operator string, lhs IExprNode, rhs IExprNode) opAssignNode {
 }
 
 func (self opAssignNode) String() string {
-  return fmt.Sprintf("(%s (%s %s %s)", self.Lhs, self.Operator, self.Lhs, self.Rhs)
+  return fmt.Sprintf("(%s (%s %s %s))", self.Lhs, self.Operator, self.Lhs, self.Rhs)
 }
 
 type prefixOpNode struct {
@@ -244,7 +244,7 @@ func UnaryOpNode(operator string, expr IExprNode) unaryOpNode {
 func (self unaryOpNode) String() string {
   switch self.Operator {
     case "!": return fmt.Sprintf("(not %s)", self.Expr)
-    default:  return fmt.Sprintf("(%s %s)", self.Operator, self.Expr)
+    default:  return fmt.Sprintf("%s%s", self.Operator, self.Expr)
   }
 }
 
