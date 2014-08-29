@@ -54,7 +54,7 @@ func repl() {
   }
 }
 
-func p(nodes []ast.INode, err error) {
+func p(nodes []ast.IStmtNode, err error) {
   if err != nil {
     panic(err)
   }

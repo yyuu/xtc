@@ -9,8 +9,10 @@ import (
 %}
 
 %union {
-  node ast.INode
-  nodes []ast.INode
+  expr ast.IExprNode
+  exprs []ast.IExprNode
+  stmt ast.IStmtNode
+  stmts []ast.IStmtNode
   token token
 }
 
@@ -81,7 +83,7 @@ import (
 program: stmts
        {
          if lex, ok := yylex.(*lex); ok {
-           lex.nodes = $1.nodes
+           lex.nodes = $1.stmts
          } else {
            panic("parser is broken")
          }
@@ -90,7 +92,7 @@ program: stmts
 
 block: '{' defvar_list stmts '}'
      {
-       $$.node = ast.BlockNode($2.nodes, $3.nodes)
+       $$.stmt = ast.BlockNode($2.exprs, $3.stmts)
      }
      ;
 
@@ -145,14 +147,14 @@ typeref_base: VOID
 stmts:
      | stmts stmt
      {
-       $$.nodes = append($1.nodes, $2.node)
+       $$.stmts = append($1.stmts, $2.stmt)
      }
      ;
 
 stmt: ';'
     | expr ';'
     {
-      $$.node = ast.ExprStmtNode($1.node)
+      $$.stmt = ast.ExprStmtNode($1.expr)
     }
     | block
     | if_stmt
@@ -168,61 +170,61 @@ stmt: ';'
 
 if_stmt: IF '(' expr ')' stmt ELSE stmt
        {
-         $$.node = ast.IfNode($3.node, $5.node, $7.node)
+         $$.stmt = ast.IfNode($3.expr, $5.stmt, $7.stmt)
        }
        ;
 
 while_stmt: WHILE '(' expr ')' stmt
           {
-            $$.node = ast.WhileNode($3.node, $5.node)
+            $$.stmt = ast.WhileNode($3.expr, $5.stmt)
           }
           ;
 
 dowhile_stmt: DO stmt WHILE '(' expr ')' ';'
             {
-              $$.node = ast.DoWhileNode($2.node, $5.node)
+              $$.stmt = ast.DoWhileNode($2.stmt, $5.expr)
             }
             ;
 
 for_stmt: FOR '(' expr ';' expr ';' expr ')' stmt
         {
-          $$.node = ast.ForNode($3.node, $5.node, $7.node, $9.node)
+          $$.stmt = ast.ForNode($3.expr, $5.expr, $7.expr, $9.stmt)
         }
         ;
 
 switch_stmt: SWITCH '(' expr ')' '{' case_clauses '}'
            {
-             $$.node = ast.SwitchNode($3.node, $6.nodes)
+             $$.stmt = ast.SwitchNode($3.expr, $6.stmts)
            }
            ;
 
 case_clauses:
             | case_clauses case_clause
             {
-              $$.nodes = append($1.nodes, $2.node)
+              $$.stmts = append($1.stmts, $2.stmt)
             }
             | case_clauses default_clause
             {
-              $$.nodes = append($1.nodes, $2.node)
+              $$.stmts = append($1.stmts, $2.stmt)
             }
             ;
 
 case_clause: cases case_body
            {
-             $$.node = ast.CaseNode($1.nodes, $2.node)
+             $$.stmt = ast.CaseNode($1.exprs, $2.stmt)
            }
            ;
 
 cases:
      | cases CASE primary ':'
      {
-       $$.nodes = append($1.nodes, $3.node)
+       $$.exprs = append($1.exprs, $3.expr)
      }
      ;
 
 default_clause: DEFAULT ':' case_body
               {
-                $$.node = ast.CaseNode([]ast.INode { }, $3.node)
+                $$.stmt = ast.CaseNode([]ast.IExprNode { }, $3.stmt)
               }
               ;
 
@@ -230,72 +232,72 @@ case_body: stmt
 
 goto_stmt: GOTO IDENTIFIER ';'
          {
-           $$.node = ast.GotoNode($2.token.Literal)
+           $$.stmt = ast.GotoNode($2.token.Literal)
          }
          ;
 
 
 break_stmt: BREAK ';'
           {
-            $$.node = ast.BreakNode()
+            $$.stmt = ast.BreakNode()
           }
           ;
 
 continue_stmt: CONTINUE ';'
              {
-               $$.node = ast.ContinueNode()
+               $$.stmt = ast.ContinueNode()
              }
              ;
 
 return_stmt: RETURN expr ';'
            {
-             $$.node = ast.ReturnNode($2.node)
+             $$.stmt = ast.ReturnNode($2.expr)
            }
            ;
 
 expr: term '=' expr
     {
-      $$.node = ast.AssignNode($1.node, $3.node)
+      $$.expr = ast.AssignNode($1.expr, $3.expr)
     }
     | term PLUSEQ expr
     {
-      $$.node = ast.OpAssignNode("+", $1.node, $3.node)
+      $$.expr = ast.OpAssignNode("+", $1.expr, $3.expr)
     }
     | term MINUSEQ expr
     {
-      $$.node = ast.OpAssignNode("-", $1.node, $3.node)
+      $$.expr = ast.OpAssignNode("-", $1.expr, $3.expr)
     }
     | term MULEQ expr
     {
-      $$.node = ast.OpAssignNode("*", $1.node, $3.node)
+      $$.expr = ast.OpAssignNode("*", $1.expr, $3.expr)
     }
     | term DIVEQ expr
     {
-      $$.node = ast.OpAssignNode("/", $1.node, $3.node)
+      $$.expr = ast.OpAssignNode("/", $1.expr, $3.expr)
     }
     | term MODEQ expr
     {
-      $$.node = ast.OpAssignNode("%", $1.node, $3.node)
+      $$.expr = ast.OpAssignNode("%", $1.expr, $3.expr)
     }
     | term ANDEQ expr
     {
-      $$.node = ast.OpAssignNode("&", $1.node, $3.node)
+      $$.expr = ast.OpAssignNode("&", $1.expr, $3.expr)
     }
     | term OREQ expr
     {
-      $$.node = ast.OpAssignNode("|", $1.node, $3.node)
+      $$.expr = ast.OpAssignNode("|", $1.expr, $3.expr)
     }
     | term XOREQ expr
     {
-      $$.node = ast.OpAssignNode("^", $1.node, $3.node)
+      $$.expr = ast.OpAssignNode("^", $1.expr, $3.expr)
     }
     | term LSHIFTEQ expr
     {
-      $$.node = ast.OpAssignNode("<<", $1.node, $3.node)
+      $$.expr = ast.OpAssignNode("<<", $1.expr, $3.expr)
     }
     | term RSHIFTEQ expr
     {
-      $$.node = ast.OpAssignNode(">>", $1.node, $3.node)
+      $$.expr = ast.OpAssignNode(">>", $1.expr, $3.expr)
     }
     | expr10
     ;
@@ -303,106 +305,106 @@ expr: term '=' expr
 expr10: expr9
       | expr9 '?' expr ':' expr10
       {
-        $$.node = ast.CondExprNode($1.node, $3.node, $5.node)
+        $$.expr = ast.CondExprNode($1.expr, $3.expr, $5.expr)
       }
       ;
 
 expr9: expr8
      | expr9 OROR expr8
      {
-       $$.node = ast.LogicalOrNode($1.node, $3.node)
+       $$.expr = ast.LogicalOrNode($1.expr, $3.expr)
      }
      ;
 
 expr8: expr7
      | expr8 ANDAND expr7
      {
-       $$.node = ast.LogicalAndNode($1.node, $3.node)
+       $$.expr = ast.LogicalAndNode($1.expr, $3.expr)
      }
      ;
 
 expr7: expr6
      | expr7 '>' expr6
      {
-       $$.node = ast.BinaryOpNode(">", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode(">", $1.expr, $3.expr)
      }
      | expr7 '<' expr6
      {
-       $$.node = ast.BinaryOpNode("<", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode("<", $1.expr, $3.expr)
      }
      | expr7 GTEQ expr6
      {
-       $$.node = ast.BinaryOpNode(">=", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode(">=", $1.expr, $3.expr)
      }
      | expr7 LTEQ expr6
      {
-       $$.node = ast.BinaryOpNode("<=", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode("<=", $1.expr, $3.expr)
      }
      | expr7 EQEQ expr6
      {
-       $$.node = ast.BinaryOpNode("==", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode("==", $1.expr, $3.expr)
      }
      | expr7 NEQ expr6
      {
-       $$.node = ast.BinaryOpNode("!=", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode("!=", $1.expr, $3.expr)
      }
      ;
 
 expr6: expr5
      | expr6 '|' expr5
      {
-       $$.node = ast.BinaryOpNode("|", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode("|", $1.expr, $3.expr)
      }
      ;
 
 expr5: expr4
      | expr5 '^' expr4
      {
-       $$.node = ast.BinaryOpNode("^", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode("^", $1.expr, $3.expr)
      }
      ;
 
 expr4: expr3
      | expr4 '&' expr3
      {
-       $$.node = ast.BinaryOpNode("&", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode("&", $1.expr, $3.expr)
      }
      ;
 
 expr3: expr2
      | expr3 RSHIFT expr2
      {
-       $$.node = ast.BinaryOpNode(">>", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode(">>", $1.expr, $3.expr)
      }
      | expr3 LSHIFT expr2
      {
-       $$.node = ast.BinaryOpNode("<<", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode("<<", $1.expr, $3.expr)
      }
      ;
 
 expr2: expr1
      | expr2 '+' expr1
      {
-       $$.node = ast.BinaryOpNode("+", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode("+", $1.expr, $3.expr)
      }
      | expr2 '-' expr1
      {
-       $$.node = ast.BinaryOpNode("-", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode("-", $1.expr, $3.expr)
      }
      ;
 
 expr1: term
      | expr1 '*' term
      {
-       $$.node = ast.BinaryOpNode("*", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode("*", $1.expr, $3.expr)
      }
      | expr1 '/' term
      {
-       $$.node = ast.BinaryOpNode("/", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode("/", $1.expr, $3.expr)
      }
      | expr1 '%' term
      {
-       $$.node = ast.BinaryOpNode("%", $1.node, $3.node)
+       $$.expr = ast.BinaryOpNode("%", $1.expr, $3.expr)
      }
      ;
 
@@ -411,27 +413,27 @@ term: unary
 
 unary: PLUSPLUS unary
      {
-       $$.node = ast.PrefixOpNode("++", $2.node)
+       $$.expr = ast.PrefixOpNode("++", $2.expr)
      }
      | MINUSMINUS unary
      {
-       $$.node = ast.PrefixOpNode("--", $2.node)
+       $$.expr = ast.PrefixOpNode("--", $2.expr)
      }
      | '+' term
      {
-       $$.node = ast.UnaryOpNode("+", $2.node)
+       $$.expr = ast.UnaryOpNode("+", $2.expr)
      }
      | '-' term
      {
-       $$.node = ast.UnaryOpNode("-", $2.node)
+       $$.expr = ast.UnaryOpNode("-", $2.expr)
      }
      | '!' term
      {
-       $$.node = ast.UnaryOpNode("!", $2.node)
+       $$.expr = ast.UnaryOpNode("!", $2.expr)
      }
      | '~' term
      {
-       $$.node = ast.UnaryOpNode("~", $2.node)
+       $$.expr = ast.UnaryOpNode("~", $2.expr)
      }
      | postfix
      ;
@@ -439,19 +441,19 @@ unary: PLUSPLUS unary
 postfix: primary
        | primary PLUSPLUS
        {
-         $$.node = ast.SuffixOpNode("++", $1.node)
+         $$.expr = ast.SuffixOpNode("++", $1.expr)
        }
        | primary MINUSMINUS
        {
-         $$.node = ast.SuffixOpNode("--", $1.node)
+         $$.expr = ast.SuffixOpNode("--", $1.expr)
        }
        | primary '(' ')'
        {
-         $$.node = ast.FuncallNode($1.node, []ast.INode { })
+         $$.expr = ast.FuncallNode($1.expr, []ast.IExprNode { })
        }
        | primary '(' args ')'
        {
-         $$.node = ast.FuncallNode($1.node, $3.nodes)
+         $$.expr = ast.FuncallNode($1.expr, $3.exprs)
        }
        ;
 
@@ -461,30 +463,30 @@ name: IDENTIFIER
 args: expr
     | args ',' expr
     {
-      $$.nodes = append($1.nodes, $3.node)
+      $$.exprs = append($1.exprs, $3.expr)
     }
     ;
 
 primary: INTEGER
        {
-         $$.node = ast.IntegerLiteralNode($1.token.Literal)
+         $$.expr = ast.IntegerLiteralNode($1.token.Literal)
        }
        | CHARACTER
        {
          // TODO: decode character literal
-         $$.node = ast.IntegerLiteralNode($1.token.Literal)
+         $$.expr = ast.IntegerLiteralNode($1.token.Literal)
        }
        | STRING
        {
-         $$.node = ast.StringLiteralNode($1.token.Literal)
+         $$.expr = ast.StringLiteralNode($1.token.Literal)
        }
        | IDENTIFIER
        {
-         $$.node = ast.VariableNode($1.token.Literal)
+         $$.expr = ast.VariableNode($1.token.Literal)
        }
        | '(' expr ')'
        {
-         $$.node = $2.node
+         $$.expr = $2.expr
        }
        ;
 
@@ -511,7 +513,7 @@ func (self *lex) Error(s string) {
   panic(fmt.Errorf("%s: %s", self, s))
 }
 
-func ParseExpr(s string) ([]ast.INode, error) {
+func ParseExpr(s string) ([]ast.IStmtNode, error) {
   lex := lexer("main.c", s)
   if yyParse(lex) == 0 {
     return lex.nodes, nil // success

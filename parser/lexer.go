@@ -16,7 +16,7 @@ type lex struct {
   LineOffset int
   ignoreSpaces bool
   ignoreComments bool
-  nodes []ast.INode
+  nodes []ast.IStmtNode
   error error
 }
 

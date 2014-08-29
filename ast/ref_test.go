@@ -20,10 +20,10 @@ func TestDereferenceNode(t *testing.T) {
  */
 
 func TestFuncallNode(t *testing.T) {
-  x := FuncallNode(VariableNode("a"), []INode { IntegerLiteralNode("12345"), IntegerLiteralNode("67890") })
+  x := FuncallNode(VariableNode("a"), []IExprNode { IntegerLiteralNode("12345"), IntegerLiteralNode("67890") })
   assertEquals(t, x.String(), "(a 12345 67890)")
 
-  y := FuncallNode(VariableNode("b"), []INode { })
+  y := FuncallNode(VariableNode("b"), []IExprNode { })
   assertEquals(t, y.String(), "(b)")
 }
 

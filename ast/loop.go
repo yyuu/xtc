@@ -9,8 +9,8 @@ type doWhileNode struct {
   Cond IExprNode
 }
 
-func DoWhileNode(body INode, cond INode) doWhileNode {
-  return doWhileNode { body.(IStmtNode), cond.(IExprNode) }
+func DoWhileNode(body IStmtNode, cond IExprNode) doWhileNode {
+  return doWhileNode { body, cond }
 }
 
 func (self doWhileNode) String() string {
@@ -24,8 +24,8 @@ type forNode struct {
   Body IStmtNode
 }
 
-func ForNode(init INode, cond INode, incr INode, body INode) forNode {
-  return forNode { init.(IExprNode), cond.(IExprNode), incr.(IExprNode), body.(IExprNode) }
+func ForNode(init IExprNode, cond IExprNode, incr IExprNode, body IStmtNode) forNode {
+  return forNode { init, cond, incr, body }
 }
 
 func (self forNode) String() string {
@@ -37,8 +37,8 @@ type whileNode struct {
   Body IStmtNode
 }
 
-func WhileNode(cond INode, body INode) whileNode {
-  return whileNode { cond.(IExprNode), body.(IStmtNode) }
+func WhileNode(cond IExprNode, body IStmtNode) whileNode {
+  return whileNode { cond, body }
 }
 
 func (self whileNode) String() string {

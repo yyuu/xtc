@@ -30,8 +30,8 @@ type exprStmtNode struct {
   Expr IExprNode
 }
 
-func ExprStmtNode(expr INode) exprStmtNode {
-  return exprStmtNode { expr.(IExprNode) }
+func ExprStmtNode(expr IExprNode) exprStmtNode {
+  return exprStmtNode { expr }
 }
 
 func (self exprStmtNode) String() string {
@@ -55,8 +55,8 @@ type labelNode struct {
   Stmt IStmtNode
 }
 
-func LabelNode(name string, stmt INode) labelNode {
-  return labelNode { name, stmt.(IStmtNode) }
+func LabelNode(name string, stmt IStmtNode) labelNode {
+  return labelNode { name, stmt }
 }
 
 func (self labelNode) String() string {
@@ -67,8 +67,8 @@ type returnNode struct {
   Expr IExprNode
 }
 
-func ReturnNode(expr INode) returnNode {
-  return returnNode { expr.(IExprNode) }
+func ReturnNode(expr IExprNode) returnNode {
+  return returnNode { expr }
 }
 
 func (self returnNode) String() string {

@@ -9,8 +9,8 @@ type addressNode struct {
   Expr IExprNode
 }
 
-func AddressNode(expr INode) addressNode {
-  return addressNode { expr.(IExprNode) }
+func AddressNode(expr IExprNode) addressNode {
+  return addressNode { expr }
 }
 
 func (self addressNode) String() string {
@@ -22,8 +22,8 @@ type arefNode struct {
   Index IExprNode
 }
 
-func ArefNode(expr INode, index INode) arefNode {
-  return arefNode { expr.(IExprNode), index.(IExprNode) }
+func ArefNode(expr IExprNode, index IExprNode) arefNode {
+  return arefNode { expr, index }
 }
 
 func (self arefNode) String() string {
@@ -35,12 +35,7 @@ type funcallNode struct {
   Args []IExprNode
 }
 
-func FuncallNode(_expr INode, _args []INode) funcallNode {
-  expr := _expr.(IExprNode)
-  args := make([]IExprNode, len(_args))
-  for i := range _args {
-    args[i] = _args[i].(IExprNode)
-  }
+func FuncallNode(expr IExprNode, args []IExprNode) funcallNode {
   return funcallNode { expr, args }
 }
 
@@ -61,8 +56,8 @@ type memberNode struct {
   Member string
 }
 
-func MemberNode(expr INode, member string) memberNode {
-  return memberNode { expr.(IExprNode), member }
+func MemberNode(expr IExprNode, member string) memberNode {
+  return memberNode { expr, member }
 }
 
 func (self memberNode) String() string {
@@ -74,8 +69,8 @@ type ptrMemberNode struct {
   Member string
 }
 
-func PtrMemberNode(expr INode, member string) ptrMemberNode {
-  return ptrMemberNode { expr.(IExprNode), member }
+func PtrMemberNode(expr IExprNode, member string) ptrMemberNode {
+  return ptrMemberNode { expr, member }
 }
 
 func (self ptrMemberNode) String() string {
