@@ -50,6 +50,28 @@ func (self ArefNode) GetLocation() Location {
   return self.location
 }
 
+// DereferenceNode
+type DereferenceNode struct {
+  location Location
+  Expr IExprNode
+}
+
+func NewDereferenceNode(location Location, expr IExprNode) DereferenceNode {
+  return DereferenceNode { location, expr }
+}
+
+func (self DereferenceNode) String() string {
+  panic("not implemented")
+}
+
+func (self DereferenceNode) IsExpr() bool {
+  return true
+}
+
+func (self DereferenceNode) GetLocation() Location {
+  return self.location
+}
+
 // FuncallNode
 type FuncallNode struct {
   location Location

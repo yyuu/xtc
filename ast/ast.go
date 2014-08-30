@@ -49,3 +49,43 @@ func (self AST) String() string {
 func Equals(a, b AST) bool {
   return reflect.DeepEqual(a, b)
 }
+
+type ASTVisitor interface {
+  // Statements
+  VisitBlockNode(BlockNode)
+  VisitExprStmtNode(BlockNode)
+  VisitIfNode(IfNode)
+  VisitSwitchNode(SwitchNode)
+  VisitCaseNode(CaseNode)
+  VisitWhileNode(WhileNode)
+  VisitDoWhileNode(DoWhileNode)
+  VisitForNode(ForNode)
+  VisitBreakNode(BreakNode)
+  VisitContinueNode(ContinueNode)
+  VisitGotoNode(GotoNode)
+  VisitLabelNode(LabelNode)
+  VisitReturnNode(ReturnNode)
+
+  // Expressions
+  VisitAssignNode(AssignNode)
+  VisitOpAssignNode(OpAssignNode)
+  VisitCondExprNode(CondExprNode)
+  VisitLogicalOrNode(LogicalOrNode)
+  VisitLogicalAndNode(LogicalAndNode)
+  VisitBinaryOpNode(BinaryOpNode)
+  VisitUnaryOpNode(UnaryOpNode)
+  VisitPrefixOpNode(PrefixOpNode)
+  VisitSuffixOpNode(SuffixOpNode)
+  VisitArefNode(ArefNode)
+  VisitMemberNode(MemberNode)
+  VisitPtrMemberNode(PtrMemberNode)
+  VisitFuncallNode(FuncallNode)
+  VisitDereferenceNode(DereferenceNode)
+  VisitAddressNode(AddressNode)
+  VisitCastNode(CastNode)
+  VisitSizeofExprNode(SizeofExprNode)
+  VisitSizeofTypeNode(SizeofTypeNode)
+  VisitVariableNode(VariableNode)
+  VisitIntegerLiteralNode(IntegerLiteralNode)
+  VisitStringLiteralNode(StringLiteralNode)
+}
