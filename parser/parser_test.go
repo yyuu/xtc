@@ -1,12 +1,13 @@
 package parser
 
 import (
+  "reflect"
   "testing"
   "bitbucket.org/yyuu/bs/ast"
 )
 
 func assertEqualsAST(t *testing.T, got ast.AST, expected ast.AST) {
-  if ! ast.Equals(got, expected) {
+  if ! reflect.DeepEqual(got, expected) {
     t.Errorf("\n;;;; expected ;;;;\n%s\n;;;; got ;;;;\n%s\n", expected, got)
     t.Fail()
   }

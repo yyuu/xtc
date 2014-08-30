@@ -2,7 +2,6 @@ package ast
 
 import (
   "fmt"
-  "reflect"
   "strings"
 )
 
@@ -44,10 +43,6 @@ func (self AST) String() string {
     xs[i] = fmt.Sprintf(";; %s:%d,%d\n%s", location.SourceName, location.LineNumber+1, location.LineOffset+1, stmt)
   }
   return strings.Join(xs, "\n")
-}
-
-func Equals(a, b AST) bool {
-  return reflect.DeepEqual(a, b)
 }
 
 type ASTVisitor interface {
