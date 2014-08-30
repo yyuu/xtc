@@ -15,14 +15,38 @@ func TestDoWhile(t *testing.T) {
     NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "b"), []IExprNode { NewVariableNode(loc(0,0), "a") })),
     NewBinaryOpNode(loc(0,0), "<", NewVariableNode(loc(0,0), "a"), NewIntegerLiteralNode(loc(0,0), "100")),
   )
-  s := `
-    (let do-while-loop ()
-      (begin
-        (b a)
-        (if (< a 100)
-            (do-while-loop))))
-  `
-  assertEquals(t, jsonString(x), trimSpace(s))
+  s := `{
+  "Location": "[:0,0]",
+  "Body": {
+    "Location": "[:0,0]",
+    "Expr": {
+      "Location": "[:0,0]",
+      "Expr": {
+        "Location": "[:0,0]",
+        "Name": "b"
+      },
+      "Args": [
+        {
+          "Location": "[:0,0]",
+          "Name": "a"
+        }
+      ]
+    }
+  },
+  "Cond": {
+    "Location": "[:0,0]",
+    "Operator": "\u003c",
+    "Left": {
+      "Location": "[:0,0]",
+      "Name": "a"
+    },
+    "Right": {
+      "Location": "[:0,0]",
+      "Value": 100
+    }
+  }
+}`
+  assertJsonEquals(t, x, s)
 }
 
 func TestFor(t *testing.T) {
@@ -38,14 +62,57 @@ func TestFor(t *testing.T) {
     NewSuffixOpNode(loc(0,0), "++", NewVariableNode(loc(0,0), "i")),
     NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "f"), []IExprNode { NewVariableNode(loc(0,0), "i") })),
   )
-  s := `
-    (let for-loop ((i 0))
-      (if (< i 100)
-        (begin
-          (f i)
-          (for-loop (+ i 1)))))
-  `
-  assertEquals(t, jsonString(x), trimSpace(s))
+  s := `{
+  "Location": "[:0,0]",
+  "Init": {
+    "Location": "[:0,0]",
+    "Lhs": {
+      "Location": "[:0,0]",
+      "Name": "i"
+    },
+    "Rhs": {
+      "Location": "[:0,0]",
+      "Value": 0
+    }
+  },
+  "Cond": {
+    "Location": "[:0,0]",
+    "Operator": "\u003c",
+    "Left": {
+      "Location": "[:0,0]",
+      "Name": "i"
+    },
+    "Right": {
+      "Location": "[:0,0]",
+      "Value": 100
+    }
+  },
+  "Incr": {
+    "Location": "[:0,0]",
+    "Operator": "++",
+    "Expr": {
+      "Location": "[:0,0]",
+      "Name": "i"
+    }
+  },
+  "Body": {
+    "Location": "[:0,0]",
+    "Expr": {
+      "Location": "[:0,0]",
+      "Expr": {
+        "Location": "[:0,0]",
+        "Name": "f"
+      },
+      "Args": [
+        {
+          "Location": "[:0,0]",
+          "Name": "i"
+        }
+      ]
+    }
+  }
+}`
+  assertJsonEquals(t, x, s)
 }
 
 func TestWhile(t *testing.T) {
@@ -59,12 +126,27 @@ func TestWhile(t *testing.T) {
     NewUnaryOpNode(loc(0,0), "!", NewVariableNode(loc(0,0), "eof")),
     NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "gets"), []IExprNode { })),
   )
-  s := `
-    (let while-loop ((while-cond (not eof)))
-      (if while-cond
-        (begin
-          (gets)
-          (while-loop (not eof)))))
-  `
-  assertEquals(t, jsonString(x), trimSpace(s))
+  s := `{
+  "Location": "[:0,0]",
+  "Cond": {
+    "Location": "[:0,0]",
+    "Operator": "!",
+    "Expr": {
+      "Location": "[:0,0]",
+      "Name": "eof"
+    }
+  },
+  "Body": {
+    "Location": "[:0,0]",
+    "Expr": {
+      "Location": "[:0,0]",
+      "Expr": {
+        "Location": "[:0,0]",
+        "Name": "gets"
+      },
+      "Args": []
+    }
+  }
+}`
+  assertJsonEquals(t, x, s)
 }
