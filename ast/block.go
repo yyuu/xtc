@@ -13,7 +13,7 @@ type blockNode struct {
   Stmts []IStmtNode
 }
 
-func BlockNode(location Location, variables []IExprNode, stmts []IStmtNode) blockNode {
+func NewBlockNode(location Location, variables []IExprNode, stmts []IStmtNode) blockNode {
   return blockNode { location, variables, stmts }
 }
 

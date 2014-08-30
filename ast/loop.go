@@ -11,7 +11,7 @@ type doWhileNode struct {
   Cond IExprNode
 }
 
-func DoWhileNode(location Location, body IStmtNode, cond IExprNode) doWhileNode {
+func NewDoWhileNode(location Location, body IStmtNode, cond IExprNode) doWhileNode {
   return doWhileNode { location, body, cond }
 }
 
@@ -36,7 +36,7 @@ type forNode struct {
   Body IStmtNode
 }
 
-func ForNode(location Location, init IExprNode, cond IExprNode, incr IExprNode, body IStmtNode) forNode {
+func NewForNode(location Location, init IExprNode, cond IExprNode, incr IExprNode, body IStmtNode) forNode {
   return forNode { location, init, cond, incr, body }
 }
 
@@ -59,7 +59,7 @@ type whileNode struct {
   Body IStmtNode
 }
 
-func WhileNode(location Location, cond IExprNode, body IStmtNode) whileNode {
+func NewWhileNode(location Location, cond IExprNode, body IStmtNode) whileNode {
   return whileNode { location, cond, body }
 }
 

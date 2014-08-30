@@ -12,7 +12,7 @@ type binaryOpNode struct {
   Right IExprNode
 }
 
-func BinaryOpNode(location Location, operator string, left IExprNode, right IExprNode) binaryOpNode {
+func NewBinaryOpNode(location Location, operator string, left IExprNode, right IExprNode) binaryOpNode {
   return binaryOpNode { location, operator, left, right }
 }
 
@@ -44,7 +44,7 @@ type logicalAndNode struct {
   Right IExprNode
 }
 
-func LogicalAndNode(location Location, left IExprNode, right IExprNode) logicalAndNode {
+func NewLogicalAndNode(location Location, left IExprNode, right IExprNode) logicalAndNode {
   return logicalAndNode { location, left, right }
 }
 
@@ -67,7 +67,7 @@ type logicalOrNode struct {
   Right IExprNode
 }
 
-func LogicalOrNode(location Location, left IExprNode, right IExprNode) logicalOrNode {
+func NewLogicalOrNode(location Location, left IExprNode, right IExprNode) logicalOrNode {
   return logicalOrNode { location, left, right }
 }
 
@@ -90,7 +90,7 @@ type prefixOpNode struct {
   Expr IExprNode
 }
 
-func PrefixOpNode(location Location, operator string, expr IExprNode) prefixOpNode {
+func NewPrefixOpNode(location Location, operator string, expr IExprNode) prefixOpNode {
   return prefixOpNode { location, operator, expr }
 }
 
@@ -117,7 +117,7 @@ type suffixOpNode struct {
   Expr IExprNode
 }
 
-func SuffixOpNode(location Location, operator string, expr IExprNode) suffixOpNode {
+func NewSuffixOpNode(location Location, operator string, expr IExprNode) suffixOpNode {
   return suffixOpNode { location, operator, expr }
 }
 
@@ -144,7 +144,7 @@ type unaryOpNode struct {
   Expr IExprNode
 }
 
-func UnaryOpNode(location Location, operator string, expr IExprNode) unaryOpNode {
+func NewUnaryOpNode(location Location, operator string, expr IExprNode) unaryOpNode {
   return unaryOpNode { location, operator, expr }
 }
 

@@ -34,9 +34,9 @@ gets( );
   assertEqualsAST(t, *a,
     ast.AST {
       []ast.IStmtNode {
-        ast.ExprStmtNode(loc(1,1),
-          ast.FuncallNode(loc(1,1),
-                          ast.VariableNode(loc(1,1), "gets"),
+        ast.NewExprStmtNode(loc(1,1),
+          ast.NewFuncallNode(loc(1,1),
+                          ast.NewVariableNode(loc(1,1), "gets"),
                           []ast.IExprNode {
                           })),
       },
@@ -55,11 +55,11 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
   assertEqualsAST(t, *a,
     ast.AST {
       []ast.IStmtNode {
-        ast.ExprStmtNode(loc(1,5),
-          ast.FuncallNode(loc(1,5),
-                          ast.VariableNode(loc(1,5), "println"),
+        ast.NewExprStmtNode(loc(1,5),
+          ast.NewFuncallNode(loc(1,5),
+                          ast.NewVariableNode(loc(1,5), "println"),
                           []ast.IExprNode {
-                            ast.StringLiteralNode(loc(1,13), "\"hello, world\""),
+                            ast.NewStringLiteralNode(loc(1,13), "\"hello, world\""),
                           })),
       },
     },
@@ -82,12 +82,12 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
   assertEqualsAST(t, *a,
     ast.AST {
       []ast.IStmtNode {
-        ast.ExprStmtNode(loc(2,5),
-          ast.FuncallNode(loc(2,5),
-                          ast.VariableNode(loc(2,5), "println"),
+        ast.NewExprStmtNode(loc(2,5),
+          ast.NewFuncallNode(loc(2,5),
+                          ast.NewVariableNode(loc(2,5), "println"),
                           []ast.IExprNode {
-                            ast.StringLiteralNode(loc(3,7), "\"hello, %s\""),
-                            ast.StringLiteralNode(loc(4,7), "\"world\""),
+                            ast.NewStringLiteralNode(loc(3,7), "\"hello, %s\""),
+                            ast.NewStringLiteralNode(loc(4,7), "\"world\""),
                           })),
       },
     },

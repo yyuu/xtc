@@ -11,7 +11,7 @@ type assignNode struct {
   Rhs IExprNode
 }
 
-func AssignNode(location Location, lhs IExprNode, rhs IExprNode) assignNode {
+func NewAssignNode(location Location, lhs IExprNode, rhs IExprNode) assignNode {
   return assignNode { location, lhs, rhs }
 }
 
@@ -35,7 +35,7 @@ type opAssignNode struct {
   Rhs IExprNode
 }
 
-func OpAssignNode(location Location, operator string, lhs IExprNode, rhs IExprNode) opAssignNode {
+func NewOpAssignNode(location Location, operator string, lhs IExprNode, rhs IExprNode) opAssignNode {
   return opAssignNode { location, operator, lhs, rhs }
 }
 

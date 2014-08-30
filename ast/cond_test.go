@@ -8,13 +8,13 @@ func TestCondExpr(t *testing.T) {
 /*
   (n < 2) ? 1 : (f(n-1)+f(n-2))
  */
-  x := CondExprNode(
+  x := NewCondExprNode(
     LOC,
-    BinaryOpNode(LOC, "<", VariableNode(LOC, "n"), IntegerLiteralNode(LOC, "2")),
-    IntegerLiteralNode(LOC, "1"),
-    BinaryOpNode(LOC, "+",
-                 FuncallNode(LOC, VariableNode(LOC, "f"), []IExprNode { BinaryOpNode(LOC, "-", VariableNode(LOC, "n"), IntegerLiteralNode(LOC, "1")) }),
-                 FuncallNode(LOC, VariableNode(LOC, "f"), []IExprNode { BinaryOpNode(LOC, "-", VariableNode(LOC, "n"), IntegerLiteralNode(LOC, "2")) })))
+    NewBinaryOpNode(LOC, "<", NewVariableNode(LOC, "n"), NewIntegerLiteralNode(LOC, "2")),
+    NewIntegerLiteralNode(LOC, "1"),
+    NewBinaryOpNode(LOC, "+",
+                 NewFuncallNode(LOC, NewVariableNode(LOC, "f"), []IExprNode { NewBinaryOpNode(LOC, "-", NewVariableNode(LOC, "n"), NewIntegerLiteralNode(LOC, "1")) }),
+                 NewFuncallNode(LOC, NewVariableNode(LOC, "f"), []IExprNode { NewBinaryOpNode(LOC, "-", NewVariableNode(LOC, "n"), NewIntegerLiteralNode(LOC, "2")) })))
   assertEquals(t, x.String(), "(if (< n 2) 1 (+ (f (- n 1)) (f (- n 2))))")
 }
 
@@ -26,11 +26,11 @@ func TestIf(t *testing.T) {
     println("odd");
   }
  */
-  x := IfNode(
+  x := NewIfNode(
     LOC,
-    BinaryOpNode(LOC, "==", BinaryOpNode(LOC, "%", VariableNode(LOC, "n"), IntegerLiteralNode(LOC, "2")), IntegerLiteralNode(LOC, "0")),
-    ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "println"), []IExprNode { StringLiteralNode(LOC, "\"even\"") })),
-    ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "println"), []IExprNode { StringLiteralNode(LOC, "\"odd\"") })),
+    NewBinaryOpNode(LOC, "==", NewBinaryOpNode(LOC, "%", NewVariableNode(LOC, "n"), NewIntegerLiteralNode(LOC, "2")), NewIntegerLiteralNode(LOC, "0")),
+    NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "println"), []IExprNode { NewStringLiteralNode(LOC, "\"even\"") })),
+    NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "println"), []IExprNode { NewStringLiteralNode(LOC, "\"odd\"") })),
   )
   s := `
     (if (= (modulo n 2) 0)
@@ -48,24 +48,24 @@ func TestSwitch(t *testing.T) {
     default: println("plentiful")
   }
    */
-  x := SwitchNode(
+  x := NewSwitchNode(
     LOC,
-    VariableNode(LOC, "n"),
+    NewVariableNode(LOC, "n"),
     []IStmtNode {
-      CaseNode(
+      NewCaseNode(
         LOC,
-        []IExprNode { IntegerLiteralNode(LOC, "1") },
-        ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "println"), []IExprNode { StringLiteralNode(LOC, "\"one\"") })),
+        []IExprNode { NewIntegerLiteralNode(LOC, "1") },
+        NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "println"), []IExprNode { NewStringLiteralNode(LOC, "\"one\"") })),
       ),
-      CaseNode(
+      NewCaseNode(
         LOC, 
-        []IExprNode { IntegerLiteralNode(LOC, "2") },
-        ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "println"), []IExprNode { StringLiteralNode(LOC, "\"two\"") })),
+        []IExprNode { NewIntegerLiteralNode(LOC, "2") },
+        NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "println"), []IExprNode { NewStringLiteralNode(LOC, "\"two\"") })),
       ),
-      CaseNode(
+      NewCaseNode(
         LOC,
         []IExprNode { },
-        ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "println"), []IExprNode { StringLiteralNode(LOC, "\"plentiful\"") })),
+        NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "println"), []IExprNode { NewStringLiteralNode(LOC, "\"plentiful\"") })),
       ),
     },
   )

@@ -9,7 +9,7 @@ type breakNode struct {
   location Location
 }
 
-func BreakNode(location Location) breakNode {
+func NewBreakNode(location Location) breakNode {
   return breakNode { location }
 }
 
@@ -30,7 +30,7 @@ type continueNode struct {
   location Location
 }
 
-func ContinueNode(location Location) continueNode {
+func NewContinueNode(location Location) continueNode {
   return continueNode { location }
 }
 
@@ -52,7 +52,7 @@ type exprStmtNode struct {
   Expr IExprNode
 }
 
-func ExprStmtNode(location Location, expr IExprNode) exprStmtNode {
+func NewExprStmtNode(location Location, expr IExprNode) exprStmtNode {
   return exprStmtNode { location, expr }
 }
 
@@ -74,7 +74,7 @@ type gotoNode struct {
   Target string
 }
 
-func GotoNode(location Location, target string) gotoNode {
+func NewGotoNode(location Location, target string) gotoNode {
   return gotoNode { location, target }
 }
 
@@ -97,7 +97,7 @@ type labelNode struct {
   Stmt IStmtNode
 }
 
-func LabelNode(location Location, name string, stmt IStmtNode) labelNode {
+func NewLabelNode(location Location, name string, stmt IStmtNode) labelNode {
   return labelNode { location, name, stmt }
 }
 
@@ -119,7 +119,7 @@ type returnNode struct {
   Expr IExprNode
 }
 
-func ReturnNode(location Location, expr IExprNode) returnNode {
+func NewReturnNode(location Location, expr IExprNode) returnNode {
   return returnNode { location, expr }
 }
 

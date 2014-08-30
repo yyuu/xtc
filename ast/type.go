@@ -7,7 +7,7 @@ type castNode struct {
   Expr IExprNode
 }
 
-func CastNode(location Location, t ITypeNode, expr IExprNode) castNode {
+func NewCastNode(location Location, t ITypeNode, expr IExprNode) castNode {
   return castNode { location, t, expr }
 }
 
@@ -30,7 +30,7 @@ type sizeofExprNode struct {
   Type ITypeNode
 }
 
-func SizeofExprNode(location Location, expr IExprNode, t ITypeNode) sizeofExprNode {
+func NewSizeofExprNode(location Location, expr IExprNode, t ITypeNode) sizeofExprNode {
   return sizeofExprNode { location, expr, t }
 }
 
@@ -53,7 +53,7 @@ type sizeofTypeNode struct {
   Operand ITypeNode
 }
 
-func SizeofTypeNode(location Location, t ITypeNode, operand ITypeNode) sizeofTypeNode {
+func NewSizeofTypeNode(location Location, t ITypeNode, operand ITypeNode) sizeofTypeNode {
   return sizeofTypeNode { location, t, operand }
 }
 

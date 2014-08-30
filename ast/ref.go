@@ -11,7 +11,7 @@ type addressNode struct {
   Expr IExprNode
 }
 
-func AddressNode(location Location, expr IExprNode) addressNode {
+func NewAddressNode(location Location, expr IExprNode) addressNode {
   return addressNode { location, expr }
 }
 
@@ -34,7 +34,7 @@ type arefNode struct {
   Index IExprNode
 }
 
-func ArefNode(location Location, expr IExprNode, index IExprNode) arefNode {
+func NewArefNode(location Location, expr IExprNode, index IExprNode) arefNode {
   return arefNode { location, expr, index }
 }
 
@@ -57,7 +57,7 @@ type funcallNode struct {
   Args []IExprNode
 }
 
-func FuncallNode(location Location, expr IExprNode, args []IExprNode) funcallNode {
+func NewFuncallNode(location Location, expr IExprNode, args []IExprNode) funcallNode {
   return funcallNode { location, expr, args }
 }
 
@@ -88,7 +88,7 @@ type memberNode struct {
   Member string
 }
 
-func MemberNode(location Location, expr IExprNode, member string) memberNode {
+func NewMemberNode(location Location, expr IExprNode, member string) memberNode {
   return memberNode { location, expr, member }
 }
 
@@ -111,7 +111,7 @@ type ptrMemberNode struct {
   Member string
 }
 
-func PtrMemberNode(location Location, expr IExprNode, member string) ptrMemberNode {
+func NewPtrMemberNode(location Location, expr IExprNode, member string) ptrMemberNode {
   return ptrMemberNode { location, expr, member }
 }
 
@@ -133,7 +133,7 @@ type variableNode struct {
   Name string
 }
 
-func VariableNode(location Location, name string) variableNode {
+func NewVariableNode(location Location, name string) variableNode {
   return variableNode { location, name }
 }
 

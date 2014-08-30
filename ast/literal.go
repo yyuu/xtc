@@ -10,7 +10,7 @@ type integerLiteralNode struct {
   Value int
 }
 
-func IntegerLiteralNode(location Location, literal string) integerLiteralNode {
+func NewIntegerLiteralNode(location Location, literal string) integerLiteralNode {
   value, err := strconv.Atoi(literal)
   if err != nil { panic(err) }
   return integerLiteralNode { location, value }
@@ -34,7 +34,7 @@ type stringLiteralNode struct {
   Value string
 }
 
-func StringLiteralNode(location Location, literal string) stringLiteralNode {
+func NewStringLiteralNode(location Location, literal string) stringLiteralNode {
   return stringLiteralNode { location, literal }
 }
 

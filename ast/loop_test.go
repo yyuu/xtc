@@ -10,10 +10,10 @@ func TestDoWhile(t *testing.T) {
     b(a);
   } while (a < 100);
  */
-  x := DoWhileNode(
+  x := NewDoWhileNode(
     LOC,
-    ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "b"), []IExprNode { VariableNode(LOC, "a") })),
-    BinaryOpNode(LOC, "<", VariableNode(LOC, "a"), IntegerLiteralNode(LOC, "100")),
+    NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "b"), []IExprNode { NewVariableNode(LOC, "a") })),
+    NewBinaryOpNode(LOC, "<", NewVariableNode(LOC, "a"), NewIntegerLiteralNode(LOC, "100")),
   )
   s := `
     (let do-while-loop ()
@@ -31,12 +31,12 @@ func TestFor(t *testing.T) {
     f(i);
   }
  */
-  x := ForNode(
+  x := NewForNode(
     LOC,
-    AssignNode(LOC, VariableNode(LOC, "i"), IntegerLiteralNode(LOC, "0")),
-    BinaryOpNode(LOC, "<", VariableNode(LOC, "i"), IntegerLiteralNode(LOC, "100")),
-    SuffixOpNode(LOC, "++", VariableNode(LOC, "i")),
-    ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "f"), []IExprNode { VariableNode(LOC, "i") })),
+    NewAssignNode(LOC, NewVariableNode(LOC, "i"), NewIntegerLiteralNode(LOC, "0")),
+    NewBinaryOpNode(LOC, "<", NewVariableNode(LOC, "i"), NewIntegerLiteralNode(LOC, "100")),
+    NewSuffixOpNode(LOC, "++", NewVariableNode(LOC, "i")),
+    NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "f"), []IExprNode { NewVariableNode(LOC, "i") })),
   )
   s := `
     (let for-loop ((i 0))
@@ -54,10 +54,10 @@ func TestWhile(t *testing.T) {
     gets();
   }
  */
-  x := WhileNode(
+  x := NewWhileNode(
     LOC,
-    UnaryOpNode(LOC, "!", VariableNode(LOC, "eof")),
-    ExprStmtNode(LOC, FuncallNode(LOC, VariableNode(LOC, "gets"), []IExprNode { })),
+    NewUnaryOpNode(LOC, "!", NewVariableNode(LOC, "eof")),
+    NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "gets"), []IExprNode { })),
   )
   s := `
     (let while-loop ((while-cond (not eof)))

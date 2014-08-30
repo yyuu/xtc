@@ -5,34 +5,34 @@ import (
 )
 
 func TestBinaryOp(t *testing.T) {
-  x := BinaryOpNode(LOC, "*", BinaryOpNode(LOC, "%", VariableNode(LOC, "a"), VariableNode(LOC, "b")), VariableNode(LOC, "c"))
+  x := NewBinaryOpNode(LOC, "*", NewBinaryOpNode(LOC, "%", NewVariableNode(LOC, "a"), NewVariableNode(LOC, "b")), NewVariableNode(LOC, "c"))
   assertEquals(t, x.String(), "(* (modulo a b) c)")
 }
 
 func TestLogicalAndNode(t *testing.T) {
-  x := LogicalAndNode(LOC, VariableNode(LOC, "a"), LogicalAndNode(LOC, VariableNode(LOC, "b"), VariableNode(LOC, "c")))
+  x := NewLogicalAndNode(LOC, NewVariableNode(LOC, "a"), NewLogicalAndNode(LOC, NewVariableNode(LOC, "b"), NewVariableNode(LOC, "c")))
   assertEquals(t, x.String(), "(and a (and b c))")
 }
 
 func TestLogicalOrNode(t *testing.T) {
-  x := LogicalOrNode(LOC, LogicalOrNode(LOC, VariableNode(LOC, "a"), VariableNode(LOC, "b")), VariableNode(LOC, "c"))
+  x := NewLogicalOrNode(LOC, NewLogicalOrNode(LOC, NewVariableNode(LOC, "a"), NewVariableNode(LOC, "b")), NewVariableNode(LOC, "c"))
   assertEquals(t, x.String(), "(or (or a b) c)")
 }
 
 func TestPrefixOpNode(t *testing.T) {
-  x := PrefixOpNode(LOC, "--", VariableNode(LOC, "a"))
+  x := NewPrefixOpNode(LOC, "--", NewVariableNode(LOC, "a"))
   assertEquals(t, x.String(), "(- 1 a)")
 }
 
 func TestSuffixOpNode(t *testing.T) {
-  x := SuffixOpNode(LOC, "++", VariableNode(LOC, "a"))
+  x := NewSuffixOpNode(LOC, "++", NewVariableNode(LOC, "a"))
   assertEquals(t, x.String(), "(+ a 1)")
 }
 
 func TestUnaryOpNode(t *testing.T) {
-  x := UnaryOpNode(LOC, "-", IntegerLiteralNode(LOC, "12345"))
+  x := NewUnaryOpNode(LOC, "-", NewIntegerLiteralNode(LOC, "12345"))
   assertEquals(t, x.String(), "-12345")
 
-  y := UnaryOpNode(LOC, "!", VariableNode(LOC, "a"))
+  y := NewUnaryOpNode(LOC, "!", NewVariableNode(LOC, "a"))
   assertEquals(t, y.String(), "(not a)")
 }

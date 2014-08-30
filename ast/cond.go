@@ -13,7 +13,7 @@ type condExprNode struct {
   ElseExpr IExprNode
 }
 
-func CondExprNode(location Location, cond IExprNode, thenExpr IExprNode, elseExpr IExprNode) condExprNode {
+func NewCondExprNode(location Location, cond IExprNode, thenExpr IExprNode, elseExpr IExprNode) condExprNode {
   return condExprNode { location, cond, thenExpr, elseExpr }
 }
 
@@ -36,7 +36,7 @@ type caseNode struct {
   Body IStmtNode
 }
 
-func CaseNode(location Location, values []IExprNode, body IStmtNode) caseNode {
+func NewCaseNode(location Location, values []IExprNode, body IStmtNode) caseNode {
   return caseNode { location, values, body }
 }
 
@@ -68,7 +68,7 @@ type ifNode struct {
   ElseBody IStmtNode
 }
 
-func IfNode(location Location, cond IExprNode, thenBody IStmtNode, elseBody IStmtNode) ifNode {
+func NewIfNode(location Location, cond IExprNode, thenBody IStmtNode, elseBody IStmtNode) ifNode {
   return ifNode { location, cond, thenBody, elseBody }
 }
 
@@ -91,7 +91,7 @@ type switchNode struct {
   Cases []caseNode
 }
 
-func SwitchNode(location Location, cond IExprNode, _cases []IStmtNode) switchNode {
+func NewSwitchNode(location Location, cond IExprNode, _cases []IStmtNode) switchNode {
   cases := make([]caseNode, len(_cases))
   for i := range _cases {
     cases[i] = _cases[i].(caseNode)
