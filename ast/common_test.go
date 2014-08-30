@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "encoding/json"
   "regexp"
   "strings"
   "testing"
@@ -17,8 +18,14 @@ func trimSpace(s string) string {
   return re.ReplaceAllString(strings.TrimSpace(s), " ")
 }
 
-var LOC = Location {
-  SourceName: "__test__",
-  LineNumber: 0,
-  LineOffset: 0,
+func loc(lineNumber int, lineOffset int) Location {
+  return Location { "", lineNumber, lineOffset }
+}
+
+func jsonString(x interface{}) string {
+  cs, err := json.Marshal(x)
+  if err != nil {
+    panic(err)
+  }
+  return string(cs)
 }

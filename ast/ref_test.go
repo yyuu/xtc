@@ -10,8 +10,8 @@ func TestAddressNode(t *testing.T) {
  */
 
 func TestArefNode(t *testing.T) {
-  x := NewArefNode(LOC, NewVariableNode(LOC, "a"), NewIntegerLiteralNode(LOC, "12345"))
-  assertEquals(t, x.String(), "(vector-ref a 12345)")
+  x := NewArefNode(loc(0,0), NewVariableNode(loc(0,0), "a"), NewIntegerLiteralNode(loc(0,0), "12345"))
+  assertEquals(t, jsonString(x), "(vector-ref a 12345)")
 }
 
 /*
@@ -20,24 +20,24 @@ func TestDereferenceNode(t *testing.T) {
  */
 
 func TestFuncallNode(t *testing.T) {
-  x := NewFuncallNode(LOC, NewVariableNode(LOC, "a"), []IExprNode { NewIntegerLiteralNode(LOC, "12345"), NewIntegerLiteralNode(LOC, "67890") })
-  assertEquals(t, x.String(), "(a 12345 67890)")
+  x := NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "a"), []IExprNode { NewIntegerLiteralNode(loc(0,0), "12345"), NewIntegerLiteralNode(loc(0,0), "67890") })
+  assertEquals(t, jsonString(x), "(a 12345 67890)")
 
-  y := NewFuncallNode(LOC, NewVariableNode(LOC, "b"), []IExprNode { })
-  assertEquals(t, y.String(), "(b)")
+  y := NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "b"), []IExprNode { })
+  assertEquals(t, jsonString(y), "(b)")
 }
 
 func TestMemberNode(t *testing.T) {
-  x := NewMemberNode(LOC, NewVariableNode(LOC, "a"), "b")
-  assertEquals(t, x.String(), "(slot-ref a 'b)")
+  x := NewMemberNode(loc(0,0), NewVariableNode(loc(0,0), "a"), "b")
+  assertEquals(t, jsonString(x), "(slot-ref a 'b)")
 }
 
 func TestPtrMemberNode(t *testing.T) {
-  x := NewPtrMemberNode(LOC, NewVariableNode(LOC, "a"), "b")
-  assertEquals(t, x.String(), "(slot-ref a 'b)")
+  x := NewPtrMemberNode(loc(0,0), NewVariableNode(loc(0,0), "a"), "b")
+  assertEquals(t, jsonString(x), "(slot-ref a 'b)")
 }
 
 func TestVariableNode(t *testing.T) {
-  x := NewVariableNode(LOC, "a")
-  assertEquals(t, x.String(), "a")
+  x := NewVariableNode(loc(0,0), "a")
+  assertEquals(t, jsonString(x), "a")
 }

@@ -11,9 +11,9 @@ func TestDoWhile(t *testing.T) {
   } while (a < 100);
  */
   x := NewDoWhileNode(
-    LOC,
-    NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "b"), []IExprNode { NewVariableNode(LOC, "a") })),
-    NewBinaryOpNode(LOC, "<", NewVariableNode(LOC, "a"), NewIntegerLiteralNode(LOC, "100")),
+    loc(0,0),
+    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "b"), []IExprNode { NewVariableNode(loc(0,0), "a") })),
+    NewBinaryOpNode(loc(0,0), "<", NewVariableNode(loc(0,0), "a"), NewIntegerLiteralNode(loc(0,0), "100")),
   )
   s := `
     (let do-while-loop ()
@@ -22,7 +22,7 @@ func TestDoWhile(t *testing.T) {
         (if (< a 100)
             (do-while-loop))))
   `
-  assertEquals(t, x.String(), trimSpace(s))
+  assertEquals(t, jsonString(x), trimSpace(s))
 }
 
 func TestFor(t *testing.T) {
@@ -32,11 +32,11 @@ func TestFor(t *testing.T) {
   }
  */
   x := NewForNode(
-    LOC,
-    NewAssignNode(LOC, NewVariableNode(LOC, "i"), NewIntegerLiteralNode(LOC, "0")),
-    NewBinaryOpNode(LOC, "<", NewVariableNode(LOC, "i"), NewIntegerLiteralNode(LOC, "100")),
-    NewSuffixOpNode(LOC, "++", NewVariableNode(LOC, "i")),
-    NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "f"), []IExprNode { NewVariableNode(LOC, "i") })),
+    loc(0,0),
+    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "i"), NewIntegerLiteralNode(loc(0,0), "0")),
+    NewBinaryOpNode(loc(0,0), "<", NewVariableNode(loc(0,0), "i"), NewIntegerLiteralNode(loc(0,0), "100")),
+    NewSuffixOpNode(loc(0,0), "++", NewVariableNode(loc(0,0), "i")),
+    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "f"), []IExprNode { NewVariableNode(loc(0,0), "i") })),
   )
   s := `
     (let for-loop ((i 0))
@@ -45,7 +45,7 @@ func TestFor(t *testing.T) {
           (f i)
           (for-loop (+ i 1)))))
   `
-  assertEquals(t, x.String(), trimSpace(s))
+  assertEquals(t, jsonString(x), trimSpace(s))
 }
 
 func TestWhile(t *testing.T) {
@@ -55,9 +55,9 @@ func TestWhile(t *testing.T) {
   }
  */
   x := NewWhileNode(
-    LOC,
-    NewUnaryOpNode(LOC, "!", NewVariableNode(LOC, "eof")),
-    NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "gets"), []IExprNode { })),
+    loc(0,0),
+    NewUnaryOpNode(loc(0,0), "!", NewVariableNode(loc(0,0), "eof")),
+    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "gets"), []IExprNode { })),
   )
   s := `
     (let while-loop ((while-cond (not eof)))
@@ -66,5 +66,5 @@ func TestWhile(t *testing.T) {
           (gets)
           (while-loop (not eof)))))
   `
-  assertEquals(t, x.String(), trimSpace(s))
+  assertEquals(t, jsonString(x), trimSpace(s))
 }

@@ -5,11 +5,11 @@ import (
 )
 
 func TestAssignNode(t *testing.T) {
-  x := NewAssignNode(LOC, NewVariableNode(LOC, "a"), NewStringLiteralNode(LOC, "\"xxx\""))
-  assertEquals(t, x.String(), "(a \"xxx\")")
+  x := NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "a"), NewStringLiteralNode(loc(0,0), "\"xxx\""))
+  assertEquals(t, jsonString(x), "(a \"xxx\")")
 }
 
 func TestOpAssignNode(t *testing.T) {
-  x := NewOpAssignNode(LOC, "+", NewVariableNode(LOC, "a"), NewIntegerLiteralNode(LOC, "12345"))
-  assertEquals(t, x.String(), "(a (+ a 12345))")
+  x := NewOpAssignNode(loc(0,0), "+", NewVariableNode(loc(0,0), "a"), NewIntegerLiteralNode(loc(0,0), "12345"))
+  assertEquals(t, jsonString(x), "(a (+ a 12345))")
 }

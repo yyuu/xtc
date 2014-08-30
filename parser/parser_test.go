@@ -21,7 +21,7 @@ func TestParseEmpty(t *testing.T) {
 }
 
 func loc(lineNumber int, lineOffset int) ast.Location {
-  return ast.Location { SourceName: "-", LineNumber: lineNumber, LineOffset: lineOffset }
+  return ast.Location { SourceName: "", LineNumber: lineNumber, LineOffset: lineOffset }
 }
 
 func TestParseFuncallWithoutArguments(t *testing.T) {

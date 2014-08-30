@@ -9,13 +9,13 @@ func TestCondExpr(t *testing.T) {
   (n < 2) ? 1 : (f(n-1)+f(n-2))
  */
   x := NewCondExprNode(
-    LOC,
-    NewBinaryOpNode(LOC, "<", NewVariableNode(LOC, "n"), NewIntegerLiteralNode(LOC, "2")),
-    NewIntegerLiteralNode(LOC, "1"),
-    NewBinaryOpNode(LOC, "+",
-                 NewFuncallNode(LOC, NewVariableNode(LOC, "f"), []IExprNode { NewBinaryOpNode(LOC, "-", NewVariableNode(LOC, "n"), NewIntegerLiteralNode(LOC, "1")) }),
-                 NewFuncallNode(LOC, NewVariableNode(LOC, "f"), []IExprNode { NewBinaryOpNode(LOC, "-", NewVariableNode(LOC, "n"), NewIntegerLiteralNode(LOC, "2")) })))
-  assertEquals(t, x.String(), "(if (< n 2) 1 (+ (f (- n 1)) (f (- n 2))))")
+    loc(0,0),
+    NewBinaryOpNode(loc(0,0), "<", NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "2")),
+    NewIntegerLiteralNode(loc(0,0), "1"),
+    NewBinaryOpNode(loc(0,0), "+",
+                 NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "f"), []IExprNode { NewBinaryOpNode(loc(0,0), "-", NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "1")) }),
+                 NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "f"), []IExprNode { NewBinaryOpNode(loc(0,0), "-", NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "2")) })))
+  assertEquals(t, jsonString(x), "(if (< n 2) 1 (+ (f (- n 1)) (f (- n 2))))")
 }
 
 func TestIf(t *testing.T) {
@@ -27,17 +27,17 @@ func TestIf(t *testing.T) {
   }
  */
   x := NewIfNode(
-    LOC,
-    NewBinaryOpNode(LOC, "==", NewBinaryOpNode(LOC, "%", NewVariableNode(LOC, "n"), NewIntegerLiteralNode(LOC, "2")), NewIntegerLiteralNode(LOC, "0")),
-    NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "println"), []IExprNode { NewStringLiteralNode(LOC, "\"even\"") })),
-    NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "println"), []IExprNode { NewStringLiteralNode(LOC, "\"odd\"") })),
+    loc(0,0),
+    NewBinaryOpNode(loc(0,0), "==", NewBinaryOpNode(loc(0,0), "%", NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "2")), NewIntegerLiteralNode(loc(0,0), "0")),
+    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []IExprNode { NewStringLiteralNode(loc(0,0), "\"even\"") })),
+    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []IExprNode { NewStringLiteralNode(loc(0,0), "\"odd\"") })),
   )
   s := `
     (if (= (modulo n 2) 0)
       (println "even")
       (println "odd"))
   `
-  assertEquals(t, x.String(), trimSpace(s))
+  assertEquals(t, jsonString(x), trimSpace(s))
 }
 
 func TestSwitch(t *testing.T) {
@@ -49,23 +49,23 @@ func TestSwitch(t *testing.T) {
   }
    */
   x := NewSwitchNode(
-    LOC,
-    NewVariableNode(LOC, "n"),
+    loc(0,0),
+    NewVariableNode(loc(0,0), "n"),
     []IStmtNode {
       NewCaseNode(
-        LOC,
-        []IExprNode { NewIntegerLiteralNode(LOC, "1") },
-        NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "println"), []IExprNode { NewStringLiteralNode(LOC, "\"one\"") })),
+        loc(0,0),
+        []IExprNode { NewIntegerLiteralNode(loc(0,0), "1") },
+        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []IExprNode { NewStringLiteralNode(loc(0,0), "\"one\"") })),
       ),
       NewCaseNode(
-        LOC, 
-        []IExprNode { NewIntegerLiteralNode(LOC, "2") },
-        NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "println"), []IExprNode { NewStringLiteralNode(LOC, "\"two\"") })),
+        loc(0,0), 
+        []IExprNode { NewIntegerLiteralNode(loc(0,0), "2") },
+        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []IExprNode { NewStringLiteralNode(loc(0,0), "\"two\"") })),
       ),
       NewCaseNode(
-        LOC,
+        loc(0,0),
         []IExprNode { },
-        NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "println"), []IExprNode { NewStringLiteralNode(LOC, "\"plentiful\"") })),
+        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []IExprNode { NewStringLiteralNode(loc(0,0), "\"plentiful\"") })),
       ),
     },
   )
@@ -76,5 +76,5 @@ func TestSwitch(t *testing.T) {
         ((= switch-cond 2) (println "two"))
         (else (println "plentiful"))))
   `
-  assertEquals(t, x.String(), trimSpace(s))
+  assertEquals(t, jsonString(x), trimSpace(s))
 }

@@ -5,34 +5,34 @@ import (
 )
 
 func TestBinaryOp(t *testing.T) {
-  x := NewBinaryOpNode(LOC, "*", NewBinaryOpNode(LOC, "%", NewVariableNode(LOC, "a"), NewVariableNode(LOC, "b")), NewVariableNode(LOC, "c"))
-  assertEquals(t, x.String(), "(* (modulo a b) c)")
+  x := NewBinaryOpNode(loc(0,0), "*", NewBinaryOpNode(loc(0,0), "%", NewVariableNode(loc(0,0), "a"), NewVariableNode(loc(0,0), "b")), NewVariableNode(loc(0,0), "c"))
+  assertEquals(t, jsonString(x), "(* (modulo a b) c)")
 }
 
 func TestLogicalAndNode(t *testing.T) {
-  x := NewLogicalAndNode(LOC, NewVariableNode(LOC, "a"), NewLogicalAndNode(LOC, NewVariableNode(LOC, "b"), NewVariableNode(LOC, "c")))
-  assertEquals(t, x.String(), "(and a (and b c))")
+  x := NewLogicalAndNode(loc(0,0), NewVariableNode(loc(0,0), "a"), NewLogicalAndNode(loc(0,0), NewVariableNode(loc(0,0), "b"), NewVariableNode(loc(0,0), "c")))
+  assertEquals(t, jsonString(x), "(and a (and b c))")
 }
 
 func TestLogicalOrNode(t *testing.T) {
-  x := NewLogicalOrNode(LOC, NewLogicalOrNode(LOC, NewVariableNode(LOC, "a"), NewVariableNode(LOC, "b")), NewVariableNode(LOC, "c"))
-  assertEquals(t, x.String(), "(or (or a b) c)")
+  x := NewLogicalOrNode(loc(0,0), NewLogicalOrNode(loc(0,0), NewVariableNode(loc(0,0), "a"), NewVariableNode(loc(0,0), "b")), NewVariableNode(loc(0,0), "c"))
+  assertEquals(t, jsonString(x), "(or (or a b) c)")
 }
 
 func TestPrefixOpNode(t *testing.T) {
-  x := NewPrefixOpNode(LOC, "--", NewVariableNode(LOC, "a"))
-  assertEquals(t, x.String(), "(- 1 a)")
+  x := NewPrefixOpNode(loc(0,0), "--", NewVariableNode(loc(0,0), "a"))
+  assertEquals(t, jsonString(x), "(- 1 a)")
 }
 
 func TestSuffixOpNode(t *testing.T) {
-  x := NewSuffixOpNode(LOC, "++", NewVariableNode(LOC, "a"))
-  assertEquals(t, x.String(), "(+ a 1)")
+  x := NewSuffixOpNode(loc(0,0), "++", NewVariableNode(loc(0,0), "a"))
+  assertEquals(t, jsonString(x), "(+ a 1)")
 }
 
 func TestUnaryOpNode(t *testing.T) {
-  x := NewUnaryOpNode(LOC, "-", NewIntegerLiteralNode(LOC, "12345"))
-  assertEquals(t, x.String(), "-12345")
+  x := NewUnaryOpNode(loc(0,0), "-", NewIntegerLiteralNode(loc(0,0), "12345"))
+  assertEquals(t, jsonString(x), "-12345")
 
-  y := NewUnaryOpNode(LOC, "!", NewVariableNode(LOC, "a"))
-  assertEquals(t, y.String(), "(not a)")
+  y := NewUnaryOpNode(loc(0,0), "!", NewVariableNode(loc(0,0), "a"))
+  assertEquals(t, jsonString(y), "(not a)")
 }

@@ -517,7 +517,7 @@ func (self *lex) Error(s string) {
 }
 
 func ParseExpr(s string) (*ast.AST, error) {
-  lex := lexer("-", s)
+  lex := lexer("", s)
   if yyParse(lex) == 0 {
     return lex.ast, nil // success
   } else {

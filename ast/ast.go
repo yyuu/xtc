@@ -31,6 +31,15 @@ type Location struct {
   LineOffset int
 }
 
+func (self Location) String() string {
+  return fmt.Sprintf("[%s:%d,%d]", self.SourceName, self.LineNumber, self.LineOffset)
+}
+
+func (self Location) MarshalJSON() ([]byte, error) {
+  s := fmt.Sprintf("%q", self.String())
+  return []byte(s), nil
+}
+
 type AST struct {
   Stmts []IStmtNode
 }

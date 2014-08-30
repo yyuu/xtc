@@ -11,16 +11,16 @@ func TestBlock1(t *testing.T) {
   }
  */
   x := NewBlockNode(
-    LOC,
+    loc(0,0),
     []IExprNode { },
     []IStmtNode {
-      NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "println"), []IExprNode { NewStringLiteralNode(LOC, "\"hello, world\"") })),
+      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []IExprNode { NewStringLiteralNode(loc(0,0), "\"hello, world\"") })),
     },
   )
   s := `
     (println "hello, world")
   `
-  assertEquals(t, x.String(), trimSpace(s))
+  assertEquals(t, jsonString(x), trimSpace(s))
 }
 
 func TestBlock2(t *testing.T) {
@@ -31,19 +31,19 @@ func TestBlock2(t *testing.T) {
   }
  */
   x := NewBlockNode(
-    LOC,
+    loc(0,0),
     []IExprNode {
-      NewAssignNode(LOC, NewVariableNode(LOC, "n"), NewIntegerLiteralNode(LOC, "12345")),
+      NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "12345")),
     },
     []IStmtNode {
-      NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "printf"), []IExprNode { NewStringLiteralNode(LOC, "\"%d\""), NewVariableNode(LOC, "n") })),
+      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []IExprNode { NewStringLiteralNode(loc(0,0), "\"%d\""), NewVariableNode(loc(0,0), "n") })),
     },
   )
   s := `
     (let ((n 12345))
       (printf "%d" n))
   `
-  assertEquals(t, x.String(), trimSpace(s))
+  assertEquals(t, jsonString(x), trimSpace(s))
 }
 
 func TestBlock3(t *testing.T) {
@@ -56,14 +56,14 @@ func TestBlock3(t *testing.T) {
   }
  */
   x := NewBlockNode(
-    LOC,
+    loc(0,0),
     []IExprNode {
-      NewAssignNode(LOC, NewVariableNode(LOC, "n"), NewIntegerLiteralNode(LOC, "12345")),
-      NewAssignNode(LOC, NewVariableNode(LOC, "m"), NewIntegerLiteralNode(LOC, "67890")),
+      NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "12345")),
+      NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "m"), NewIntegerLiteralNode(loc(0,0), "67890")),
     },
     []IStmtNode {
-      NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "printf"), []IExprNode { NewStringLiteralNode(LOC, "\"%d\""), NewVariableNode(LOC, "n") })),
-      NewExprStmtNode(LOC, NewFuncallNode(LOC, NewVariableNode(LOC, "printf"), []IExprNode { NewStringLiteralNode(LOC, "\"%d\""), NewVariableNode(LOC, "m") })),
+      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []IExprNode { NewStringLiteralNode(loc(0,0), "\"%d\""), NewVariableNode(loc(0,0), "n") })),
+      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []IExprNode { NewStringLiteralNode(loc(0,0), "\"%d\""), NewVariableNode(loc(0,0), "m") })),
     },
   )
   s := `
@@ -73,5 +73,5 @@ func TestBlock3(t *testing.T) {
         (printf "%d" n)
         (printf "%d" m)))
   `
-  assertEquals(t, x.String(), trimSpace(s))
+  assertEquals(t, jsonString(x), trimSpace(s))
 }
