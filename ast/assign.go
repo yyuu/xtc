@@ -6,7 +6,7 @@ import (
 
 // AssignNode
 type AssignNode struct {
-  location Location
+  Location Location
   Lhs IExprNode
   Rhs IExprNode
 }
@@ -24,12 +24,12 @@ func (self AssignNode) IsExpr() bool {
 }
 
 func (self AssignNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // OpAssignNode
 type OpAssignNode struct {
-  location Location
+  Location Location
   Operator string
   Lhs IExprNode
   Rhs IExprNode
@@ -48,5 +48,5 @@ func (self OpAssignNode) IsExpr() bool {
 }
 
 func (self OpAssignNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }

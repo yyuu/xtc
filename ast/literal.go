@@ -6,7 +6,7 @@ import (
 
 // IntegerLiteralNode
 type IntegerLiteralNode struct {
-  location Location
+  Location Location
   Value int
 }
 
@@ -25,12 +25,12 @@ func (self IntegerLiteralNode) IsExpr() bool {
 }
 
 func (self IntegerLiteralNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // StringLiteralNode
 type StringLiteralNode struct {
-  location Location
+  Location Location
   Value string
 }
 
@@ -47,5 +47,5 @@ func (self StringLiteralNode) IsExpr() bool {
 }
 
 func (self StringLiteralNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }

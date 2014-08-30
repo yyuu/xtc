@@ -7,7 +7,7 @@ import (
 
 // CondExprNode
 type CondExprNode struct {
-  location Location
+  Location Location
   Cond IExprNode
   ThenExpr IExprNode
   ElseExpr IExprNode
@@ -26,12 +26,12 @@ func (self CondExprNode) IsExpr() bool {
 }
 
 func (self CondExprNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // CaseNode
 type CaseNode struct {
-  location Location
+  Location Location
   Values []IExprNode
   Body IStmtNode
 }
@@ -57,12 +57,12 @@ func (self CaseNode) IsStmt() bool {
 }
 
 func (self CaseNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // IfNode
 type IfNode struct {
-  location Location
+  Location Location
   Cond IExprNode
   ThenBody IStmtNode
   ElseBody IStmtNode
@@ -81,12 +81,12 @@ func (self IfNode) IsStmt() bool {
 }
 
 func (self IfNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // SwitchNode
 type SwitchNode struct {
-  location Location
+  Location Location
   Cond IExprNode
   Cases []CaseNode
 }
@@ -116,5 +116,5 @@ func (self SwitchNode) IsStmt() bool {
 }
 
 func (self SwitchNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }

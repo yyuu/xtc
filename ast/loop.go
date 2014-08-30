@@ -6,7 +6,7 @@ import (
 
 // DoWhileNode
 type DoWhileNode struct {
-  location Location
+  Location Location
   Body IStmtNode
   Cond IExprNode
 }
@@ -24,12 +24,12 @@ func (self DoWhileNode) IsStmt() bool {
 }
 
 func (self DoWhileNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // ForNode
 type ForNode struct {
-  location Location
+  Location Location
   Init IExprNode
   Cond IExprNode
   Incr IExprNode
@@ -49,12 +49,12 @@ func (self ForNode) IsStmt() bool {
 }
 
 func (self ForNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // WhileNode
 type WhileNode struct {
-  location Location
+  Location Location
   Cond IExprNode
   Body IStmtNode
 }
@@ -72,5 +72,5 @@ func (self WhileNode) IsStmt() bool {
 }
 
 func (self WhileNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }

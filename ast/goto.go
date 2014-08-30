@@ -6,7 +6,7 @@ import (
 
 // BreakNode
 type BreakNode struct {
-  location Location
+  Location Location
 }
 
 func NewBreakNode(location Location) BreakNode {
@@ -22,12 +22,12 @@ func (self BreakNode) IsStmt() bool {
 }
 
 func (self BreakNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // ContinueNode
 type ContinueNode struct {
-  location Location
+  Location Location
 }
 
 func NewContinueNode(location Location) ContinueNode {
@@ -43,12 +43,12 @@ func (self ContinueNode) IsStmt() bool {
 }
 
 func (self ContinueNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // ExprStmtNode
 type ExprStmtNode struct {
-  location Location
+  Location Location
   Expr IExprNode
 }
 
@@ -65,12 +65,12 @@ func (self ExprStmtNode) IsStmt() bool {
 }
 
 func (self ExprStmtNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // GotoNode
 type GotoNode struct {
-  location Location
+  Location Location
   Target string
 }
 
@@ -87,12 +87,12 @@ func (self GotoNode) IsStmt() bool {
 }
 
 func (self GotoNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // LabelNode
 type LabelNode struct {
-  location Location
+  Location Location
   Name string
   Stmt IStmtNode
 }
@@ -110,12 +110,12 @@ func (self LabelNode) IsStmt() bool {
 }
 
 func (self LabelNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // ReturnNode
 type ReturnNode struct {
-  location Location
+  Location Location
   Expr IExprNode
 }
 
@@ -132,5 +132,5 @@ func (self ReturnNode) IsStmt() bool {
 }
 
 func (self ReturnNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }

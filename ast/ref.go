@@ -7,7 +7,7 @@ import (
 
 // AddressNode
 type AddressNode struct {
-  location Location
+  Location Location
   Expr IExprNode
 }
 
@@ -24,12 +24,12 @@ func (self AddressNode) IsExpr() bool {
 }
 
 func (self AddressNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // ArefNode
 type ArefNode struct {
-  location Location
+  Location Location
   Expr IExprNode
   Index IExprNode
 }
@@ -47,12 +47,12 @@ func (self ArefNode) IsExpr() bool {
 }
 
 func (self ArefNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // DereferenceNode
 type DereferenceNode struct {
-  location Location
+  Location Location
   Expr IExprNode
 }
 
@@ -69,12 +69,12 @@ func (self DereferenceNode) IsExpr() bool {
 }
 
 func (self DereferenceNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // FuncallNode
 type FuncallNode struct {
-  location Location
+  Location Location
   Expr IExprNode
   Args []IExprNode
 }
@@ -100,12 +100,12 @@ func (self FuncallNode) IsExpr() bool {
 }
 
 func (self FuncallNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // MemberNode
 type MemberNode struct {
-  location Location
+  Location Location
   Expr IExprNode
   Member string
 }
@@ -123,12 +123,12 @@ func (self MemberNode) IsExpr() bool {
 }
 
 func (self MemberNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // PtrMemberNode
 type PtrMemberNode struct {
-  location Location
+  Location Location
   Expr IExprNode
   Member string
 }
@@ -146,12 +146,12 @@ func (self PtrMemberNode) IsExpr() bool {
 }
 
 func (self PtrMemberNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // VariableNode
 type VariableNode struct {
-  location Location
+  Location Location
   Name string
 }
 
@@ -168,5 +168,5 @@ func (self VariableNode) IsExpr() bool {
 }
 
 func (self VariableNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }

@@ -2,7 +2,7 @@ package ast
 
 // CastNode
 type CastNode struct {
-  location Location
+  Location Location
   Type ITypeNode
   Expr IExprNode
 }
@@ -20,12 +20,12 @@ func (self CastNode) IsExpr() bool {
 }
 
 func (self CastNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // SizeofExprNode
 type SizeofExprNode struct {
-  location Location
+  Location Location
   Expr IExprNode
   Type ITypeNode
 }
@@ -43,12 +43,12 @@ func (self SizeofExprNode) IsExpr() bool {
 }
 
 func (self SizeofExprNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
 
 // SizeofTypeNode
 type SizeofTypeNode struct {
-  location Location
+  Location Location
   Type ITypeNode
   Operand ITypeNode
 }
@@ -66,5 +66,5 @@ func (self SizeofTypeNode) IsExpr() bool {
 }
 
 func (self SizeofTypeNode) GetLocation() Location {
-  return self.location
+  return self.Location
 }
