@@ -5,47 +5,47 @@ import (
 )
 
 // IntegerLiteralNode
-type integerLiteralNode struct {
+type IntegerLiteralNode struct {
   location Location
   Value int
 }
 
-func NewIntegerLiteralNode(location Location, literal string) integerLiteralNode {
+func NewIntegerLiteralNode(location Location, literal string) IntegerLiteralNode {
   value, err := strconv.Atoi(literal)
   if err != nil { panic(err) }
-  return integerLiteralNode { location, value }
+  return IntegerLiteralNode { location, value }
 }
 
-func (self integerLiteralNode) String() string {
+func (self IntegerLiteralNode) String() string {
   return strconv.Itoa(self.Value)
 }
 
-func (self integerLiteralNode) IsExpr() bool {
+func (self IntegerLiteralNode) IsExpr() bool {
   return true
 }
 
-func (self integerLiteralNode) GetLocation() Location {
+func (self IntegerLiteralNode) GetLocation() Location {
   return self.location
 }
 
 // StringLiteralNode
-type stringLiteralNode struct {
+type StringLiteralNode struct {
   location Location
   Value string
 }
 
-func NewStringLiteralNode(location Location, literal string) stringLiteralNode {
-  return stringLiteralNode { location, literal }
+func NewStringLiteralNode(location Location, literal string) StringLiteralNode {
+  return StringLiteralNode { location, literal }
 }
 
-func (self stringLiteralNode) String() string {
+func (self StringLiteralNode) String() string {
   return self.Value
 }
 
-func (self stringLiteralNode) IsExpr() bool {
+func (self StringLiteralNode) IsExpr() bool {
   return true
 }
 
-func (self stringLiteralNode) GetLocation() Location {
+func (self StringLiteralNode) GetLocation() Location {
   return self.location
 }

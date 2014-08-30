@@ -5,132 +5,132 @@ import (
 )
 
 // BreakNode
-type breakNode struct {
+type BreakNode struct {
   location Location
 }
 
-func NewBreakNode(location Location) breakNode {
-  return breakNode { location }
+func NewBreakNode(location Location) BreakNode {
+  return BreakNode { location }
 }
 
-func (self breakNode) String() string {
+func (self BreakNode) String() string {
   return "(break)"
 }
 
-func (self breakNode) IsStmt() bool {
+func (self BreakNode) IsStmt() bool {
   return true
 }
 
-func (self breakNode) GetLocation() Location {
+func (self BreakNode) GetLocation() Location {
   return self.location
 }
 
 // ContinueNode
-type continueNode struct {
+type ContinueNode struct {
   location Location
 }
 
-func NewContinueNode(location Location) continueNode {
-  return continueNode { location }
+func NewContinueNode(location Location) ContinueNode {
+  return ContinueNode { location }
 }
 
-func (self continueNode) String() string {
+func (self ContinueNode) String() string {
   return "(continue)"
 }
 
-func (self continueNode) IsStmt() bool {
+func (self ContinueNode) IsStmt() bool {
   return true
 }
 
-func (self continueNode) GetLocation() Location {
+func (self ContinueNode) GetLocation() Location {
   return self.location
 }
 
 // ExprStmtNode
-type exprStmtNode struct {
+type ExprStmtNode struct {
   location Location
   Expr IExprNode
 }
 
-func NewExprStmtNode(location Location, expr IExprNode) exprStmtNode {
-  return exprStmtNode { location, expr }
+func NewExprStmtNode(location Location, expr IExprNode) ExprStmtNode {
+  return ExprStmtNode { location, expr }
 }
 
-func (self exprStmtNode) String() string {
+func (self ExprStmtNode) String() string {
   return fmt.Sprintf("%s", self.Expr)
 }
 
-func (self exprStmtNode) IsStmt() bool {
+func (self ExprStmtNode) IsStmt() bool {
   return true
 }
 
-func (self exprStmtNode) GetLocation() Location {
+func (self ExprStmtNode) GetLocation() Location {
   return self.location
 }
 
 // GotoNode
-type gotoNode struct {
+type GotoNode struct {
   location Location
   Target string
 }
 
-func NewGotoNode(location Location, target string) gotoNode {
-  return gotoNode { location, target }
+func NewGotoNode(location Location, target string) GotoNode {
+  return GotoNode { location, target }
 }
 
-func (self gotoNode) String() string {
+func (self GotoNode) String() string {
   return fmt.Sprintf("(goto %s)", self.Target)
 }
 
-func (self gotoNode) IsStmt() bool {
+func (self GotoNode) IsStmt() bool {
   return true
 }
 
-func (self gotoNode) GetLocation() Location {
+func (self GotoNode) GetLocation() Location {
   return self.location
 }
 
 // LabelNode
-type labelNode struct {
+type LabelNode struct {
   location Location
   Name string
   Stmt IStmtNode
 }
 
-func NewLabelNode(location Location, name string, stmt IStmtNode) labelNode {
-  return labelNode { location, name, stmt }
+func NewLabelNode(location Location, name string, stmt IStmtNode) LabelNode {
+  return LabelNode { location, name, stmt }
 }
 
-func (self labelNode) String() string {
+func (self LabelNode) String() string {
   panic("not implemented")
 }
 
-func (self labelNode) IsStmt() bool {
+func (self LabelNode) IsStmt() bool {
   return true
 }
 
-func (self labelNode) GetLocation() Location {
+func (self LabelNode) GetLocation() Location {
   return self.location
 }
 
 // ReturnNode
-type returnNode struct {
+type ReturnNode struct {
   location Location
   Expr IExprNode
 }
 
-func NewReturnNode(location Location, expr IExprNode) returnNode {
-  return returnNode { location, expr }
+func NewReturnNode(location Location, expr IExprNode) ReturnNode {
+  return ReturnNode { location, expr }
 }
 
-func (self returnNode) String() string {
+func (self ReturnNode) String() string {
   return fmt.Sprintf("%s", self.Expr)
 }
 
-func (self returnNode) IsStmt() bool {
+func (self ReturnNode) IsStmt() bool {
   return true
 }
 
-func (self returnNode) GetLocation() Location {
+func (self ReturnNode) GetLocation() Location {
   return self.location
 }

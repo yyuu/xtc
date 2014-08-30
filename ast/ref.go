@@ -6,62 +6,62 @@ import (
 )
 
 // AddressNode
-type addressNode struct {
+type AddressNode struct {
   location Location
   Expr IExprNode
 }
 
-func NewAddressNode(location Location, expr IExprNode) addressNode {
-  return addressNode { location, expr }
+func NewAddressNode(location Location, expr IExprNode) AddressNode {
+  return AddressNode { location, expr }
 }
 
-func (self addressNode) String() string {
+func (self AddressNode) String() string {
   panic("not implemented")
 }
 
-func (self addressNode) IsExpr() bool {
+func (self AddressNode) IsExpr() bool {
   return true
 }
 
-func (self addressNode) GetLocation() Location {
+func (self AddressNode) GetLocation() Location {
   return self.location
 }
 
 // ArefNode
-type arefNode struct {
+type ArefNode struct {
   location Location
   Expr IExprNode
   Index IExprNode
 }
 
-func NewArefNode(location Location, expr IExprNode, index IExprNode) arefNode {
-  return arefNode { location, expr, index }
+func NewArefNode(location Location, expr IExprNode, index IExprNode) ArefNode {
+  return ArefNode { location, expr, index }
 }
 
-func (self arefNode) String() string {
+func (self ArefNode) String() string {
   return fmt.Sprintf("(vector-ref %s %s)", self.Expr, self.Index)
 }
 
-func (self arefNode) IsExpr() bool {
+func (self ArefNode) IsExpr() bool {
   return true
 }
 
-func (self arefNode) GetLocation() Location {
+func (self ArefNode) GetLocation() Location {
   return self.location
 }
 
 // FuncallNode
-type funcallNode struct {
+type FuncallNode struct {
   location Location
   Expr IExprNode
   Args []IExprNode
 }
 
-func NewFuncallNode(location Location, expr IExprNode, args []IExprNode) funcallNode {
-  return funcallNode { location, expr, args }
+func NewFuncallNode(location Location, expr IExprNode, args []IExprNode) FuncallNode {
+  return FuncallNode { location, expr, args }
 }
 
-func (self funcallNode) String() string {
+func (self FuncallNode) String() string {
   sArgs := make([]string, len(self.Args))
   for i := range self.Args {
     sArgs[i] = fmt.Sprintf("%s", self.Args[i])
@@ -73,78 +73,78 @@ func (self funcallNode) String() string {
   }
 }
 
-func (self funcallNode) IsExpr() bool {
+func (self FuncallNode) IsExpr() bool {
   return true
 }
 
-func (self funcallNode) GetLocation() Location {
+func (self FuncallNode) GetLocation() Location {
   return self.location
 }
 
 // MemberNode
-type memberNode struct {
+type MemberNode struct {
   location Location
   Expr IExprNode
   Member string
 }
 
-func NewMemberNode(location Location, expr IExprNode, member string) memberNode {
-  return memberNode { location, expr, member }
+func NewMemberNode(location Location, expr IExprNode, member string) MemberNode {
+  return MemberNode { location, expr, member }
 }
 
-func (self memberNode) String() string {
+func (self MemberNode) String() string {
   return fmt.Sprintf("(slot-ref %s '%s)", self.Expr, self.Member)
 }
 
-func (self memberNode) IsExpr() bool {
+func (self MemberNode) IsExpr() bool {
   return true
 }
 
-func (self memberNode) GetLocation() Location {
+func (self MemberNode) GetLocation() Location {
   return self.location
 }
 
 // PtrMemberNode
-type ptrMemberNode struct {
+type PtrMemberNode struct {
   location Location
   Expr IExprNode
   Member string
 }
 
-func NewPtrMemberNode(location Location, expr IExprNode, member string) ptrMemberNode {
-  return ptrMemberNode { location, expr, member }
+func NewPtrMemberNode(location Location, expr IExprNode, member string) PtrMemberNode {
+  return PtrMemberNode { location, expr, member }
 }
 
-func (self ptrMemberNode) String() string {
+func (self PtrMemberNode) String() string {
   return fmt.Sprintf("(slot-ref %s '%s)", self.Expr, self.Member)
 }
 
-func (self ptrMemberNode) IsExpr() bool {
+func (self PtrMemberNode) IsExpr() bool {
   return true
 }
 
-func (self ptrMemberNode) GetLocation() Location {
+func (self PtrMemberNode) GetLocation() Location {
   return self.location
 }
 
 // VariableNode
-type variableNode struct {
+type VariableNode struct {
   location Location
   Name string
 }
 
-func NewVariableNode(location Location, name string) variableNode {
-  return variableNode { location, name }
+func NewVariableNode(location Location, name string) VariableNode {
+  return VariableNode { location, name }
 }
 
-func (self variableNode) String() string {
+func (self VariableNode) String() string {
   return self.Name
 }
 
-func (self variableNode) IsExpr() bool {
+func (self VariableNode) IsExpr() bool {
   return true
 }
 
-func (self variableNode) GetLocation() Location {
+func (self VariableNode) GetLocation() Location {
   return self.location
 }

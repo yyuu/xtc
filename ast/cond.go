@@ -6,41 +6,41 @@ import (
 )
 
 // CondExprNode
-type condExprNode struct {
+type CondExprNode struct {
   location Location
   Cond IExprNode
   ThenExpr IExprNode
   ElseExpr IExprNode
 }
 
-func NewCondExprNode(location Location, cond IExprNode, thenExpr IExprNode, elseExpr IExprNode) condExprNode {
-  return condExprNode { location, cond, thenExpr, elseExpr }
+func NewCondExprNode(location Location, cond IExprNode, thenExpr IExprNode, elseExpr IExprNode) CondExprNode {
+  return CondExprNode { location, cond, thenExpr, elseExpr }
 }
 
-func (self condExprNode) String() string {
+func (self CondExprNode) String() string {
   return fmt.Sprintf("(if %s %s %s)", self.Cond, self.ThenExpr, self.ElseExpr)
 }
 
-func (self condExprNode) IsExpr() bool {
+func (self CondExprNode) IsExpr() bool {
   return true
 }
 
-func (self condExprNode) GetLocation() Location {
+func (self CondExprNode) GetLocation() Location {
   return self.location
 }
 
 // CaseNode
-type caseNode struct {
+type CaseNode struct {
   location Location
   Values []IExprNode
   Body IStmtNode
 }
 
-func NewCaseNode(location Location, values []IExprNode, body IStmtNode) caseNode {
-  return caseNode { location, values, body }
+func NewCaseNode(location Location, values []IExprNode, body IStmtNode) CaseNode {
+  return CaseNode { location, values, body }
 }
 
-func (self caseNode) String() string {
+func (self CaseNode) String() string {
   sValues := make([]string, len(self.Values))
   for i := range self.Values {
     sValues[i] = fmt.Sprintf("(= switch-cond %s)", self.Values[i])
@@ -52,54 +52,54 @@ func (self caseNode) String() string {
   }
 }
 
-func (self caseNode) IsStmt() bool {
+func (self CaseNode) IsStmt() bool {
   return true
 }
 
-func (self caseNode) GetLocation() Location {
+func (self CaseNode) GetLocation() Location {
   return self.location
 }
 
 // IfNode
-type ifNode struct {
+type IfNode struct {
   location Location
   Cond IExprNode
   ThenBody IStmtNode
   ElseBody IStmtNode
 }
 
-func NewIfNode(location Location, cond IExprNode, thenBody IStmtNode, elseBody IStmtNode) ifNode {
-  return ifNode { location, cond, thenBody, elseBody }
+func NewIfNode(location Location, cond IExprNode, thenBody IStmtNode, elseBody IStmtNode) IfNode {
+  return IfNode { location, cond, thenBody, elseBody }
 }
 
-func (self ifNode) String() string {
+func (self IfNode) String() string {
   return fmt.Sprintf("(if %s %s %s)", self.Cond, self.ThenBody, self.ElseBody)
 }
 
-func (self ifNode) IsStmt() bool {
+func (self IfNode) IsStmt() bool {
   return true
 }
 
-func (self ifNode) GetLocation() Location {
+func (self IfNode) GetLocation() Location {
   return self.location
 }
 
 // SwitchNode
-type switchNode struct {
+type SwitchNode struct {
   location Location
   Cond IExprNode
-  Cases []caseNode
+  Cases []CaseNode
 }
 
-func NewSwitchNode(location Location, cond IExprNode, _cases []IStmtNode) switchNode {
-  cases := make([]caseNode, len(_cases))
+func NewSwitchNode(location Location, cond IExprNode, _cases []IStmtNode) SwitchNode {
+  cases := make([]CaseNode, len(_cases))
   for i := range _cases {
-    cases[i] = _cases[i].(caseNode)
+    cases[i] = _cases[i].(CaseNode)
   }
-  return switchNode { location, cond, cases }
+  return SwitchNode { location, cond, cases }
 }
 
-func (self switchNode) String() string {
+func (self SwitchNode) String() string {
   sCases := make([]string, len(self.Cases))
   for i := range self.Cases {
     sCases[i] = fmt.Sprintf("%s", self.Cases[i])
@@ -111,10 +111,10 @@ func (self switchNode) String() string {
   }
 }
 
-func (self switchNode) IsStmt() bool {
+func (self SwitchNode) IsStmt() bool {
   return true
 }
 
-func (self switchNode) GetLocation() Location {
+func (self SwitchNode) GetLocation() Location {
   return self.location
 }

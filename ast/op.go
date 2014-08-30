@@ -5,18 +5,18 @@ import (
 )
 
 // BinaryOpNode
-type binaryOpNode struct {
+type BinaryOpNode struct {
   location Location
   Operator string
   Left IExprNode
   Right IExprNode
 }
 
-func NewBinaryOpNode(location Location, operator string, left IExprNode, right IExprNode) binaryOpNode {
-  return binaryOpNode { location, operator, left, right }
+func NewBinaryOpNode(location Location, operator string, left IExprNode, right IExprNode) BinaryOpNode {
+  return BinaryOpNode { location, operator, left, right }
 }
 
-func (self binaryOpNode) String() string {
+func (self BinaryOpNode) String() string {
   switch self.Operator {
     case "&&": return fmt.Sprintf("(and %s %s)", self.Left, self.Right)
     case "||": return fmt.Sprintf("(or %s %s)", self.Left, self.Right)
@@ -29,72 +29,72 @@ func (self binaryOpNode) String() string {
   }
 }
 
-func (self binaryOpNode) IsExpr() bool {
+func (self BinaryOpNode) IsExpr() bool {
   return true
 }
 
-func (self binaryOpNode) GetLocation() Location {
+func (self BinaryOpNode) GetLocation() Location {
   return self.location
 }
 
 // LogicalAndNode
-type logicalAndNode struct {
+type LogicalAndNode struct {
   location Location
   Left IExprNode
   Right IExprNode
 }
 
-func NewLogicalAndNode(location Location, left IExprNode, right IExprNode) logicalAndNode {
-  return logicalAndNode { location, left, right }
+func NewLogicalAndNode(location Location, left IExprNode, right IExprNode) LogicalAndNode {
+  return LogicalAndNode { location, left, right }
 }
 
-func (self logicalAndNode) String() string {
+func (self LogicalAndNode) String() string {
   return fmt.Sprintf("(and %s %s)", self.Left, self.Right)
 }
 
-func (self logicalAndNode) IsExpr() bool {
+func (self LogicalAndNode) IsExpr() bool {
   return true
 }
 
-func (self logicalAndNode) GetLocation() Location {
+func (self LogicalAndNode) GetLocation() Location {
   return self.location
 }
 
 // LogicalOrNode
-type logicalOrNode struct {
+type LogicalOrNode struct {
   location Location
   Left IExprNode
   Right IExprNode
 }
 
-func NewLogicalOrNode(location Location, left IExprNode, right IExprNode) logicalOrNode {
-  return logicalOrNode { location, left, right }
+func NewLogicalOrNode(location Location, left IExprNode, right IExprNode) LogicalOrNode {
+  return LogicalOrNode { location, left, right }
 }
 
-func (self logicalOrNode) String() string {
+func (self LogicalOrNode) String() string {
   return fmt.Sprintf("(or %s %s)", self.Left, self.Right)
 }
 
-func (self logicalOrNode) IsExpr() bool {
+func (self LogicalOrNode) IsExpr() bool {
   return true
 }
 
-func (self logicalOrNode) GetLocation() Location {
+func (self LogicalOrNode) GetLocation() Location {
   return self.location
 }
 
 // PrefixOpNode
-type prefixOpNode struct {
+type PrefixOpNode struct {
   location Location
   Operator string
   Expr IExprNode
 }
 
-func NewPrefixOpNode(location Location, operator string, expr IExprNode) prefixOpNode {
-  return prefixOpNode { location, operator, expr }
+func NewPrefixOpNode(location Location, operator string, expr IExprNode) PrefixOpNode {
+  return PrefixOpNode { location, operator, expr }
 }
 
-func (self prefixOpNode) String() string {
+func (self PrefixOpNode) String() string {
   switch self.Operator {
     case "++": return fmt.Sprintf("(+ 1 %s)", self.Expr)
     case "--": return fmt.Sprintf("(- 1 %s)", self.Expr)
@@ -102,26 +102,26 @@ func (self prefixOpNode) String() string {
   }
 }
 
-func (self prefixOpNode) IsExpr() bool {
+func (self PrefixOpNode) IsExpr() bool {
   return true
 }
 
-func (self prefixOpNode) GetLocation() Location {
+func (self PrefixOpNode) GetLocation() Location {
   return self.location
 }
 
 // SuffixOpNode
-type suffixOpNode struct {
+type SuffixOpNode struct {
   location Location
   Operator string
   Expr IExprNode
 }
 
-func NewSuffixOpNode(location Location, operator string, expr IExprNode) suffixOpNode {
-  return suffixOpNode { location, operator, expr }
+func NewSuffixOpNode(location Location, operator string, expr IExprNode) SuffixOpNode {
+  return SuffixOpNode { location, operator, expr }
 }
 
-func (self suffixOpNode) String() string {
+func (self SuffixOpNode) String() string {
   switch self.Operator {
     case "++": return fmt.Sprintf("(+ %s 1)", self.Expr)
     case "--": return fmt.Sprintf("(- %s 1)", self.Expr)
@@ -129,36 +129,36 @@ func (self suffixOpNode) String() string {
   }
 }
 
-func (self suffixOpNode) IsExpr() bool {
+func (self SuffixOpNode) IsExpr() bool {
   return true
 }
 
-func (self suffixOpNode) GetLocation() Location {
+func (self SuffixOpNode) GetLocation() Location {
   return self.location
 }
 
 // UnaryOpNode
-type unaryOpNode struct {
+type UnaryOpNode struct {
   location Location
   Operator string
   Expr IExprNode
 }
 
-func NewUnaryOpNode(location Location, operator string, expr IExprNode) unaryOpNode {
-  return unaryOpNode { location, operator, expr }
+func NewUnaryOpNode(location Location, operator string, expr IExprNode) UnaryOpNode {
+  return UnaryOpNode { location, operator, expr }
 }
 
-func (self unaryOpNode) String() string {
+func (self UnaryOpNode) String() string {
   switch self.Operator {
     case "!": return fmt.Sprintf("(not %s)", self.Expr)
     default:  return fmt.Sprintf("%s%s", self.Operator, self.Expr)
   }
 }
 
-func (self unaryOpNode) IsExpr() bool {
+func (self UnaryOpNode) IsExpr() bool {
   return true
 }
 
-func (self unaryOpNode) GetLocation() Location {
+func (self UnaryOpNode) GetLocation() Location {
   return self.location
 }

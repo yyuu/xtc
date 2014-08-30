@@ -1,70 +1,70 @@
 package ast
 
 // CastNode
-type castNode struct {
+type CastNode struct {
   location Location
   Type ITypeNode
   Expr IExprNode
 }
 
-func NewCastNode(location Location, t ITypeNode, expr IExprNode) castNode {
-  return castNode { location, t, expr }
+func NewCastNode(location Location, t ITypeNode, expr IExprNode) CastNode {
+  return CastNode { location, t, expr }
 }
 
-func (self castNode) String() string {
+func (self CastNode) String() string {
   panic("not implemented")
 }
 
-func (self castNode) IsExpr() bool {
+func (self CastNode) IsExpr() bool {
   return true
 }
 
-func (self castNode) GetLocation() Location {
+func (self CastNode) GetLocation() Location {
   return self.location
 }
 
 // SizeofExprNode
-type sizeofExprNode struct {
+type SizeofExprNode struct {
   location Location
   Expr IExprNode
   Type ITypeNode
 }
 
-func NewSizeofExprNode(location Location, expr IExprNode, t ITypeNode) sizeofExprNode {
-  return sizeofExprNode { location, expr, t }
+func NewSizeofExprNode(location Location, expr IExprNode, t ITypeNode) SizeofExprNode {
+  return SizeofExprNode { location, expr, t }
 }
 
-func (self sizeofExprNode) String() string {
+func (self SizeofExprNode) String() string {
   panic("not implemented")
 }
 
-func (self sizeofExprNode) IsExpr() bool {
+func (self SizeofExprNode) IsExpr() bool {
   return true
 }
 
-func (self sizeofExprNode) GetLocation() Location {
+func (self SizeofExprNode) GetLocation() Location {
   return self.location
 }
 
 // SizeofTypeNode
-type sizeofTypeNode struct {
+type SizeofTypeNode struct {
   location Location
   Type ITypeNode
   Operand ITypeNode
 }
 
-func NewSizeofTypeNode(location Location, t ITypeNode, operand ITypeNode) sizeofTypeNode {
-  return sizeofTypeNode { location, t, operand }
+func NewSizeofTypeNode(location Location, t ITypeNode, operand ITypeNode) SizeofTypeNode {
+  return SizeofTypeNode { location, t, operand }
 }
 
-func (self sizeofTypeNode) String() string {
+func (self SizeofTypeNode) String() string {
   panic("not implemented")
 }
 
-func (self sizeofTypeNode) IsExpr() bool {
+func (self SizeofTypeNode) IsExpr() bool {
   return true
 }
 
-func (self sizeofTypeNode) GetLocation() Location {
+func (self SizeofTypeNode) GetLocation() Location {
   return self.location
 }

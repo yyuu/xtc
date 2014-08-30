@@ -5,30 +5,30 @@ import (
 )
 
 // DoWhileNode
-type doWhileNode struct {
+type DoWhileNode struct {
   location Location
   Body IStmtNode
   Cond IExprNode
 }
 
-func NewDoWhileNode(location Location, body IStmtNode, cond IExprNode) doWhileNode {
-  return doWhileNode { location, body, cond }
+func NewDoWhileNode(location Location, body IStmtNode, cond IExprNode) DoWhileNode {
+  return DoWhileNode { location, body, cond }
 }
 
-func (self doWhileNode) String() string {
+func (self DoWhileNode) String() string {
   return fmt.Sprintf("(let do-while-loop () (begin %s (if %s (do-while-loop))))", self.Body, self.Cond)
 }
 
-func (self doWhileNode) IsStmt() bool {
+func (self DoWhileNode) IsStmt() bool {
   return true
 }
 
-func (self doWhileNode) GetLocation() Location {
+func (self DoWhileNode) GetLocation() Location {
   return self.location
 }
 
 // ForNode
-type forNode struct {
+type ForNode struct {
   location Location
   Init IExprNode
   Cond IExprNode
@@ -36,41 +36,41 @@ type forNode struct {
   Body IStmtNode
 }
 
-func NewForNode(location Location, init IExprNode, cond IExprNode, incr IExprNode, body IStmtNode) forNode {
-  return forNode { location, init, cond, incr, body }
+func NewForNode(location Location, init IExprNode, cond IExprNode, incr IExprNode, body IStmtNode) ForNode {
+  return ForNode { location, init, cond, incr, body }
 }
 
-func (self forNode) String() string {
+func (self ForNode) String() string {
   return fmt.Sprintf("(let for-loop (%s) (if %s (begin %s (for-loop %s))))", self.Init, self.Cond, self.Body, self.Incr)
 }
 
-func (self forNode) IsStmt() bool {
+func (self ForNode) IsStmt() bool {
   return true
 }
 
-func (self forNode) GetLocation() Location {
+func (self ForNode) GetLocation() Location {
   return self.location
 }
 
 // WhileNode
-type whileNode struct {
+type WhileNode struct {
   location Location
   Cond IExprNode
   Body IStmtNode
 }
 
-func NewWhileNode(location Location, cond IExprNode, body IStmtNode) whileNode {
-  return whileNode { location, cond, body }
+func NewWhileNode(location Location, cond IExprNode, body IStmtNode) WhileNode {
+  return WhileNode { location, cond, body }
 }
 
-func (self whileNode) String() string {
+func (self WhileNode) String() string {
   return fmt.Sprintf("(let while-loop ((while-cond %s)) (if while-cond (begin %s (while-loop %s))))", self.Cond, self.Body, self.Cond)
 }
 
-func (self whileNode) IsStmt() bool {
+func (self WhileNode) IsStmt() bool {
   return true
 }
 
-func (self whileNode) GetLocation() Location {
+func (self WhileNode) GetLocation() Location {
   return self.location
 }

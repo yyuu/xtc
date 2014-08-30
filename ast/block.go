@@ -6,18 +6,18 @@ import (
 )
 
 // BlockNode
-type blockNode struct {
+type BlockNode struct {
   location Location
 // Variables []DefinedVariable
   Variables []IExprNode
   Stmts []IStmtNode
 }
 
-func NewBlockNode(location Location, variables []IExprNode, stmts []IStmtNode) blockNode {
-  return blockNode { location, variables, stmts }
+func NewBlockNode(location Location, variables []IExprNode, stmts []IStmtNode) BlockNode {
+  return BlockNode { location, variables, stmts }
 }
 
-func (self blockNode) String() string {
+func (self BlockNode) String() string {
   sVariables := make([]string, len(self.Variables))
   for i := range self.Variables {
     sVariables[i] = fmt.Sprintf("%s", self.Variables[i])
@@ -41,10 +41,10 @@ func (self blockNode) String() string {
   }
 }
 
-func (self blockNode) IsStmt() bool {
+func (self BlockNode) IsStmt() bool {
   return true
 }
 
-func (self blockNode) GetLocation() Location {
+func (self BlockNode) GetLocation() Location {
   return self.location
 }
