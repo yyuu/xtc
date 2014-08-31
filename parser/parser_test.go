@@ -21,6 +21,15 @@ func jsonString(x interface{}) string {
   return dst.String()
 }
 
+func testParse(t *testing.T, s string) ast.AST {
+  a, err := ParseExpr(s)
+  if err != nil {
+    t.Error(err)
+    t.Fail()
+  }
+  return *a
+}
+
 func assertEqualsAST(t *testing.T, got ast.AST, expected ast.AST) {
   if ! reflect.DeepEqual(got, expected) {
     t.Errorf("\n// expected\n%s\n// got\n%s\n", jsonString(expected), jsonString(got))
@@ -43,11 +52,7 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
   s := `
 gets( );
   `
-  a, err := ParseExpr(s)
-  if err != nil {
-    t.Fail()
-  }
-  assertEqualsAST(t, *a,
+  assertEqualsAST(t, testParse(t, s),
     ast.AST {
       []ast.IStmtNode {
         ast.NewExprStmtNode(loc(1,1),
@@ -64,11 +69,7 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
   s := `
     println("hello, world");
   `
-  a, err := ParseExpr(s)
-  if err != nil {
-    t.Fail()
-  }
-  assertEqualsAST(t, *a,
+  assertEqualsAST(t, testParse(t, s),
     ast.AST {
       []ast.IStmtNode {
         ast.NewExprStmtNode(loc(1,5),
@@ -91,11 +92,7 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
     );
 
   `
-  a, err := ParseExpr(s)
-  if err != nil {
-    t.Fail()
-  }
-  assertEqualsAST(t, *a,
+  assertEqualsAST(t, testParse(t, s),
     ast.AST {
       []ast.IStmtNode {
         ast.NewExprStmtNode(loc(2,5),
