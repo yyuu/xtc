@@ -1,14 +1,29 @@
 package parser
 
 import (
+  "bytes"
+  "encoding/json"
   "reflect"
   "testing"
   "bitbucket.org/yyuu/bs/ast"
 )
 
+func jsonString(x interface{}) string {
+  src, err := json.Marshal(x)
+  if err != nil {
+    panic(err)
+  }
+  var dst bytes.Buffer
+  err = json.Indent(&dst, src, "", "  ")
+  if err != nil {
+    panic(err)
+  }
+  return dst.String()
+}
+
 func assertEqualsAST(t *testing.T, got ast.AST, expected ast.AST) {
   if ! reflect.DeepEqual(got, expected) {
-    t.Errorf("\n;;;; expected ;;;;\n%s\n;;;; got ;;;;\n%s\n", expected, got)
+    t.Errorf("\n// expected\n%s\n// got\n%s\n", jsonString(expected), jsonString(got))
     t.Fail()
   }
 }
