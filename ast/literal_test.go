@@ -23,10 +23,10 @@ func TestOctalIntegerLiteral(t *testing.T) {
 }
 
 func TestHexadecimalIntegerLiteral(t *testing.T) {
-  x := NewIntegerLiteralNode(loc(0,0), "0xDEADBEEF")
+  x := NewIntegerLiteralNode(loc(0,0), "0xFFFF")
   s := `{
   "Location": "[:0,0]",
-  "Value": 3735928559
+  "Value": 65535
 }`
   assertJsonEquals(t, x, s)
 }
