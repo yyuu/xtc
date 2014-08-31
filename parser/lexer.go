@@ -21,8 +21,9 @@ type lex struct {
 }
 
 func (self lex) String() string {
-  source := fmt.Sprintf("%s...", self.scanner.Peek(16))
-  return fmt.Sprintf("%s:%d: %q", self.sourceName, self.lineNumber, source)
+  location := ast.Location { self.sourceName, self.lineNumber, self.lineOffset }
+  source := fmt.Sprintf("%s", self.scanner.Peek(16))
+  return fmt.Sprintf("%s: %q", location, source)
 }
 
 type token struct {
@@ -32,8 +33,7 @@ type token struct {
 }
 
 func (self token) String() string {
-  location := self.location
-  return fmt.Sprintf("#<token:%d %s:%d,%d %q>", self.id, location.SourceName, location.LineNumber, location.LineOffset, self.literal)
+  return fmt.Sprintf("#<token:%d %s %q>", self.id, self.location, self.literal)
 }
 
 func lexer(filename string, source string) *lex {
