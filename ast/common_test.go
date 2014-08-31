@@ -6,7 +6,7 @@ import (
   "testing"
 )
 
-func assertJsonEquals(t *testing.T, got interface{}, expected string) {
+func assertJsonEquals(t *testing.T, got INode, expected string) {
   s := jsonString(got)
   if s != expected {
     t.Errorf("\n// expected\n%s\n// got\n%s\n", expected, s)

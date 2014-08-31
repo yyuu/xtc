@@ -1,7 +1,8 @@
 package ast
 
 import (
-  "strconv"
+  "fmt"
+  "strings"
 )
 
 // IntegerLiteralNode
@@ -11,13 +12,33 @@ type IntegerLiteralNode struct {
 }
 
 func NewIntegerLiteralNode(location Location, literal string) IntegerLiteralNode {
-  value, err := strconv.Atoi(literal)
-  if err != nil { panic(err) }
+  var value int
+  var err error
+  if ( strings.Index(literal, "'") == 0 && strings.LastIndex(literal, "'") == len(literal)-1 ) && 2 < len(literal) {
+    _, err = fmt.Sscanf(literal[1:len(literal)-1], "%c", &value)
+  } else {
+    if ( strings.Index(literal, "0X") == 0 || strings.Index(literal, "0x") == 0 ) && 2 < len(literal) {
+      // hexadecimal
+      _, err = fmt.Sscanf(literal[2:], "%x", &value)
+    } else {
+      if ( strings.Index(literal, "0") == 0 ) && 1 < len(literal) {
+        // octal
+        _, err = fmt.Sscanf(literal[1:], "%o", &value)
+      } else {
+        // decimal
+        _, err = fmt.Sscanf(literal, "%d", &value)
+      }
+    }
+  }
+  if err != nil {
+    panic(err)
+  }
   return IntegerLiteralNode { location, value }
 }
 
 func (self IntegerLiteralNode) String() string {
-  return strconv.Itoa(self.Value)
+//return strconv.Itoa(self.Value)
+  return fmt.Sprintf("%d", self.Value)
 }
 
 func (self IntegerLiteralNode) IsExpr() bool {
