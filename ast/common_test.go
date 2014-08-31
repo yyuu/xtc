@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "bytes"
   "encoding/json"
   "regexp"
   "strings"
@@ -23,9 +24,14 @@ func loc(lineNumber int, lineOffset int) Location {
 }
 
 func jsonString(x interface{}) string {
-  cs, err := json.Marshal(x)
+  src, err := json.Marshal(x)
   if err != nil {
     panic(err)
   }
-  return string(cs)
+  var dst bytes.Buffer
+  err = json.Indent(&dst, src, "", "  ")
+  if err != nil {
+    panic(err)
+  }
+  return dst.String()
 }
