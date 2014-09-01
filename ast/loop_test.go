@@ -16,17 +16,22 @@ func TestDoWhile(t *testing.T) {
     NewBinaryOpNode(loc(0,0), "<", NewVariableNode(loc(0,0), "a"), NewIntegerLiteralNode(loc(0,0), "100")),
   )
   s := `{
+  "ClassName": "ast.DoWhileNode",
   "Location": "[:0,0]",
   "Body": {
+    "ClassName": "ast.ExprStmtNode",
     "Location": "[:0,0]",
     "Expr": {
+      "ClassName": "ast.FuncallNode",
       "Location": "[:0,0]",
       "Expr": {
+        "ClassName": "ast.VariableNode",
         "Location": "[:0,0]",
         "Name": "b"
       },
       "Args": [
         {
+          "ClassName": "ast.VariableNode",
           "Location": "[:0,0]",
           "Name": "a"
         }
@@ -34,13 +39,16 @@ func TestDoWhile(t *testing.T) {
     }
   },
   "Cond": {
+    "ClassName": "ast.BinaryOpNode",
     "Location": "[:0,0]",
     "Operator": "\u003c",
     "Left": {
+      "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
       "Name": "a"
     },
     "Right": {
+      "ClassName": "ast.IntegerLiteralNode",
       "Location": "[:0,0]",
       "Value": 100
     }
@@ -63,48 +71,61 @@ func TestFor(t *testing.T) {
     NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "f"), []IExprNode { NewVariableNode(loc(0,0), "i") })),
   )
   s := `{
+  "ClassName": "ast.ForNode",
   "Location": "[:0,0]",
   "Init": {
+    "ClassName": "ast.AssignNode",
     "Location": "[:0,0]",
     "Lhs": {
+      "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
       "Name": "i"
     },
     "Rhs": {
+      "ClassName": "ast.IntegerLiteralNode",
       "Location": "[:0,0]",
       "Value": 0
     }
   },
   "Cond": {
+    "ClassName": "ast.BinaryOpNode",
     "Location": "[:0,0]",
     "Operator": "\u003c",
     "Left": {
+      "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
       "Name": "i"
     },
     "Right": {
+      "ClassName": "ast.IntegerLiteralNode",
       "Location": "[:0,0]",
       "Value": 100
     }
   },
   "Incr": {
+    "ClassName": "ast.SuffixOpNode",
     "Location": "[:0,0]",
     "Operator": "++",
     "Expr": {
+      "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
       "Name": "i"
     }
   },
   "Body": {
+    "ClassName": "ast.ExprStmtNode",
     "Location": "[:0,0]",
     "Expr": {
+      "ClassName": "ast.FuncallNode",
       "Location": "[:0,0]",
       "Expr": {
+        "ClassName": "ast.VariableNode",
         "Location": "[:0,0]",
         "Name": "f"
       },
       "Args": [
         {
+          "ClassName": "ast.VariableNode",
           "Location": "[:0,0]",
           "Name": "i"
         }
@@ -127,20 +148,26 @@ func TestWhile(t *testing.T) {
     NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "gets"), []IExprNode { })),
   )
   s := `{
+  "ClassName": "ast.WhileNode",
   "Location": "[:0,0]",
   "Cond": {
+    "ClassName": "ast.UnaryOpNode",
     "Location": "[:0,0]",
     "Operator": "!",
     "Expr": {
+      "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
       "Name": "eof"
     }
   },
   "Body": {
+    "ClassName": "ast.ExprStmtNode",
     "Location": "[:0,0]",
     "Expr": {
+      "ClassName": "ast.FuncallNode",
       "Location": "[:0,0]",
       "Expr": {
+        "ClassName": "ast.VariableNode",
         "Location": "[:0,0]",
         "Name": "gets"
       },

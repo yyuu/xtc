@@ -18,19 +18,24 @@ func TestBlock1(t *testing.T) {
     },
   )
   s := `{
+  "ClassName": "ast.BlockNode",
   "Location": "[:0,0]",
   "Variables": [],
   "Stmts": [
     {
+      "ClassName": "ast.ExprStmtNode",
       "Location": "[:0,0]",
       "Expr": {
+        "ClassName": "ast.FuncallNode",
         "Location": "[:0,0]",
         "Expr": {
+          "ClassName": "ast.VariableNode",
           "Location": "[:0,0]",
           "Name": "println"
         },
         "Args": [
           {
+            "ClassName": "ast.StringLiteralNode",
             "Location": "[:0,0]",
             "Value": "\"hello, world\""
           }
@@ -59,15 +64,19 @@ func TestBlock2(t *testing.T) {
     },
   )
   s := `{
+  "ClassName": "ast.BlockNode",
   "Location": "[:0,0]",
   "Variables": [
     {
+      "ClassName": "ast.AssignNode",
       "Location": "[:0,0]",
       "Lhs": {
+        "ClassName": "ast.VariableNode",
         "Location": "[:0,0]",
         "Name": "n"
       },
       "Rhs": {
+        "ClassName": "ast.IntegerLiteralNode",
         "Location": "[:0,0]",
         "Value": 12345
       }
@@ -75,19 +84,24 @@ func TestBlock2(t *testing.T) {
   ],
   "Stmts": [
     {
+      "ClassName": "ast.ExprStmtNode",
       "Location": "[:0,0]",
       "Expr": {
+        "ClassName": "ast.FuncallNode",
         "Location": "[:0,0]",
         "Expr": {
+          "ClassName": "ast.VariableNode",
           "Location": "[:0,0]",
           "Name": "printf"
         },
         "Args": [
           {
+            "ClassName": "ast.StringLiteralNode",
             "Location": "[:0,0]",
             "Value": "\"%d\""
           },
           {
+            "ClassName": "ast.VariableNode",
             "Location": "[:0,0]",
             "Name": "n"
           }
@@ -120,26 +134,33 @@ func TestBlock3(t *testing.T) {
     },
   )
   s := `{
+  "ClassName": "ast.BlockNode",
   "Location": "[:0,0]",
   "Variables": [
     {
+      "ClassName": "ast.AssignNode",
       "Location": "[:0,0]",
       "Lhs": {
+        "ClassName": "ast.VariableNode",
         "Location": "[:0,0]",
         "Name": "n"
       },
       "Rhs": {
+        "ClassName": "ast.IntegerLiteralNode",
         "Location": "[:0,0]",
         "Value": 12345
       }
     },
     {
+      "ClassName": "ast.AssignNode",
       "Location": "[:0,0]",
       "Lhs": {
+        "ClassName": "ast.VariableNode",
         "Location": "[:0,0]",
         "Name": "m"
       },
       "Rhs": {
+        "ClassName": "ast.IntegerLiteralNode",
         "Location": "[:0,0]",
         "Value": 67890
       }
@@ -147,19 +168,24 @@ func TestBlock3(t *testing.T) {
   ],
   "Stmts": [
     {
+      "ClassName": "ast.ExprStmtNode",
       "Location": "[:0,0]",
       "Expr": {
+        "ClassName": "ast.FuncallNode",
         "Location": "[:0,0]",
         "Expr": {
+          "ClassName": "ast.VariableNode",
           "Location": "[:0,0]",
           "Name": "printf"
         },
         "Args": [
           {
+            "ClassName": "ast.StringLiteralNode",
             "Location": "[:0,0]",
             "Value": "\"%d\""
           },
           {
+            "ClassName": "ast.VariableNode",
             "Location": "[:0,0]",
             "Name": "n"
           }
@@ -167,19 +193,24 @@ func TestBlock3(t *testing.T) {
       }
     },
     {
+      "ClassName": "ast.ExprStmtNode",
       "Location": "[:0,0]",
       "Expr": {
+        "ClassName": "ast.FuncallNode",
         "Location": "[:0,0]",
         "Expr": {
+          "ClassName": "ast.VariableNode",
           "Location": "[:0,0]",
           "Name": "printf"
         },
         "Args": [
           {
+            "ClassName": "ast.StringLiteralNode",
             "Location": "[:0,0]",
             "Value": "\"%d\""
           },
           {
+            "ClassName": "ast.VariableNode",
             "Location": "[:0,0]",
             "Name": "m"
           }

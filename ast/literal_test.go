@@ -7,6 +7,7 @@ import (
 func TestDecimalIntegerLiteral(t *testing.T) {
   x := NewIntegerLiteralNode(loc(0,0), "12345")
   s := `{
+  "ClassName": "ast.IntegerLiteralNode",
   "Location": "[:0,0]",
   "Value": 12345
 }`
@@ -16,6 +17,7 @@ func TestDecimalIntegerLiteral(t *testing.T) {
 func TestOctalIntegerLiteral(t *testing.T) {
   x := NewIntegerLiteralNode(loc(0,0), "0755")
   s := `{
+  "ClassName": "ast.IntegerLiteralNode",
   "Location": "[:0,0]",
   "Value": 493
 }`
@@ -25,6 +27,7 @@ func TestOctalIntegerLiteral(t *testing.T) {
 func TestHexadecimalIntegerLiteral(t *testing.T) {
   x := NewIntegerLiteralNode(loc(0,0), "0xFFFF")
   s := `{
+  "ClassName": "ast.IntegerLiteralNode",
   "Location": "[:0,0]",
   "Value": 65535
 }`
@@ -34,6 +37,7 @@ func TestHexadecimalIntegerLiteral(t *testing.T) {
 func TestCharacterIntegerLiteral(t *testing.T) {
   x := NewIntegerLiteralNode(loc(0,0), "'a'")
   s := `{
+  "ClassName": "ast.IntegerLiteralNode",
   "Location": "[:0,0]",
   "Value": 97
 }`
@@ -43,6 +47,7 @@ func TestCharacterIntegerLiteral(t *testing.T) {
 func TestStringLiteral1(t *testing.T) {
   x := NewStringLiteralNode(loc(0,0), "\"hello, world\"")
   s := `{
+  "ClassName": "ast.StringLiteralNode",
   "Location": "[:0,0]",
   "Value": "\"hello, world\""
 }`
