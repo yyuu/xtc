@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "encoding/json"
   "fmt"
 )
 
@@ -17,6 +18,20 @@ func NewAssignNode(location Location, lhs IExprNode, rhs IExprNode) AssignNode {
 
 func (self AssignNode) String() string {
   return fmt.Sprintf("(%s %s)", self.Lhs, self.Rhs)
+}
+
+func (self AssignNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Lhs IExprNode
+    Rhs IExprNode
+  }
+  x.ClassName = "ast.AssignNode"
+  x.Location = self.Location
+  x.Lhs = self.Lhs
+  x.Rhs = self.Rhs
+  return json.Marshal(x)
 }
 
 func (self AssignNode) IsExpr() bool {
@@ -41,6 +56,22 @@ func NewOpAssignNode(location Location, operator string, lhs IExprNode, rhs IExp
 
 func (self OpAssignNode) String() string {
   return fmt.Sprintf("(%s (%s %s %s))", self.Lhs, self.Operator, self.Lhs, self.Rhs)
+}
+
+func (self OpAssignNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Operator string
+    Lhs IExprNode
+    Rhs IExprNode
+  }
+  x.ClassName = "ast.OpAssignNode"
+  x.Location = self.Location
+  x.Operator = self.Operator
+  x.Lhs = self.Lhs
+  x.Rhs = self.Rhs
+  return json.Marshal(x)
 }
 
 func (self OpAssignNode) IsExpr() bool {

@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "encoding/json"
   "fmt"
   "strings"
 )
@@ -19,6 +20,22 @@ func NewCondExprNode(location Location, cond IExprNode, thenExpr IExprNode, else
 
 func (self CondExprNode) String() string {
   return fmt.Sprintf("(if %s %s %s)", self.Cond, self.ThenExpr, self.ElseExpr)
+}
+
+func (self CondExprNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Cond IExprNode
+    ThenExpr IExprNode
+    ElseExpr IExprNode
+  }
+  x.ClassName = "ast.CondExprNode"
+  x.Location = self.Location
+  x.Cond = self.Cond
+  x.ThenExpr = self.ThenExpr
+  x.ElseExpr = self.ElseExpr
+  return json.Marshal(x)
 }
 
 func (self CondExprNode) IsExpr() bool {
@@ -52,6 +69,20 @@ func (self CaseNode) String() string {
   }
 }
 
+func (self CaseNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Values []IExprNode
+    Body IStmtNode
+  }
+  x.ClassName = "ast.CaseNode"
+  x.Location = self.Location
+  x.Values = self.Values
+  x.Body = self.Body
+  return json.Marshal(x)
+}
+
 func (self CaseNode) IsStmt() bool {
   return true
 }
@@ -74,6 +105,22 @@ func NewIfNode(location Location, cond IExprNode, thenBody IStmtNode, elseBody I
 
 func (self IfNode) String() string {
   return fmt.Sprintf("(if %s %s %s)", self.Cond, self.ThenBody, self.ElseBody)
+}
+
+func (self IfNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Cond IExprNode
+    ThenBody IStmtNode
+    ElseBody IStmtNode
+  }
+  x.ClassName = "ast.IfNode"
+  x.Location = self.Location
+  x.Cond = self.Cond
+  x.ThenBody = self.ThenBody
+  x.ElseBody = self.ElseBody
+  return json.Marshal(x)
 }
 
 func (self IfNode) IsStmt() bool {
@@ -109,6 +156,20 @@ func (self SwitchNode) String() string {
   } else {
     return fmt.Sprintf("(let ((switch-cond %s)) (cond %s))", self.Cond, strings.Join(sCases, " "))
   }
+}
+
+func (self SwitchNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Cond IExprNode
+    Cases []CaseNode
+  }
+  x.ClassName = "ast.SwitchNode"
+  x.Location = self.Location
+  x.Cond = self.Cond
+  x.Cases = self.Cases
+  return json.Marshal(x)
 }
 
 func (self SwitchNode) IsStmt() bool {

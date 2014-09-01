@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "encoding/json"
   "fmt"
 )
 
@@ -29,6 +30,22 @@ func (self BinaryOpNode) String() string {
   }
 }
 
+func (self BinaryOpNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Operator string
+    Left IExprNode
+    Right IExprNode
+  }
+  x.ClassName = "ast.BinaryOpNode"
+  x.Location = self.Location
+  x.Operator = self.Operator
+  x.Left = self.Left
+  x.Right = self.Right
+  return json.Marshal(x)
+}
+
 func (self BinaryOpNode) IsExpr() bool {
   return true
 }
@@ -52,6 +69,20 @@ func (self LogicalAndNode) String() string {
   return fmt.Sprintf("(and %s %s)", self.Left, self.Right)
 }
 
+func (self LogicalAndNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Left IExprNode
+    Right IExprNode
+  }
+  x.ClassName = "ast.LogicalAndNode"
+  x.Location = self.Location
+  x.Left = self.Left
+  x.Right = self.Right
+  return json.Marshal(x)
+}
+
 func (self LogicalAndNode) IsExpr() bool {
   return true
 }
@@ -73,6 +104,20 @@ func NewLogicalOrNode(location Location, left IExprNode, right IExprNode) Logica
 
 func (self LogicalOrNode) String() string {
   return fmt.Sprintf("(or %s %s)", self.Left, self.Right)
+}
+
+func (self LogicalOrNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Left IExprNode
+    Right IExprNode
+  }
+  x.ClassName = "ast.LogicalOrNode"
+  x.Location = self.Location
+  x.Left = self.Left
+  x.Right = self.Right
+  return json.Marshal(x)
 }
 
 func (self LogicalOrNode) IsExpr() bool {
@@ -102,6 +147,20 @@ func (self PrefixOpNode) String() string {
   }
 }
 
+func (self PrefixOpNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Operator string
+    Expr IExprNode
+  }
+  x.ClassName = "ast.PrefixOpNode"
+  x.Location = self.Location
+  x.Operator = self.Operator
+  x.Expr = self.Expr
+  return json.Marshal(x)
+}
+
 func (self PrefixOpNode) IsExpr() bool {
   return true
 }
@@ -129,6 +188,20 @@ func (self SuffixOpNode) String() string {
   }
 }
 
+func (self SuffixOpNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Operator string
+    Expr IExprNode
+  }
+  x.ClassName = "ast.SuffixOpNode"
+  x.Location = self.Location
+  x.Operator = self.Operator
+  x.Expr = self.Expr
+  return json.Marshal(x)
+}
+
 func (self SuffixOpNode) IsExpr() bool {
   return true
 }
@@ -153,6 +226,20 @@ func (self UnaryOpNode) String() string {
     case "!": return fmt.Sprintf("(not %s)", self.Expr)
     default:  return fmt.Sprintf("%s%s", self.Operator, self.Expr)
   }
+}
+
+func (self UnaryOpNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Operator string
+    Expr IExprNode
+  }
+  x.ClassName = "ast.UnaryOpNode"
+  x.Location = self.Location
+  x.Operator = self.Operator
+  x.Expr = self.Expr
+  return json.Marshal(x)
 }
 
 func (self UnaryOpNode) IsExpr() bool {

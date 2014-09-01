@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "encoding/json"
   "fmt"
   "strings"
 )
@@ -17,6 +18,18 @@ func NewAddressNode(location Location, expr IExprNode) AddressNode {
 
 func (self AddressNode) String() string {
   panic("not implemented")
+}
+
+func (self AddressNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Expr IExprNode
+  }
+  x.ClassName = "ast.AddressNode"
+  x.Location = self.Location
+  x.Expr = self.Expr
+  return json.Marshal(x)
 }
 
 func (self AddressNode) IsExpr() bool {
@@ -42,6 +55,20 @@ func (self ArefNode) String() string {
   return fmt.Sprintf("(vector-ref %s %s)", self.Expr, self.Index)
 }
 
+func (self ArefNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Expr IExprNode
+    Index IExprNode
+  }
+  x.ClassName = "ast.ArefNode"
+  x.Location = self.Location
+  x.Expr = self.Expr
+  x.Index = self.Index
+  return json.Marshal(x)
+}
+
 func (self ArefNode) IsExpr() bool {
   return true
 }
@@ -62,6 +89,18 @@ func NewDereferenceNode(location Location, expr IExprNode) DereferenceNode {
 
 func (self DereferenceNode) String() string {
   panic("not implemented")
+}
+
+func (self DereferenceNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Expr IExprNode
+  }
+  x.ClassName = "ast.DereferenceNode"
+  x.Location = self.Location
+  x.Expr = self.Expr
+  return json.Marshal(x)
 }
 
 func (self DereferenceNode) IsExpr() bool {
@@ -95,6 +134,20 @@ func (self FuncallNode) String() string {
   }
 }
 
+func (self FuncallNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Expr IExprNode
+    Args []IExprNode
+  }
+  x.ClassName = "ast.FuncallNode"
+  x.Location = self.Location
+  x.Expr = self.Expr
+  x.Args = self.Args
+  return json.Marshal(x)
+}
+
 func (self FuncallNode) IsExpr() bool {
   return true
 }
@@ -116,6 +169,20 @@ func NewMemberNode(location Location, expr IExprNode, member string) MemberNode 
 
 func (self MemberNode) String() string {
   return fmt.Sprintf("(slot-ref %s '%s)", self.Expr, self.Member)
+}
+
+func (self MemberNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Expr IExprNode
+    Member string
+  }
+  x.ClassName = "ast.MemberNode"
+  x.Location = self.Location
+  x.Expr = self.Expr
+  x.Member = self.Member
+  return json.Marshal(x)
 }
 
 func (self MemberNode) IsExpr() bool {
@@ -141,6 +208,20 @@ func (self PtrMemberNode) String() string {
   return fmt.Sprintf("(slot-ref %s '%s)", self.Expr, self.Member)
 }
 
+func (self PtrMemberNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Expr IExprNode
+    Member string
+  }
+  x.ClassName = "ast.PtrMemberNode"
+  x.Location = self.Location
+  x.Expr = self.Expr
+  x.Member = self.Member
+  return json.Marshal(x)
+}
+
 func (self PtrMemberNode) IsExpr() bool {
   return true
 }
@@ -161,6 +242,18 @@ func NewVariableNode(location Location, name string) VariableNode {
 
 func (self VariableNode) String() string {
   return self.Name
+}
+
+func (self VariableNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Name string
+  }
+  x.ClassName = "ast.VariableNode"
+  x.Location = self.Location
+  x.Name = self.Name
+  return json.Marshal(x)
 }
 
 func (self VariableNode) IsExpr() bool {

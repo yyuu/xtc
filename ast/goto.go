@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "encoding/json"
   "fmt"
 )
 
@@ -15,6 +16,16 @@ func NewBreakNode(location Location) BreakNode {
 
 func (self BreakNode) String() string {
   return "(break)"
+}
+
+func (self BreakNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+  }
+  x.ClassName = "ast.BreakNode"
+  x.Location = self.Location
+  return json.Marshal(x)
 }
 
 func (self BreakNode) IsStmt() bool {
@@ -36,6 +47,16 @@ func NewContinueNode(location Location) ContinueNode {
 
 func (self ContinueNode) String() string {
   return "(continue)"
+}
+
+func (self ContinueNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+  }
+  x.ClassName = "ast.ContinueNode"
+  x.Location = self.Location
+  return json.Marshal(x)
 }
 
 func (self ContinueNode) IsStmt() bool {
@@ -60,6 +81,18 @@ func (self ExprStmtNode) String() string {
   return fmt.Sprintf("%s", self.Expr)
 }
 
+func (self ExprStmtNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Expr IExprNode
+  }
+  x.ClassName = "ast.ExprStmtNode"
+  x.Location = self.Location
+  x.Expr = self.Expr
+  return json.Marshal(x)
+}
+
 func (self ExprStmtNode) IsStmt() bool {
   return true
 }
@@ -80,6 +113,18 @@ func NewGotoNode(location Location, target string) GotoNode {
 
 func (self GotoNode) String() string {
   return fmt.Sprintf("(goto %s)", self.Target)
+}
+
+func (self GotoNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Target string
+  }
+  x.ClassName = "ast.GotoNode"
+  x.Location = self.Location
+  x.Target = self.Target
+  return json.Marshal(x)
 }
 
 func (self GotoNode) IsStmt() bool {
@@ -105,6 +150,20 @@ func (self LabelNode) String() string {
   panic("not implemented")
 }
 
+func (self LabelNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Name string
+    Stmt IStmtNode
+  }
+  x.ClassName = "ast.LabelNode"
+  x.Location = self.Location
+  x.Name = self.Name
+  x.Stmt = self.Stmt
+  return json.Marshal(x)
+}
+
 func (self LabelNode) IsStmt() bool {
   return true
 }
@@ -125,6 +184,18 @@ func NewReturnNode(location Location, expr IExprNode) ReturnNode {
 
 func (self ReturnNode) String() string {
   return fmt.Sprintf("%s", self.Expr)
+}
+
+func (self ReturnNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Expr IExprNode
+  }
+  x.ClassName = "ast.ReturnNode"
+  x.Location = self.Location
+  x.Expr = self.Expr
+  return json.Marshal(x)
 }
 
 func (self ReturnNode) IsStmt() bool {

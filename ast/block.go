@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "encoding/json"
   "fmt"
   "strings"
 )
@@ -39,6 +40,20 @@ func (self BlockNode) String() string {
     case 1:  return fmt.Sprintf("(let (%s) %s)", strings.Join(sVariables, " "), stmts)
     default: return fmt.Sprintf("(let* (%s) (begin %s))", strings.Join(sVariables, " "), strings.Join(sStmts, " "))
   }
+}
+
+func (self BlockNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Variables []IExprNode
+    Stmts []IStmtNode
+  }
+  x.ClassName = "ast.BlockNode"
+  x.Location = self.Location
+  x.Variables = self.Variables
+  x.Stmts = self.Stmts
+  return json.Marshal(x)
 }
 
 func (self BlockNode) IsStmt() bool {

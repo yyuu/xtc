@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "encoding/json"
   "fmt"
   "strings"
 )
@@ -37,8 +38,19 @@ func NewIntegerLiteralNode(location Location, literal string) IntegerLiteralNode
 }
 
 func (self IntegerLiteralNode) String() string {
-//return strconv.Itoa(self.Value)
   return fmt.Sprintf("%d", self.Value)
+}
+
+func (self IntegerLiteralNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Value int
+  }
+  x.ClassName = "ast.IntegerLiteralNode"
+  x.Location = self.Location
+  x.Value = self.Value
+  return json.Marshal(x)
 }
 
 func (self IntegerLiteralNode) IsExpr() bool {
@@ -61,6 +73,18 @@ func NewStringLiteralNode(location Location, literal string) StringLiteralNode {
 
 func (self StringLiteralNode) String() string {
   return self.Value
+}
+
+func (self StringLiteralNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    Value string
+  }
+  x.ClassName = "ast.StringLiteralNode"
+  x.Location = self.Location
+  x.Value = self.Value
+  return json.Marshal(x)
 }
 
 func (self StringLiteralNode) IsExpr() bool {
