@@ -1,16 +1,49 @@
 package ast
 
 import (
+  "bytes"
   "encoding/json"
+  "io/ioutil"
+  "os"
+  "os/exec"
   "testing"
 )
 
 func assertJsonEquals(t *testing.T, got INode, expected string) {
   s := jsonString(got)
   if s != expected {
-    t.Errorf("\n// expected\n%s\n// got\n%s\n", expected, s)
+//  t.Errorf("\n// expected\n%s\n// got\n%s\n", expected, s)
+    t.Errorf("\n// got\n%s\n// diff\n%s\n", s, diff(expected, s))
     t.Fail()
   }
+}
+
+func diff(x, y string) string {
+  a, b := tempfile(x), tempfile(y)
+  defer func() {
+    os.Remove(a)
+    os.Remove(b)
+  }()
+
+  cmd := exec.Command("diff", "-u", a, b)
+  var out bytes.Buffer
+  cmd.Stdout = &out
+  cmd.Run()
+  return out.String()
+}
+
+func tempfile(s string) string {
+  tmpdir := os.Getenv("TMP")
+  if tmpdir == "" {
+    tmpdir = "/tmp"
+  }
+  fp, err := ioutil.TempFile(tmpdir, "tmp")
+  if err != nil {
+    panic(err)
+  }
+  fp.WriteString(s)
+  fp.Close()
+  return fp.Name()
 }
 
 func loc(lineNumber int, lineOffset int) Location {
