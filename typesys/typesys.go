@@ -1,5 +1,9 @@
 package typesys
 
+import (
+  "bitbucket.org/yyuu/bs/ast"
+)
+
 const (
   TYPE_VOID = 1 << iota
   TYPE_INTEGER
