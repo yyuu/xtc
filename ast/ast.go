@@ -7,6 +7,7 @@ import (
 
 type INode interface {
   String() string
+  MarshalJSON() ([]byte, error)
   GetLocation() Location
 }
 
