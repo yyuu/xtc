@@ -64,3 +64,6 @@ func asTypeDefinitions(xs []ast.INode) []ast.ITypeDefinition {
   return ys
 }
 
+func asDeclarations(x ast.INode) ast.Declarations {
+  return x.(ast.Declarations)
+}

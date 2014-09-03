@@ -143,6 +143,10 @@ func (self TypeNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
+func (self TypeNode) GetTypeRef() typesys.ITypeRef {
+  return self.TypeRef
+}
+
 func (self TypeNode) IsType() bool {
   return true
 }

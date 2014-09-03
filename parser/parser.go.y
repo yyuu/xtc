@@ -6,6 +6,7 @@ import (
   "fmt"
   "strconv"
   "bitbucket.org/yyuu/bs/ast"
+  "bitbucket.org/yyuu/bs/entity"
   "bitbucket.org/yyuu/bs/typesys"
 )
 %}
@@ -15,6 +16,8 @@ import (
 
   _node ast.INode
   _nodes []ast.INode
+
+  _entity entity.IEntity
 
   _typeref typesys.ITypeRef
   _typerefs []typesys.ITypeRef
@@ -95,6 +98,133 @@ compilation_unit:
                 }
                 ;
 
+declaration_file: import_stmts
+                | declaration_file funcdecl
+                {
+                  $$._node = asDeclarations($1._node).AddFuncdecl($2._entity.(entity.UndefinedFunction))
+                }
+                | declaration_file vardecl
+                {
+                  $$._node = asDeclarations($1._node).AddVardecl($2._entity.(entity.UndefinedVariable))
+                }
+                | declaration_file defconst
+                {
+                  $$._node = asDeclarations($1._node).AddDefconst($2._entity.(entity.Constant))
+                }
+                | declaration_file defstruct
+                {
+                  $$._node = asDeclarations($1._node).AddDefstruct($2._node.(ast.StructNode))
+                }
+                | declaration_file defunion
+                {
+                  $$._node = asDeclarations($1._node).AddDefunion($2._node.(ast.UnionNode))
+                }
+                | declaration_file typedef
+                {
+                  $$._node = asDeclarations($1._node).AddTypedef($2._node.(ast.TypedefNode))
+                }
+                ;
+
+import_stmts:
+            | import_stmts import_stmt
+            {
+              $$._nodes = append($1._nodes, $2._node)
+            }
+            ;
+
+import_stmt: IMPORT import_name ';'
+           {
+//           $$._nodes, err := loader.LoadLibrary($2._tokens.literal)
+//           if err != nil {
+//             panic(err)
+//           }
+           }
+           ;
+
+import_name: name
+           | import_name '.' name
+           {
+             $$._token.literal = fmt.Sprintf("%s.%s", $1._token.literal, $3._token.literal)
+           }
+           ;
+
+top_defs:
+        {
+          $$._node = ast.NewDeclarations()
+        }
+        | top_defs defun
+        {
+          $$._node = asDeclarations($1._node).AddDefun($2._entity.(entity.DefinedFunction))
+        }
+        | top_defs defvars
+        {
+          $$._node = asDeclarations($1._node).AddDefvar($2._entity.(entity.DefinedVariable))
+        }
+        | top_defs defconst
+        {
+          $$._node = asDeclarations($1._node).AddDefconst($2._entity.(entity.Constant))
+        }
+        | top_defs defstruct
+        {
+          $$._node = asDeclarations($1._node).AddDefstruct($2._node.(ast.StructNode))
+        }
+        | top_defs defunion
+        {
+          $$._node = asDeclarations($1._node).AddDefunion($2._node.(ast.UnionNode))
+        }
+        | top_defs typedef
+        {
+          $$._node = asDeclarations($1._node).AddTypedef($2._node.(ast.TypedefNode))
+        }
+        ;
+
+defvars: storage type name '=' expr ';'
+       {
+         $$._entity = entity.NewDefinedVariable($1._node!=nil, asType($2._node), $3._token.literal, asExpr($5._node))
+       }
+       ;
+
+defconst: CONST type name '=' expr ';'
+        ;
+
+defun: storage typeref name '(' params ')' block
+     ;
+
+storage:
+       | STATIC
+       ;
+
+params: VOID
+      {
+        $$._entity = entity.NewParams($1._token.location, []entity.Parameter { })
+      }
+      | fixedparams
+      {
+        $$._entity = entity.NewParams($1._token.location, $1._entity.(entity.Params).ParamDescs)
+      }
+      | fixedparams ',' DOTDOTDOT
+      {
+        $$._entity = entity.NewParams($1._token.location, $1._entity.(entity.Params).ParamDescs)
+//      $$._entity.AcceptVarArgs()
+      }
+      ;
+
+fixedparams: param
+           {
+             $$._entity = entity.NewParams($1._token.location, []entity.Parameter { $1._entity.(entity.Parameter) })
+           }
+           | fixedparams ',' param
+           {
+             $$._entity = entity.NewParams($1._token.location, append($1._entity.(entity.Params).ParamDescs, $3._entity.(entity.Parameter)))
+           }
+           ;
+
+param: type name
+     {
+       $$._entity = entity.NewParameter(asType($1._node), $2._token.literal)
+     }
+     ;
+
 block: '{' defvar_list stmts '}'
      {
        $$._node = ast.NewBlockNode($1._token.location, asExprs($2._nodes), asStmts($3._nodes))
@@ -103,20 +233,10 @@ block: '{' defvar_list stmts '}'
 
 defvar_list:
            | defvar_list defvars
+           {
+             $$._nodes = append($1._nodes, $2._node)
+           }
            ;
-
-defvars: storage type defvars_names ';'
-       ;
-
-defvars_names: name
-             | name '=' expr
-             | defvars_names ',' name
-             | defvars_names ',' name '=' expr
-             ;
-
-storage:
-       | STATIC
-       ;
 
 defstruct: STRUCT name member_list ';'
          {
@@ -152,15 +272,19 @@ slot: type name
     }
     ;
 
-/*
 funcdecl: EXTERN typeref name '(' params ')' ';'
+        {
+          ps := $5._entity.(entity.Params)
+          ref := typesys.NewFunctionTypeRef($2._typeref, ps.ParametersTypeRef())
+          $$._entity = entity.NewUndefinedFunction(ast.NewTypeNode($1._token.location, ref), $3._token.literal, ps)
+        }
         ;
- */
 
-/*
 vardecl: EXTERN type name ';'
+       {
+         $$._entity = entity.NewUndefinedVariable(asType($2._node), $3._token.literal)
+       }
        ;
- */
 
 type: typeref
     {

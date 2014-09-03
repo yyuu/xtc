@@ -3,6 +3,7 @@ package ast
 import (
   "fmt"
   "strings"
+  "bitbucket.org/yyuu/bs/typesys"
 )
 
 type INode interface {
@@ -24,6 +25,7 @@ type IStmtNode interface {
 type ITypeNode interface {
   INode
   IsType() bool
+  GetTypeRef() typesys.ITypeRef
 }
 
 type ITypeDefinition interface {
