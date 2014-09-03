@@ -33,19 +33,19 @@ func assertFalse(t *testing.T, key string, got bool) {
 }
 
 type location struct {
-  SourceName string
-  LineNumber int
-  LineOffset int
+  sourceName string
+  lineNumber int
+  lineOffset int
 }
 
 func (self location) GetSourceName() string {
-  return self.SourceName
+  return self.sourceName
 }
 
 func (self location) GetLineNumber() int {
-  return self.LineNumber
+  return self.lineNumber
 }
 
 func (self location) GetLineOffset() int {
-  return self.LineOffset
+  return self.lineOffset
 }

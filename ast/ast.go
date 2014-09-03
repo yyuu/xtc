@@ -32,6 +32,10 @@ type Location struct {
   LineOffset int
 }
 
+func NewLocation(sourceName string, lineNumber int, lineOffset int) Location {
+  return Location { sourceName, lineNumber, lineOffset }
+}
+
 func (self Location) GetSourceName() string {
   return self.SourceName
 }
@@ -61,8 +65,7 @@ func (self AST) String() string {
   xs := make([]string, len(self.Stmts))
   for i := range self.Stmts {
     stmt := self.Stmts[i]
-    location := stmt.GetLocation()
-    xs[i] = fmt.Sprintf(";; %s:%d,%d\n%s", location.SourceName, location.LineNumber+1, location.LineOffset+1, stmt)
+    xs[i] = fmt.Sprintf(";; %s\n%s", stmt.GetLocation(), stmt)
   }
   return strings.Join(xs, "\n")
 }

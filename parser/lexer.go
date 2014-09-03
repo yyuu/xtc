@@ -21,7 +21,7 @@ type lex struct {
 }
 
 func (self lex) String() string {
-  location := ast.Location { self.sourceName, self.lineNumber, self.lineOffset }
+  location := ast.NewLocation(self.sourceName, self.lineNumber, self.lineOffset)
   source := fmt.Sprintf("%s", self.scanner.Peek(16))
   return fmt.Sprintf("%s: %q", location, source)
 }
@@ -182,11 +182,7 @@ func (self *lex) consume(id int, literal string) (t *token) {
   t = &token {
     id: id,
     literal: literal,
-    location: ast.Location {
-      SourceName: self.sourceName,
-      LineNumber: self.lineNumber,
-      LineOffset: self.lineOffset,
-    },
+    location: ast.NewLocation(self.sourceName, self.lineNumber, self.lineOffset),
   }
 
   self.lineNumber += strings.Count(literal, "\n")
