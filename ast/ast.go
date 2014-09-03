@@ -32,6 +32,18 @@ type Location struct {
   LineOffset int
 }
 
+func (self Location) GetSourceName() string {
+  return self.SourceName
+}
+
+func (self Location) GetLineNumber() int {
+  return self.LineNumber
+}
+
+func (self Location) GetLineOffset() int {
+  return self.LineOffset
+}
+
 func (self Location) String() string {
   return fmt.Sprintf("[%s:%d,%d]", self.SourceName, self.LineNumber, self.LineOffset)
 }
