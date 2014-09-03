@@ -520,6 +520,14 @@ unary: PLUSPLUS unary
      {
        $$._expr = ast.NewUnaryOpNode($1._token.location, "~", $2._expr)
      }
+     | SIZEOF '(' type ')'
+     {
+       $$._expr = ast.NewSizeofTypeNode($1._token.location, $3._type, typesys.NewIntegerTypeRef($1._token.location, "unsigned long"))
+     }
+     | SIZEOF unary
+     {
+       $$._expr = ast.NewSizeofExprNode($1._token.location, $2._expr, typesys.NewIntegerTypeRef($1._token.location, "unsigned long"))
+     }
      | postfix
      ;
 
