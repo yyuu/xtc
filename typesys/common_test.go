@@ -31,3 +31,21 @@ func assertFalse(t *testing.T, key string, got bool) {
     t.Fail()
   }
 }
+
+type location struct {
+  SourceName string
+  LineNumber int
+  LineOffset int
+}
+
+func (self location) GetSourceName() string {
+  return self.SourceName
+}
+
+func (self location) GetLineNumber() int {
+  return self.LineNumber
+}
+
+func (self location) GetLineOffset() int {
+  return self.LineOffset
+}
