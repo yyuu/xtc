@@ -180,7 +180,7 @@ func (self TypedefNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self TypedefNode) IsType() bool {
+func (self TypedefNode) IsTypeDefinition() bool {
   return true
 }
 
@@ -205,6 +205,10 @@ func (self TypeDefinition) String() string {
 
 func (self TypeDefinition) MarshalJSON() ([]byte, error) {
   panic("not implemented")
+}
+
+func (self TypeDefinition) IsTypeDefinition() bool {
+  return true
 }
 
 func (self TypeDefinition) GetLocation() Location {

@@ -13,26 +13,11 @@ import (
 %union {
   _token token
 
-  _type ast.ITypeNode
-  _types []ast.ITypeNode
+  _node ast.INode
+  _nodes []ast.INode
 
   _typeref typesys.ITypeRef
   _typerefs []typesys.ITypeRef
-
-  _expr ast.IExprNode
-  _exprs []ast.IExprNode
-
-  _stmt ast.IStmtNode
-  _stmts []ast.IStmtNode
-
-  _slot ast.Slot
-  _slots []ast.Slot
-
-  _typedef ast.ITypeDefinition
-  _typedefs []ast.ITypeDefinition
-
-  _decl ast.Declarations
-  _decls []ast.Declarations
 }
 
 %token SPACES
@@ -103,7 +88,7 @@ compilation_unit:
                 | stmts
                 {
                   if lex, ok := yylex.(*lex); ok {
-                    lex.ast = &ast.AST { $1._stmts }
+                    lex.ast = &ast.AST { asStmts($1._nodes) }
                   } else {
                     panic("parser is broken")
                   }
@@ -112,7 +97,7 @@ compilation_unit:
 
 block: '{' defvar_list stmts '}'
      {
-       $$._stmt = ast.NewBlockNode($1._token.location, $2._exprs, $3._stmts)
+       $$._node = ast.NewBlockNode($1._token.location, asExprs($2._nodes), asStmts($3._nodes))
      }
      ;
 
@@ -135,35 +120,35 @@ storage:
 
 defstruct: STRUCT name member_list ';'
          {
-           $$._typedef = ast.NewStructNode($1._token.location, typesys.NewStructTypeRef($1._token.location, $2._token.literal), $2._token.literal, $3._slots)
+           $$._node = ast.NewStructNode($1._token.location, typesys.NewStructTypeRef($1._token.location, $2._token.literal), $2._token.literal, asSlots($3._nodes))
          }
          ;
 
 defunion: UNION name member_list ';'
         {
-          $$._typedef = ast.NewUnionNode($1._token.location, typesys.NewUnionTypeRef($1._token.location, $2._token.literal), $2._token.literal, $3._slots)
+          $$._node = ast.NewUnionNode($1._token.location, typesys.NewUnionTypeRef($1._token.location, $2._token.literal), $2._token.literal, asSlots($3._nodes))
         }
         ;
 
 member_list: '{' member_list_body '}'
            {
-             $$._slots = $2._slots
+             $$._nodes = $2._nodes
            }
            ;
 
 member_list_body: slot ';'
                 {
-                  $$._slots = []ast.Slot { $1._slot }
+                  $$._nodes = []ast.INode { $1._node }
                 }
                 | member_list_body slot ';'
                 {
-                  $$._slots = append($1._slots, $2._slot)
+                  $$._nodes = append($1._nodes, $2._node)
                 }
                 ;
 
 slot: type name
     {
-      $$._slot = ast.NewSlot($1._type, $2._token.literal)
+      $$._node = ast.NewSlot(asType($1._node), $2._token.literal)
     }
     ;
 
@@ -179,7 +164,7 @@ vardecl: EXTERN type name ';'
 
 type: typeref
     {
-      $$._type = ast.NewTypeNode($1._token.location, $1._typeref)
+      $$._node = ast.NewTypeNode($1._token.location, $1._typeref)
     }
     ;
 
@@ -272,14 +257,14 @@ typeref_base: VOID
 
 typedef: TYPEDEF typeref IDENTIFIER ';'
        {
-         $$._type = ast.NewTypedefNode($1._token.location, $2._typeref, $3._token.literal)
+         $$._node = ast.NewTypedefNode($1._token.location, $2._typeref, $3._token.literal)
        }
        ;
 
 stmts:
      | stmts stmt
      {
-       $$._stmts = append($1._stmts, $2._stmt)
+       $$._nodes = append($1._nodes, $2._node)
      }
      ;
 
@@ -287,7 +272,7 @@ stmt: ';'
     | labeled_stmt
     | expr ';'
     {
-      $$._stmt = ast.NewExprStmtNode($1._token.location, $1._expr)
+      $$._node = ast.NewExprStmtNode($1._token.location, asExpr($1._node))
     }
     | block
     | if_stmt
@@ -303,67 +288,67 @@ stmt: ';'
 
 labeled_stmt: IDENTIFIER ':' stmt
             {
-              $$._stmt = ast.NewLabelNode($1._token.location, $1._token.literal, $3._stmt)
+              $$._node = ast.NewLabelNode($1._token.location, $1._token.literal, asStmt($3._node))
             }
             ;
 
 if_stmt: IF '(' expr ')' stmt ELSE stmt
        {
-         $$._stmt = ast.NewIfNode($1._token.location, $3._expr, $5._stmt, $7._stmt)
+         $$._node = ast.NewIfNode($1._token.location, asExpr($3._node), asStmt($5._node), asStmt($7._node))
        }
        ;
 
 while_stmt: WHILE '(' expr ')' stmt
           {
-            $$._stmt = ast.NewWhileNode($1._token.location, $3._expr, $5._stmt)
+            $$._node = ast.NewWhileNode($1._token.location, asExpr($3._node), asStmt($5._node))
           }
           ;
 
 dowhile_stmt: DO stmt WHILE '(' expr ')' ';'
             {
-              $$._stmt = ast.NewDoWhileNode($1._token.location, $2._stmt, $5._expr)
+              $$._node = ast.NewDoWhileNode($1._token.location, asStmt($2._node), asExpr($5._node))
             }
             ;
 
 for_stmt: FOR '(' expr ';' expr ';' expr ')' stmt
         {
-          $$._stmt = ast.NewForNode($1._token.location, $3._expr, $5._expr, $7._expr, $9._stmt)
+          $$._node = ast.NewForNode($1._token.location, asExpr($3._node), asExpr($5._node), asExpr($7._node), asStmt($9._node))
         }
         ;
 
 switch_stmt: SWITCH '(' expr ')' '{' case_clauses '}'
            {
-             $$._stmt = ast.NewSwitchNode($1._token.location, $3._expr, $6._stmts)
+             $$._node = ast.NewSwitchNode($1._token.location, asExpr($3._node), asStmts($6._nodes))
            }
            ;
 
 case_clauses:
             | case_clauses case_clause
             {
-              $$._stmts = append($1._stmts, $2._stmt)
+              $$._nodes = append($1._nodes, $2._node)
             }
             | case_clauses default_clause
             {
-              $$._stmts = append($1._stmts, $2._stmt)
+              $$._nodes = append($1._nodes, $2._node)
             }
             ;
 
 case_clause: cases case_body
            {
-             $$._stmt = ast.NewCaseNode($1._token.location, $1._exprs, $2._stmt)
+             $$._node = ast.NewCaseNode($1._token.location, asExprs($1._nodes), asStmt($2._node))
            }
            ;
 
 cases:
      | cases CASE primary ':'
      {
-       $$._exprs = append($1._exprs, $3._expr)
+       $$._nodes = append($1._nodes, $3._node)
      }
      ;
 
 default_clause: DEFAULT ':' case_body
               {
-                $$._stmt = ast.NewCaseNode($1._token.location, []ast.IExprNode { }, $3._stmt)
+                $$._node = ast.NewCaseNode($1._token.location, []ast.IExprNode { }, asStmt($3._node))
               }
               ;
 
@@ -371,72 +356,72 @@ case_body: stmt
 
 goto_stmt: GOTO IDENTIFIER ';'
          {
-           $$._stmt = ast.NewGotoNode($1._token.location, $2._token.literal)
+           $$._node = ast.NewGotoNode($1._token.location, $2._token.literal)
          }
          ;
 
 
 break_stmt: BREAK ';'
           {
-            $$._stmt = ast.NewBreakNode($1._token.location)
+            $$._node = ast.NewBreakNode($1._token.location)
           }
           ;
 
 continue_stmt: CONTINUE ';'
              {
-               $$._stmt = ast.NewContinueNode($1._token.location)
+               $$._node = ast.NewContinueNode($1._token.location)
              }
              ;
 
 return_stmt: RETURN expr ';'
            {
-             $$._stmt = ast.NewReturnNode($1._token.location, $2._expr)
+             $$._node = ast.NewReturnNode($1._token.location, asExpr($2._node))
            }
            ;
 
 expr: term '=' expr
     {
-      $$._expr = ast.NewAssignNode($1._token.location, $1._expr, $3._expr)
+      $$._node = ast.NewAssignNode($1._token.location, asExpr($1._node), asExpr($3._node))
     }
     | term PLUSEQ expr
     {
-      $$._expr = ast.NewOpAssignNode($1._token.location, "+", $1._expr, $3._expr)
+      $$._node = ast.NewOpAssignNode($1._token.location, "+", asExpr($1._node), asExpr($3._node))
     }
     | term MINUSEQ expr
     {
-      $$._expr = ast.NewOpAssignNode($1._token.location, "-", $1._expr, $3._expr)
+      $$._node = ast.NewOpAssignNode($1._token.location, "-", asExpr($1._node), asExpr($3._node))
     }
     | term MULEQ expr
     {
-      $$._expr = ast.NewOpAssignNode($1._token.location, "*", $1._expr, $3._expr)
+      $$._node = ast.NewOpAssignNode($1._token.location, "*", asExpr($1._node), asExpr($3._node))
     }
     | term DIVEQ expr
     {
-      $$._expr = ast.NewOpAssignNode($1._token.location, "/", $1._expr, $3._expr)
+      $$._node = ast.NewOpAssignNode($1._token.location, "/", asExpr($1._node), asExpr($3._node))
     }
     | term MODEQ expr
     {
-      $$._expr = ast.NewOpAssignNode($1._token.location, "%", $1._expr, $3._expr)
+      $$._node = ast.NewOpAssignNode($1._token.location, "%", asExpr($1._node), asExpr($3._node))
     }
     | term ANDEQ expr
     {
-      $$._expr = ast.NewOpAssignNode($1._token.location, "&", $1._expr, $3._expr)
+      $$._node = ast.NewOpAssignNode($1._token.location, "&", asExpr($1._node), asExpr($3._node))
     }
     | term OREQ expr
     {
-      $$._expr = ast.NewOpAssignNode($1._token.location, "|", $1._expr, $3._expr)
+      $$._node = ast.NewOpAssignNode($1._token.location, "|", asExpr($1._node), asExpr($3._node))
     }
     | term XOREQ expr
     {
-      $$._expr = ast.NewOpAssignNode($1._token.location, "^", $1._expr, $3._expr)
+      $$._node = ast.NewOpAssignNode($1._token.location, "^", asExpr($1._node), asExpr($3._node))
     }
     | term LSHIFTEQ expr
     {
-      $$._expr = ast.NewOpAssignNode($1._token.location, "<<", $1._expr, $3._expr)
+      $$._node = ast.NewOpAssignNode($1._token.location, "<<", asExpr($1._node), asExpr($3._node))
     }
     | term RSHIFTEQ expr
     {
-      $$._expr = ast.NewOpAssignNode($1._token.location, ">>", $1._expr, $3._expr)
+      $$._node = ast.NewOpAssignNode($1._token.location, ">>", asExpr($1._node), asExpr($3._node))
     }
     | expr10
     ;
@@ -444,106 +429,106 @@ expr: term '=' expr
 expr10: expr9
       | expr9 '?' expr ':' expr10
       {
-        $$._expr = ast.NewCondExprNode($1._token.location, $1._expr, $3._expr, $5._expr)
+        $$._node = ast.NewCondExprNode($1._token.location, asExpr($1._node), asExpr($3._node), asExpr($5._node))
       }
       ;
 
 expr9: expr8
      | expr9 OROR expr8
      {
-       $$._expr = ast.NewLogicalOrNode($1._token.location, $1._expr, $3._expr)
+       $$._node = ast.NewLogicalOrNode($1._token.location, asExpr($1._node), asExpr($3._node))
      }
      ;
 
 expr8: expr7
      | expr8 ANDAND expr7
      {
-       $$._expr = ast.NewLogicalAndNode($1._token.location, $1._expr, $3._expr)
+       $$._node = ast.NewLogicalAndNode($1._token.location, asExpr($1._node), asExpr($3._node))
      }
      ;
 
 expr7: expr6
      | expr7 '>' expr6
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, ">", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, ">", asExpr($1._node), asExpr($3._node))
      }
      | expr7 '<' expr6
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, "<", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, "<", asExpr($1._node), asExpr($3._node))
      }
      | expr7 GTEQ expr6
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, ">=", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, ">=", asExpr($1._node), asExpr($3._node))
      }
      | expr7 LTEQ expr6
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, "<=", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, "<=", asExpr($1._node), asExpr($3._node))
      }
      | expr7 EQEQ expr6
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, "==", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, "==", asExpr($1._node), asExpr($3._node))
      }
      | expr7 NEQ expr6
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, "!=", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, "!=", asExpr($1._node), asExpr($3._node))
      }
      ;
 
 expr6: expr5
      | expr6 '|' expr5
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, "|", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, "|", asExpr($1._node), asExpr($3._node))
      }
      ;
 
 expr5: expr4
      | expr5 '^' expr4
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, "^", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, "^", asExpr($1._node), asExpr($3._node))
      }
      ;
 
 expr4: expr3
      | expr4 '&' expr3
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, "&", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, "&", asExpr($1._node), asExpr($3._node))
      }
      ;
 
 expr3: expr2
      | expr3 RSHIFT expr2
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, ">>", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, ">>", asExpr($1._node), asExpr($3._node))
      }
      | expr3 LSHIFT expr2
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, "<<", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, "<<", asExpr($1._node), asExpr($3._node))
      }
      ;
 
 expr2: expr1
      | expr2 '+' expr1
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, "+", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, "+", asExpr($1._node), asExpr($3._node))
      }
      | expr2 '-' expr1
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, "-", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, "-", asExpr($1._node), asExpr($3._node))
      }
      ;
 
 expr1: term
      | expr1 '*' term
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, "*", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, "*", asExpr($1._node), asExpr($3._node))
      }
      | expr1 '/' term
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, "/", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, "/", asExpr($1._node), asExpr($3._node))
      }
      | expr1 '%' term
      {
-       $$._expr = ast.NewBinaryOpNode($1._token.location, "%", $1._expr, $3._expr)
+       $$._node = ast.NewBinaryOpNode($1._token.location, "%", asExpr($1._node), asExpr($3._node))
      }
      ;
 
@@ -552,35 +537,35 @@ term: unary
 
 unary: PLUSPLUS unary
      {
-       $$._expr = ast.NewPrefixOpNode($1._token.location, "++", $2._expr)
+       $$._node = ast.NewPrefixOpNode($1._token.location, "++", asExpr($2._node))
      }
      | MINUSMINUS unary
      {
-       $$._expr = ast.NewPrefixOpNode($1._token.location, "--", $2._expr)
+       $$._node = ast.NewPrefixOpNode($1._token.location, "--", asExpr($2._node))
      }
      | '+' term
      {
-       $$._expr = ast.NewUnaryOpNode($1._token.location, "+", $2._expr)
+       $$._node = ast.NewUnaryOpNode($1._token.location, "+", asExpr($2._node))
      }
      | '-' term
      {
-       $$._expr = ast.NewUnaryOpNode($1._token.location, "-", $2._expr)
+       $$._node = ast.NewUnaryOpNode($1._token.location, "-", asExpr($2._node))
      }
      | '!' term
      {
-       $$._expr = ast.NewUnaryOpNode($1._token.location, "!", $2._expr)
+       $$._node = ast.NewUnaryOpNode($1._token.location, "!", asExpr($2._node))
      }
      | '~' term
      {
-       $$._expr = ast.NewUnaryOpNode($1._token.location, "~", $2._expr)
+       $$._node = ast.NewUnaryOpNode($1._token.location, "~", asExpr($2._node))
      }
      | SIZEOF '(' type ')'
      {
-       $$._expr = ast.NewSizeofTypeNode($1._token.location, $3._type, typesys.NewIntegerTypeRef($1._token.location, "unsigned long"))
+       $$._node = ast.NewSizeofTypeNode($1._token.location, asType($3._node), typesys.NewIntegerTypeRef($1._token.location, "unsigned long"))
      }
      | SIZEOF unary
      {
-       $$._expr = ast.NewSizeofExprNode($1._token.location, $2._expr, typesys.NewIntegerTypeRef($1._token.location, "unsigned long"))
+       $$._node = ast.NewSizeofExprNode($1._token.location, asExpr($2._node), typesys.NewIntegerTypeRef($1._token.location, "unsigned long"))
      }
      | postfix
      ;
@@ -588,15 +573,15 @@ unary: PLUSPLUS unary
 postfix: primary
        | primary PLUSPLUS
        {
-         $$._expr = ast.NewSuffixOpNode($1._token.location, "++", $1._expr)
+         $$._node = ast.NewSuffixOpNode($1._token.location, "++", asExpr($1._node))
        }
        | primary MINUSMINUS
        {
-         $$._expr = ast.NewSuffixOpNode($1._token.location, "--", $1._expr)
+         $$._node = ast.NewSuffixOpNode($1._token.location, "--", asExpr($1._node))
        }
        | primary '(' args ')'
        {
-         $$._expr = ast.NewFuncallNode($1._token.location, $1._expr, $3._exprs)
+         $$._node = ast.NewFuncallNode($1._token.location, asExpr($1._node), asExprs($3._nodes))
        }
        ;
 
@@ -605,38 +590,38 @@ name: IDENTIFIER
 
 args:
     {
-      $$._exprs = []ast.IExprNode { }
+      $$._nodes = []ast.INode { }
     }
     | expr
     {
-      $$._exprs = append($1._exprs, $1._expr)
+      $$._nodes = append($1._nodes, $1._node)
     }
     | args ',' expr
     {
-      $$._exprs = append($1._exprs, $3._expr)
+      $$._nodes = append($1._nodes, $3._node)
     }
     ;
 
 primary: INTEGER
        {
-         $$._expr = ast.NewIntegerLiteralNode($1._token.location, $1._token.literal)
+         $$._node = ast.NewIntegerLiteralNode($1._token.location, $1._token.literal)
        }
        | CHARACTER
        {
          // TODO: decode character literal
-         $$._expr = ast.NewIntegerLiteralNode($1._token.location, $1._token.literal)
+         $$._node = ast.NewIntegerLiteralNode($1._token.location, $1._token.literal)
        }
        | STRING
        {
-         $$._expr = ast.NewStringLiteralNode($1._token.location, $1._token.literal)
+         $$._node = ast.NewStringLiteralNode($1._token.location, $1._token.literal)
        }
        | IDENTIFIER
        {
-         $$._expr = ast.NewVariableNode($1._token.location, $1._token.literal)
+         $$._node = ast.NewVariableNode($1._token.location, $1._token.literal)
        }
        | '(' expr ')'
        {
-         $$._expr = $2._expr
+         $$._node = asExpr($2._node)
        }
        ;
 
