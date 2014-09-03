@@ -127,11 +127,16 @@ storage:
        ;
 
 defstruct: STRUCT name member_list ';'
+         {
+           $$._stmt = ast.NewStructNode($1._token.location, typesys.NewStructTypeRef($1._token.location, $2._token.literal), $2._token.literal, $3._slots)
+         }
          ;
 
 defunion: UNION name member_list ';'
+        {
+          $$._stmt = ast.NewUnionNode($1._token.location, typesys.NewUnionTypeRef($1._token.location, $2._token.literal), $2._token.literal, $3._slots)
+        }
         ;
-
 
 member_list: '{' member_list_body '}'
            {

@@ -187,3 +187,26 @@ func (self TypedefNode) IsType() bool {
 func (self TypedefNode) GetLocation() Location {
   return self.Location
 }
+
+// TypeDefinition
+type TypeDefinition struct {
+  Location Location
+  Name string
+  TypeNode ITypeNode
+}
+
+func NewTypeDefinition(loc Location, ref typesys.ITypeRef, name string) TypeDefinition {
+  return TypeDefinition { loc, name, NewTypeNode(loc, ref) }
+}
+
+func (self TypeDefinition) String() string {
+  panic("not implemented")
+}
+
+func (self TypeDefinition) MarshalJSON() ([]byte, error) {
+  panic("not implemented")
+}
+
+func (self TypeDefinition) GetLocation() Location {
+  return self.Location
+}
