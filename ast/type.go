@@ -2,6 +2,8 @@ package ast
 
 import (
   "encoding/json"
+  "fmt"
+  "bitbucket.org/yyuu/bs/typesys"
 )
 
 // CastNode
@@ -16,7 +18,7 @@ func NewCastNode(location Location, t ITypeNode, expr IExprNode) CastNode {
 }
 
 func (self CastNode) String() string {
-  panic("not implemented")
+  return fmt.Sprintf("(%s %s)", self.Type, self.Expr)
 }
 
 func (self CastNode) MarshalJSON() ([]byte, error) {
@@ -48,12 +50,12 @@ type SizeofExprNode struct {
   Type ITypeNode
 }
 
-func NewSizeofExprNode(location Location, expr IExprNode, t ITypeNode) SizeofExprNode {
-  return SizeofExprNode { location, expr, t }
+func NewSizeofExprNode(location Location, expr IExprNode, t typesys.ITypeRef) SizeofExprNode {
+  return SizeofExprNode { location, expr, NewTypeNode(location, t) }
 }
 
 func (self SizeofExprNode) String() string {
-  panic("not implemented")
+  return fmt.Sprintf("(sizeof %s)", self.Expr)
 }
 
 func (self SizeofExprNode) MarshalJSON() ([]byte, error) {
@@ -85,12 +87,12 @@ type SizeofTypeNode struct {
   Operand ITypeNode
 }
 
-func NewSizeofTypeNode(location Location, t ITypeNode, operand ITypeNode) SizeofTypeNode {
-  return SizeofTypeNode { location, t, operand }
+func NewSizeofTypeNode(location Location, operand ITypeNode, t typesys.ITypeRef) SizeofTypeNode {
+  return SizeofTypeNode { location, operand, NewTypeNode(location, t) }
 }
 
 func (self SizeofTypeNode) String() string {
-  panic("not implemented")
+  return fmt.Sprintf("(sizeof %s)", self.Type)
 }
 
 func (self SizeofTypeNode) MarshalJSON() ([]byte, error) {
@@ -112,5 +114,76 @@ func (self SizeofTypeNode) IsExpr() bool {
 }
 
 func (self SizeofTypeNode) GetLocation() Location {
+  return self.Location
+}
+
+// TypeNode
+type TypeNode struct {
+  Location Location
+  TypeRef typesys.ITypeRef
+}
+
+func NewTypeNode(location Location, t typesys.ITypeRef) TypeNode {
+  return TypeNode { location, t }
+}
+
+func (self TypeNode) String() string {
+  return fmt.Sprintf("(type %s)", self.TypeRef)
+}
+
+func (self TypeNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    TypeRef typesys.ITypeRef
+  }
+  x.ClassName = "ast.TypeNode"
+  x.Location = self.Location
+  x.TypeRef = self.TypeRef
+  return json.Marshal(x)
+}
+
+func (self TypeNode) IsType() bool {
+  return true
+}
+
+func (self TypeNode) GetLocation() Location {
+  return self.Location
+}
+
+// TypedefNode
+type TypedefNode struct {
+  Location Location
+  TypeNode ITypeNode
+  Name string
+}
+
+func NewTypedefNode(location Location, t ITypeNode, name string) TypedefNode {
+  return TypedefNode { location, t, name }
+}
+
+func (self TypedefNode) String() string {
+  return fmt.Sprintf("(typedef %s %s)", self.Name, self.TypeNode)
+}
+
+func (self TypedefNode) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location Location
+    TypeNode ITypeNode
+    Name string
+  }
+  x.ClassName = "ast.TypedefNode"
+  x.Location = self.Location
+  x.TypeNode = self.TypeNode
+  x.Name = self.Name
+  return json.Marshal(x)
+}
+
+func (self TypedefNode) IsType() bool {
+  return true
+}
+
+func (self TypedefNode) GetLocation() Location {
   return self.Location
 }
