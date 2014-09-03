@@ -26,6 +26,11 @@ type ITypeNode interface {
   IsType() bool
 }
 
+type ITypeDefinition interface {
+  INode
+  IsTypeDefinition() bool
+}
+
 type Location struct {
   SourceName string
   LineNumber int

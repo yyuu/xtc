@@ -27,6 +27,12 @@ import (
 
   _slot ast.Slot
   _slots []ast.Slot
+
+  _typedef ast.ITypeDefinition
+  _typedefs []ast.ITypeDefinition
+
+  _decl ast.Declarations
+  _decls []ast.Declarations
 }
 
 %token SPACES
@@ -93,15 +99,16 @@ import (
 
 %%
 
-program: stmts
-       {
-         if lex, ok := yylex.(*lex); ok {
-           lex.ast = &ast.AST { $1._stmts }
-         } else {
-           panic("parser is broken")
-         }
-       }
-       ;
+compilation_unit:
+                | stmts
+                {
+                  if lex, ok := yylex.(*lex); ok {
+                    lex.ast = &ast.AST { $1._stmts }
+                  } else {
+                    panic("parser is broken")
+                  }
+                }
+                ;
 
 block: '{' defvar_list stmts '}'
      {
@@ -128,13 +135,13 @@ storage:
 
 defstruct: STRUCT name member_list ';'
          {
-           $$._stmt = ast.NewStructNode($1._token.location, typesys.NewStructTypeRef($1._token.location, $2._token.literal), $2._token.literal, $3._slots)
+           $$._typedef = ast.NewStructNode($1._token.location, typesys.NewStructTypeRef($1._token.location, $2._token.literal), $2._token.literal, $3._slots)
          }
          ;
 
 defunion: UNION name member_list ';'
         {
-          $$._stmt = ast.NewUnionNode($1._token.location, typesys.NewUnionTypeRef($1._token.location, $2._token.literal), $2._token.literal, $3._slots)
+          $$._typedef = ast.NewUnionNode($1._token.location, typesys.NewUnionTypeRef($1._token.location, $2._token.literal), $2._token.literal, $3._slots)
         }
         ;
 

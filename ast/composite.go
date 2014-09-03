@@ -24,7 +24,7 @@ func (self StructNode) MarshalJSON() ([]byte, error) {
   panic("not implemented")
 }
 
-func (self StructNode) IsStmt() bool {
+func (self StructNode) IsTypeDefinition() bool {
   return true
 }
 
@@ -52,7 +52,7 @@ func (self UnionNode) MarshalJSON() ([]byte, error) {
   panic("not implemented")
 }
 
-func (self UnionNode) IsStmt() bool {
+func (self UnionNode) IsTypeDefinition() bool {
   return true
 }
 
