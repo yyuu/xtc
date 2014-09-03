@@ -72,3 +72,7 @@ func NewVoidTypeRef(location ILocation) VoidTypeRef {
 func (self VoidTypeRef) GetLocation() ILocation {
   return self.Location
 }
+
+func (self VoidTypeRef) IsTypeRef() bool {
+  return true
+}

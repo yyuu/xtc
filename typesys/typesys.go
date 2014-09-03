@@ -39,5 +39,10 @@ type IType interface {
 // ITypeRef
 type ITypeRef interface {
   GetLocation() ILocation
-  TypeRefId() int
+  IsTypeRef() bool
+}
+
+type ISlot interface {
+  GetName() string
+  GetOffset() int
 }

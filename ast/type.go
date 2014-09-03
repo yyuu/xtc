@@ -154,28 +154,28 @@ func (self TypeNode) GetLocation() Location {
 // TypedefNode
 type TypedefNode struct {
   Location Location
-  TypeNode ITypeNode
+  Real typesys.ITypeRef
   Name string
 }
 
-func NewTypedefNode(location Location, t ITypeNode, name string) TypedefNode {
-  return TypedefNode { location, t, name }
+func NewTypedefNode(location Location, real typesys.ITypeRef, name string) TypedefNode {
+  return TypedefNode { location, real, name }
 }
 
 func (self TypedefNode) String() string {
-  return fmt.Sprintf("(typedef %s %s)", self.Name, self.TypeNode)
+  return fmt.Sprintf("(typedef %s %s)", self.Name, self.Real)
 }
 
 func (self TypedefNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
     Location Location
-    TypeNode ITypeNode
+    Real typesys.ITypeRef
     Name string
   }
   x.ClassName = "ast.TypedefNode"
   x.Location = self.Location
-  x.TypeNode = self.TypeNode
+  x.Real = self.Real
   x.Name = self.Name
   return json.Marshal(x)
 }

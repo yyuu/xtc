@@ -76,3 +76,7 @@ func NewIntegerTypeRef(location ILocation, name string) IntegerTypeRef {
 func (self IntegerTypeRef) GetLocation() ILocation {
   return self.Location
 }
+
+func (self IntegerTypeRef) IsTypeRef() bool {
+  return true
+}

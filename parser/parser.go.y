@@ -4,12 +4,20 @@ package parser
 import (
   "errors"
   "fmt"
+  "strconv"
   "bitbucket.org/yyuu/bs/ast"
+  "bitbucket.org/yyuu/bs/typesys"
 )
 %}
 
 %union {
   _token token
+
+  _type ast.ITypeNode
+  _types []ast.ITypeNode
+
+  _typeref typesys.ITypeRef
+  _typerefs []typesys.ITypeRef
 
   _expr ast.IExprNode
   _exprs []ast.IExprNode
@@ -111,18 +119,34 @@ defvars_names: name
              | defvars_names ',' name '=' expr
              ;
 
-storage: 
+storage:
        | STATIC
        ;
 
 type: typeref
+    {
+      $$._type = ast.NewTypeNode($1._token.location, $1._typeref)
+    }
     ;
 
 typeref: typeref_base
        | typeref '[' ']'
+       {
+         $$._typeref = typesys.NewArrayTypeRef($1._typeref, 0)
+       }
        | typeref '[' INTEGER ']'
+       {
+         n, _ := strconv.Atoi($3._token.literal)
+         $$._typeref = typesys.NewArrayTypeRef($1._typeref, n)
+       }
        | typeref '*'
+       {
+         $$._typeref = typesys.NewPointerTypeRef($1._typeref)
+       }
        | typeref '(' param_typerefs ')'
+       {
+         $$._typeref = typesys.NewFunctionTypeRef($1._typeref, $3._typeref)
+       }
        ;
 
 param_typerefs: VOID
@@ -134,17 +158,56 @@ fixedparam_typerefs: typeref
                    ;
 
 typeref_base: VOID
+            {
+              $$._typeref = typesys.NewVoidTypeRef($1._token.location)
+            }
             | CHAR
+            {
+              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "char")
+            }
             | SHORT
+            {
+              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "short")
+            }
             | INT
+            {
+              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "int")
+            }
             | LONG
+            {
+              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "long")
+            }
             | UNSIGNED CHAR
+            {
+              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned char")
+            }
             | UNSIGNED SHORT
+            {
+              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned short")
+            }
             | UNSIGNED INT
+            {
+              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned int")
+            }
             | UNSIGNED LONG
+            {
+              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned long")
+            }
             | STRUCT IDENTIFIER
+            {
+              $$._typeref = typesys.NewStructTypeRef($1._token.location, $2._token.literal)
+            }
             | UNION IDENTIFIER
+            {
+              $$._typeref = typesys.NewUnionTypeRef($1._token.location, $2._token.literal)
+            }
             ;
+
+typedef: TYPEDEF typeref IDENTIFIER ';'
+       {
+         $$._type = ast.NewTypedefNode($1._token.location, $2._typeref, $3._token.literal)
+       }
+       ;
 
 stmts:
      | stmts stmt
@@ -154,6 +217,7 @@ stmts:
      ;
 
 stmt: ';'
+    | labeled_stmt
     | expr ';'
     {
       $$._stmt = ast.NewExprStmtNode($1._token.location, $1._expr)
@@ -169,6 +233,12 @@ stmt: ';'
     | goto_stmt
     | return_stmt
     ;
+
+labeled_stmt: IDENTIFIER ':' stmt
+            {
+              $$._stmt = ast.NewLabelNode($1._token.location, $1._token.literal, $3._stmt)
+            }
+            ;
 
 if_stmt: IF '(' expr ')' stmt ELSE stmt
        {
@@ -449,10 +519,6 @@ postfix: primary
        {
          $$._expr = ast.NewSuffixOpNode($1._token.location, "--", $1._expr)
        }
-       | primary '(' ')'
-       {
-         $$._expr = ast.NewFuncallNode($1._token.location, $1._expr, []ast.IExprNode { })
-       }
        | primary '(' args ')'
        {
          $$._expr = ast.NewFuncallNode($1._token.location, $1._expr, $3._exprs)
@@ -462,9 +528,13 @@ postfix: primary
 name: IDENTIFIER
     ;
 
-args: expr
+args:
     {
-      $$._exprs = []ast.IExprNode { $1._expr }
+      $$._exprs = []ast.IExprNode { }
+    }
+    | expr
+    {
+      $$._exprs = append($1._exprs, $1._expr)
     }
     | args ',' expr
     {
