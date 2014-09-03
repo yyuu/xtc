@@ -2,7 +2,6 @@ package typesys
 
 import (
   "testing"
-  "bitbucket.org/yyuu/bs/ast"
 )
 
 // signed int 32 : int32
@@ -36,7 +35,7 @@ func TestCharType(t *testing.T) {
 }
 
 func TestSignedInt32TypeRef(t *testing.T) {
-  location := ast.Location { "", 1, 2 }
+  location := location { "", 1, 2 }
   x := NewIntegerTypeRef(location, "int32")
   assertEquals(t, "int32 ref has location", x.GetLocation(), location)
   assertEquals(t, "int32 is int32", x.Name, "int32")

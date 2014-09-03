@@ -2,7 +2,6 @@ package typesys
 
 import (
   "testing"
-  "bitbucket.org/yyuu/bs/ast"
 )
 
 func TestVoid1(t *testing.T) {
@@ -14,7 +13,7 @@ func TestVoid1(t *testing.T) {
 }
 
 func TestVoidRef1(t *testing.T) {
-  location := ast.Location { "", 1, 2 }
+  location := location { "", 1, 2 }
   x := NewVoidTypeRef(location)
   assertEquals(t, "void ref has location", x.GetLocation(), location)
 }

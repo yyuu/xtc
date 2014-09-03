@@ -1,9 +1,5 @@
 package typesys
 
-import (
-  "bitbucket.org/yyuu/bs/ast"
-)
-
 // VoidType
 type VoidType struct {
 }
@@ -66,13 +62,13 @@ func (self VoidType) IsFunction() bool {
 
 // VoidTypeRef
 type VoidTypeRef struct {
-  Location ast.Location
+  Location ILocation
 }
 
-func NewVoidTypeRef(location ast.Location) VoidTypeRef {
+func NewVoidTypeRef(location ILocation) VoidTypeRef {
   return VoidTypeRef { location }
 }
 
-func (self VoidTypeRef) GetLocation() ast.Location {
+func (self VoidTypeRef) GetLocation() ILocation {
   return self.Location
 }

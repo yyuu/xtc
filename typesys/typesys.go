@@ -1,9 +1,5 @@
 package typesys
 
-import (
-  "bitbucket.org/yyuu/bs/ast"
-)
-
 const (
   TYPE_VOID = 1 << iota
   TYPE_INTEGER
@@ -15,6 +11,30 @@ const (
   TYPE_USERTYPE
   TYPE_FUNCTION
 )
+
+type ILocation interface {
+  GetSourceName() string
+  GetLineNumber() int
+  GetLineOffset() int
+}
+
+type location struct {
+  SourceName string
+  LineNumber int
+  LineOffset int
+}
+
+func (self location) GetSourceName() string {
+  return self.SourceName
+}
+
+func (self location) GetLineNumber() int {
+  return self.LineNumber
+}
+
+func (self location) GetLineOffset() int {
+  return self.LineOffset
+}
 
 // IType
 type IType interface {
@@ -36,6 +56,6 @@ type IType interface {
 
 // ITypeRef
 type ITypeRef interface {
-  GetLocation() ast.Location
+  GetLocation() ILocation
   TypeRefId() int
 }

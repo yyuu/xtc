@@ -1,9 +1,5 @@
 package typesys
 
-import (
-  "bitbucket.org/yyuu/bs/ast"
-)
-
 // IntegerType
 type IntegerType struct {
   IntegerSize int
@@ -69,14 +65,14 @@ func (self IntegerType) IsFunction() bool {
 
 // IntegerTypeRef
 type IntegerTypeRef struct {
-  Location ast.Location
+  Location ILocation
   Name string
 }
 
-func NewIntegerTypeRef(location ast.Location, name string) IntegerTypeRef {
+func NewIntegerTypeRef(location ILocation, name string) IntegerTypeRef {
   return IntegerTypeRef { location, name }
 }
 
-func (self IntegerTypeRef) GetLocation() ast.Location {
+func (self IntegerTypeRef) GetLocation() ILocation {
   return self.Location
 }
