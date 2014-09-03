@@ -24,6 +24,9 @@ import (
 
   _stmt ast.IStmtNode
   _stmts []ast.IStmtNode
+
+  _slot ast.Slot
+  _slots []ast.Slot
 }
 
 %token SPACES
@@ -122,6 +125,45 @@ defvars_names: name
 storage:
        | STATIC
        ;
+
+defstruct: STRUCT name member_list ';'
+         ;
+
+defunion: UNION name member_list ';'
+        ;
+
+
+member_list: '{' member_list_body '}'
+           {
+             $$._slots = $2._slots
+           }
+           ;
+
+member_list_body: slot ';'
+                {
+                  $$._slots = []ast.Slot { $1._slot }
+                }
+                | member_list_body slot ';'
+                {
+                  $$._slots = append($1._slots, $2._slot)
+                }
+                ;
+
+slot: type name
+    {
+      $$._slot = ast.NewSlot($1._type, $2._token.literal)
+    }
+    ;
+
+/*
+funcdecl: EXTERN typeref name '(' params ')' ';'
+        ;
+ */
+
+/*
+vardecl: EXTERN type name ';'
+       ;
+ */
 
 type: typeref
     {
