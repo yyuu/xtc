@@ -150,11 +150,24 @@ typeref: typeref_base
        ;
 
 param_typerefs: VOID
+              {
+                $$._typeref = typesys.NewParamTypeRefs($1._token.location, []typesys.ITypeRef { }, false)
+              }
               | fixedparam_typerefs
+              {
+//              $1._typerefs.AcceptVArgs()
+                $$._typerefs = $1._typerefs
+              }
               ;
 
 fixedparam_typerefs: typeref
+                   {
+                     $$._typerefs = []typesys.ITypeRef { $1._typeref }
+                   }
                    | fixedparam_typerefs ',' typeref
+                   {
+                     $$._typerefs = append($1._typerefs, $3._typeref)
+                   }
                    ;
 
 typeref_base: VOID
