@@ -3,16 +3,17 @@ package ast
 import (
   "encoding/json"
   "fmt"
+  "bitbucket.org/yyuu/bs/duck"
 )
 
 // AssignNode
 type AssignNode struct {
-  Location Location
-  Lhs IExprNode
-  Rhs IExprNode
+  Location duck.ILocation
+  Lhs duck.IExprNode
+  Rhs duck.IExprNode
 }
 
-func NewAssignNode(location Location, lhs IExprNode, rhs IExprNode) AssignNode {
+func NewAssignNode(location duck.ILocation, lhs duck.IExprNode, rhs duck.IExprNode) AssignNode {
   return AssignNode { location, lhs, rhs }
 }
 
@@ -23,9 +24,9 @@ func (self AssignNode) String() string {
 func (self AssignNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Lhs IExprNode
-    Rhs IExprNode
+    Location duck.ILocation
+    Lhs duck.IExprNode
+    Rhs duck.IExprNode
   }
   x.ClassName = "ast.AssignNode"
   x.Location = self.Location
@@ -38,19 +39,19 @@ func (self AssignNode) IsExpr() bool {
   return true
 }
 
-func (self AssignNode) GetLocation() Location {
+func (self AssignNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // OpAssignNode
 type OpAssignNode struct {
-  Location Location
+  Location duck.ILocation
   Operator string
-  Lhs IExprNode
-  Rhs IExprNode
+  Lhs duck.IExprNode
+  Rhs duck.IExprNode
 }
 
-func NewOpAssignNode(location Location, operator string, lhs IExprNode, rhs IExprNode) OpAssignNode {
+func NewOpAssignNode(location duck.ILocation, operator string, lhs duck.IExprNode, rhs duck.IExprNode) OpAssignNode {
   return OpAssignNode { location, operator, lhs, rhs }
 }
 
@@ -61,10 +62,10 @@ func (self OpAssignNode) String() string {
 func (self OpAssignNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
+    Location duck.ILocation
     Operator string
-    Lhs IExprNode
-    Rhs IExprNode
+    Lhs duck.IExprNode
+    Rhs duck.IExprNode
   }
   x.ClassName = "ast.OpAssignNode"
   x.Location = self.Location
@@ -78,6 +79,6 @@ func (self OpAssignNode) IsExpr() bool {
   return true
 }
 
-func (self OpAssignNode) GetLocation() Location {
+func (self OpAssignNode) GetLocation() duck.ILocation {
   return self.Location
 }

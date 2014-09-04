@@ -2,6 +2,7 @@ package ast
 
 import (
   "testing"
+  "bitbucket.org/yyuu/bs/duck"
 )
 
 /*
@@ -34,7 +35,7 @@ func TestDereferenceNode(t *testing.T) {
  */
 
 func TestFuncallNode(t *testing.T) {
-  x := NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "a"), []IExprNode { NewIntegerLiteralNode(loc(0,0), "12345"), NewIntegerLiteralNode(loc(0,0), "67890") })
+  x := NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "a"), []duck.IExprNode { NewIntegerLiteralNode(loc(0,0), "12345"), NewIntegerLiteralNode(loc(0,0), "67890") })
   s := `{
   "ClassName": "ast.FuncallNode",
   "Location": "[:0,0]",
@@ -60,7 +61,7 @@ func TestFuncallNode(t *testing.T) {
 }
 
 func TestFuncallNode2(t *testing.T) {
-  x := NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "b"), []IExprNode { })
+  x := NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "b"), []duck.IExprNode { })
   s := `{
   "ClassName": "ast.FuncallNode",
   "Location": "[:0,0]",

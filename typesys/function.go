@@ -1,12 +1,16 @@
 package typesys
 
+import (
+  "bitbucket.org/yyuu/bs/duck"
+)
+
 // FunctionType
 type FunctionType struct {
-  ReturnType IType
+  ReturnType duck.IType
   ParamTypes ParamTypes
 }
 
-func NewFunctionType(ret IType, paramTypes ParamTypes) FunctionType {
+func NewFunctionType(ret duck.IType, paramTypes ParamTypes) FunctionType {
   return FunctionType { ret, paramTypes }
 }
 
@@ -64,16 +68,16 @@ func (self FunctionType) IsFunction() bool {
 
 // FunctionTypeRef
 type FunctionTypeRef struct {
-  Location ILocation
-  ReturnType ITypeRef
+  Location duck.ILocation
+  ReturnType duck.ITypeRef
   Params ParamTypeRefs
 }
 
-func NewFunctionTypeRef(returnType ITypeRef, params ITypeRef) FunctionTypeRef {
+func NewFunctionTypeRef(returnType duck.ITypeRef, params duck.ITypeRef) FunctionTypeRef {
   return FunctionTypeRef { returnType.GetLocation(), returnType, params.(ParamTypeRefs) }
 }
 
-func (self FunctionTypeRef) GetLocation() ILocation {
+func (self FunctionTypeRef) GetLocation() duck.ILocation {
   return self.Location
 }
 

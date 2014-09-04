@@ -1,12 +1,16 @@
 package typesys
 
+import (
+  "bitbucket.org/yyuu/bs/duck"
+)
+
 // PointerType
 type PointerType struct {
   PointerSize int
-  BaseType IType
+  BaseType duck.IType
 }
 
-func NewPointerType(size int, baseType IType) PointerType {
+func NewPointerType(size int, baseType duck.IType) PointerType {
   return PointerType { size, baseType }
 }
 
@@ -64,15 +68,15 @@ func (self PointerType) IsFunction() bool {
 
 // PointerTypeRef
 type PointerTypeRef struct {
-  Location ILocation
-  BaseType ITypeRef
+  Location duck.ILocation
+  BaseType duck.ITypeRef
 }
 
-func NewPointerTypeRef(baseType ITypeRef) PointerTypeRef {
+func NewPointerTypeRef(baseType duck.ITypeRef) PointerTypeRef {
   return PointerTypeRef { baseType.GetLocation(), baseType }
 }
 
-func (self PointerTypeRef) GetLocation() ILocation {
+func (self PointerTypeRef) GetLocation() duck.ILocation {
   return self.Location
 }
 

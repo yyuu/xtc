@@ -6,6 +6,7 @@ import (
   "fmt"
   "strconv"
   "bitbucket.org/yyuu/bs/ast"
+  "bitbucket.org/yyuu/bs/duck"
   "bitbucket.org/yyuu/bs/entity"
   "bitbucket.org/yyuu/bs/typesys"
 )
@@ -14,13 +15,13 @@ import (
 %union {
   _token token
 
-  _node ast.INode
-  _nodes []ast.INode
+  _node duck.INode
+  _nodes []duck.INode
 
-  _entity entity.IEntity
+  _entity duck.IEntity
 
-  _typeref typesys.ITypeRef
-  _typerefs []typesys.ITypeRef
+  _typeref duck.ITypeRef
+  _typerefs []duck.ITypeRef
 }
 
 %token SPACES
@@ -258,7 +259,7 @@ member_list: '{' member_list_body '}'
 
 member_list_body: slot ';'
                 {
-                  $$._nodes = []ast.INode { $1._node }
+                  $$._nodes = []duck.INode { $1._node }
                 }
                 | member_list_body slot ';'
                 {
@@ -314,7 +315,7 @@ typeref: typeref_base
 
 param_typerefs: VOID
               {
-                $$._typeref = typesys.NewParamTypeRefs($1._token.location, []typesys.ITypeRef { }, false)
+                $$._typeref = typesys.NewParamTypeRefs($1._token.location, []duck.ITypeRef { }, false)
               }
               | fixedparam_typerefs
               {
@@ -325,7 +326,7 @@ param_typerefs: VOID
 
 fixedparam_typerefs: typeref
                    {
-                     $$._typerefs = []typesys.ITypeRef { $1._typeref }
+                     $$._typerefs = []duck.ITypeRef { $1._typeref }
                    }
                    | fixedparam_typerefs ',' typeref
                    {
@@ -472,7 +473,7 @@ cases:
 
 default_clause: DEFAULT ':' case_body
               {
-                $$._node = ast.NewCaseNode($1._token.location, []ast.IExprNode { }, asStmt($3._node))
+                $$._node = ast.NewCaseNode($1._token.location, []duck.IExprNode { }, asStmt($3._node))
               }
               ;
 
@@ -714,7 +715,7 @@ name: IDENTIFIER
 
 args:
     {
-      $$._nodes = []ast.INode { }
+      $$._nodes = []duck.INode { }
     }
     | expr
     {

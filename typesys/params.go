@@ -1,13 +1,17 @@
 package typesys
 
+import (
+  "bitbucket.org/yyuu/bs/duck"
+)
+
 // ParamTypes
 type ParamTypes struct {
-  Location ILocation
-  ParamDescs []IType
+  Location duck.ILocation
+  ParamDescs []duck.IType
   VarArg bool
 }
 
-func NewParamTypes(loc ILocation, paramDescs []IType, vararg bool) ParamTypes {
+func NewParamTypes(loc duck.ILocation, paramDescs []duck.IType, vararg bool) ParamTypes {
   return ParamTypes { loc, paramDescs, vararg }
 }
 
@@ -65,16 +69,16 @@ func (self ParamTypes) IsFunction() bool {
 
 // ParamTypeRefs
 type ParamTypeRefs struct {
-  Location ILocation
-  ParamDescs []ITypeRef
+  Location duck.ILocation
+  ParamDescs []duck.ITypeRef
   VarArg bool
 }
 
-func NewParamTypeRefs(loc ILocation, paramDescs []ITypeRef, vararg bool) ParamTypeRefs {
+func NewParamTypeRefs(loc duck.ILocation, paramDescs []duck.ITypeRef, vararg bool) ParamTypeRefs {
   return ParamTypeRefs { loc, paramDescs, vararg }
 }
 
-func (self ParamTypeRefs) GetLocation() ILocation {
+func (self ParamTypeRefs) GetLocation() duck.ILocation {
   return self.Location
 }
 

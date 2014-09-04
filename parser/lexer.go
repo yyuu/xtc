@@ -6,6 +6,7 @@ import (
   "strings"
   "unicode/utf8"
   "bitbucket.org/yyuu/bs/ast"
+  "bitbucket.org/yyuu/bs/duck"
   "bitbucket.org/yyuu/bs/strscan"
 )
 
@@ -29,7 +30,7 @@ func (self lex) String() string {
 type token struct {
   id int
   literal string
-  location ast.Location
+  location duck.ILocation
 }
 
 func (self token) String() string {

@@ -1,14 +1,18 @@
 package entity
 
+import (
+  "bitbucket.org/yyuu/bs/duck"
+)
+
 type DefinedVariable struct {
   Private bool
   Name string
-  TypeNode ITypeNode
+  TypeNode duck.ITypeNode
   NumRefered int
-  Initializer IExprNode
+  Initializer duck.IExprNode
 }
 
-func NewDefinedVariable(isPrivate bool, t ITypeNode, name string, init IExprNode) DefinedVariable {
+func NewDefinedVariable(isPrivate bool, t duck.ITypeNode, name string, init duck.IExprNode) DefinedVariable {
   return DefinedVariable {
     Private: isPrivate,
     Name: name,
@@ -33,10 +37,10 @@ func (self DefinedVariable) HasInitializer() bool {
 type UndefinedVariable struct {
   Private bool
   Name string
-  TypeNode ITypeNode
+  TypeNode duck.ITypeNode
 }
 
-func NewUndefinedVariable(t ITypeNode, name string) UndefinedVariable {
+func NewUndefinedVariable(t duck.ITypeNode, name string) UndefinedVariable {
   return UndefinedVariable {
     Private: false,
     Name: name,

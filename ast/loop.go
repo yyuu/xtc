@@ -3,16 +3,17 @@ package ast
 import (
   "encoding/json"
   "fmt"
+  "bitbucket.org/yyuu/bs/duck"
 )
 
 // DoWhileNode
 type DoWhileNode struct {
-  Location Location
-  Body IStmtNode
-  Cond IExprNode
+  Location duck.ILocation
+  Body duck.IStmtNode
+  Cond duck.IExprNode
 }
 
-func NewDoWhileNode(location Location, body IStmtNode, cond IExprNode) DoWhileNode {
+func NewDoWhileNode(location duck.ILocation, body duck.IStmtNode, cond duck.IExprNode) DoWhileNode {
   return DoWhileNode { location, body, cond }
 }
 
@@ -23,9 +24,9 @@ func (self DoWhileNode) String() string {
 func (self DoWhileNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Body IStmtNode
-    Cond IExprNode
+    Location duck.ILocation
+    Body duck.IStmtNode
+    Cond duck.IExprNode
   }
   x.ClassName = "ast.DoWhileNode"
   x.Location = self.Location
@@ -38,20 +39,20 @@ func (self DoWhileNode) IsStmt() bool {
   return true
 }
 
-func (self DoWhileNode) GetLocation() Location {
+func (self DoWhileNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // ForNode
 type ForNode struct {
-  Location Location
-  Init IExprNode
-  Cond IExprNode
-  Incr IExprNode
-  Body IStmtNode
+  Location duck.ILocation
+  Init duck.IExprNode
+  Cond duck.IExprNode
+  Incr duck.IExprNode
+  Body duck.IStmtNode
 }
 
-func NewForNode(location Location, init IExprNode, cond IExprNode, incr IExprNode, body IStmtNode) ForNode {
+func NewForNode(location duck.ILocation, init duck.IExprNode, cond duck.IExprNode, incr duck.IExprNode, body duck.IStmtNode) ForNode {
   return ForNode { location, init, cond, incr, body }
 }
 
@@ -62,11 +63,11 @@ func (self ForNode) String() string {
 func (self ForNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Init IExprNode
-    Cond IExprNode
-    Incr IExprNode
-    Body IStmtNode
+    Location duck.ILocation
+    Init duck.IExprNode
+    Cond duck.IExprNode
+    Incr duck.IExprNode
+    Body duck.IStmtNode
   }
   x.ClassName = "ast.ForNode"
   x.Location = self.Location
@@ -81,18 +82,18 @@ func (self ForNode) IsStmt() bool {
   return true
 }
 
-func (self ForNode) GetLocation() Location {
+func (self ForNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // WhileNode
 type WhileNode struct {
-  Location Location
-  Cond IExprNode
-  Body IStmtNode
+  Location duck.ILocation
+  Cond duck.IExprNode
+  Body duck.IStmtNode
 }
 
-func NewWhileNode(location Location, cond IExprNode, body IStmtNode) WhileNode {
+func NewWhileNode(location duck.ILocation, cond duck.IExprNode, body duck.IStmtNode) WhileNode {
   return WhileNode { location, cond, body }
 }
 
@@ -103,9 +104,9 @@ func (self WhileNode) String() string {
 func (self WhileNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Cond IExprNode
-    Body IStmtNode
+    Location duck.ILocation
+    Cond duck.IExprNode
+    Body duck.IStmtNode
   }
   x.ClassName = "ast.WhileNode"
   x.Location = self.Location
@@ -118,6 +119,6 @@ func (self WhileNode) IsStmt() bool {
   return true
 }
 
-func (self WhileNode) GetLocation() Location {
+func (self WhileNode) GetLocation() duck.ILocation {
   return self.Location
 }

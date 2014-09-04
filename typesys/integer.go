@@ -1,5 +1,9 @@
 package typesys
 
+import (
+  "bitbucket.org/yyuu/bs/duck"
+)
+
 // IntegerType
 type IntegerType struct {
   IntegerSize int
@@ -65,15 +69,15 @@ func (self IntegerType) IsFunction() bool {
 
 // IntegerTypeRef
 type IntegerTypeRef struct {
-  Location ILocation
+  Location duck.ILocation
   Name string
 }
 
-func NewIntegerTypeRef(location ILocation, name string) IntegerTypeRef {
+func NewIntegerTypeRef(location duck.ILocation, name string) IntegerTypeRef {
   return IntegerTypeRef { location, name }
 }
 
-func (self IntegerTypeRef) GetLocation() ILocation {
+func (self IntegerTypeRef) GetLocation() duck.ILocation {
   return self.Location
 }
 

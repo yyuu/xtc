@@ -1,15 +1,16 @@
 package entity
 
 import (
+  "bitbucket.org/yyuu/bs/duck"
   "bitbucket.org/yyuu/bs/typesys"
 )
 
 type Params struct {
-  Location ILocation
+  Location duck.ILocation
   ParamDescs []Parameter
 }
 
-func NewParams(loc ILocation, paramDescs []Parameter) Params {
+func NewParams(loc duck.ILocation, paramDescs []Parameter) Params {
   return Params {
     Location: loc,
     ParamDescs: paramDescs,
@@ -21,7 +22,7 @@ func (self Params) IsEntity() bool {
 }
 
 func (self Params) ParametersTypeRef() typesys.ParamTypeRefs {
-  ps := make([]typesys.ITypeRef, len(self.ParamDescs))
+  ps := make([]duck.ITypeRef, len(self.ParamDescs))
   for i := range self.ParamDescs {
     ps[i] = self.ParamDescs[i].TypeNode.GetTypeRef()
   }
@@ -29,11 +30,11 @@ func (self Params) ParametersTypeRef() typesys.ParamTypeRefs {
 }
 
 type Parameter struct {
-  TypeNode ITypeNode
+  TypeNode duck.ITypeNode
   Name string
 }
 
-func NewParameter(t ITypeNode, name string) Parameter {
+func NewParameter(t duck.ITypeNode, name string) Parameter {
   return Parameter {
     TypeNode: t,
     Name: name,

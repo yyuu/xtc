@@ -2,49 +2,50 @@ package parser
 
 import (
   "bitbucket.org/yyuu/bs/ast"
+  "bitbucket.org/yyuu/bs/duck"
 )
 
-func asExpr(x ast.INode) ast.IExprNode {
-  return x.(ast.IExprNode)
+func asExpr(x duck.INode) duck.IExprNode {
+  return x.(duck.IExprNode)
 }
 
-func asExprs(xs []ast.INode) []ast.IExprNode {
-  ys := make([]ast.IExprNode, len(xs))
+func asExprs(xs []duck.INode) []duck.IExprNode {
+  ys := make([]duck.IExprNode, len(xs))
   for i := range xs {
     ys[i] = asExpr(xs[i])
   }
   return ys
 }
 
-func asStmt(x ast.INode) ast.IStmtNode {
-  return x.(ast.IStmtNode)
+func asStmt(x duck.INode) duck.IStmtNode {
+  return x.(duck.IStmtNode)
 }
 
-func asStmts(xs []ast.INode) []ast.IStmtNode {
-  ys := make([]ast.IStmtNode, len(xs))
+func asStmts(xs []duck.INode) []duck.IStmtNode {
+  ys := make([]duck.IStmtNode, len(xs))
   for i := range xs {
     ys[i] = asStmt(xs[i])
   }
   return ys
 }
 
-func asType(x ast.INode) ast.ITypeNode {
-  return x.(ast.ITypeNode)
+func asType(x duck.INode) duck.ITypeNode {
+  return x.(duck.ITypeNode)
 }
 
-func asTypes(xs []ast.INode) []ast.ITypeNode {
-  ys := make([]ast.ITypeNode, len(xs))
+func asTypes(xs []duck.INode) []duck.ITypeNode {
+  ys := make([]duck.ITypeNode, len(xs))
   for i := range xs {
     ys[i] = asType(xs[i])
   }
   return ys
 }
 
-func asSlot(x ast.INode) ast.Slot {
+func asSlot(x duck.INode) ast.Slot {
   return x.(ast.Slot)
 }
 
-func asSlots(xs []ast.INode) []ast.Slot {
+func asSlots(xs []duck.INode) []ast.Slot {
   ys := make([]ast.Slot, len(xs))
   for i := range xs {
     ys[i] = asSlot(xs[i])
@@ -52,18 +53,18 @@ func asSlots(xs []ast.INode) []ast.Slot {
   return ys
 }
 
-func asTypeDefinition(x ast.INode) ast.ITypeDefinition {
-  return x.(ast.ITypeDefinition)
+func asTypeDefinition(x duck.INode) duck.ITypeDefinition {
+  return x.(duck.ITypeDefinition)
 }
 
-func asTypeDefinitions(xs []ast.INode) []ast.ITypeDefinition {
-  ys := make([]ast.ITypeDefinition, len(xs))
+func asTypeDefinitions(xs []duck.INode) []duck.ITypeDefinition {
+  ys := make([]duck.ITypeDefinition, len(xs))
   for i := range xs {
     ys[i] = asTypeDefinition(xs[i])
   }
   return ys
 }
 
-func asDeclarations(x ast.INode) ast.Declarations {
+func asDeclarations(x duck.INode) ast.Declarations {
   return x.(ast.Declarations)
 }

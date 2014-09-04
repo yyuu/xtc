@@ -4,17 +4,18 @@ import (
   "encoding/json"
   "fmt"
   "strings"
+  "bitbucket.org/yyuu/bs/duck"
 )
 
 // CondExprNode
 type CondExprNode struct {
-  Location Location
-  Cond IExprNode
-  ThenExpr IExprNode
-  ElseExpr IExprNode
+  Location duck.ILocation
+  Cond duck.IExprNode
+  ThenExpr duck.IExprNode
+  ElseExpr duck.IExprNode
 }
 
-func NewCondExprNode(location Location, cond IExprNode, thenExpr IExprNode, elseExpr IExprNode) CondExprNode {
+func NewCondExprNode(location duck.ILocation, cond duck.IExprNode, thenExpr duck.IExprNode, elseExpr duck.IExprNode) CondExprNode {
   return CondExprNode { location, cond, thenExpr, elseExpr }
 }
 
@@ -25,10 +26,10 @@ func (self CondExprNode) String() string {
 func (self CondExprNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Cond IExprNode
-    ThenExpr IExprNode
-    ElseExpr IExprNode
+    Location duck.ILocation
+    Cond duck.IExprNode
+    ThenExpr duck.IExprNode
+    ElseExpr duck.IExprNode
   }
   x.ClassName = "ast.CondExprNode"
   x.Location = self.Location
@@ -42,18 +43,18 @@ func (self CondExprNode) IsExpr() bool {
   return true
 }
 
-func (self CondExprNode) GetLocation() Location {
+func (self CondExprNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // CaseNode
 type CaseNode struct {
-  Location Location
-  Values []IExprNode
-  Body IStmtNode
+  Location duck.ILocation
+  Values []duck.IExprNode
+  Body duck.IStmtNode
 }
 
-func NewCaseNode(location Location, values []IExprNode, body IStmtNode) CaseNode {
+func NewCaseNode(location duck.ILocation, values []duck.IExprNode, body duck.IStmtNode) CaseNode {
   return CaseNode { location, values, body }
 }
 
@@ -72,9 +73,9 @@ func (self CaseNode) String() string {
 func (self CaseNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Values []IExprNode
-    Body IStmtNode
+    Location duck.ILocation
+    Values []duck.IExprNode
+    Body duck.IStmtNode
   }
   x.ClassName = "ast.CaseNode"
   x.Location = self.Location
@@ -87,19 +88,19 @@ func (self CaseNode) IsStmt() bool {
   return true
 }
 
-func (self CaseNode) GetLocation() Location {
+func (self CaseNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // IfNode
 type IfNode struct {
-  Location Location
-  Cond IExprNode
-  ThenBody IStmtNode
-  ElseBody IStmtNode
+  Location duck.ILocation
+  Cond duck.IExprNode
+  ThenBody duck.IStmtNode
+  ElseBody duck.IStmtNode
 }
 
-func NewIfNode(location Location, cond IExprNode, thenBody IStmtNode, elseBody IStmtNode) IfNode {
+func NewIfNode(location duck.ILocation, cond duck.IExprNode, thenBody duck.IStmtNode, elseBody duck.IStmtNode) IfNode {
   return IfNode { location, cond, thenBody, elseBody }
 }
 
@@ -110,10 +111,10 @@ func (self IfNode) String() string {
 func (self IfNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Cond IExprNode
-    ThenBody IStmtNode
-    ElseBody IStmtNode
+    Location duck.ILocation
+    Cond duck.IExprNode
+    ThenBody duck.IStmtNode
+    ElseBody duck.IStmtNode
   }
   x.ClassName = "ast.IfNode"
   x.Location = self.Location
@@ -127,18 +128,18 @@ func (self IfNode) IsStmt() bool {
   return true
 }
 
-func (self IfNode) GetLocation() Location {
+func (self IfNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // SwitchNode
 type SwitchNode struct {
-  Location Location
-  Cond IExprNode
+  Location duck.ILocation
+  Cond duck.IExprNode
   Cases []CaseNode
 }
 
-func NewSwitchNode(location Location, cond IExprNode, _cases []IStmtNode) SwitchNode {
+func NewSwitchNode(location duck.ILocation, cond duck.IExprNode, _cases []duck.IStmtNode) SwitchNode {
   cases := make([]CaseNode, len(_cases))
   for i := range _cases {
     cases[i] = _cases[i].(CaseNode)
@@ -161,8 +162,8 @@ func (self SwitchNode) String() string {
 func (self SwitchNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Cond IExprNode
+    Location duck.ILocation
+    Cond duck.IExprNode
     Cases []CaseNode
   }
   x.ClassName = "ast.SwitchNode"
@@ -176,6 +177,6 @@ func (self SwitchNode) IsStmt() bool {
   return true
 }
 
-func (self SwitchNode) GetLocation() Location {
+func (self SwitchNode) GetLocation() duck.ILocation {
   return self.Location
 }

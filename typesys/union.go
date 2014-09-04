@@ -1,13 +1,17 @@
 package typesys
 
+import (
+  "bitbucket.org/yyuu/bs/duck"
+)
+
 // UnionType
 type UnionType struct {
-  Location ILocation
+  Location duck.ILocation
   Name string
-  Members []ISlot
+  Members []duck.ISlot
 }
 
-func NewUnionType(name string, membs []ISlot, loc ILocation) UnionType {
+func NewUnionType(name string, membs []duck.ISlot, loc duck.ILocation) UnionType {
   return UnionType { loc, name, membs }
 }
 
@@ -65,15 +69,15 @@ func (self UnionType) IsFunction() bool {
 
 // UnionTypeRef
 type UnionTypeRef struct {
-  Location ILocation
+  Location duck.ILocation
   Name string
 }
 
-func NewUnionTypeRef(loc ILocation, name string) UnionTypeRef {
+func NewUnionTypeRef(loc duck.ILocation, name string) UnionTypeRef {
   return UnionTypeRef { loc, name }
 }
 
-func (self UnionTypeRef) GetLocation() ILocation {
+func (self UnionTypeRef) GetLocation() duck.ILocation {
   return self.Location
 }
 

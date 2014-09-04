@@ -1,13 +1,17 @@
 package typesys
 
+import (
+  "bitbucket.org/yyuu/bs/duck"
+)
+
 // StructType
 type StructType struct {
-  Location ILocation
+  Location duck.ILocation
   Name string
-  Members []ISlot
+  Members []duck.ISlot
 }
 
-func NewStructType(name string, membs []ISlot, loc ILocation) StructType {
+func NewStructType(name string, membs []duck.ISlot, loc duck.ILocation) StructType {
   return StructType { loc, name, membs }
 }
 
@@ -65,15 +69,15 @@ func (self StructType) IsFunction() bool {
 
 // StructTypeRef
 type StructTypeRef struct {
-  Location ILocation
+  Location duck.ILocation
   Name string
 }
 
-func NewStructTypeRef(loc ILocation, name string) StructTypeRef {
+func NewStructTypeRef(loc duck.ILocation, name string) StructTypeRef {
   return StructTypeRef { loc, name }
 }
 
-func (self StructTypeRef) GetLocation() ILocation {
+func (self StructTypeRef) GetLocation() duck.ILocation {
   return self.Location
 }
 

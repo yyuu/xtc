@@ -1,13 +1,17 @@
 package ast
 
+import (
+  "bitbucket.org/yyuu/bs/duck"
+)
+
 // Slot
 type Slot struct {
-  TypeNode ITypeNode
+  TypeNode duck.ITypeNode
   Name string
   Offset int
 }
 
-func NewSlot(t ITypeNode, n string) Slot {
+func NewSlot(t duck.ITypeNode, n string) Slot {
   return Slot { t, n, -1 }
 }
 
@@ -27,6 +31,6 @@ func (self Slot) GetOffset() int {
   return self.Offset
 }
 
-func (self Slot) GetLocation() Location {
+func (self Slot) GetLocation() duck.ILocation {
   panic("Slot#GetLocation called")
 }

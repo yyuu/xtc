@@ -1,4 +1,4 @@
-package entity
+package duck
 
 type IEntity interface {
   IsEntity() bool

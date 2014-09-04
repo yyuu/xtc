@@ -3,17 +3,17 @@ package ast
 import (
   "encoding/json"
   "fmt"
-  "bitbucket.org/yyuu/bs/typesys"
+  "bitbucket.org/yyuu/bs/duck"
 )
 
 // CastNode
 type CastNode struct {
-  Location Location
-  Type ITypeNode
-  Expr IExprNode
+  Location duck.ILocation
+  Type duck.ITypeNode
+  Expr duck.IExprNode
 }
 
-func NewCastNode(location Location, t ITypeNode, expr IExprNode) CastNode {
+func NewCastNode(location duck.ILocation, t duck.ITypeNode, expr duck.IExprNode) CastNode {
   return CastNode { location, t, expr }
 }
 
@@ -24,9 +24,9 @@ func (self CastNode) String() string {
 func (self CastNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Type ITypeNode
-    Expr IExprNode
+    Location duck.ILocation
+    Type duck.ITypeNode
+    Expr duck.IExprNode
   }
   x.ClassName = "ast.CastNode"
   x.Location = self.Location
@@ -39,18 +39,18 @@ func (self CastNode) IsExpr() bool {
   return true
 }
 
-func (self CastNode) GetLocation() Location {
+func (self CastNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // SizeofExprNode
 type SizeofExprNode struct {
-  Location Location
-  Expr IExprNode
-  Type ITypeNode
+  Location duck.ILocation
+  Expr duck.IExprNode
+  Type duck.ITypeNode
 }
 
-func NewSizeofExprNode(location Location, expr IExprNode, t typesys.ITypeRef) SizeofExprNode {
+func NewSizeofExprNode(location duck.ILocation, expr duck.IExprNode, t duck.ITypeRef) SizeofExprNode {
   return SizeofExprNode { location, expr, NewTypeNode(location, t) }
 }
 
@@ -61,9 +61,9 @@ func (self SizeofExprNode) String() string {
 func (self SizeofExprNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Expr IExprNode
-    Type ITypeNode
+    Location duck.ILocation
+    Expr duck.IExprNode
+    Type duck.ITypeNode
   }
   x.ClassName = "ast.SizeofExprNode"
   x.Location = self.Location
@@ -76,18 +76,18 @@ func (self SizeofExprNode) IsExpr() bool {
   return true
 }
 
-func (self SizeofExprNode) GetLocation() Location {
+func (self SizeofExprNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // SizeofTypeNode
 type SizeofTypeNode struct {
-  Location Location
-  Type ITypeNode
-  Operand ITypeNode
+  Location duck.ILocation
+  Type duck.ITypeNode
+  Operand duck.ITypeNode
 }
 
-func NewSizeofTypeNode(location Location, operand ITypeNode, t typesys.ITypeRef) SizeofTypeNode {
+func NewSizeofTypeNode(location duck.ILocation, operand duck.ITypeNode, t duck.ITypeRef) SizeofTypeNode {
   return SizeofTypeNode { location, operand, NewTypeNode(location, t) }
 }
 
@@ -98,9 +98,9 @@ func (self SizeofTypeNode) String() string {
 func (self SizeofTypeNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Type ITypeNode
-    Operand ITypeNode
+    Location duck.ILocation
+    Type duck.ITypeNode
+    Operand duck.ITypeNode
   }
   x.ClassName = "ast.SizeofTypeNode"
   x.Location = self.Location
@@ -113,17 +113,17 @@ func (self SizeofTypeNode) IsExpr() bool {
   return true
 }
 
-func (self SizeofTypeNode) GetLocation() Location {
+func (self SizeofTypeNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // TypeNode
 type TypeNode struct {
-  Location Location
-  TypeRef typesys.ITypeRef
+  Location duck.ILocation
+  TypeRef duck.ITypeRef
 }
 
-func NewTypeNode(location Location, t typesys.ITypeRef) TypeNode {
+func NewTypeNode(location duck.ILocation, t duck.ITypeRef) TypeNode {
   return TypeNode { location, t }
 }
 
@@ -134,8 +134,8 @@ func (self TypeNode) String() string {
 func (self TypeNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    TypeRef typesys.ITypeRef
+    Location duck.ILocation
+    TypeRef duck.ITypeRef
   }
   x.ClassName = "ast.TypeNode"
   x.Location = self.Location
@@ -143,7 +143,7 @@ func (self TypeNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self TypeNode) GetTypeRef() typesys.ITypeRef {
+func (self TypeNode) GetTypeRef() duck.ITypeRef {
   return self.TypeRef
 }
 
@@ -151,18 +151,18 @@ func (self TypeNode) IsType() bool {
   return true
 }
 
-func (self TypeNode) GetLocation() Location {
+func (self TypeNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // TypedefNode
 type TypedefNode struct {
-  Location Location
-  Real typesys.ITypeRef
+  Location duck.ILocation
+  Real duck.ITypeRef
   Name string
 }
 
-func NewTypedefNode(location Location, real typesys.ITypeRef, name string) TypedefNode {
+func NewTypedefNode(location duck.ILocation, real duck.ITypeRef, name string) TypedefNode {
   return TypedefNode { location, real, name }
 }
 
@@ -173,8 +173,8 @@ func (self TypedefNode) String() string {
 func (self TypedefNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Real typesys.ITypeRef
+    Location duck.ILocation
+    Real duck.ITypeRef
     Name string
   }
   x.ClassName = "ast.TypedefNode"
@@ -188,18 +188,18 @@ func (self TypedefNode) IsTypeDefinition() bool {
   return true
 }
 
-func (self TypedefNode) GetLocation() Location {
+func (self TypedefNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // TypeDefinition
 type TypeDefinition struct {
-  Location Location
+  Location duck.ILocation
   Name string
-  TypeNode ITypeNode
+  TypeNode duck.ITypeNode
 }
 
-func NewTypeDefinition(loc Location, ref typesys.ITypeRef, name string) TypeDefinition {
+func NewTypeDefinition(loc duck.ILocation, ref duck.ITypeRef, name string) TypeDefinition {
   return TypeDefinition { loc, name, NewTypeNode(loc, ref) }
 }
 
@@ -215,6 +215,6 @@ func (self TypeDefinition) IsTypeDefinition() bool {
   return true
 }
 
-func (self TypeDefinition) GetLocation() Location {
+func (self TypeDefinition) GetLocation() duck.ILocation {
   return self.Location
 }

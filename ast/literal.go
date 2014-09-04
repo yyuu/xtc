@@ -4,15 +4,16 @@ import (
   "encoding/json"
   "fmt"
   "strings"
+  "bitbucket.org/yyuu/bs/duck"
 )
 
 // IntegerLiteralNode
 type IntegerLiteralNode struct {
-  Location Location
+  Location duck.ILocation
   Value int
 }
 
-func NewIntegerLiteralNode(location Location, literal string) IntegerLiteralNode {
+func NewIntegerLiteralNode(location duck.ILocation, literal string) IntegerLiteralNode {
   var value int
   var err error
   if ( strings.Index(literal, "'") == 0 && strings.LastIndex(literal, "'") == len(literal)-1 ) && 2 < len(literal) {
@@ -44,7 +45,7 @@ func (self IntegerLiteralNode) String() string {
 func (self IntegerLiteralNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
+    Location duck.ILocation
     Value int
   }
   x.ClassName = "ast.IntegerLiteralNode"
@@ -57,17 +58,17 @@ func (self IntegerLiteralNode) IsExpr() bool {
   return true
 }
 
-func (self IntegerLiteralNode) GetLocation() Location {
+func (self IntegerLiteralNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // StringLiteralNode
 type StringLiteralNode struct {
-  Location Location
+  Location duck.ILocation
   Value string
 }
 
-func NewStringLiteralNode(location Location, literal string) StringLiteralNode {
+func NewStringLiteralNode(location duck.ILocation, literal string) StringLiteralNode {
   return StringLiteralNode { location, literal }
 }
 
@@ -78,7 +79,7 @@ func (self StringLiteralNode) String() string {
 func (self StringLiteralNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
+    Location duck.ILocation
     Value string
   }
   x.ClassName = "ast.StringLiteralNode"
@@ -91,6 +92,6 @@ func (self StringLiteralNode) IsExpr() bool {
   return true
 }
 
-func (self StringLiteralNode) GetLocation() Location {
+func (self StringLiteralNode) GetLocation() duck.ILocation {
   return self.Location
 }

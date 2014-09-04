@@ -4,17 +4,18 @@ import (
   "encoding/json"
   "fmt"
   "strings"
+  "bitbucket.org/yyuu/bs/duck"
 )
 
 // BlockNode
 type BlockNode struct {
-  Location Location
+  Location duck.ILocation
 // Variables []DefinedVariable
-  Variables []IExprNode
-  Stmts []IStmtNode
+  Variables []duck.IExprNode
+  Stmts []duck.IStmtNode
 }
 
-func NewBlockNode(location Location, variables []IExprNode, stmts []IStmtNode) BlockNode {
+func NewBlockNode(location duck.ILocation, variables []duck.IExprNode, stmts []duck.IStmtNode) BlockNode {
   return BlockNode { location, variables, stmts }
 }
 
@@ -45,9 +46,9 @@ func (self BlockNode) String() string {
 func (self BlockNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Variables []IExprNode
-    Stmts []IStmtNode
+    Location duck.ILocation
+    Variables []duck.IExprNode
+    Stmts []duck.IStmtNode
   }
   x.ClassName = "ast.BlockNode"
   x.Location = self.Location
@@ -60,6 +61,6 @@ func (self BlockNode) IsStmt() bool {
   return true
 }
 
-func (self BlockNode) GetLocation() Location {
+func (self BlockNode) GetLocation() duck.ILocation {
   return self.Location
 }

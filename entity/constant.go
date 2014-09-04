@@ -1,12 +1,16 @@
 package entity
 
+import (
+  "bitbucket.org/yyuu/bs/duck"
+)
+
 type Constant struct {
   Name string
-  TypeNode ITypeNode
-  Value IExprNode
+  TypeNode duck.ITypeNode
+  Value duck.IExprNode
 }
 
-func NewConstant(name string, t ITypeNode, value IExprNode) Constant {
+func NewConstant(name string, t duck.ITypeNode, value duck.IExprNode) Constant {
   return Constant {
     Name: name,
     TypeNode: t,

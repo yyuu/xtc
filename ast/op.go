@@ -3,17 +3,18 @@ package ast
 import (
   "encoding/json"
   "fmt"
+  "bitbucket.org/yyuu/bs/duck"
 )
 
 // BinaryOpNode
 type BinaryOpNode struct {
-  Location Location
+  Location duck.ILocation
   Operator string
-  Left IExprNode
-  Right IExprNode
+  Left duck.IExprNode
+  Right duck.IExprNode
 }
 
-func NewBinaryOpNode(location Location, operator string, left IExprNode, right IExprNode) BinaryOpNode {
+func NewBinaryOpNode(location duck.ILocation, operator string, left duck.IExprNode, right duck.IExprNode) BinaryOpNode {
   return BinaryOpNode { location, operator, left, right }
 }
 
@@ -33,10 +34,10 @@ func (self BinaryOpNode) String() string {
 func (self BinaryOpNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
+    Location duck.ILocation
     Operator string
-    Left IExprNode
-    Right IExprNode
+    Left duck.IExprNode
+    Right duck.IExprNode
   }
   x.ClassName = "ast.BinaryOpNode"
   x.Location = self.Location
@@ -50,18 +51,18 @@ func (self BinaryOpNode) IsExpr() bool {
   return true
 }
 
-func (self BinaryOpNode) GetLocation() Location {
+func (self BinaryOpNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // LogicalAndNode
 type LogicalAndNode struct {
-  Location Location
-  Left IExprNode
-  Right IExprNode
+  Location duck.ILocation
+  Left duck.IExprNode
+  Right duck.IExprNode
 }
 
-func NewLogicalAndNode(location Location, left IExprNode, right IExprNode) LogicalAndNode {
+func NewLogicalAndNode(location duck.ILocation, left duck.IExprNode, right duck.IExprNode) LogicalAndNode {
   return LogicalAndNode { location, left, right }
 }
 
@@ -72,9 +73,9 @@ func (self LogicalAndNode) String() string {
 func (self LogicalAndNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Left IExprNode
-    Right IExprNode
+    Location duck.ILocation
+    Left duck.IExprNode
+    Right duck.IExprNode
   }
   x.ClassName = "ast.LogicalAndNode"
   x.Location = self.Location
@@ -87,18 +88,18 @@ func (self LogicalAndNode) IsExpr() bool {
   return true
 }
 
-func (self LogicalAndNode) GetLocation() Location {
+func (self LogicalAndNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // LogicalOrNode
 type LogicalOrNode struct {
-  Location Location
-  Left IExprNode
-  Right IExprNode
+  Location duck.ILocation
+  Left duck.IExprNode
+  Right duck.IExprNode
 }
 
-func NewLogicalOrNode(location Location, left IExprNode, right IExprNode) LogicalOrNode {
+func NewLogicalOrNode(location duck.ILocation, left duck.IExprNode, right duck.IExprNode) LogicalOrNode {
   return LogicalOrNode { location, left, right }
 }
 
@@ -109,9 +110,9 @@ func (self LogicalOrNode) String() string {
 func (self LogicalOrNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
-    Left IExprNode
-    Right IExprNode
+    Location duck.ILocation
+    Left duck.IExprNode
+    Right duck.IExprNode
   }
   x.ClassName = "ast.LogicalOrNode"
   x.Location = self.Location
@@ -124,18 +125,18 @@ func (self LogicalOrNode) IsExpr() bool {
   return true
 }
 
-func (self LogicalOrNode) GetLocation() Location {
+func (self LogicalOrNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // PrefixOpNode
 type PrefixOpNode struct {
-  Location Location
+  Location duck.ILocation
   Operator string
-  Expr IExprNode
+  Expr duck.IExprNode
 }
 
-func NewPrefixOpNode(location Location, operator string, expr IExprNode) PrefixOpNode {
+func NewPrefixOpNode(location duck.ILocation, operator string, expr duck.IExprNode) PrefixOpNode {
   return PrefixOpNode { location, operator, expr }
 }
 
@@ -150,9 +151,9 @@ func (self PrefixOpNode) String() string {
 func (self PrefixOpNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
+    Location duck.ILocation
     Operator string
-    Expr IExprNode
+    Expr duck.IExprNode
   }
   x.ClassName = "ast.PrefixOpNode"
   x.Location = self.Location
@@ -165,18 +166,18 @@ func (self PrefixOpNode) IsExpr() bool {
   return true
 }
 
-func (self PrefixOpNode) GetLocation() Location {
+func (self PrefixOpNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // SuffixOpNode
 type SuffixOpNode struct {
-  Location Location
+  Location duck.ILocation
   Operator string
-  Expr IExprNode
+  Expr duck.IExprNode
 }
 
-func NewSuffixOpNode(location Location, operator string, expr IExprNode) SuffixOpNode {
+func NewSuffixOpNode(location duck.ILocation, operator string, expr duck.IExprNode) SuffixOpNode {
   return SuffixOpNode { location, operator, expr }
 }
 
@@ -191,9 +192,9 @@ func (self SuffixOpNode) String() string {
 func (self SuffixOpNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
+    Location duck.ILocation
     Operator string
-    Expr IExprNode
+    Expr duck.IExprNode
   }
   x.ClassName = "ast.SuffixOpNode"
   x.Location = self.Location
@@ -206,18 +207,18 @@ func (self SuffixOpNode) IsExpr() bool {
   return true
 }
 
-func (self SuffixOpNode) GetLocation() Location {
+func (self SuffixOpNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
 // UnaryOpNode
 type UnaryOpNode struct {
-  Location Location
+  Location duck.ILocation
   Operator string
-  Expr IExprNode
+  Expr duck.IExprNode
 }
 
-func NewUnaryOpNode(location Location, operator string, expr IExprNode) UnaryOpNode {
+func NewUnaryOpNode(location duck.ILocation, operator string, expr duck.IExprNode) UnaryOpNode {
   return UnaryOpNode { location, operator, expr }
 }
 
@@ -231,9 +232,9 @@ func (self UnaryOpNode) String() string {
 func (self UnaryOpNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Location Location
+    Location duck.ILocation
     Operator string
-    Expr IExprNode
+    Expr duck.IExprNode
   }
   x.ClassName = "ast.UnaryOpNode"
   x.Location = self.Location
@@ -246,6 +247,6 @@ func (self UnaryOpNode) IsExpr() bool {
   return true
 }
 
-func (self UnaryOpNode) GetLocation() Location {
+func (self UnaryOpNode) GetLocation() duck.ILocation {
   return self.Location
 }

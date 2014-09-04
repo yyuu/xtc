@@ -1,13 +1,17 @@
 package typesys
 
+import (
+  "bitbucket.org/yyuu/bs/duck"
+)
+
 // ArrayType
 type ArrayType struct {
-  BaseType IType
+  BaseType duck.IType
   Length int
   PointerSize int
 }
 
-func NewArrayType(baseType IType, length int, pointerSize int) ArrayType {
+func NewArrayType(baseType duck.IType, length int, pointerSize int) ArrayType {
   return ArrayType { baseType, length, pointerSize }
 }
 
@@ -65,16 +69,16 @@ func (self ArrayType) IsFunction() bool {
 
 // ArrayTypeRef
 type ArrayTypeRef struct {
-  Location ILocation
-  BaseType ITypeRef
+  Location duck.ILocation
+  BaseType duck.ITypeRef
   Length int
 }
 
-func NewArrayTypeRef(baseType ITypeRef, length int) ArrayTypeRef {
+func NewArrayTypeRef(baseType duck.ITypeRef, length int) ArrayTypeRef {
   return ArrayTypeRef { baseType.GetLocation(), baseType, length }
 }
 
-func (self ArrayTypeRef) GetLocation() ILocation {
+func (self ArrayTypeRef) GetLocation() duck.ILocation {
   return self.Location
 }
 

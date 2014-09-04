@@ -1,14 +1,18 @@
 package entity
 
+import (
+  "bitbucket.org/yyuu/bs/duck"
+)
+
 type DefinedFunction struct {
   Private bool
-  TypeNode ITypeNode
+  TypeNode duck.ITypeNode
   Name string
   Params Params
-  Body IStmtNode
+  Body duck.IStmtNode
 }
 
-func NewDefinedFunction(priv bool, t ITypeNode, name string, params Params, body IStmtNode) DefinedFunction {
+func NewDefinedFunction(priv bool, t duck.ITypeNode, name string, params Params, body duck.IStmtNode) DefinedFunction {
   return DefinedFunction {
     Private: priv,
     TypeNode: t,
@@ -23,12 +27,12 @@ func (self DefinedFunction) IsEntity() bool {
 }
 
 type UndefinedFunction struct {
-  TypeNode ITypeNode
+  TypeNode duck.ITypeNode
   Name string
   Params Params
 }
 
-func NewUndefinedFunction(t ITypeNode, name string, params Params) UndefinedFunction {
+func NewUndefinedFunction(t duck.ITypeNode, name string, params Params) UndefinedFunction {
   return UndefinedFunction {
     TypeNode: t,
     Name: name,

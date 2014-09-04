@@ -5,6 +5,9 @@
 go test -i ./strscan
 go test -v ./strscan
 
+go test -i ./duck
+go test -v ./duck
+
 go test -i ./ast
 go test -v ./ast
 

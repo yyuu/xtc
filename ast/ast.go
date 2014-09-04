@@ -3,35 +3,8 @@ package ast
 import (
   "fmt"
   "strings"
-  "bitbucket.org/yyuu/bs/typesys"
+  "bitbucket.org/yyuu/bs/duck"
 )
-
-type INode interface {
-  String() string
-  MarshalJSON() ([]byte, error)
-  GetLocation() Location
-}
-
-type IExprNode interface {
-  INode
-  IsExpr() bool
-}
-
-type IStmtNode interface {
-  INode
-  IsStmt() bool
-}
-
-type ITypeNode interface {
-  INode
-  IsType() bool
-  GetTypeRef() typesys.ITypeRef
-}
-
-type ITypeDefinition interface {
-  INode
-  IsTypeDefinition() bool
-}
 
 type Location struct {
   SourceName string
@@ -39,7 +12,7 @@ type Location struct {
   LineOffset int
 }
 
-func NewLocation(sourceName string, lineNumber int, lineOffset int) Location {
+func NewLocation(sourceName string, lineNumber int, lineOffset int) duck.ILocation {
   return Location { sourceName, lineNumber, lineOffset }
 }
 
@@ -65,7 +38,7 @@ func (self Location) MarshalJSON() ([]byte, error) {
 }
 
 type AST struct {
-  Stmts []IStmtNode
+  Stmts []duck.IStmtNode
 }
 
 func (self AST) String() string {

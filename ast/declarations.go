@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "bitbucket.org/yyuu/bs/duck"
   "bitbucket.org/yyuu/bs/entity"
 )
 
@@ -140,7 +141,7 @@ func (self Declarations) MarshalJSON() ([]byte, error) {
   panic("Declarations#MarshalJSON called")
 }
 
-func (self Declarations) GetLocation() Location {
+func (self Declarations) GetLocation() duck.ILocation {
   panic("Declarations#GetLocation called")
 }
 
