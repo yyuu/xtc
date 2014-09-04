@@ -1,6 +1,7 @@
 package entity
 
 import (
+  "encoding/json"
   "bitbucket.org/yyuu/bs/duck"
   "bitbucket.org/yyuu/bs/typesys"
 )
@@ -15,6 +16,22 @@ func NewParams(loc duck.ILocation, paramDescs []Parameter) Params {
     Location: loc,
     ParamDescs: paramDescs,
   }
+}
+
+func (self Params) String() string {
+  panic("Params#String called")
+}
+
+func (self Params) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location duck.ILocation
+    ParamDescs []Parameter
+  }
+  x.ClassName = "entity.Params"
+  x.Location = self.Location
+  x.ParamDescs = self.ParamDescs
+  return json.Marshal(x)
 }
 
 func (self Params) IsEntity() bool {
@@ -39,6 +56,22 @@ func NewParameter(t duck.ITypeNode, name string) Parameter {
     TypeNode: t,
     Name: name,
   }
+}
+
+func (self Parameter) String() string {
+  panic("Parameter#String called")
+}
+
+func (self Parameter) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    TypeNode duck.ITypeNode
+    Name string
+  }
+  x.ClassName = "entity.Parameter"
+  x.TypeNode = self.TypeNode
+  x.Name = self.Name
+  return json.Marshal(x)
 }
 
 func (self Parameter) IsEntity() bool {

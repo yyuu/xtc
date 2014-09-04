@@ -1,6 +1,7 @@
 package typesys
 
 import (
+  "encoding/json"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -13,6 +14,24 @@ type UnionType struct {
 
 func NewUnionType(name string, membs []duck.ISlot, loc duck.ILocation) UnionType {
   return UnionType { loc, name, membs }
+}
+
+func (self UnionType) String() string {
+  panic("UnionType#String called")
+}
+
+func (self UnionType) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location duck.ILocation
+    Name string
+    Members []duck.ISlot
+  }
+  x.ClassName = "typesys.UnionType"
+  x.Location = self.Location
+  x.Name = self.Name
+  x.Members = self.Members
+  return json.Marshal(x)
 }
 
 func (self UnionType) Size() int {
@@ -75,6 +94,22 @@ type UnionTypeRef struct {
 
 func NewUnionTypeRef(loc duck.ILocation, name string) UnionTypeRef {
   return UnionTypeRef { loc, name }
+}
+
+func (self UnionTypeRef) String() string {
+  panic("UnionTypeRef#String called")
+}
+
+func (self UnionTypeRef) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location duck.ILocation
+    Name string
+  }
+  x.ClassName = "typesys.UnionTypeRef"
+  x.Location = self.Location
+  x.Name = self.Name
+  return json.Marshal(x)
 }
 
 func (self UnionTypeRef) GetLocation() duck.ILocation {

@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "encoding/json"
   "bitbucket.org/yyuu/bs/duck"
   "bitbucket.org/yyuu/bs/entity"
 )
@@ -138,7 +139,27 @@ func (self Declarations) String() string {
 }
 
 func (self Declarations) MarshalJSON() ([]byte, error) {
-  panic("Declarations#MarshalJSON called")
+  var x struct {
+    ClassName string
+    Defvars []entity.DefinedVariable
+    Vardecls []entity.UndefinedVariable
+    Defuns []entity.DefinedFunction
+    Funcdecls []entity.UndefinedFunction
+    Constants []entity.Constant
+    Defstructs []StructNode
+    Defunions []UnionNode
+    Typedefs []TypedefNode
+  }
+  x.ClassName = "ast.Declarations"
+  x.Defvars = self.Defvars
+  x.Vardecls = self.Vardecls
+  x.Defuns = self.Defuns
+  x.Funcdecls = self.Funcdecls
+  x.Constants = self.Constants
+  x.Defstructs = self.Defstructs
+  x.Defunions = self.Defunions
+  x.Typedefs = self.Typedefs
+  return json.Marshal(x)
 }
 
 func (self Declarations) GetLocation() duck.ILocation {

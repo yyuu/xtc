@@ -1,6 +1,7 @@
 package typesys
 
 import (
+  "encoding/json"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -13,6 +14,24 @@ type StructType struct {
 
 func NewStructType(name string, membs []duck.ISlot, loc duck.ILocation) StructType {
   return StructType { loc, name, membs }
+}
+
+func (self StructType) String() string {
+  panic("StructType#String called")
+}
+
+func (self StructType) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location duck.ILocation
+    Name string
+    Members []duck.ISlot
+  }
+  x.ClassName = "typesys.StructType"
+  x.Location = self.Location
+  x.Name = self.Name
+  x.Members = self.Members
+  return json.Marshal(x)
 }
 
 func (self StructType) Size() int {
@@ -75,6 +94,22 @@ type StructTypeRef struct {
 
 func NewStructTypeRef(loc duck.ILocation, name string) StructTypeRef {
   return StructTypeRef { loc, name }
+}
+
+func (self StructTypeRef) String() string {
+  panic("StructTypeRef#String called")
+}
+
+func (self StructTypeRef) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location duck.ILocation
+    Name string
+  }
+  x.ClassName = "typesys.StructTypeRef"
+  x.Location = self.Location
+  x.Name = self.Name
+  return json.Marshal(x)
 }
 
 func (self StructTypeRef) GetLocation() duck.ILocation {

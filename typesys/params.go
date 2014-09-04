@@ -1,6 +1,7 @@
 package typesys
 
 import (
+  "encoding/json"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -8,11 +9,29 @@ import (
 type ParamTypes struct {
   Location duck.ILocation
   ParamDescs []duck.IType
-  VarArg bool
+  Vararg bool
 }
 
 func NewParamTypes(loc duck.ILocation, paramDescs []duck.IType, vararg bool) ParamTypes {
   return ParamTypes { loc, paramDescs, vararg }
+}
+
+func (self ParamTypes) String() string {
+  panic("ParamTypes#String called")
+}
+
+func (self ParamTypes) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location duck.ILocation
+    ParamDescs []duck.IType
+    VarArg bool
+  }
+  x.ClassName = "typesys.ParamTypes"
+  x.Location = self.Location
+  x.ParamDescs = self.ParamDescs
+  x.VarArg = self.Vararg
+  return json.Marshal(x)
 }
 
 func (self ParamTypes) Size() int {
@@ -71,11 +90,29 @@ func (self ParamTypes) IsFunction() bool {
 type ParamTypeRefs struct {
   Location duck.ILocation
   ParamDescs []duck.ITypeRef
-  VarArg bool
+  Vararg bool
 }
 
 func NewParamTypeRefs(loc duck.ILocation, paramDescs []duck.ITypeRef, vararg bool) ParamTypeRefs {
   return ParamTypeRefs { loc, paramDescs, vararg }
+}
+
+func (self ParamTypeRefs) String() string {
+  panic("ParamTypeRefs#String called")
+}
+
+func (self ParamTypeRefs) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location duck.ILocation
+    ParamDescs []duck.ITypeRef
+    Vararg bool
+  }
+  x.ClassName = "typesys.ParamTypeRefs"
+  x.Location = self.Location
+  x.ParamDescs = self.ParamDescs
+  x.Vararg = self.Vararg
+  return json.Marshal(x)
 }
 
 func (self ParamTypeRefs) GetLocation() duck.ILocation {

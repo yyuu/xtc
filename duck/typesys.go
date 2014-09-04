@@ -2,6 +2,9 @@ package duck
 
 // IType
 type IType interface {
+  String() string
+  MarshalJSON() ([]byte, error)
+
   Size() int
   AllocSize() int
   Alignment() int
@@ -20,11 +23,18 @@ type IType interface {
 
 // ITypeRef
 type ITypeRef interface {
+  String() string
+  MarshalJSON() ([]byte, error)
+
   GetLocation() ILocation
   IsTypeRef() bool
 }
 
 type ISlot interface {
+  String() string
+  MarshalJSON() ([]byte, error)
+
   GetName() string
   GetOffset() int
 }
+

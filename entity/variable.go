@@ -1,6 +1,7 @@
 package entity
 
 import (
+  "encoding/json"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -20,6 +21,28 @@ func NewDefinedVariable(isPrivate bool, t duck.ITypeNode, name string, init duck
     NumRefered: 0,
     Initializer: init,
   }
+}
+
+func (self DefinedVariable) String() string {
+  panic("DefinedVariable#String called")
+}
+
+func (self DefinedVariable) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Private bool
+    Name string
+    TypeNode duck.ITypeNode
+    NumRefered int
+    Initializer duck.IExprNode
+  }
+  x.ClassName = "entity.DefinedVariable"
+  x.Private = self.Private
+  x.Name = self.Name
+  x.TypeNode = self.TypeNode
+  x.NumRefered = self.NumRefered
+  x.Initializer = self.Initializer
+  return json.Marshal(x)
 }
 
 func (self DefinedVariable) IsEntity() bool {
@@ -46,6 +69,24 @@ func NewUndefinedVariable(t duck.ITypeNode, name string) UndefinedVariable {
     Name: name,
     TypeNode: t,
   }
+}
+
+func (self UndefinedVariable) String() string {
+  panic("UndefinedVariable#String called")
+}
+
+func (self UndefinedVariable) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Private bool
+    Name string
+    TypeNode duck.ITypeNode
+  }
+  x.ClassName = "entity.UndefinedVariable"
+  x.Private = self.Private
+  x.Name = self.Name
+  x.TypeNode = self.TypeNode
+  return json.Marshal(x)
 }
 
 func (self UndefinedVariable) IsEntity() bool {

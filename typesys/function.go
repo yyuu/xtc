@@ -1,6 +1,7 @@
 package typesys
 
 import (
+  "encoding/json"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -12,6 +13,22 @@ type FunctionType struct {
 
 func NewFunctionType(ret duck.IType, paramTypes ParamTypes) FunctionType {
   return FunctionType { ret, paramTypes }
+}
+
+func (self FunctionType) String() string {
+  panic("FunctionType#String called")
+}
+
+func (self FunctionType) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    ReturnType duck.IType
+    ParamTypes ParamTypes
+  }
+  x.ClassName = "typesys.FunctionType"
+  x.ReturnType = self.ReturnType
+  x.ParamTypes = self.ParamTypes
+  return json.Marshal(x)
 }
 
 func (self FunctionType) Size() int {
@@ -75,6 +92,24 @@ type FunctionTypeRef struct {
 
 func NewFunctionTypeRef(returnType duck.ITypeRef, params duck.ITypeRef) FunctionTypeRef {
   return FunctionTypeRef { returnType.GetLocation(), returnType, params.(ParamTypeRefs) }
+}
+
+func (self FunctionTypeRef) String() string {
+  panic("FunctionTypeRef#String called")
+}
+
+func (self FunctionTypeRef) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location duck.ILocation
+    ReturnType duck.ITypeRef
+    Params ParamTypeRefs
+  }
+  x.ClassName = "typesys.FunctionTypeRef"
+  x.Location = self.Location
+  x.ReturnType = self.ReturnType
+  x.Params = self.Params
+  return json.Marshal(x)
 }
 
 func (self FunctionTypeRef) GetLocation() duck.ILocation {

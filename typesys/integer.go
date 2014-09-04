@@ -1,6 +1,7 @@
 package typesys
 
 import (
+  "encoding/json"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -13,6 +14,24 @@ type IntegerType struct {
 
 func NewIntegerType(size int, isSigned bool, name string) IntegerType {
   return IntegerType { size, isSigned, name }
+}
+
+func (self IntegerType) String() string {
+  panic("IntegerType#String called")
+}
+
+func (self IntegerType) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    IntegerSize int
+    Signed bool
+    Name string
+  }
+  x.ClassName = "typesys.IntegerType"
+  x.IntegerSize = self.IntegerSize
+  x.Signed = self.Signed
+  x.Name = self.Name
+  return json.Marshal(x)
 }
 
 func (self IntegerType) Size() int {
@@ -75,6 +94,22 @@ type IntegerTypeRef struct {
 
 func NewIntegerTypeRef(location duck.ILocation, name string) IntegerTypeRef {
   return IntegerTypeRef { location, name }
+}
+
+func (self IntegerTypeRef) String() string {
+  panic("IntegerTypeRef#String called")
+}
+
+func (self IntegerTypeRef) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location duck.ILocation
+    Name string
+  }
+  x.ClassName = "typesys.IntegerTypeRef"
+  x.Location = self.Location
+  x.Name = self.Name
+  return json.Marshal(x)
 }
 
 func (self IntegerTypeRef) GetLocation() duck.ILocation {

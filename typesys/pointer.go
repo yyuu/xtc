@@ -1,6 +1,7 @@
 package typesys
 
 import (
+  "encoding/json"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -12,6 +13,22 @@ type PointerType struct {
 
 func NewPointerType(size int, baseType duck.IType) PointerType {
   return PointerType { size, baseType }
+}
+
+func (self PointerType) String() string {
+  panic("PointerType#String called")
+}
+
+func (self PointerType) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    PointerSize int
+    BaseType duck.IType
+  }
+  x.ClassName = "typesys.PointerType"
+  x.PointerSize = self.PointerSize
+  x.BaseType = self.BaseType
+  return json.Marshal(x)
 }
 
 func (self PointerType) Size() int {
@@ -74,6 +91,22 @@ type PointerTypeRef struct {
 
 func NewPointerTypeRef(baseType duck.ITypeRef) PointerTypeRef {
   return PointerTypeRef { baseType.GetLocation(), baseType }
+}
+
+func (self PointerTypeRef) String() string {
+  panic("PointerTypeRef#String called")
+}
+
+func (self PointerTypeRef) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location duck.ILocation
+    BaseType duck.ITypeRef
+  }
+  x.ClassName = "typesys.PointerTypeRef"
+  x.Location = self.Location
+  x.BaseType = self.BaseType
+  return json.Marshal(x)
 }
 
 func (self PointerTypeRef) GetLocation() duck.ILocation {

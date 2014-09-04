@@ -2,7 +2,6 @@ package ast
 
 import (
   "fmt"
-  "strings"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -38,16 +37,19 @@ func (self Location) MarshalJSON() ([]byte, error) {
 }
 
 type AST struct {
-  Stmts []duck.IStmtNode
+  Location duck.ILocation
+  Declarations Declarations
+}
+
+func NewAST(source duck.ILocation, declarations Declarations) AST {
+  return AST {
+    Location: source,
+    Declarations: declarations,
+  }
 }
 
 func (self AST) String() string {
-  xs := make([]string, len(self.Stmts))
-  for i := range self.Stmts {
-    stmt := self.Stmts[i]
-    xs[i] = fmt.Sprintf(";; %s\n%s", stmt.GetLocation(), stmt)
-  }
-  return strings.Join(xs, "\n")
+  return fmt.Sprintf(";; %s\n%s", self.Location, self.Declarations)
 }
 
 type ASTVisitor interface {

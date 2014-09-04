@@ -89,10 +89,12 @@ import (
 %%
 
 compilation_unit:
-                | stmts
+                | import_stmts top_defs
                 {
                   if lex, ok := yylex.(*lex); ok {
-                    lex.ast = &ast.AST { asStmts($1._nodes) }
+//                  ast := ast.NewAST($1._token.location, asDeclarations($2._node))
+                    ast := ast.NewAST($2._token.location, asDeclarations($2._node))
+                    lex.ast = &ast
                   } else {
                     panic("parser is broken")
                   }
@@ -198,7 +200,7 @@ defconst: CONST type name '=' expr ';'
 defun: storage typeref name '(' params ')' block
      {
        priv := $1._token.literal == "storage"
-       ps := asParams($6._entity)
+       ps := asParams($5._entity)
        t := typesys.NewFunctionTypeRef($2._typeref, ps.ParametersTypeRef())
        $$._entity = entity.NewDefinedFunction(priv, ast.NewTypeNode($1._token.location, t), $3._token.literal, ps, asStmt($7._node))
      }
