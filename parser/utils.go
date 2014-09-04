@@ -3,6 +3,7 @@ package parser
 import (
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/entity"
 )
 
 func asExpr(x duck.INode) duck.IExprNode {
@@ -67,4 +68,44 @@ func asTypeDefinitions(xs []duck.INode) []duck.ITypeDefinition {
 
 func asDeclarations(x duck.INode) ast.Declarations {
   return x.(ast.Declarations)
+}
+
+func asDefinedFunction(x duck.IEntity) entity.DefinedFunction {
+  return x.(entity.DefinedFunction)
+}
+
+func asUndefinedFunction(x duck.IEntity) entity.UndefinedFunction {
+  return x.(entity.UndefinedFunction)
+}
+
+func asDefinedVariable(x duck.IEntity) entity.DefinedVariable {
+  return x.(entity.DefinedVariable)
+}
+
+func asUndefinedVariable(x duck.IEntity) entity.UndefinedVariable {
+  return x.(entity.UndefinedVariable)
+}
+
+func asConstant(x duck.IEntity) entity.Constant {
+  return x.(entity.Constant)
+}
+
+func asStructNode(x duck.INode) ast.StructNode {
+  return x.(ast.StructNode)
+}
+
+func asUnionNode(x duck.INode) ast.UnionNode {
+  return x.(ast.UnionNode)
+}
+
+func asTypedefNode(x duck.INode) ast.TypedefNode {
+  return x.(ast.TypedefNode)
+}
+
+func asParams(x duck.IEntity) entity.Params {
+  return x.(entity.Params)
+}
+
+func asParameter(x duck.IEntity) entity.Parameter {
+  return x.(entity.Parameter)
 }

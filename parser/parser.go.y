@@ -100,29 +100,32 @@ compilation_unit:
                 ;
 
 declaration_file: import_stmts
+                {
+//
+                }
                 | declaration_file funcdecl
                 {
-                  $$._node = asDeclarations($1._node).AddFuncdecl($2._entity.(entity.UndefinedFunction))
+                  $$._node = asDeclarations($1._node).AddFuncdecl(asUndefinedFunction($2._entity))
                 }
                 | declaration_file vardecl
                 {
-                  $$._node = asDeclarations($1._node).AddVardecl($2._entity.(entity.UndefinedVariable))
+                  $$._node = asDeclarations($1._node).AddVardecl(asUndefinedVariable($2._entity))
                 }
                 | declaration_file defconst
                 {
-                  $$._node = asDeclarations($1._node).AddDefconst($2._entity.(entity.Constant))
+                  $$._node = asDeclarations($1._node).AddDefconst(asConstant($2._entity))
                 }
                 | declaration_file defstruct
                 {
-                  $$._node = asDeclarations($1._node).AddDefstruct($2._node.(ast.StructNode))
+                  $$._node = asDeclarations($1._node).AddDefstruct(asStructNode($2._node))
                 }
                 | declaration_file defunion
                 {
-                  $$._node = asDeclarations($1._node).AddDefunion($2._node.(ast.UnionNode))
+                  $$._node = asDeclarations($1._node).AddDefunion(asUnionNode($2._node))
                 }
                 | declaration_file typedef
                 {
-                  $$._node = asDeclarations($1._node).AddTypedef($2._node.(ast.TypedefNode))
+                  $$._node = asDeclarations($1._node).AddTypedef(asTypedefNode($2._node))
                 }
                 ;
 
@@ -155,27 +158,27 @@ top_defs:
         }
         | top_defs defun
         {
-          $$._node = asDeclarations($1._node).AddDefun($2._entity.(entity.DefinedFunction))
+          $$._node = asDeclarations($1._node).AddDefun(asDefinedFunction($2._entity))
         }
         | top_defs defvars
         {
-          $$._node = asDeclarations($1._node).AddDefvar($2._entity.(entity.DefinedVariable))
+          $$._node = asDeclarations($1._node).AddDefvar(asDefinedVariable($2._entity))
         }
         | top_defs defconst
         {
-          $$._node = asDeclarations($1._node).AddDefconst($2._entity.(entity.Constant))
+          $$._node = asDeclarations($1._node).AddDefconst(asConstant($2._entity))
         }
         | top_defs defstruct
         {
-          $$._node = asDeclarations($1._node).AddDefstruct($2._node.(ast.StructNode))
+          $$._node = asDeclarations($1._node).AddDefstruct(asStructNode($2._node))
         }
         | top_defs defunion
         {
-          $$._node = asDeclarations($1._node).AddDefunion($2._node.(ast.UnionNode))
+          $$._node = asDeclarations($1._node).AddDefunion(asUnionNode($2._node))
         }
         | top_defs typedef
         {
-          $$._node = asDeclarations($1._node).AddTypedef($2._node.(ast.TypedefNode))
+          $$._node = asDeclarations($1._node).AddTypedef(asTypedefNode($2._node))
         }
         ;
 
@@ -201,22 +204,22 @@ params: VOID
       }
       | fixedparams
       {
-        $$._entity = entity.NewParams($1._token.location, $1._entity.(entity.Params).ParamDescs)
+        $$._entity = entity.NewParams($1._token.location, asParams($1._entity).ParamDescs)
       }
       | fixedparams ',' DOTDOTDOT
       {
-        $$._entity = entity.NewParams($1._token.location, $1._entity.(entity.Params).ParamDescs)
+        $$._entity = entity.NewParams($1._token.location, asParams($1._entity).ParamDescs)
 //      $$._entity.AcceptVarArgs()
       }
       ;
 
 fixedparams: param
            {
-             $$._entity = entity.NewParams($1._token.location, []entity.Parameter { $1._entity.(entity.Parameter) })
+             $$._entity = entity.NewParams($1._token.location, []entity.Parameter { asParameter($1._entity) })
            }
            | fixedparams ',' param
            {
-             $$._entity = entity.NewParams($1._token.location, append($1._entity.(entity.Params).ParamDescs, $3._entity.(entity.Parameter)))
+             $$._entity = entity.NewParams($1._token.location, append(asParams($1._entity).ParamDescs, asParameter($3._entity)))
            }
            ;
 
@@ -275,7 +278,7 @@ slot: type name
 
 funcdecl: EXTERN typeref name '(' params ')' ';'
         {
-          ps := $5._entity.(entity.Params)
+          ps := asParams($5._entity)
           ref := typesys.NewFunctionTypeRef($2._typeref, ps.ParametersTypeRef())
           $$._entity = entity.NewUndefinedFunction(ast.NewTypeNode($1._token.location, ref), $3._token.literal, ps)
         }
