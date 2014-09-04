@@ -49,3 +49,11 @@ func (self location) GetLineNumber() int {
 func (self location) GetLineOffset() int {
   return self.lineOffset
 }
+
+func (self location) String() string {
+  panic("location#String called")
+}
+
+func (self location) MarshalJSON() ([]byte, error) {
+  panic("location#MarshalJSON called")
+}

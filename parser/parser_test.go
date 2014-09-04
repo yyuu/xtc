@@ -5,7 +5,7 @@ import (
   "testing"
   "bitbucket.org/yyuu/bs/ast"
 //"bitbucket.org/yyuu/bs/duck"
-  "bitbucket.org/yyuu/bs/entity"
+//"bitbucket.org/yyuu/bs/entity"
 )
 
 func testParse(t *testing.T, s string) ast.AST {
