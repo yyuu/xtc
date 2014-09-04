@@ -3,6 +3,7 @@ package ast
 import (
   "testing"
   "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/xt"
 )
 
 /*
@@ -26,7 +27,7 @@ func TestArefNode(t *testing.T) {
     "Value": 12345
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "ArefNode", xt.JSON(x), s)
 }
 
 /*
@@ -57,7 +58,7 @@ func TestFuncallNode(t *testing.T) {
     }
   ]
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "FuncallNode1", xt.JSON(x), s)
 }
 
 func TestFuncallNode2(t *testing.T) {
@@ -72,7 +73,7 @@ func TestFuncallNode2(t *testing.T) {
   },
   "Args": []
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "FuncallNode2", xt.JSON(x), s)
 }
 
 func TestMemberNode(t *testing.T) {
@@ -87,7 +88,7 @@ func TestMemberNode(t *testing.T) {
   },
   "Member": "b"
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "MemberNode", xt.JSON(x), s)
 }
 
 func TestPtrMemberNode(t *testing.T) {
@@ -102,7 +103,7 @@ func TestPtrMemberNode(t *testing.T) {
   },
   "Member": "b"
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "PtrMemberNode", xt.JSON(x), s)
 }
 
 func TestVariableNode(t *testing.T) {
@@ -112,5 +113,5 @@ func TestVariableNode(t *testing.T) {
   "Location": "[:0,0]",
   "Name": "a"
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "VariableNode", xt.JSON(x), s)
 }

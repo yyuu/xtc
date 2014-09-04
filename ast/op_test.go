@@ -2,6 +2,7 @@ package ast
 
 import (
   "testing"
+  "bitbucket.org/yyuu/bs/xt"
 )
 
 func TestBinaryOp(t *testing.T) {
@@ -31,7 +32,7 @@ func TestBinaryOp(t *testing.T) {
     "Name": "c"
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "BinaryOpNode", xt.JSON(x), s)
 }
 
 func TestLogicalAndNode(t *testing.T) {
@@ -59,7 +60,7 @@ func TestLogicalAndNode(t *testing.T) {
     }
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "LogicalAndNode", xt.JSON(x), s)
 }
 
 func TestLogicalOrNode(t *testing.T) {
@@ -87,7 +88,7 @@ func TestLogicalOrNode(t *testing.T) {
     "Name": "c"
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "LogicalOrNode", xt.JSON(x), s)
 }
 
 func TestPrefixOpNode(t *testing.T) {
@@ -102,7 +103,7 @@ func TestPrefixOpNode(t *testing.T) {
     "Name": "a"
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "PrefixOpNode", xt.JSON(x), s)
 }
 
 func TestSuffixOpNode(t *testing.T) {
@@ -117,7 +118,7 @@ func TestSuffixOpNode(t *testing.T) {
     "Name": "a"
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "SuffixOpNode", xt.JSON(x), s)
 }
 
 func TestUnaryOpNode1(t *testing.T) {
@@ -132,7 +133,7 @@ func TestUnaryOpNode1(t *testing.T) {
     "Value": 12345
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "UnaryOpNode1", xt.JSON(x), s)
 }
 
 func TestUnaryOpNode2(t *testing.T) {
@@ -147,5 +148,5 @@ func TestUnaryOpNode2(t *testing.T) {
     "Name": "a"
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "UnaryOpNode2", xt.JSON(x), s)
 }

@@ -2,25 +2,17 @@ package parser
 
 import (
   "testing"
+  "bitbucket.org/yyuu/bs/xt"
 )
 
 func assertToken(t *testing.T, tok *token, id int, literal string) {
-  if tok == nil {
-    t.Error("insufficient token")
-  } else {
-    if tok.id != id {
-      t.Errorf("invalid token id: %s: expected %d, got %d", tok, id, tok.id)
-    }
-    if tok.literal != literal {
-      t.Errorf("invalid token literal: %s: expected %q, got %q", tok, literal, tok.literal)
-    }
-  }
+  xt.AssertNotNil(t, "insufficient token", tok)
+  xt.AssertEquals(t, "invalid token id", tok.id, id)
+  xt.AssertEquals(t, "invalid token literal", tok.literal, literal)
 }
 
 func assertTokenNull(t *testing.T, tok *token) {
-  if tok != nil {
-    t.Errorf("surplus token: %s", tok)
-  }
+  xt.AssertNotNil(t, "surplus token", tok)
 }
 
 func TestEmpty(t *testing.T) {

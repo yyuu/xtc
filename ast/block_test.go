@@ -3,6 +3,7 @@ package ast
 import (
   "testing"
   "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/xt"
 )
 
 func TestBlock1(t *testing.T) {
@@ -45,7 +46,7 @@ func TestBlock1(t *testing.T) {
     }
   ]
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "BlockNode1", xt.JSON(x), s)
 }
 
 func TestBlock2(t *testing.T) {
@@ -111,7 +112,7 @@ func TestBlock2(t *testing.T) {
     }
   ]
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "BlockNode2", xt.JSON(x), s)
 }
 
 func TestBlock3(t *testing.T) {
@@ -220,5 +221,5 @@ func TestBlock3(t *testing.T) {
     }
   ]
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "BlockNode3", xt.JSON(x), s)
 }

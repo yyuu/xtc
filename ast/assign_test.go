@@ -2,6 +2,7 @@ package ast
 
 import (
   "testing"
+  "bitbucket.org/yyuu/bs/xt"
 )
 
 func TestAssignNode(t *testing.T) {
@@ -20,7 +21,7 @@ func TestAssignNode(t *testing.T) {
     "Value": "\"xxx\""
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "AssignNode", xt.JSON(x), s)
 }
 
 func TestOpAssignNode(t *testing.T) {
@@ -40,5 +41,5 @@ func TestOpAssignNode(t *testing.T) {
     "Value": 12345
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "OpAssignNode", xt.JSON(x), s)
 }

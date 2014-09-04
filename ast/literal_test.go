@@ -2,6 +2,7 @@ package ast
 
 import (
   "testing"
+  "bitbucket.org/yyuu/bs/xt"
 )
 
 func TestDecimalIntegerLiteral(t *testing.T) {
@@ -11,7 +12,7 @@ func TestDecimalIntegerLiteral(t *testing.T) {
   "Location": "[:0,0]",
   "Value": 12345
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "DecimalIntegerLiteralNode", xt.JSON(x), s)
 }
 
 func TestOctalIntegerLiteral(t *testing.T) {
@@ -21,7 +22,7 @@ func TestOctalIntegerLiteral(t *testing.T) {
   "Location": "[:0,0]",
   "Value": 493
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "OctalIntegerLiteralNode", xt.JSON(x), s)
 }
 
 func TestHexadecimalIntegerLiteral(t *testing.T) {
@@ -31,7 +32,7 @@ func TestHexadecimalIntegerLiteral(t *testing.T) {
   "Location": "[:0,0]",
   "Value": 65535
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "HexadecimalIntegerLiteralNode", xt.JSON(x), s)
 }
 
 func TestCharacterIntegerLiteral(t *testing.T) {
@@ -41,7 +42,7 @@ func TestCharacterIntegerLiteral(t *testing.T) {
   "Location": "[:0,0]",
   "Value": 97
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "CharacterIntegerLiteralNode", xt.JSON(x), s)
 }
 
 func TestStringLiteral1(t *testing.T) {
@@ -51,5 +52,5 @@ func TestStringLiteral1(t *testing.T) {
   "Location": "[:0,0]",
   "Value": "\"hello, world\""
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "StringLiteralNode", xt.JSON(x), s)
 }

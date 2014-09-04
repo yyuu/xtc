@@ -3,6 +3,7 @@ package ast
 import (
   "testing"
   "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/xt"
 )
 
 func TestDoWhile(t *testing.T) {
@@ -55,7 +56,7 @@ func TestDoWhile(t *testing.T) {
     }
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "DoWhileNode", xt.JSON(x), s)
 }
 
 func TestFor(t *testing.T) {
@@ -134,7 +135,7 @@ func TestFor(t *testing.T) {
     }
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "ForNode", xt.JSON(x), s)
 }
 
 func TestWhile(t *testing.T) {
@@ -176,5 +177,5 @@ func TestWhile(t *testing.T) {
     }
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "WhileNode", xt.JSON(x), s)
 }

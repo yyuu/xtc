@@ -2,6 +2,7 @@ package ast
 
 import (
   "testing"
+  "bitbucket.org/yyuu/bs/xt"
 )
 
 func TestBreak(t *testing.T) {
@@ -10,7 +11,7 @@ func TestBreak(t *testing.T) {
   "ClassName": "ast.BreakNode",
   "Location": "[:0,0]"
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "BreakNode", xt.JSON(x), s)
 }
 
 func TestContinue(t *testing.T) {
@@ -19,7 +20,7 @@ func TestContinue(t *testing.T) {
   "ClassName": "ast.ContinueNode",
   "Location": "[:0,0]"
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "ContinueNode", xt.JSON(x), s)
 }
 
 func TestExprStmt(t *testing.T) {
@@ -43,7 +44,7 @@ func TestExprStmt(t *testing.T) {
     }
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "ExprStmtNode", xt.JSON(x), s)
 }
 
 func TestGoto(t *testing.T) {
@@ -53,7 +54,7 @@ func TestGoto(t *testing.T) {
   "Location": "[:0,0]",
   "Target": "a"
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "GotoNode", xt.JSON(x), s)
 }
 
 /*
@@ -72,5 +73,5 @@ func TestReturn(t *testing.T) {
     "Name": "a"
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "VariableNode", xt.JSON(x), s)
 }

@@ -3,6 +3,7 @@ package ast
 import (
   "testing"
   "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/xt"
 )
 
 func TestCondExpr(t *testing.T) {
@@ -97,7 +98,7 @@ func TestCondExpr(t *testing.T) {
     }
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "CondExprNode", xt.JSON(x), s)
 }
 
 func TestIf(t *testing.T) {
@@ -183,7 +184,7 @@ func TestIf(t *testing.T) {
     }
   }
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "IfNode", xt.JSON(x), s)
 }
 
 func TestSwitch(t *testing.T) {
@@ -313,5 +314,5 @@ func TestSwitch(t *testing.T) {
     }
   ]
 }`
-  assertJsonEquals(t, x, s)
+  xt.AssertStringEqualsDiff(t, "SwitchNode", xt.JSON(x), s)
 }
