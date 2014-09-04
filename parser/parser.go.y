@@ -184,14 +184,24 @@ top_defs:
 
 defvars: storage type name '=' expr ';'
        {
-         $$._entity = entity.NewDefinedVariable($1._node!=nil, asType($2._node), $3._token.literal, asExpr($5._node))
+         priv := $1._token.literal == "storage"
+         $$._entity = entity.NewDefinedVariable(priv, asType($2._node), $3._token.literal, asExpr($5._node))
        }
        ;
 
 defconst: CONST type name '=' expr ';'
+        {
+          $$._entity = entity.NewConstant(asType($2._node), $3._token.literal, asExpr($5._node))
+        }
         ;
 
 defun: storage typeref name '(' params ')' block
+     {
+       priv := $1._token.literal == "storage"
+       ps := asParams($6._entity)
+       t := typesys.NewFunctionTypeRef($2._typeref, ps.ParametersTypeRef())
+       $$._entity = entity.NewDefinedFunction(priv, ast.NewTypeNode($1._token.location, t), $3._token.literal, ps, asStmt($7._node))
+     }
      ;
 
 storage:

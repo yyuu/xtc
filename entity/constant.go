@@ -10,10 +10,10 @@ type Constant struct {
   Value duck.IExprNode
 }
 
-func NewConstant(name string, t duck.ITypeNode, value duck.IExprNode) Constant {
+func NewConstant(t duck.ITypeNode, name string, value duck.IExprNode) Constant {
   return Constant {
-    Name: name,
     TypeNode: t,
+    Name: name,
     Value: value,
   }
 }
