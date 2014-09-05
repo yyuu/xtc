@@ -2,47 +2,14 @@ package parser
 
 import (
   "testing"
-  "bitbucket.org/yyuu/bs/ast"
+//"bitbucket.org/yyuu/bs/ast"
 //"bitbucket.org/yyuu/bs/duck"
-  "bitbucket.org/yyuu/bs/entity"
   "bitbucket.org/yyuu/bs/xt"
 )
 
 func TestParseEmpty(t *testing.T) {
   _, err := ParseExpr("")
   xt.AssertNil(t, "", err)
-}
-
-func defvars(xs...entity.DefinedVariable) []entity.DefinedVariable {
-  return xs
-}
-
-func vardecls(xs...entity.UndefinedVariable) []entity.UndefinedVariable {
-  return xs
-}
-
-func defuns(xs...entity.DefinedFunction) []entity.DefinedFunction {
-  return xs
-}
-
-func funcdecls(xs...entity.UndefinedFunction) []entity.UndefinedFunction {
-  return xs
-}
-
-func defconsts(xs...entity.Constant) []entity.Constant {
-  return xs
-}
-
-func defstructs(xs...ast.StructNode) []ast.StructNode {
-  return xs
-}
-
-func defunions(xs...ast.UnionNode) []ast.UnionNode {
-  return xs
-}
-
-func typedefs(xs...ast.TypedefNode) []ast.TypedefNode {
-  return xs
 }
 
 /*
