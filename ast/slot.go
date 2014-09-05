@@ -8,9 +8,9 @@ import (
 
 // Slot
 type Slot struct {
-  TypeNode duck.ITypeNode
-  Name string
-  Offset int
+  typeNode duck.ITypeNode
+  name string
+  offset int
 }
 
 func NewSlot(t duck.ITypeNode, n string) Slot {
@@ -18,7 +18,7 @@ func NewSlot(t duck.ITypeNode, n string) Slot {
 }
 
 func (self Slot) String() string {
-  return fmt.Sprintf("<ast.Slot Name=%s TypeNode=%s Offset=%d>", self.Name, self.TypeNode, self.Offset)
+  return fmt.Sprintf("<ast.Slot Name=%s TypeNode=%s Offset=%d>", self.name, self.typeNode, self.offset)
 }
 
 func (self Slot) MarshalJSON() ([]byte, error) {
@@ -29,18 +29,18 @@ func (self Slot) MarshalJSON() ([]byte, error) {
     Offset int
   }
   x.ClassName = "ast.Slot"
-  x.TypeNode = self.TypeNode
-  x.Name = self.Name
-  x.Offset = self.Offset
+  x.TypeNode = self.typeNode
+  x.Name = self.name
+  x.Offset = self.offset
   return json.Marshal(x)
 }
 
 func (self Slot) GetName() string {
-  return self.Name
+  return self.name
 }
 
 func (self Slot) GetOffset() int {
-  return self.Offset
+  return self.offset
 }
 
 func (self Slot) GetLocation() duck.ILocation {

@@ -8,26 +8,26 @@ import (
 
 // BinaryOpNode
 type BinaryOpNode struct {
-  Location duck.ILocation
-  Operator string
-  Left duck.IExprNode
-  Right duck.IExprNode
+  location duck.ILocation
+  operator string
+  left duck.IExprNode
+  right duck.IExprNode
 }
 
-func NewBinaryOpNode(location duck.ILocation, operator string, left duck.IExprNode, right duck.IExprNode) BinaryOpNode {
-  return BinaryOpNode { location, operator, left, right }
+func NewBinaryOpNode(loc duck.ILocation, operator string, left duck.IExprNode, right duck.IExprNode) BinaryOpNode {
+  return BinaryOpNode { loc, operator, left, right }
 }
 
 func (self BinaryOpNode) String() string {
-  switch self.Operator {
-    case "&&": return fmt.Sprintf("(and %s %s)", self.Left, self.Right)
-    case "||": return fmt.Sprintf("(or %s %s)", self.Left, self.Right)
-    case "==": return fmt.Sprintf("(= %s %s)", self.Left, self.Right)
-    case "!=": return fmt.Sprintf("(not (= %s %s))", self.Left, self.Right)
-    case "<<": return fmt.Sprintf("(bitwise-arithmetic-left %s %s)", self.Left, self.Right)
-    case ">>": return fmt.Sprintf("(bitwise-arithmetic-right %s %s)", self.Left, self.Right)
-    case "%":  return fmt.Sprintf("(modulo %s %s)", self.Left, self.Right)
-    default:   return fmt.Sprintf("(%s %s %s)", self.Operator, self.Left, self.Right)
+  switch self.operator {
+    case "&&": return fmt.Sprintf("(and %s %s)", self.left, self.right)
+    case "||": return fmt.Sprintf("(or %s %s)", self.left, self.right)
+    case "==": return fmt.Sprintf("(= %s %s)", self.left, self.right)
+    case "!=": return fmt.Sprintf("(not (= %s %s))", self.left, self.right)
+    case "<<": return fmt.Sprintf("(bitwise-arithmetic-left %s %s)", self.left, self.right)
+    case ">>": return fmt.Sprintf("(bitwise-arithmetic-right %s %s)", self.left, self.right)
+    case "%":  return fmt.Sprintf("(modulo %s %s)", self.left, self.right)
+    default:   return fmt.Sprintf("(%s %s %s)", self.operator, self.left, self.right)
   }
 }
 
@@ -40,10 +40,10 @@ func (self BinaryOpNode) MarshalJSON() ([]byte, error) {
     Right duck.IExprNode
   }
   x.ClassName = "ast.BinaryOpNode"
-  x.Location = self.Location
-  x.Operator = self.Operator
-  x.Left = self.Left
-  x.Right = self.Right
+  x.Location = self.location
+  x.Operator = self.operator
+  x.Left = self.left
+  x.Right = self.right
   return json.Marshal(x)
 }
 
@@ -52,22 +52,22 @@ func (self BinaryOpNode) IsExpr() bool {
 }
 
 func (self BinaryOpNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // LogicalAndNode
 type LogicalAndNode struct {
-  Location duck.ILocation
-  Left duck.IExprNode
-  Right duck.IExprNode
+  location duck.ILocation
+  left duck.IExprNode
+  right duck.IExprNode
 }
 
-func NewLogicalAndNode(location duck.ILocation, left duck.IExprNode, right duck.IExprNode) LogicalAndNode {
-  return LogicalAndNode { location, left, right }
+func NewLogicalAndNode(loc duck.ILocation, left duck.IExprNode, right duck.IExprNode) LogicalAndNode {
+  return LogicalAndNode { loc, left, right }
 }
 
 func (self LogicalAndNode) String() string {
-  return fmt.Sprintf("(and %s %s)", self.Left, self.Right)
+  return fmt.Sprintf("(and %s %s)", self.left, self.right)
 }
 
 func (self LogicalAndNode) MarshalJSON() ([]byte, error) {
@@ -78,9 +78,9 @@ func (self LogicalAndNode) MarshalJSON() ([]byte, error) {
     Right duck.IExprNode
   }
   x.ClassName = "ast.LogicalAndNode"
-  x.Location = self.Location
-  x.Left = self.Left
-  x.Right = self.Right
+  x.Location = self.location
+  x.Left = self.left
+  x.Right = self.right
   return json.Marshal(x)
 }
 
@@ -89,22 +89,22 @@ func (self LogicalAndNode) IsExpr() bool {
 }
 
 func (self LogicalAndNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // LogicalOrNode
 type LogicalOrNode struct {
-  Location duck.ILocation
-  Left duck.IExprNode
-  Right duck.IExprNode
+  location duck.ILocation
+  left duck.IExprNode
+  right duck.IExprNode
 }
 
-func NewLogicalOrNode(location duck.ILocation, left duck.IExprNode, right duck.IExprNode) LogicalOrNode {
-  return LogicalOrNode { location, left, right }
+func NewLogicalOrNode(loc duck.ILocation, left duck.IExprNode, right duck.IExprNode) LogicalOrNode {
+  return LogicalOrNode { loc, left, right }
 }
 
 func (self LogicalOrNode) String() string {
-  return fmt.Sprintf("(or %s %s)", self.Left, self.Right)
+  return fmt.Sprintf("(or %s %s)", self.left, self.right)
 }
 
 func (self LogicalOrNode) MarshalJSON() ([]byte, error) {
@@ -115,9 +115,9 @@ func (self LogicalOrNode) MarshalJSON() ([]byte, error) {
     Right duck.IExprNode
   }
   x.ClassName = "ast.LogicalOrNode"
-  x.Location = self.Location
-  x.Left = self.Left
-  x.Right = self.Right
+  x.Location = self.location
+  x.Left = self.left
+  x.Right = self.right
   return json.Marshal(x)
 }
 
@@ -126,25 +126,25 @@ func (self LogicalOrNode) IsExpr() bool {
 }
 
 func (self LogicalOrNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // PrefixOpNode
 type PrefixOpNode struct {
-  Location duck.ILocation
-  Operator string
-  Expr duck.IExprNode
+  location duck.ILocation
+  operator string
+  expr duck.IExprNode
 }
 
-func NewPrefixOpNode(location duck.ILocation, operator string, expr duck.IExprNode) PrefixOpNode {
-  return PrefixOpNode { location, operator, expr }
+func NewPrefixOpNode(loc duck.ILocation, operator string, expr duck.IExprNode) PrefixOpNode {
+  return PrefixOpNode { loc, operator, expr }
 }
 
 func (self PrefixOpNode) String() string {
-  switch self.Operator {
-    case "++": return fmt.Sprintf("(+ 1 %s)", self.Expr)
-    case "--": return fmt.Sprintf("(- 1 %s)", self.Expr)
-    default:   return fmt.Sprintf("(%s %s)", self.Operator, self.Expr)
+  switch self.operator {
+    case "++": return fmt.Sprintf("(+ 1 %s)", self.expr)
+    case "--": return fmt.Sprintf("(- 1 %s)", self.expr)
+    default:   return fmt.Sprintf("(%s %s)", self.operator, self.expr)
   }
 }
 
@@ -156,9 +156,9 @@ func (self PrefixOpNode) MarshalJSON() ([]byte, error) {
     Expr duck.IExprNode
   }
   x.ClassName = "ast.PrefixOpNode"
-  x.Location = self.Location
-  x.Operator = self.Operator
-  x.Expr = self.Expr
+  x.Location = self.location
+  x.Operator = self.operator
+  x.Expr = self.expr
   return json.Marshal(x)
 }
 
@@ -167,25 +167,25 @@ func (self PrefixOpNode) IsExpr() bool {
 }
 
 func (self PrefixOpNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // SuffixOpNode
 type SuffixOpNode struct {
-  Location duck.ILocation
-  Operator string
-  Expr duck.IExprNode
+  location duck.ILocation
+  operator string
+  expr duck.IExprNode
 }
 
-func NewSuffixOpNode(location duck.ILocation, operator string, expr duck.IExprNode) SuffixOpNode {
-  return SuffixOpNode { location, operator, expr }
+func NewSuffixOpNode(loc duck.ILocation, operator string, expr duck.IExprNode) SuffixOpNode {
+  return SuffixOpNode { loc, operator, expr }
 }
 
 func (self SuffixOpNode) String() string {
-  switch self.Operator {
-    case "++": return fmt.Sprintf("(+ %s 1)", self.Expr)
-    case "--": return fmt.Sprintf("(- %s 1)", self.Expr)
-    default:   return fmt.Sprintf("(%s %s)", self.Operator, self.Expr)
+  switch self.operator {
+    case "++": return fmt.Sprintf("(+ %s 1)", self.expr)
+    case "--": return fmt.Sprintf("(- %s 1)", self.expr)
+    default:   return fmt.Sprintf("(%s %s)", self.operator, self.expr)
   }
 }
 
@@ -197,9 +197,9 @@ func (self SuffixOpNode) MarshalJSON() ([]byte, error) {
     Expr duck.IExprNode
   }
   x.ClassName = "ast.SuffixOpNode"
-  x.Location = self.Location
-  x.Operator = self.Operator
-  x.Expr = self.Expr
+  x.Location = self.location
+  x.Operator = self.operator
+  x.Expr = self.expr
   return json.Marshal(x)
 }
 
@@ -208,24 +208,24 @@ func (self SuffixOpNode) IsExpr() bool {
 }
 
 func (self SuffixOpNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // UnaryOpNode
 type UnaryOpNode struct {
-  Location duck.ILocation
-  Operator string
-  Expr duck.IExprNode
+  location duck.ILocation
+  operator string
+  expr duck.IExprNode
 }
 
-func NewUnaryOpNode(location duck.ILocation, operator string, expr duck.IExprNode) UnaryOpNode {
-  return UnaryOpNode { location, operator, expr }
+func NewUnaryOpNode(loc duck.ILocation, operator string, expr duck.IExprNode) UnaryOpNode {
+  return UnaryOpNode { loc, operator, expr }
 }
 
 func (self UnaryOpNode) String() string {
-  switch self.Operator {
-    case "!": return fmt.Sprintf("(not %s)", self.Expr)
-    default:  return fmt.Sprintf("%s%s", self.Operator, self.Expr)
+  switch self.operator {
+    case "!": return fmt.Sprintf("(not %s)", self.expr)
+    default:  return fmt.Sprintf("%s%s", self.operator, self.expr)
   }
 }
 
@@ -237,9 +237,9 @@ func (self UnaryOpNode) MarshalJSON() ([]byte, error) {
     Expr duck.IExprNode
   }
   x.ClassName = "ast.UnaryOpNode"
-  x.Location = self.Location
-  x.Operator = self.Operator
-  x.Expr = self.Expr
+  x.Location = self.location
+  x.Operator = self.operator
+  x.Expr = self.expr
   return json.Marshal(x)
 }
 
@@ -248,5 +248,5 @@ func (self UnaryOpNode) IsExpr() bool {
 }
 
 func (self UnaryOpNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }

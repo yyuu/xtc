@@ -9,24 +9,24 @@ import (
 
 // BlockNode
 type BlockNode struct {
-  Location duck.ILocation
-// Variables []DefinedVariable
-  Variables []duck.IExprNode
-  Stmts []duck.IStmtNode
+  location duck.ILocation
+// variables []DefinedVariable
+  variables []duck.IExprNode
+  stmts []duck.IStmtNode
 }
 
-func NewBlockNode(location duck.ILocation, variables []duck.IExprNode, stmts []duck.IStmtNode) BlockNode {
-  return BlockNode { location, variables, stmts }
+func NewBlockNode(loc duck.ILocation, variables []duck.IExprNode, stmts []duck.IStmtNode) BlockNode {
+  return BlockNode { loc, variables, stmts }
 }
 
 func (self BlockNode) String() string {
-  sVariables := make([]string, len(self.Variables))
-  for i := range self.Variables {
-    sVariables[i] = fmt.Sprintf("%s", self.Variables[i])
+  sVariables := make([]string, len(self.variables))
+  for i := range self.variables {
+    sVariables[i] = fmt.Sprintf("%s", self.variables[i])
   }
-  sStmts := make([]string, len(self.Stmts))
-  for j := range self.Stmts {
-    sStmts[j] = fmt.Sprintf("%s", self.Stmts[j])
+  sStmts := make([]string, len(self.stmts))
+  for j := range self.stmts {
+    sStmts[j] = fmt.Sprintf("%s", self.stmts[j])
   }
 
   stmts := ""
@@ -51,9 +51,9 @@ func (self BlockNode) MarshalJSON() ([]byte, error) {
     Stmts []duck.IStmtNode
   }
   x.ClassName = "ast.BlockNode"
-  x.Location = self.Location
-  x.Variables = self.Variables
-  x.Stmts = self.Stmts
+  x.Location = self.location
+  x.Variables = self.variables
+  x.Stmts = self.stmts
   return json.Marshal(x)
 }
 
@@ -62,5 +62,5 @@ func (self BlockNode) IsStmt() bool {
 }
 
 func (self BlockNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }

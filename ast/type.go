@@ -8,30 +8,30 @@ import (
 
 // CastNode
 type CastNode struct {
-  Location duck.ILocation
-  Type duck.ITypeNode
-  Expr duck.IExprNode
+  location duck.ILocation
+  typeNode duck.ITypeNode
+  expr duck.IExprNode
 }
 
-func NewCastNode(location duck.ILocation, t duck.ITypeNode, expr duck.IExprNode) CastNode {
-  return CastNode { location, t, expr }
+func NewCastNode(loc duck.ILocation, t duck.ITypeNode, expr duck.IExprNode) CastNode {
+  return CastNode { loc, t, expr }
 }
 
 func (self CastNode) String() string {
-  return fmt.Sprintf("(%s %s)", self.Type, self.Expr)
+  return fmt.Sprintf("(%s %s)", self.typeNode, self.expr)
 }
 
 func (self CastNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
     Location duck.ILocation
-    Type duck.ITypeNode
+    TypeNode duck.ITypeNode
     Expr duck.IExprNode
   }
   x.ClassName = "ast.CastNode"
-  x.Location = self.Location
-  x.Type = self.Type
-  x.Expr = self.Expr
+  x.Location = self.location
+  x.TypeNode = self.typeNode
+  x.Expr = self.expr
   return json.Marshal(x)
 }
 
@@ -40,22 +40,22 @@ func (self CastNode) IsExpr() bool {
 }
 
 func (self CastNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // SizeofExprNode
 type SizeofExprNode struct {
-  Location duck.ILocation
-  Expr duck.IExprNode
-  Type duck.ITypeNode
+  location duck.ILocation
+  expr duck.IExprNode
+  typeNode duck.ITypeNode
 }
 
-func NewSizeofExprNode(location duck.ILocation, expr duck.IExprNode, t duck.ITypeRef) SizeofExprNode {
-  return SizeofExprNode { location, expr, NewTypeNode(location, t) }
+func NewSizeofExprNode(loc duck.ILocation, expr duck.IExprNode, t duck.ITypeRef) SizeofExprNode {
+  return SizeofExprNode { loc, expr, NewTypeNode(loc, t) }
 }
 
 func (self SizeofExprNode) String() string {
-  return fmt.Sprintf("(sizeof %s)", self.Expr)
+  return fmt.Sprintf("(sizeof %s)", self.expr)
 }
 
 func (self SizeofExprNode) MarshalJSON() ([]byte, error) {
@@ -63,12 +63,12 @@ func (self SizeofExprNode) MarshalJSON() ([]byte, error) {
     ClassName string
     Location duck.ILocation
     Expr duck.IExprNode
-    Type duck.ITypeNode
+    TypeNode duck.ITypeNode
   }
   x.ClassName = "ast.SizeofExprNode"
-  x.Location = self.Location
-  x.Expr = self.Expr
-  x.Type = self.Type
+  x.Location = self.location
+  x.Expr = self.expr
+  x.TypeNode = self.typeNode
   return json.Marshal(x)
 }
 
@@ -77,35 +77,35 @@ func (self SizeofExprNode) IsExpr() bool {
 }
 
 func (self SizeofExprNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // SizeofTypeNode
 type SizeofTypeNode struct {
-  Location duck.ILocation
-  Type duck.ITypeNode
-  Operand duck.ITypeNode
+  location duck.ILocation
+  typeNode duck.ITypeNode
+  operand duck.ITypeNode
 }
 
-func NewSizeofTypeNode(location duck.ILocation, operand duck.ITypeNode, t duck.ITypeRef) SizeofTypeNode {
-  return SizeofTypeNode { location, operand, NewTypeNode(location, t) }
+func NewSizeofTypeNode(loc duck.ILocation, operand duck.ITypeNode, t duck.ITypeRef) SizeofTypeNode {
+  return SizeofTypeNode { loc, operand, NewTypeNode(loc, t) }
 }
 
 func (self SizeofTypeNode) String() string {
-  return fmt.Sprintf("(sizeof %s)", self.Type)
+  return fmt.Sprintf("(sizeof %s)", self.typeNode)
 }
 
 func (self SizeofTypeNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
     Location duck.ILocation
-    Type duck.ITypeNode
+    TypeNode duck.ITypeNode
     Operand duck.ITypeNode
   }
   x.ClassName = "ast.SizeofTypeNode"
-  x.Location = self.Location
-  x.Type = self.Type
-  x.Operand = self.Operand
+  x.Location = self.location
+  x.TypeNode = self.typeNode
+  x.Operand = self.operand
   return json.Marshal(x)
 }
 
@@ -114,21 +114,21 @@ func (self SizeofTypeNode) IsExpr() bool {
 }
 
 func (self SizeofTypeNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // TypeNode
 type TypeNode struct {
-  Location duck.ILocation
-  TypeRef duck.ITypeRef
+  location duck.ILocation
+  typeRef duck.ITypeRef
 }
 
-func NewTypeNode(location duck.ILocation, t duck.ITypeRef) TypeNode {
-  return TypeNode { location, t }
+func NewTypeNode(loc duck.ILocation, t duck.ITypeRef) TypeNode {
+  return TypeNode { loc, t }
 }
 
 func (self TypeNode) String() string {
-  return fmt.Sprintf("(type %s)", self.TypeRef)
+  return fmt.Sprintf("(type %s)", self.typeRef)
 }
 
 func (self TypeNode) MarshalJSON() ([]byte, error) {
@@ -138,13 +138,13 @@ func (self TypeNode) MarshalJSON() ([]byte, error) {
     TypeRef duck.ITypeRef
   }
   x.ClassName = "ast.TypeNode"
-  x.Location = self.Location
-  x.TypeRef = self.TypeRef
+  x.Location = self.location
+  x.TypeRef = self.typeRef
   return json.Marshal(x)
 }
 
 func (self TypeNode) GetTypeRef() duck.ITypeRef {
-  return self.TypeRef
+  return self.typeRef
 }
 
 func (self TypeNode) IsType() bool {
@@ -152,22 +152,22 @@ func (self TypeNode) IsType() bool {
 }
 
 func (self TypeNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // TypedefNode
 type TypedefNode struct {
-  Location duck.ILocation
-  Real duck.ITypeRef
-  Name string
+  location duck.ILocation
+  real duck.ITypeRef
+  name string
 }
 
-func NewTypedefNode(location duck.ILocation, real duck.ITypeRef, name string) TypedefNode {
-  return TypedefNode { location, real, name }
+func NewTypedefNode(loc duck.ILocation, real duck.ITypeRef, name string) TypedefNode {
+  return TypedefNode { loc, real, name }
 }
 
 func (self TypedefNode) String() string {
-  return fmt.Sprintf("(typedef %s %s)", self.Name, self.Real)
+  return fmt.Sprintf("(typedef %s %s)", self.name, self.real)
 }
 
 func (self TypedefNode) MarshalJSON() ([]byte, error) {
@@ -178,9 +178,9 @@ func (self TypedefNode) MarshalJSON() ([]byte, error) {
     Name string
   }
   x.ClassName = "ast.TypedefNode"
-  x.Location = self.Location
-  x.Real = self.Real
-  x.Name = self.Name
+  x.Location = self.location
+  x.Real = self.real
+  x.Name = self.name
   return json.Marshal(x)
 }
 
@@ -189,14 +189,14 @@ func (self TypedefNode) IsTypeDefinition() bool {
 }
 
 func (self TypedefNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // TypeDefinition
 type TypeDefinition struct {
-  Location duck.ILocation
-  Name string
-  TypeNode duck.ITypeNode
+  location duck.ILocation
+  name string
+  typeNode duck.ITypeNode
 }
 
 func NewTypeDefinition(loc duck.ILocation, ref duck.ITypeRef, name string) TypeDefinition {
@@ -204,7 +204,7 @@ func NewTypeDefinition(loc duck.ILocation, ref duck.ITypeRef, name string) TypeD
 }
 
 func (self TypeDefinition) String() string {
-  return fmt.Sprintf("<ast.TypeDefinition Name=%s Location=%s TypeNode=%s>", self.Name, self.Location, self.TypeNode)
+  return fmt.Sprintf("<ast.TypeDefinition Name=%s Location=%s TypeNode=%s>", self.name, self.location, self.typeNode)
 }
 
 func (self TypeDefinition) MarshalJSON() ([]byte, error) {
@@ -215,9 +215,9 @@ func (self TypeDefinition) MarshalJSON() ([]byte, error) {
     TypeNode duck.ITypeNode
   }
   x.ClassName = "ast.TypeDefinition"
-  x.Location = self.Location
-  x.Name = self.Name
-  x.TypeNode = self.TypeNode
+  x.Location = self.location
+  x.Name = self.name
+  x.TypeNode = self.typeNode
   return json.Marshal(x)
 }
 
@@ -226,5 +226,5 @@ func (self TypeDefinition) IsTypeDefinition() bool {
 }
 
 func (self TypeDefinition) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }

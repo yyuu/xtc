@@ -8,11 +8,11 @@ import (
 
 // BreakNode
 type BreakNode struct {
-  Location duck.ILocation
+  location duck.ILocation
 }
 
-func NewBreakNode(location duck.ILocation) BreakNode {
-  return BreakNode { location }
+func NewBreakNode(loc duck.ILocation) BreakNode {
+  return BreakNode { loc }
 }
 
 func (self BreakNode) String() string {
@@ -25,7 +25,7 @@ func (self BreakNode) MarshalJSON() ([]byte, error) {
     Location duck.ILocation
   }
   x.ClassName = "ast.BreakNode"
-  x.Location = self.Location
+  x.Location = self.location
   return json.Marshal(x)
 }
 
@@ -34,16 +34,16 @@ func (self BreakNode) IsStmt() bool {
 }
 
 func (self BreakNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // ContinueNode
 type ContinueNode struct {
-  Location duck.ILocation
+  location duck.ILocation
 }
 
-func NewContinueNode(location duck.ILocation) ContinueNode {
-  return ContinueNode { location }
+func NewContinueNode(loc duck.ILocation) ContinueNode {
+  return ContinueNode { loc }
 }
 
 func (self ContinueNode) String() string {
@@ -56,7 +56,7 @@ func (self ContinueNode) MarshalJSON() ([]byte, error) {
     Location duck.ILocation
   }
   x.ClassName = "ast.ContinueNode"
-  x.Location = self.Location
+  x.Location = self.location
   return json.Marshal(x)
 }
 
@@ -65,21 +65,21 @@ func (self ContinueNode) IsStmt() bool {
 }
 
 func (self ContinueNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // ExprStmtNode
 type ExprStmtNode struct {
-  Location duck.ILocation
-  Expr duck.IExprNode
+  location duck.ILocation
+  expr duck.IExprNode
 }
 
-func NewExprStmtNode(location duck.ILocation, expr duck.IExprNode) ExprStmtNode {
-  return ExprStmtNode { location, expr }
+func NewExprStmtNode(loc duck.ILocation, expr duck.IExprNode) ExprStmtNode {
+  return ExprStmtNode { loc, expr }
 }
 
 func (self ExprStmtNode) String() string {
-  return fmt.Sprintf("%s", self.Expr)
+  return fmt.Sprintf("%s", self.expr)
 }
 
 func (self ExprStmtNode) MarshalJSON() ([]byte, error) {
@@ -89,8 +89,8 @@ func (self ExprStmtNode) MarshalJSON() ([]byte, error) {
     Expr duck.IExprNode
   }
   x.ClassName = "ast.ExprStmtNode"
-  x.Location = self.Location
-  x.Expr = self.Expr
+  x.Location = self.location
+  x.Expr = self.expr
   return json.Marshal(x)
 }
 
@@ -99,21 +99,21 @@ func (self ExprStmtNode) IsStmt() bool {
 }
 
 func (self ExprStmtNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // GotoNode
 type GotoNode struct {
-  Location duck.ILocation
-  Target string
+  location duck.ILocation
+  target string
 }
 
-func NewGotoNode(location duck.ILocation, target string) GotoNode {
-  return GotoNode { location, target }
+func NewGotoNode(loc duck.ILocation, target string) GotoNode {
+  return GotoNode { loc, target }
 }
 
 func (self GotoNode) String() string {
-  return fmt.Sprintf("(goto %s)", self.Target)
+  return fmt.Sprintf("(goto %s)", self.target)
 }
 
 func (self GotoNode) MarshalJSON() ([]byte, error) {
@@ -123,8 +123,8 @@ func (self GotoNode) MarshalJSON() ([]byte, error) {
     Target string
   }
   x.ClassName = "ast.GotoNode"
-  x.Location = self.Location
-  x.Target = self.Target
+  x.Location = self.location
+  x.Target = self.target
   return json.Marshal(x)
 }
 
@@ -133,18 +133,18 @@ func (self GotoNode) IsStmt() bool {
 }
 
 func (self GotoNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // LabelNode
 type LabelNode struct {
-  Location duck.ILocation
-  Name string
-  Stmt duck.IStmtNode
+  location duck.ILocation
+  name string
+  stmt duck.IStmtNode
 }
 
-func NewLabelNode(location duck.ILocation, name string, stmt duck.IStmtNode) LabelNode {
-  return LabelNode { location, name, stmt }
+func NewLabelNode(loc duck.ILocation, name string, stmt duck.IStmtNode) LabelNode {
+  return LabelNode { loc, name, stmt }
 }
 
 func (self LabelNode) String() string {
@@ -159,9 +159,9 @@ func (self LabelNode) MarshalJSON() ([]byte, error) {
     Stmt duck.IStmtNode
   }
   x.ClassName = "ast.LabelNode"
-  x.Location = self.Location
-  x.Name = self.Name
-  x.Stmt = self.Stmt
+  x.Location = self.location
+  x.Name = self.name
+  x.Stmt = self.stmt
   return json.Marshal(x)
 }
 
@@ -170,21 +170,21 @@ func (self LabelNode) IsStmt() bool {
 }
 
 func (self LabelNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // ReturnNode
 type ReturnNode struct {
-  Location duck.ILocation
-  Expr duck.IExprNode
+  location duck.ILocation
+  expr duck.IExprNode
 }
 
-func NewReturnNode(location duck.ILocation, expr duck.IExprNode) ReturnNode {
-  return ReturnNode { location, expr }
+func NewReturnNode(loc duck.ILocation, expr duck.IExprNode) ReturnNode {
+  return ReturnNode { loc, expr }
 }
 
 func (self ReturnNode) String() string {
-  return fmt.Sprintf("%s", self.Expr)
+  return fmt.Sprintf("%s", self.expr)
 }
 
 func (self ReturnNode) MarshalJSON() ([]byte, error) {
@@ -194,8 +194,8 @@ func (self ReturnNode) MarshalJSON() ([]byte, error) {
     Expr duck.IExprNode
   }
   x.ClassName = "ast.ReturnNode"
-  x.Location = self.Location
-  x.Expr = self.Expr
+  x.Location = self.location
+  x.Expr = self.expr
   return json.Marshal(x)
 }
 
@@ -204,5 +204,5 @@ func (self ReturnNode) IsStmt() bool {
 }
 
 func (self ReturnNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }

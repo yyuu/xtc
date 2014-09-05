@@ -1,15 +1,17 @@
 package ast
 
 import (
+  "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
 // StructNode
 type StructNode struct {
-  Location duck.ILocation
-  TypeNode duck.ITypeNode
-  Name string
-  Members []Slot
+  location duck.ILocation
+  typeNode duck.ITypeNode
+  name string
+  members []Slot
 }
 
 func NewStructNode(loc duck.ILocation, ref duck.ITypeRef, name string, membs []Slot) StructNode {
@@ -17,11 +19,23 @@ func NewStructNode(loc duck.ILocation, ref duck.ITypeRef, name string, membs []S
 }
 
 func (self StructNode) String() string {
-  panic("not implemented")
+  return fmt.Sprintf("<ast.StructNode Name=%s location=%s typeNode=%s members=%s>", self.name, self.location, self.typeNode, self.members)
 }
 
 func (self StructNode) MarshalJSON() ([]byte, error) {
-  panic("not implemented")
+  var x struct {
+    ClassName string
+    Location duck.ILocation
+    TypeNode duck.ITypeNode
+    Name string
+    Members []Slot
+  }
+  x.ClassName = "ast.StructNode"
+  x.Location = self.location
+  x.TypeNode = self.typeNode
+  x.Name = self.name
+  x.Members = self.members
+  return json.Marshal(x)
 }
 
 func (self StructNode) IsTypeDefinition() bool {
@@ -29,15 +43,15 @@ func (self StructNode) IsTypeDefinition() bool {
 }
 
 func (self StructNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // UnionNode
 type UnionNode struct {
-  Location duck.ILocation
-  TypeNode duck.ITypeNode
-  Name string
-  Members []Slot
+  location duck.ILocation
+  typeNode duck.ITypeNode
+  name string
+  members []Slot
 }
 
 func NewUnionNode(loc duck.ILocation, ref duck.ITypeRef, name string, membs []Slot) UnionNode {
@@ -45,11 +59,23 @@ func NewUnionNode(loc duck.ILocation, ref duck.ITypeRef, name string, membs []Sl
 }
 
 func (self UnionNode) String() string {
-  panic("not implemented")
+  return fmt.Sprintf("<ast.UnionNode name=%s location=%s typeNode=%s members=%s>", self.name, self.location, self.typeNode, self.members)
 }
 
 func (self UnionNode) MarshalJSON() ([]byte, error) {
-  panic("not implemented")
+  var x struct {
+    ClassName string
+    Location duck.ILocation
+    TypeNode duck.ITypeNode
+    Name string
+    Members []Slot
+  }
+  x.ClassName = "ast.UnionNode"
+  x.Location = self.location
+  x.TypeNode = self.typeNode
+  x.Name = self.name
+  x.Members = self.members
+  return json.Marshal(x)
 }
 
 func (self UnionNode) IsTypeDefinition() bool {
@@ -57,5 +83,5 @@ func (self UnionNode) IsTypeDefinition() bool {
 }
 
 func (self UnionNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }

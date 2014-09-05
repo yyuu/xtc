@@ -9,16 +9,16 @@ import (
 
 // AddressNode
 type AddressNode struct {
-  Location duck.ILocation
-  Expr duck.IExprNode
+  location duck.ILocation
+  expr duck.IExprNode
 }
 
-func NewAddressNode(location duck.ILocation, expr duck.IExprNode) AddressNode {
-  return AddressNode { location, expr }
+func NewAddressNode(loc duck.ILocation, expr duck.IExprNode) AddressNode {
+  return AddressNode { loc, expr }
 }
 
 func (self AddressNode) String() string {
-  panic("not implemented")
+  return fmt.Sprintf("<ast.AddressNode location=%s expr=%s>", self.location, self.expr)
 }
 
 func (self AddressNode) MarshalJSON() ([]byte, error) {
@@ -28,8 +28,8 @@ func (self AddressNode) MarshalJSON() ([]byte, error) {
     Expr duck.IExprNode
   }
   x.ClassName = "ast.AddressNode"
-  x.Location = self.Location
-  x.Expr = self.Expr
+  x.Location = self.location
+  x.Expr = self.expr
   return json.Marshal(x)
 }
 
@@ -38,22 +38,22 @@ func (self AddressNode) IsExpr() bool {
 }
 
 func (self AddressNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // ArefNode
 type ArefNode struct {
-  Location duck.ILocation
-  Expr duck.IExprNode
-  Index duck.IExprNode
+  location duck.ILocation
+  expr duck.IExprNode
+  index duck.IExprNode
 }
 
-func NewArefNode(location duck.ILocation, expr duck.IExprNode, index duck.IExprNode) ArefNode {
-  return ArefNode { location, expr, index }
+func NewArefNode(loc duck.ILocation, expr duck.IExprNode, index duck.IExprNode) ArefNode {
+  return ArefNode { loc, expr, index }
 }
 
 func (self ArefNode) String() string {
-  return fmt.Sprintf("(vector-ref %s %s)", self.Expr, self.Index)
+  return fmt.Sprintf("(vector-ref %s %s)", self.expr, self.index)
 }
 
 func (self ArefNode) MarshalJSON() ([]byte, error) {
@@ -64,9 +64,9 @@ func (self ArefNode) MarshalJSON() ([]byte, error) {
     Index duck.IExprNode
   }
   x.ClassName = "ast.ArefNode"
-  x.Location = self.Location
-  x.Expr = self.Expr
-  x.Index = self.Index
+  x.Location = self.location
+  x.Expr = self.expr
+  x.Index = self.index
   return json.Marshal(x)
 }
 
@@ -75,17 +75,17 @@ func (self ArefNode) IsExpr() bool {
 }
 
 func (self ArefNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // DereferenceNode
 type DereferenceNode struct {
-  Location duck.ILocation
-  Expr duck.IExprNode
+  location duck.ILocation
+  expr duck.IExprNode
 }
 
-func NewDereferenceNode(location Location, expr duck.IExprNode) DereferenceNode {
-  return DereferenceNode { location, expr }
+func NewDereferenceNode(loc Location, expr duck.IExprNode) DereferenceNode {
+  return DereferenceNode { loc, expr }
 }
 
 func (self DereferenceNode) String() string {
@@ -99,8 +99,8 @@ func (self DereferenceNode) MarshalJSON() ([]byte, error) {
     Expr duck.IExprNode
   }
   x.ClassName = "ast.DereferenceNode"
-  x.Location = self.Location
-  x.Expr = self.Expr
+  x.Location = self.location
+  x.Expr = self.expr
   return json.Marshal(x)
 }
 
@@ -109,29 +109,29 @@ func (self DereferenceNode) IsExpr() bool {
 }
 
 func (self DereferenceNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // FuncallNode
 type FuncallNode struct {
-  Location duck.ILocation
-  Expr duck.IExprNode
-  Args []duck.IExprNode
+  location duck.ILocation
+  expr duck.IExprNode
+  args []duck.IExprNode
 }
 
-func NewFuncallNode(location duck.ILocation, expr duck.IExprNode, args []duck.IExprNode) FuncallNode {
-  return FuncallNode { location, expr, args }
+func NewFuncallNode(loc duck.ILocation, expr duck.IExprNode, args []duck.IExprNode) FuncallNode {
+  return FuncallNode { loc, expr, args }
 }
 
 func (self FuncallNode) String() string {
-  sArgs := make([]string, len(self.Args))
-  for i := range self.Args {
-    sArgs[i] = fmt.Sprintf("%s", self.Args[i])
+  sArgs := make([]string, len(self.args))
+  for i := range self.args {
+    sArgs[i] = fmt.Sprintf("%s", self.args[i])
   }
   if len(sArgs) == 0 {
-    return fmt.Sprintf("(%s)", self.Expr)
+    return fmt.Sprintf("(%s)", self.expr)
   } else {
-    return fmt.Sprintf("(%s %s)", self.Expr, strings.Join(sArgs, " "))
+    return fmt.Sprintf("(%s %s)", self.expr, strings.Join(sArgs, " "))
   }
 }
 
@@ -143,9 +143,9 @@ func (self FuncallNode) MarshalJSON() ([]byte, error) {
     Args []duck.IExprNode
   }
   x.ClassName = "ast.FuncallNode"
-  x.Location = self.Location
-  x.Expr = self.Expr
-  x.Args = self.Args
+  x.Location = self.location
+  x.Expr = self.expr
+  x.Args = self.args
   return json.Marshal(x)
 }
 
@@ -154,22 +154,22 @@ func (self FuncallNode) IsExpr() bool {
 }
 
 func (self FuncallNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // MemberNode
 type MemberNode struct {
-  Location duck.ILocation
-  Expr duck.IExprNode
-  Member string
+  location duck.ILocation
+  expr duck.IExprNode
+  member string
 }
 
-func NewMemberNode(location duck.ILocation, expr duck.IExprNode, member string) MemberNode {
-  return MemberNode { location, expr, member }
+func NewMemberNode(loc duck.ILocation, expr duck.IExprNode, member string) MemberNode {
+  return MemberNode { loc, expr, member }
 }
 
 func (self MemberNode) String() string {
-  return fmt.Sprintf("(slot-ref %s '%s)", self.Expr, self.Member)
+  return fmt.Sprintf("(slot-ref %s '%s)", self.expr, self.member)
 }
 
 func (self MemberNode) MarshalJSON() ([]byte, error) {
@@ -180,9 +180,9 @@ func (self MemberNode) MarshalJSON() ([]byte, error) {
     Member string
   }
   x.ClassName = "ast.MemberNode"
-  x.Location = self.Location
-  x.Expr = self.Expr
-  x.Member = self.Member
+  x.Location = self.location
+  x.Expr = self.expr
+  x.Member = self.member
   return json.Marshal(x)
 }
 
@@ -191,22 +191,22 @@ func (self MemberNode) IsExpr() bool {
 }
 
 func (self MemberNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // PtrMemberNode
 type PtrMemberNode struct {
-  Location duck.ILocation
-  Expr duck.IExprNode
-  Member string
+  location duck.ILocation
+  expr duck.IExprNode
+  member string
 }
 
-func NewPtrMemberNode(location duck.ILocation, expr duck.IExprNode, member string) PtrMemberNode {
-  return PtrMemberNode { location, expr, member }
+func NewPtrMemberNode(loc duck.ILocation, expr duck.IExprNode, member string) PtrMemberNode {
+  return PtrMemberNode { loc, expr, member }
 }
 
 func (self PtrMemberNode) String() string {
-  return fmt.Sprintf("(slot-ref %s '%s)", self.Expr, self.Member)
+  return fmt.Sprintf("(slot-ref %s '%s)", self.expr, self.member)
 }
 
 func (self PtrMemberNode) MarshalJSON() ([]byte, error) {
@@ -217,9 +217,9 @@ func (self PtrMemberNode) MarshalJSON() ([]byte, error) {
     Member string
   }
   x.ClassName = "ast.PtrMemberNode"
-  x.Location = self.Location
-  x.Expr = self.Expr
-  x.Member = self.Member
+  x.Location = self.location
+  x.Expr = self.expr
+  x.Member = self.member
   return json.Marshal(x)
 }
 
@@ -228,21 +228,21 @@ func (self PtrMemberNode) IsExpr() bool {
 }
 
 func (self PtrMemberNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // VariableNode
 type VariableNode struct {
-  Location duck.ILocation
-  Name string
+  location duck.ILocation
+  name string
 }
 
-func NewVariableNode(location duck.ILocation, name string) VariableNode {
-  return VariableNode { location, name }
+func NewVariableNode(loc duck.ILocation, name string) VariableNode {
+  return VariableNode { loc, name }
 }
 
 func (self VariableNode) String() string {
-  return self.Name
+  return self.name
 }
 
 func (self VariableNode) MarshalJSON() ([]byte, error) {
@@ -252,8 +252,8 @@ func (self VariableNode) MarshalJSON() ([]byte, error) {
     Name string
   }
   x.ClassName = "ast.VariableNode"
-  x.Location = self.Location
-  x.Name = self.Name
+  x.Location = self.location
+  x.Name = self.name
   return json.Marshal(x)
 }
 
@@ -262,5 +262,5 @@ func (self VariableNode) IsExpr() bool {
 }
 
 func (self VariableNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }

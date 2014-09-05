@@ -6,9 +6,9 @@ import (
 )
 
 type Location struct {
-  SourceName string
-  LineNumber int
-  LineOffset int
+  sourceName string
+  lineNumber int
+  lineOffset int
 }
 
 func NewLocation(sourceName string, lineNumber int, lineOffset int) duck.ILocation {
@@ -16,19 +16,19 @@ func NewLocation(sourceName string, lineNumber int, lineOffset int) duck.ILocati
 }
 
 func (self Location) GetSourceName() string {
-  return self.SourceName
+  return self.sourceName
 }
 
 func (self Location) GetLineNumber() int {
-  return self.LineNumber
+  return self.lineNumber
 }
 
 func (self Location) GetLineOffset() int {
-  return self.LineOffset
+  return self.lineOffset
 }
 
 func (self Location) String() string {
-  return fmt.Sprintf("[%s:%d,%d]", self.SourceName, self.LineNumber, self.LineOffset)
+  return fmt.Sprintf("[%s:%d,%d]", self.sourceName, self.lineNumber, self.lineOffset)
 }
 
 func (self Location) MarshalJSON() ([]byte, error) {
@@ -37,19 +37,16 @@ func (self Location) MarshalJSON() ([]byte, error) {
 }
 
 type AST struct {
-  Location duck.ILocation
-  Declarations Declarations
+  location duck.ILocation
+  declarations Declarations
 }
 
 func NewAST(source duck.ILocation, declarations Declarations) AST {
-  return AST {
-    Location: source,
-    Declarations: declarations,
-  }
+  return AST { source, declarations }
 }
 
 func (self AST) String() string {
-  return fmt.Sprintf(";; %s\n%s", self.Location, self.Declarations)
+  return fmt.Sprintf(";; %s\n%s", self.location, self.declarations)
 }
 
 type ASTVisitor interface {

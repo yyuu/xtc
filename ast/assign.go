@@ -8,17 +8,17 @@ import (
 
 // AssignNode
 type AssignNode struct {
-  Location duck.ILocation
-  Lhs duck.IExprNode
-  Rhs duck.IExprNode
+  location duck.ILocation
+  lhs duck.IExprNode
+  rhs duck.IExprNode
 }
 
-func NewAssignNode(location duck.ILocation, lhs duck.IExprNode, rhs duck.IExprNode) AssignNode {
-  return AssignNode { location, lhs, rhs }
+func NewAssignNode(loc duck.ILocation, lhs duck.IExprNode, rhs duck.IExprNode) AssignNode {
+  return AssignNode { loc, lhs, rhs }
 }
 
 func (self AssignNode) String() string {
-  return fmt.Sprintf("(%s %s)", self.Lhs, self.Rhs)
+  return fmt.Sprintf("(%s %s)", self.lhs, self.rhs)
 }
 
 func (self AssignNode) MarshalJSON() ([]byte, error) {
@@ -29,9 +29,9 @@ func (self AssignNode) MarshalJSON() ([]byte, error) {
     Rhs duck.IExprNode
   }
   x.ClassName = "ast.AssignNode"
-  x.Location = self.Location
-  x.Lhs = self.Lhs
-  x.Rhs = self.Rhs
+  x.Location = self.location
+  x.Lhs = self.lhs
+  x.Rhs = self.rhs
   return json.Marshal(x)
 }
 
@@ -40,23 +40,23 @@ func (self AssignNode) IsExpr() bool {
 }
 
 func (self AssignNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 // OpAssignNode
 type OpAssignNode struct {
-  Location duck.ILocation
-  Operator string
-  Lhs duck.IExprNode
-  Rhs duck.IExprNode
+  location duck.ILocation
+  operator string
+  lhs duck.IExprNode
+  rhs duck.IExprNode
 }
 
-func NewOpAssignNode(location duck.ILocation, operator string, lhs duck.IExprNode, rhs duck.IExprNode) OpAssignNode {
-  return OpAssignNode { location, operator, lhs, rhs }
+func NewOpAssignNode(loc duck.ILocation, operator string, lhs duck.IExprNode, rhs duck.IExprNode) OpAssignNode {
+  return OpAssignNode { loc, operator, lhs, rhs }
 }
 
 func (self OpAssignNode) String() string {
-  return fmt.Sprintf("(%s (%s %s %s))", self.Lhs, self.Operator, self.Lhs, self.Rhs)
+  return fmt.Sprintf("(%s (%s %s %s))", self.lhs, self.operator, self.lhs, self.rhs)
 }
 
 func (self OpAssignNode) MarshalJSON() ([]byte, error) {
@@ -68,10 +68,10 @@ func (self OpAssignNode) MarshalJSON() ([]byte, error) {
     Rhs duck.IExprNode
   }
   x.ClassName = "ast.OpAssignNode"
-  x.Location = self.Location
-  x.Operator = self.Operator
-  x.Lhs = self.Lhs
-  x.Rhs = self.Rhs
+  x.Location = self.location
+  x.Operator = self.operator
+  x.Lhs = self.lhs
+  x.Rhs = self.rhs
   return json.Marshal(x)
 }
 
@@ -80,5 +80,5 @@ func (self OpAssignNode) IsExpr() bool {
 }
 
 func (self OpAssignNode) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
