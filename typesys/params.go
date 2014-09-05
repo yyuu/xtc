@@ -8,9 +8,9 @@ import (
 
 // ParamTypes
 type ParamTypes struct {
-  Location duck.ILocation
-  ParamDescs []duck.IType
-  Vararg bool
+  location duck.ILocation
+  paramDescs []duck.IType
+  vararg bool
 }
 
 func NewParamTypes(loc duck.ILocation, paramDescs []duck.IType, vararg bool) ParamTypes {
@@ -18,7 +18,7 @@ func NewParamTypes(loc duck.ILocation, paramDescs []duck.IType, vararg bool) Par
 }
 
 func (self ParamTypes) String() string {
-  return fmt.Sprintf("<typesys.ParamTypes Location=%s ParamDescs=%s Vararg=%v>", self.Location, self.ParamDescs, self.Vararg)
+  return fmt.Sprintf("<typesys.ParamTypes Location=%s ParamDescs=%s Vararg=%v>", self.location, self.paramDescs, self.vararg)
 }
 
 func (self ParamTypes) MarshalJSON() ([]byte, error) {
@@ -29,9 +29,9 @@ func (self ParamTypes) MarshalJSON() ([]byte, error) {
     VarArg bool
   }
   x.ClassName = "typesys.ParamTypes"
-  x.Location = self.Location
-  x.ParamDescs = self.ParamDescs
-  x.VarArg = self.Vararg
+  x.Location = self.location
+  x.ParamDescs = self.paramDescs
+  x.VarArg = self.vararg
   return json.Marshal(x)
 }
 
@@ -89,9 +89,9 @@ func (self ParamTypes) IsFunction() bool {
 
 // ParamTypeRefs
 type ParamTypeRefs struct {
-  Location duck.ILocation
-  ParamDescs []duck.ITypeRef
-  Vararg bool
+  location duck.ILocation
+  paramDescs []duck.ITypeRef
+  vararg bool
 }
 
 func NewParamTypeRefs(loc duck.ILocation, paramDescs []duck.ITypeRef, vararg bool) ParamTypeRefs {
@@ -99,7 +99,7 @@ func NewParamTypeRefs(loc duck.ILocation, paramDescs []duck.ITypeRef, vararg boo
 }
 
 func (self ParamTypeRefs) String() string {
-  return fmt.Sprintf("<typesys.ParamTypeRefs Location=%s ParamDescs=%s Vararg=%v>", self.Location, self.ParamDescs, self.Vararg)
+  return fmt.Sprintf("<typesys.ParamTypeRefs Location=%s ParamDescs=%s Vararg=%v>", self.location, self.paramDescs, self.vararg)
 }
 
 func (self ParamTypeRefs) MarshalJSON() ([]byte, error) {
@@ -110,14 +110,14 @@ func (self ParamTypeRefs) MarshalJSON() ([]byte, error) {
     Vararg bool
   }
   x.ClassName = "typesys.ParamTypeRefs"
-  x.Location = self.Location
-  x.ParamDescs = self.ParamDescs
-  x.Vararg = self.Vararg
+  x.Location = self.location
+  x.ParamDescs = self.paramDescs
+  x.Vararg = self.vararg
   return json.Marshal(x)
 }
 
 func (self ParamTypeRefs) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 func (self ParamTypeRefs) IsTypeRef() bool {

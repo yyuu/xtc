@@ -8,9 +8,9 @@ import (
 
 // UnionType
 type UnionType struct {
-  Location duck.ILocation
-  Name string
-  Members []duck.ISlot
+  location duck.ILocation
+  name string
+  members []duck.ISlot
 }
 
 func NewUnionType(name string, membs []duck.ISlot, loc duck.ILocation) UnionType {
@@ -18,7 +18,7 @@ func NewUnionType(name string, membs []duck.ISlot, loc duck.ILocation) UnionType
 }
 
 func (self UnionType) String() string {
-  return fmt.Sprintf("<typesys.UnionType Name=%s Location=%s Members=%s>", self.Name, self.Location, self.Members)
+  return fmt.Sprintf("<typesys.UnionType Name=%s Location=%s Members=%s>", self.name, self.location, self.members)
 }
 
 func (self UnionType) MarshalJSON() ([]byte, error) {
@@ -29,9 +29,9 @@ func (self UnionType) MarshalJSON() ([]byte, error) {
     Members []duck.ISlot
   }
   x.ClassName = "typesys.UnionType"
-  x.Location = self.Location
-  x.Name = self.Name
-  x.Members = self.Members
+  x.Location = self.location
+  x.Name = self.name
+  x.Members = self.members
   return json.Marshal(x)
 }
 
@@ -89,8 +89,8 @@ func (self UnionType) IsFunction() bool {
 
 // UnionTypeRef
 type UnionTypeRef struct {
-  Location duck.ILocation
-  Name string
+  location duck.ILocation
+  name string
 }
 
 func NewUnionTypeRef(loc duck.ILocation, name string) UnionTypeRef {
@@ -98,7 +98,7 @@ func NewUnionTypeRef(loc duck.ILocation, name string) UnionTypeRef {
 }
 
 func (self UnionTypeRef) String() string {
-  return fmt.Sprintf("<typesys.UnionTypeRef Name=%s Location=%s>", self.Name, self.Location)
+  return fmt.Sprintf("<typesys.UnionTypeRef Name=%s Location=%s>", self.name, self.location)
 }
 
 func (self UnionTypeRef) MarshalJSON() ([]byte, error) {
@@ -108,13 +108,13 @@ func (self UnionTypeRef) MarshalJSON() ([]byte, error) {
     Name string
   }
   x.ClassName = "typesys.UnionTypeRef"
-  x.Location = self.Location
-  x.Name = self.Name
+  x.Location = self.location
+  x.Name = self.name
   return json.Marshal(x)
 }
 
 func (self UnionTypeRef) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 func (self UnionTypeRef) IsTypeRef() bool {

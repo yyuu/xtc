@@ -80,15 +80,15 @@ func (self VoidType) IsFunction() bool {
 
 // VoidTypeRef
 type VoidTypeRef struct {
-  Location duck.ILocation
+  location duck.ILocation
 }
 
-func NewVoidTypeRef(location duck.ILocation) VoidTypeRef {
-  return VoidTypeRef { location }
+func NewVoidTypeRef(loc duck.ILocation) VoidTypeRef {
+  return VoidTypeRef { loc }
 }
 
 func (self VoidTypeRef) String() string {
-  return fmt.Sprintf("<typesys.VoidTypeRef Location=%s>", self.Location)
+  return fmt.Sprintf("<typesys.VoidTypeRef Location=%s>", self.location)
 }
 
 func (self VoidTypeRef) MarshalJSON() ([]byte, error) {
@@ -97,12 +97,12 @@ func (self VoidTypeRef) MarshalJSON() ([]byte, error) {
     Location duck.ILocation
   }
   x.Classname = "typesys.VoidTypeRef"
-  x.Location = self.Location
+  x.Location = self.location
   return json.Marshal(x)
 }
 
 func (self VoidTypeRef) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 func (self VoidTypeRef) IsTypeRef() bool {

@@ -8,8 +8,8 @@ import (
 
 // PointerType
 type PointerType struct {
-  PointerSize int
-  BaseType duck.IType
+  pointerSize int
+  baseType duck.IType
 }
 
 func NewPointerType(size int, baseType duck.IType) PointerType {
@@ -17,7 +17,7 @@ func NewPointerType(size int, baseType duck.IType) PointerType {
 }
 
 func (self PointerType) String() string {
-  return fmt.Sprintf("<typesys.PointerType PointerSize=%d BaseType=%s>", self.PointerSize, self.BaseType)
+  return fmt.Sprintf("<typesys.PointerType PointerSize=%d BaseType=%s>", self.pointerSize, self.baseType)
 }
 
 func (self PointerType) MarshalJSON() ([]byte, error) {
@@ -27,13 +27,13 @@ func (self PointerType) MarshalJSON() ([]byte, error) {
     BaseType duck.IType
   }
   x.ClassName = "typesys.PointerType"
-  x.PointerSize = self.PointerSize
-  x.BaseType = self.BaseType
+  x.PointerSize = self.pointerSize
+  x.BaseType = self.baseType
   return json.Marshal(x)
 }
 
 func (self PointerType) Size() int {
-  return self.PointerSize
+  return self.pointerSize
 }
 
 func (self PointerType) AllocSize() int {
@@ -86,8 +86,8 @@ func (self PointerType) IsFunction() bool {
 
 // PointerTypeRef
 type PointerTypeRef struct {
-  Location duck.ILocation
-  BaseType duck.ITypeRef
+  location duck.ILocation
+  baseType duck.ITypeRef
 }
 
 func NewPointerTypeRef(baseType duck.ITypeRef) PointerTypeRef {
@@ -95,7 +95,7 @@ func NewPointerTypeRef(baseType duck.ITypeRef) PointerTypeRef {
 }
 
 func (self PointerTypeRef) String() string {
-  return fmt.Sprintf("<typesys.PointerTypeRef Location=%s BaseType=%s>", self.Location, self.BaseType)
+  return fmt.Sprintf("<typesys.PointerTypeRef Location=%s BaseType=%s>", self.location, self.baseType)
 }
 
 func (self PointerTypeRef) MarshalJSON() ([]byte, error) {
@@ -105,13 +105,13 @@ func (self PointerTypeRef) MarshalJSON() ([]byte, error) {
     BaseType duck.ITypeRef
   }
   x.ClassName = "typesys.PointerTypeRef"
-  x.Location = self.Location
-  x.BaseType = self.BaseType
+  x.Location = self.location
+  x.BaseType = self.baseType
   return json.Marshal(x)
 }
 
 func (self PointerTypeRef) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 func (self PointerTypeRef) IsTypeRef() bool {

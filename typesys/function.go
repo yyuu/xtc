@@ -8,8 +8,8 @@ import (
 
 // FunctionType
 type FunctionType struct {
-  ReturnType duck.IType
-  ParamTypes ParamTypes
+  returnType duck.IType
+  paramTypes ParamTypes
 }
 
 func NewFunctionType(ret duck.IType, paramTypes ParamTypes) FunctionType {
@@ -17,7 +17,7 @@ func NewFunctionType(ret duck.IType, paramTypes ParamTypes) FunctionType {
 }
 
 func (self FunctionType) String() string {
-  return fmt.Sprintf("<typesys.FunctionType ReturnType=%s ParamTypes=%s>", self.ReturnType, self.ParamTypes)
+  return fmt.Sprintf("<typesys.FunctionType ReturnType=%s ParamTypes=%s>", self.returnType, self.paramTypes)
 }
 
 func (self FunctionType) MarshalJSON() ([]byte, error) {
@@ -27,8 +27,8 @@ func (self FunctionType) MarshalJSON() ([]byte, error) {
     ParamTypes ParamTypes
   }
   x.ClassName = "typesys.FunctionType"
-  x.ReturnType = self.ReturnType
-  x.ParamTypes = self.ParamTypes
+  x.ReturnType = self.returnType
+  x.ParamTypes = self.paramTypes
   return json.Marshal(x)
 }
 
@@ -86,9 +86,9 @@ func (self FunctionType) IsFunction() bool {
 
 // FunctionTypeRef
 type FunctionTypeRef struct {
-  Location duck.ILocation
-  ReturnType duck.ITypeRef
-  Params ParamTypeRefs
+  location duck.ILocation
+  returnType duck.ITypeRef
+  params ParamTypeRefs
 }
 
 func NewFunctionTypeRef(returnType duck.ITypeRef, params duck.ITypeRef) FunctionTypeRef {
@@ -96,7 +96,7 @@ func NewFunctionTypeRef(returnType duck.ITypeRef, params duck.ITypeRef) Function
 }
 
 func (self FunctionTypeRef) String() string {
-  return fmt.Sprintf("<typesys.FunctionTypeRef Location=%s ReturnType=%s Params=%s>", self.Location, self.ReturnType, self.Params)
+  return fmt.Sprintf("<typesys.FunctionTypeRef Location=%s ReturnType=%s Params=%s>", self.location, self.returnType, self.params)
 }
 
 func (self FunctionTypeRef) MarshalJSON() ([]byte, error) {
@@ -107,14 +107,14 @@ func (self FunctionTypeRef) MarshalJSON() ([]byte, error) {
     Params ParamTypeRefs
   }
   x.ClassName = "typesys.FunctionTypeRef"
-  x.Location = self.Location
-  x.ReturnType = self.ReturnType
-  x.Params = self.Params
+  x.Location = self.location
+  x.ReturnType = self.returnType
+  x.Params = self.params
   return json.Marshal(x)
 }
 
 func (self FunctionTypeRef) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 func (self FunctionTypeRef) IsTypeRef() bool {

@@ -8,9 +8,9 @@ import (
 
 // ArrayType
 type ArrayType struct {
-  BaseType duck.IType
-  Length int
-  PointerSize int
+  baseType duck.IType
+  length int
+  pointerSize int
 }
 
 func NewArrayType(baseType duck.IType, length int, pointerSize int) ArrayType {
@@ -18,7 +18,7 @@ func NewArrayType(baseType duck.IType, length int, pointerSize int) ArrayType {
 }
 
 func (self ArrayType) String() string {
-  return fmt.Sprintf("<typesys.ArrayType BaseType=%s Length=%d PointerSize=%d>", self.BaseType, self.Length, self.PointerSize)
+  return fmt.Sprintf("<typesys.ArrayType BaseType=%s Length=%d PointerSize=%d>", self.baseType, self.length, self.pointerSize)
 }
 
 func (self ArrayType) MarshalJSON() ([]byte, error) {
@@ -29,22 +29,22 @@ func (self ArrayType) MarshalJSON() ([]byte, error) {
     PointerSize int
   }
   x.ClassName = "typesys.ArrayType"
-  x.BaseType = self.BaseType
-  x.Length = self.Length
-  x.PointerSize = self.PointerSize
+  x.BaseType = self.baseType
+  x.Length = self.length
+  x.PointerSize = self.pointerSize
   return json.Marshal(x)
 }
 
 func (self ArrayType) Size() int {
-  return self.PointerSize
+  return self.pointerSize
 }
 
-func (self ArrayType) AllocSize() int {
-  return self.BaseType.AllocSize() * self.Length
+func (self ArrayType) allocSize() int {
+  return self.baseType.AllocSize() * self.length
 }
 
 func (self ArrayType) Alignment() int {
-  return self.BaseType.AllocSize()
+  return self.baseType.AllocSize()
 }
 
 func (self ArrayType) IsVoid() bool {
@@ -89,9 +89,9 @@ func (self ArrayType) IsFunction() bool {
 
 // ArrayTypeRef
 type ArrayTypeRef struct {
-  Location duck.ILocation
-  BaseType duck.ITypeRef
-  Length int
+  location duck.ILocation
+  baseType duck.ITypeRef
+  length int
 }
 
 func NewArrayTypeRef(baseType duck.ITypeRef, length int) ArrayTypeRef {
@@ -99,7 +99,7 @@ func NewArrayTypeRef(baseType duck.ITypeRef, length int) ArrayTypeRef {
 }
 
 func (self ArrayTypeRef) String() string {
-  return fmt.Sprintf("<typesys.ArrayTypeRef Location=%s BaseType=%s Length=%d>", self.Location, self.BaseType, self.Length)
+  return fmt.Sprintf("<typesys.ArrayTypeRef Location=%s BaseType=%s Length=%d>", self.location, self.baseType, self.length)
 }
 
 func (self ArrayTypeRef) MarshalJSON() ([]byte, error) {
@@ -110,14 +110,14 @@ func (self ArrayTypeRef) MarshalJSON() ([]byte, error) {
     Length int
   }
   x.ClassName = "typesys.ArrayTypeRef"
-  x.Location = self.Location
-  x.BaseType = self.BaseType
-  x.Length = self.Length
+  x.Location = self.location
+  x.BaseType = self.baseType
+  x.Length = self.length
   return json.Marshal(x)
 }
 
 func (self ArrayTypeRef) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 func (self ArrayTypeRef) IsTypeRef() bool {

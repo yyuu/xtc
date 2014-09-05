@@ -8,9 +8,9 @@ import (
 
 // IntegerType
 type IntegerType struct {
-  IntegerSize int
-  Signed bool
-  Name string
+  integerSize int
+  signed bool
+  name string
 }
 
 func NewIntegerType(size int, isSigned bool, name string) IntegerType {
@@ -18,7 +18,7 @@ func NewIntegerType(size int, isSigned bool, name string) IntegerType {
 }
 
 func (self IntegerType) String() string {
-  return fmt.Sprintf("<typesys.IntegerType Name=%s IntegerSize=%d Signed=%v>", self.Name, self.IntegerSize, self.Signed)
+  return fmt.Sprintf("<typesys.IntegerType Name=%s IntegerSize=%d Signed=%v>", self.name, self.integerSize, self.signed)
 }
 
 func (self IntegerType) MarshalJSON() ([]byte, error) {
@@ -29,14 +29,14 @@ func (self IntegerType) MarshalJSON() ([]byte, error) {
     Name string
   }
   x.ClassName = "typesys.IntegerType"
-  x.IntegerSize = self.IntegerSize
-  x.Signed = self.Signed
-  x.Name = self.Name
+  x.IntegerSize = self.integerSize
+  x.Signed = self.signed
+  x.Name = self.name
   return json.Marshal(x)
 }
 
 func (self IntegerType) Size() int {
-  return self.IntegerSize
+  return self.integerSize
 }
 
 func (self IntegerType) AllocSize() int {
@@ -56,7 +56,7 @@ func (self IntegerType) IsInteger() bool {
 }
 
 func (self IntegerType) IsSigned() bool {
-  return self.Signed
+  return self.signed
 }
 
 func (self IntegerType) IsPointer() bool {
@@ -89,16 +89,16 @@ func (self IntegerType) IsFunction() bool {
 
 // IntegerTypeRef
 type IntegerTypeRef struct {
-  Location duck.ILocation
-  Name string
+  location duck.ILocation
+  name string
 }
 
-func NewIntegerTypeRef(location duck.ILocation, name string) IntegerTypeRef {
-  return IntegerTypeRef { location, name }
+func NewIntegerTypeRef(loc duck.ILocation, name string) IntegerTypeRef {
+  return IntegerTypeRef { loc, name }
 }
 
 func (self IntegerTypeRef) String() string {
-  return fmt.Sprintf("<typesys.IntegerTypeRef Name=%s Location=%s>", self.Name, self.Location)
+  return fmt.Sprintf("<typesys.IntegerTypeRef Name=%s Location=%s>", self.name, self.location)
 }
 
 func (self IntegerTypeRef) MarshalJSON() ([]byte, error) {
@@ -108,13 +108,13 @@ func (self IntegerTypeRef) MarshalJSON() ([]byte, error) {
     Name string
   }
   x.ClassName = "typesys.IntegerTypeRef"
-  x.Location = self.Location
-  x.Name = self.Name
+  x.Location = self.location
+  x.Name = self.name
   return json.Marshal(x)
 }
 
 func (self IntegerTypeRef) GetLocation() duck.ILocation {
-  return self.Location
+  return self.location
 }
 
 func (self IntegerTypeRef) IsTypeRef() bool {
