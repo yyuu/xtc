@@ -52,12 +52,12 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
       return getc();
     }
   `
-  x := ast.AST {
+  x := ast.NewAST(
     loc(1,1),
-    ast.Declarations {
-      Defvars: defvars(),
-      Vardecls: vardecls(),
-      Defuns: defuns(
+    ast.NewDeclarations(
+      defvars(),
+      vardecls(),
+      defuns(
 //      []duck.IStmtNode {
 //        ast.NewExprStmtNode(loc(1,1),
 //          ast.NewFuncallNode(loc(1,1),
@@ -70,13 +70,13 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
 //        ),
 //      },
       ),
-      Funcdecls: funcdecls(),
-      Constants: defconsts(),
-      Defstructs: defstructs(),
-      Defunions: defunions(),
-      Typedefs: typedefs(),
-    },
-  }
+      funcdecls(),
+      defconsts(),
+      defstructs(),
+      defunions(),
+      typedefs(),
+    ),
+  )
   y, err := ParseExpr(s)
   xt.AssertNil(t, "", err)
   xt.AssertStringEqualsDiff(t, "parse funcall w/o arguments", xt.JSON(y), xt.JSON(x))
@@ -91,34 +91,34 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
       println("hello, %d", n);
     }
   `
-  x := ast.AST {
-//  []duck.IStmtNode {
-//    ast.NewExprStmtNode(loc(1,5),
-//      ast.NewFuncallNode(loc(1,5),
-//        ast.NewVariableNode(loc(1,5),
-//          "println",
-//        ),
-//        []duck.IExprNode {
-//          ast.NewStringLiteralNode(loc(1,13),
-//            "\"hello, world\"",
-//          ),
-//        },
-//      ),
-//    ),
-//  },
+  x := ast.NewAST {
     loc(1,5),
-    ast.Declarations {
-      Defvars: []entity.DefinedVariable { },
-      Vardecls: []entity.UndefinedVariable { },
-      Defuns: []entity.DefinedFunction {
-      },
-      Funcdecls: []entity.UndefinedFunction { },
-      Constants: []entity.Constant { },
-      Defstructs: []ast.StructNode { },
-      Defunions: []ast.UnionNode { },
-      Typedefs: []ast.TypedefNode { },
-    },
-  }
+    ast.NewDeclarations(
+      defvars(),
+      vardecls(),
+      defuns(
+//      []duck.IStmtNode {
+//        ast.NewExprStmtNode(loc(1,5),
+//          ast.NewFuncallNode(loc(1,5),
+//            ast.NewVariableNode(loc(1,5),
+//              "println",
+//            ),
+//            []duck.IExprNode {
+//              ast.NewStringLiteralNode(loc(1,13),
+//                "\"hello, world\"",
+//              ),
+//            },
+//          ),
+//        ),
+//      },
+      ),
+      funcdecls(),
+      constants(),
+      defstructs(),
+      defunions(),
+      typedefs(),
+    ),
+  )
   y, err := ParseExpr(s)
   xt.AssertNil(t, "", err)
   xt.AssertStringEqualsDiff(t, "parse funcall w/ single argument", xt.JSON(y), xt.JSON(x))
@@ -135,36 +135,37 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
       "world"
     );
   `
-  x := ast.AST {
-//  []duck.IStmtNode {
-//    ast.NewExprStmtNode(loc(2,5),
-//      ast.NewFuncallNode(loc(2,5),
-//        ast.NewVariableNode(loc(2,5),
-//          "println",
-//        ),
-//        []duck.IExprNode {
-//          ast.NewStringLiteralNode(loc(3,7),
-//            "\"hello, %s\"",
-//          ),
-//          ast.NewStringLiteralNode(loc(4,7),
-//            "\"world\"",
-//          ),
-//        },
-//      ),
-//    ),
-//  },
+  x := ast.NewAST(
     loc(2,5),
     ast.Declarations {
-      Defvars: []entity.DefinedVariable { },
-      Vardecls: []entity.UndefinedVariable { },
-      Defuns: []entity.DefinedFunction { },
-      Funcdecls: []entity.UndefinedFunction { },
-      Constants: []entity.Constant { },
-      Defstructs: []ast.StructNode { },
-      Defunions: []ast.UnionNode { },
-      Typedefs: []ast.TypedefNode { },
-    },
-  }
+      defvars(),
+      vardecls(),
+      defuns(
+//      []duck.IStmtNode {
+//        ast.NewExprStmtNode(loc(2,5),
+//          ast.NewFuncallNode(loc(2,5),
+//            ast.NewVariableNode(loc(2,5),
+//              "println",
+//            ),
+//            []duck.IExprNode {
+//              ast.NewStringLiteralNode(loc(3,7),
+//                "\"hello, %s\"",
+//              ),
+//              ast.NewStringLiteralNode(loc(4,7),
+//                "\"world\"",
+//              ),
+//            },
+//          ),
+//        ),
+//      },
+      ),
+      funcdecls(),
+      constants(),
+      defstructs(),
+      defunions(),
+      typedefs(),
+    ),
+  )
   y, err := ParseExpr(s)
   xt.AssertNil(t, "", err)
   xt.AssertStringEqualsDiff(t, "funcall w/ multiple arguments", xt.JSON(y), xt.JSON(x))
@@ -177,56 +178,57 @@ func TestFor1(t *testing.T) {
   s := `
     for (i=0; i<100; i++) println(i);
 `
-  x := ast.AST {
-//  []duck.IStmtNode {
-//    ast.NewForNode(loc(1,5),
-//      ast.NewAssignNode(loc(1,10),
-//        ast.NewVariableNode(loc(1,10),
-//          "i",
-//        ),
-//        ast.NewIntegerLiteralNode(loc(1,12),
-//          "0",
-//        ),
-//      ),
-//      ast.NewBinaryOpNode(loc(1,15),
-//        "<",
-//        ast.NewVariableNode(loc(1,15),
-//          "i",
-//        ),
-//        ast.NewIntegerLiteralNode(loc(1,17),
-//          "100",
-//        ),
-//      ),
-//      ast.NewSuffixOpNode(loc(1,22),
-//        "++",
-//        ast.NewVariableNode(loc(1,22),
-//          "i",
-//        ),
-//      ),
-//      ast.NewExprStmtNode(loc(1,27),
-//        ast.NewFuncallNode(loc(1,27),
-//          ast.NewVariableNode(loc(1,27),
-//            "println",
-//          ),
-//          []duck.IExprNode {
-//            ast.NewVariableNode(loc(1,35),
+  x := ast.NewAST(
+    loc(2,5),
+    ast.NewDeclarations(
+      defvars(),
+      vardecls(),
+      defuns(
+//      []duck.IStmtNode {
+//        ast.NewForNode(loc(1,5),
+//          ast.NewAssignNode(loc(1,10),
+//            ast.NewVariableNode(loc(1,10),
 //              "i",
 //            ),
-//          },
+//            ast.NewIntegerLiteralNode(loc(1,12),
+//              "0",
+//            ),
+//          ),
+//          ast.NewBinaryOpNode(loc(1,15),
+//            "<",
+//            ast.NewVariableNode(loc(1,15),
+//              "i",
+//            ),
+//            ast.NewIntegerLiteralNode(loc(1,17),
+//              "100",
+//            ),
+//          ),
+//          ast.NewSuffixOpNode(loc(1,22),
+//            "++",
+//            ast.NewVariableNode(loc(1,22),
+//              "i",
+//            ),
+//          ),
+//          ast.NewExprStmtNode(loc(1,27),
+//            ast.NewFuncallNode(loc(1,27),
+//              ast.NewVariableNode(loc(1,27),
+//                "println",
+//              ),
+//              []duck.IExprNode {
+//                ast.NewVariableNode(loc(1,35),
+//                  "i",
+//                ),
+//              },
+//            ),
+//          ),
 //        ),
-//      ),
-//    ),
-//  },
-    loc(2,5),
-    ast.Declarations {
-      Defvars: []entity.DefinedVariable { },
-      Vardecls: []entity.UndefinedVariable { },
-      Defuns: []entity.DefinedFunction { },
-      Funcdecls: []entity.UndefinedFunction { },
-      Constants: []entity.Constant { },
-      Defstructs: []ast.StructNode { },
-      Defunions: []ast.UnionNode { },
-      Typedefs: []ast.TypedefNode { },
+//      },
+      ),
+      funcdecls(),
+      constants(),
+      defstructs(),
+      defunions(),
+      typedefs(),
     },
   }
   y, err := ParseExpr(s)
