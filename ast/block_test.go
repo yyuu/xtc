@@ -3,6 +3,8 @@ package ast
 import (
   "testing"
   "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/entity"
+  "bitbucket.org/yyuu/bs/typesys"
   "bitbucket.org/yyuu/bs/xt"
 )
 
@@ -14,7 +16,7 @@ func TestBlock1(t *testing.T) {
  */
   x := NewBlockNode(
     loc(0,0),
-    []duck.IExprNode { },
+    []duck.IVariable { },
     []duck.IStmtNode {
       NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []duck.IExprNode { NewStringLiteralNode(loc(0,0), "\"hello, world\"") })),
     },
@@ -58,8 +60,14 @@ func TestBlock2(t *testing.T) {
  */
   x := NewBlockNode(
     loc(0,0),
-    []duck.IExprNode {
-      NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "12345")),
+    []duck.IVariable {
+//    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "12345")),
+      entity.NewDefinedVariable(
+        false,
+        NewTypeNode(loc(0,0), typesys.NewIntegerTypeRef(loc(0,0), "int")),
+        "n",
+        NewIntegerLiteralNode(loc(0,0), "12345"),
+      ),
     },
     []duck.IStmtNode {
       NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []duck.IExprNode { NewStringLiteralNode(loc(0,0), "\"%d\""), NewVariableNode(loc(0,0), "n") })),
@@ -70,14 +78,20 @@ func TestBlock2(t *testing.T) {
   "Location": "[:0,0]",
   "Variables": [
     {
-      "ClassName": "ast.AssignNode",
-      "Location": "[:0,0]",
-      "Lhs": {
-        "ClassName": "ast.VariableNode",
+      "ClassName": "entity.DefinedVariable",
+      "Private": false,
+      "Name": "n",
+      "TypeNode": {
+        "ClassName": "ast.TypeNode",
         "Location": "[:0,0]",
-        "Name": "n"
+        "TypeRef": {
+          "ClassName": "typesys.IntegerTypeRef",
+          "Location": "[:0,0]",
+          "Name": "int"
+        }
       },
-      "Rhs": {
+      "NumRefered": 0,
+      "Initializer": {
         "ClassName": "ast.IntegerLiteralNode",
         "Location": "[:0,0]",
         "Value": 12345
@@ -126,9 +140,21 @@ func TestBlock3(t *testing.T) {
  */
   x := NewBlockNode(
     loc(0,0),
-    []duck.IExprNode {
-      NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "12345")),
-      NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "m"), NewIntegerLiteralNode(loc(0,0), "67890")),
+    []duck.IVariable {
+//    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "12345")),
+//    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "m"), NewIntegerLiteralNode(loc(0,0), "67890")),
+      entity.NewDefinedVariable(
+        false,
+        NewTypeNode(loc(0,0), typesys.NewIntegerTypeRef(loc(0,0), "int")),
+        "n",
+        NewIntegerLiteralNode(loc(0,0), "12345"),
+      ),
+      entity.NewDefinedVariable(
+        false,
+        NewTypeNode(loc(0,0), typesys.NewIntegerTypeRef(loc(0,0), "int")),
+        "m",
+        NewIntegerLiteralNode(loc(0,0), "67890"),
+      ),
     },
     []duck.IStmtNode {
       NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []duck.IExprNode { NewStringLiteralNode(loc(0,0), "\"%d\""), NewVariableNode(loc(0,0), "n") })),
@@ -140,28 +166,40 @@ func TestBlock3(t *testing.T) {
   "Location": "[:0,0]",
   "Variables": [
     {
-      "ClassName": "ast.AssignNode",
-      "Location": "[:0,0]",
-      "Lhs": {
-        "ClassName": "ast.VariableNode",
+      "ClassName": "entity.DefinedVariable",
+      "Private": false,
+      "Name": "n",
+      "TypeNode": {
+        "ClassName": "ast.TypeNode",
         "Location": "[:0,0]",
-        "Name": "n"
+        "TypeRef": {
+          "ClassName": "typesys.IntegerTypeRef",
+          "Location": "[:0,0]",
+          "Name": "int"
+        }
       },
-      "Rhs": {
+      "NumRefered": 0,
+      "Initializer": {
         "ClassName": "ast.IntegerLiteralNode",
         "Location": "[:0,0]",
         "Value": 12345
       }
     },
     {
-      "ClassName": "ast.AssignNode",
-      "Location": "[:0,0]",
-      "Lhs": {
-        "ClassName": "ast.VariableNode",
+      "ClassName": "entity.DefinedVariable",
+      "Private": false,
+      "Name": "m",
+      "TypeNode": {
+        "ClassName": "ast.TypeNode",
         "Location": "[:0,0]",
-        "Name": "m"
+        "TypeRef": {
+          "ClassName": "typesys.IntegerTypeRef",
+          "Location": "[:0,0]",
+          "Name": "int"
+        }
       },
-      "Rhs": {
+      "NumRefered": 0,
+      "Initializer": {
         "ClassName": "ast.IntegerLiteralNode",
         "Location": "[:0,0]",
         "Value": 67890

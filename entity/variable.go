@@ -44,6 +44,10 @@ func (self DefinedVariable) IsEntity() bool {
   return true
 }
 
+func (self DefinedVariable) IsVariable() bool {
+  return true
+}
+
 func (self DefinedVariable) IsDefined() bool {
   return true
 }
@@ -81,5 +85,9 @@ func (self UndefinedVariable) MarshalJSON() ([]byte, error) {
 }
 
 func (self UndefinedVariable) IsEntity() bool {
+  return true
+}
+
+func (self UndefinedVariable) IsVariable() bool {
   return true
 }

@@ -19,6 +19,7 @@ import (
   _nodes []duck.INode
 
   _entity duck.IEntity
+  _entities []duck.IEntity
 
   _typeref duck.ITypeRef
   _typerefs []duck.ITypeRef
@@ -251,14 +252,14 @@ param: type name
 
 block: '{' defvar_list stmts '}'
      {
-       $$._node = ast.NewBlockNode($1._token.location, asExprs($2._nodes), asStmts($3._nodes))
+       $$._node = ast.NewBlockNode($1._token.location, asVariables($2._entities), asStmts($3._nodes))
      }
      ;
 
 defvar_list:
            | defvar_list defvars
            {
-             $$._nodes = append($1._nodes, $2._node)
+             $$._entities = append($1._entities, $2._entity)
            }
            ;
 

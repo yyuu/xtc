@@ -78,8 +78,28 @@ func asUndefinedFunction(x duck.IEntity) entity.UndefinedFunction {
   return x.(entity.UndefinedFunction)
 }
 
+func asVariable(x duck.IEntity) duck.IVariable {
+  return x.(duck.IVariable)
+}
+
+func asVariables(xs []duck.IEntity) []duck.IVariable {
+  ys := make([]duck.IVariable, len(xs))
+  for i := range xs {
+    ys[i] = asVariable(xs[i])
+  }
+  return ys
+}
+
 func asDefinedVariable(x duck.IEntity) entity.DefinedVariable {
   return x.(entity.DefinedVariable)
+}
+
+func asDefinedVariables(xs []duck.IEntity) []entity.DefinedVariable {
+  ys := make([]entity.DefinedVariable, len(xs))
+  for i := range xs {
+    ys[i] = asDefinedVariable(xs[i])
+  }
+  return ys
 }
 
 func asUndefinedVariable(x duck.IEntity) entity.UndefinedVariable {
