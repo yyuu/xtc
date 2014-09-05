@@ -18,6 +18,7 @@ type lex struct {
   ignoreSpaces bool
   ignoreComments bool
   ast *ast.AST
+  firstToken *token
   error error
 }
 
@@ -115,7 +116,7 @@ var operators []key = []key {
   fixed_key("||",       OROR),
 }
 
-func (self *lex) getToken() (t *token) {
+func (self *lex) getNextToken() (t *token) {
   if self.scanner.IsEOS() {
     return nil
   }
@@ -125,7 +126,7 @@ func (self *lex) getToken() (t *token) {
     if ! self.ignoreSpaces {
       return t
     } else {
-      return self.getToken()
+      return self.getNextToken()
     }
   }
 
@@ -134,7 +135,7 @@ func (self *lex) getToken() (t *token) {
     if ! self.ignoreComments {
       return t
     } else {
-      return self.getToken()
+      return self.getNextToken()
     }
   }
   t = self.scanLineComment()
@@ -142,7 +143,7 @@ func (self *lex) getToken() (t *token) {
     if ! self.ignoreComments {
       return t
     } else {
-      return self.getToken()
+      return self.getNextToken()
     }
   }
 
@@ -184,6 +185,10 @@ func (self *lex) consume(id int, literal string) (t *token) {
     id: id,
     literal: literal,
     location: ast.NewLocation(self.sourceName, self.lineNumber, self.lineOffset),
+  }
+
+  if self.firstToken == nil {
+    self.firstToken = t
   }
 
   self.lineNumber += strings.Count(literal, "\n")

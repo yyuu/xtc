@@ -93,8 +93,11 @@ compilation_unit:
                 | import_stmts top_defs
                 {
                   if lex, ok := yylex.(*lex); ok {
-//                  ast := ast.NewAST($1._token.location, asDeclarations($2._node))
-                    ast := ast.NewAST($2._token.location, asDeclarations($2._node))
+                    var loc duck.ILocation
+                    if lex.firstToken != nil {
+                      loc = lex.firstToken.location
+                    }
+                    ast := ast.NewAST(loc, asDeclarations($2._node))
                     lex.ast = &ast
                   } else {
                     panic("parser is broken")
@@ -103,9 +106,6 @@ compilation_unit:
                 ;
 
 declaration_file: import_stmts
-                {
-//
-                }
                 | declaration_file funcdecl
                 {
                   $$._node = asDeclarations($1._node).AddFuncdecl(asUndefinedFunction($2._entity))
@@ -780,7 +780,7 @@ const EOF = 0
 var VERBOSE = false
 
 func (self *lex) Lex(lval *yySymType) int {
-  t := self.getToken()
+  t := self.getNextToken()
   if t == nil {
     return EOF
   } else {
