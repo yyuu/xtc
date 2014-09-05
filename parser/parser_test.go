@@ -2,6 +2,9 @@ package parser
 
 import (
   "testing"
+  "bitbucket.org/yyuu/bs/ast"
+//"bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/entity"
   "bitbucket.org/yyuu/bs/xt"
 )
 
@@ -10,40 +13,73 @@ func TestParseEmpty(t *testing.T) {
   xt.AssertNil(t, "", err)
 }
 
+func defvars(xs...entity.DefinedVariable) []entity.DefinedVariable {
+  return xs
+}
+
+func vardecls(xs...entity.UndefinedVariable) []entity.UndefinedVariable {
+  return xs
+}
+
+func defuns(xs...entity.DefinedFunction) []entity.DefinedFunction {
+  return xs
+}
+
+func funcdecls(xs...entity.UndefinedFunction) []entity.UndefinedFunction {
+  return xs
+}
+
+func defconsts(xs...entity.Constant) []entity.Constant {
+  return xs
+}
+
+func defstructs(xs...ast.StructNode) []ast.StructNode {
+  return xs
+}
+
+func defunions(xs...ast.UnionNode) []ast.UnionNode {
+  return xs
+}
+
+func typedefs(xs...ast.TypedefNode) []ast.TypedefNode {
+  return xs
+}
+
 /*
 func TestParseFuncallWithoutArguments(t *testing.T) {
   s := `
-    int f() {
+    int f(void) {
       return getc();
     }
   `
   x := ast.AST {
-//  []duck.IStmtNode {
-//    ast.NewExprStmtNode(loc(1,1),
-//      ast.NewFuncallNode(loc(1,1),
-//        ast.NewVariableNode(loc(1,1),
-//          "gets",
-//        ),
-//        []duck.IExprNode {
-//        },
-//      ),
-//    ),
-//  },
     loc(1,1),
     ast.Declarations {
-      Defvars: []entity.DefinedVariable { },
-      Vardecls: []entity.UndefinedVariable { },
-      Defuns: []entity.DefinedFunction { },
-      Funcdecls: []entity.UndefinedFunction { },
-      Constants: []entity.Constant { },
-      Defstructs: []ast.StructNode { },
-      Defunions: []ast.UnionNode { },
-      Typedefs: []ast.TypedefNode { },
+      Defvars: defvars(),
+      Vardecls: vardecls(),
+      Defuns: defuns(
+//      []duck.IStmtNode {
+//        ast.NewExprStmtNode(loc(1,1),
+//          ast.NewFuncallNode(loc(1,1),
+//            ast.NewVariableNode(loc(1,1),
+//              "gets",
+//            ),
+//            []duck.IExprNode {
+//            },
+//          ),
+//        ),
+//      },
+      ),
+      Funcdecls: funcdecls(),
+      Constants: defconsts(),
+      Defstructs: defstructs(),
+      Defunions: defunions(),
+      Typedefs: typedefs(),
     },
   }
   y, err := ParseExpr(s)
   xt.AssertNil(t, "", err)
-  xt.AssertStringEqualsDiff(t, "parse funcall w/o arguments", xs.JSON(y), xt.JSON(x))
+  xt.AssertStringEqualsDiff(t, "parse funcall w/o arguments", xt.JSON(y), xt.JSON(x))
   xt.AssertDeepEquals(t, "", y, x)
 }
  */

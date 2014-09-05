@@ -2,6 +2,7 @@ package typesys
 
 import (
   "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -17,7 +18,7 @@ func NewArrayType(baseType duck.IType, length int, pointerSize int) ArrayType {
 }
 
 func (self ArrayType) String() string {
-  panic("ArrayType#String called")
+  return fmt.Sprintf("<typesys.ArrayType BaseType=%s Length=%d PointerSize=%d>", self.BaseType, self.Length, self.PointerSize)
 }
 
 func (self ArrayType) MarshalJSON() ([]byte, error) {
@@ -98,7 +99,7 @@ func NewArrayTypeRef(baseType duck.ITypeRef, length int) ArrayTypeRef {
 }
 
 func (self ArrayTypeRef) String() string {
-  panic("ArrayTypeRef#String called")
+  return fmt.Sprintf("<typesys.ArrayTypeRef Location=%s BaseType=%s Length=%d>", self.Location, self.BaseType, self.Length)
 }
 
 func (self ArrayTypeRef) MarshalJSON() ([]byte, error) {

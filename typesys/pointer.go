@@ -2,6 +2,7 @@ package typesys
 
 import (
   "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -16,7 +17,7 @@ func NewPointerType(size int, baseType duck.IType) PointerType {
 }
 
 func (self PointerType) String() string {
-  panic("PointerType#String called")
+  return fmt.Sprintf("<typesys.PointerType PointerSize=%d BaseType=%s>", self.PointerSize, self.BaseType)
 }
 
 func (self PointerType) MarshalJSON() ([]byte, error) {
@@ -94,7 +95,7 @@ func NewPointerTypeRef(baseType duck.ITypeRef) PointerTypeRef {
 }
 
 func (self PointerTypeRef) String() string {
-  panic("PointerTypeRef#String called")
+  return fmt.Sprintf("<typesys.PointerTypeRef Location=%s BaseType=%s>", self.Location, self.BaseType)
 }
 
 func (self PointerTypeRef) MarshalJSON() ([]byte, error) {

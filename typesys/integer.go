@@ -2,6 +2,7 @@ package typesys
 
 import (
   "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -17,7 +18,7 @@ func NewIntegerType(size int, isSigned bool, name string) IntegerType {
 }
 
 func (self IntegerType) String() string {
-  panic("IntegerType#String called")
+  return fmt.Sprintf("<typesys.IntegerType Name=%s IntegerSize=%d Signed=%v>", self.Name, self.IntegerSize, self.Signed)
 }
 
 func (self IntegerType) MarshalJSON() ([]byte, error) {
@@ -97,7 +98,7 @@ func NewIntegerTypeRef(location duck.ILocation, name string) IntegerTypeRef {
 }
 
 func (self IntegerTypeRef) String() string {
-  panic("IntegerTypeRef#String called")
+  return fmt.Sprintf("<typesys.IntegerTypeRef Name=%s Location=%s>", self.Name, self.Location)
 }
 
 func (self IntegerTypeRef) MarshalJSON() ([]byte, error) {

@@ -2,6 +2,7 @@ package entity
 
 import (
   "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -24,7 +25,7 @@ func NewDefinedVariable(isPrivate bool, t duck.ITypeNode, name string, init duck
 }
 
 func (self DefinedVariable) String() string {
-  panic("DefinedVariable#String called")
+  return fmt.Sprintf("<entity.DefinedVariable Name=%s Private=%v TypeNode=%s NumRefered=%d Initializer=%s>", self.Name, self.Private, self.TypeNode, self.NumRefered, self.Initializer)
 }
 
 func (self DefinedVariable) MarshalJSON() ([]byte, error) {
@@ -72,7 +73,7 @@ func NewUndefinedVariable(t duck.ITypeNode, name string) UndefinedVariable {
 }
 
 func (self UndefinedVariable) String() string {
-  panic("UndefinedVariable#String called")
+  return fmt.Sprintf("<entity.UndefinedVariable Name=%s Private=%v TypeNode=%s>", self.Name, self.Private, self.TypeNode)
 }
 
 func (self UndefinedVariable) MarshalJSON() ([]byte, error) {

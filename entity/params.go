@@ -2,6 +2,7 @@ package entity
 
 import (
   "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
   "bitbucket.org/yyuu/bs/typesys"
 )
@@ -19,7 +20,7 @@ func NewParams(loc duck.ILocation, paramDescs []Parameter) Params {
 }
 
 func (self Params) String() string {
-  panic("Params#String called")
+  return fmt.Sprintf("<entity.Params Location=%s ParamDescs=%s>", self.Location, self.ParamDescs)
 }
 
 func (self Params) MarshalJSON() ([]byte, error) {
@@ -59,7 +60,7 @@ func NewParameter(t duck.ITypeNode, name string) Parameter {
 }
 
 func (self Parameter) String() string {
-  panic("Parameter#String called")
+  return fmt.Sprintf("<entity.Parameter Name=%s TypeNode=%s>", self.Name, self.TypeNode)
 }
 
 func (self Parameter) MarshalJSON() ([]byte, error) {

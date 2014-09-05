@@ -2,6 +2,7 @@ package typesys
 
 import (
   "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -14,7 +15,7 @@ func NewVoidType() VoidType {
 }
 
 func (self VoidType) String() string {
-  panic("VoidType#String called")
+  return fmt.Sprintf("<typesys.VoidType>")
 }
 
 func (self VoidType) MarshalJSON() ([]byte, error) {
@@ -87,7 +88,7 @@ func NewVoidTypeRef(location duck.ILocation) VoidTypeRef {
 }
 
 func (self VoidTypeRef) String() string {
-  panic("VoidTypeRev#String called")
+  return fmt.Sprintf("<typesys.VoidTypeRef Location=%s>", self.Location)
 }
 
 func (self VoidTypeRef) MarshalJSON() ([]byte, error) {

@@ -2,6 +2,7 @@ package entity
 
 import (
   "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -24,7 +25,7 @@ func NewDefinedFunction(priv bool, t duck.ITypeNode, name string, params Params,
 }
 
 func (self DefinedFunction) String() string {
-  panic("DefinedFunction#String called")
+  return fmt.Sprintf("<entity.DefinedFunction Name=%s Private=%v TypeNode=%s Params=%s Body=%s>", self.Name, self.Private, self.TypeNode, self.Params, self.Body)
 }
 
 func (self DefinedFunction) MarshalJSON() ([]byte, error) {
@@ -64,7 +65,7 @@ func NewUndefinedFunction(t duck.ITypeNode, name string, params Params) Undefine
 }
 
 func (self UndefinedFunction) String() string {
-  panic("UndefinedFunction#String called")
+  return fmt.Sprintf("<entity.UndefinedFunction Name=%s TypeNode=%s Params=%s>", self.Name, self.TypeNode, self.Params)
 }
 
 func (self UndefinedFunction) MarshalJSON() ([]byte, error) {

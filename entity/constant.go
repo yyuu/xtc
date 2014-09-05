@@ -2,6 +2,7 @@ package entity
 
 import (
   "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -20,7 +21,7 @@ func NewConstant(t duck.ITypeNode, name string, value duck.IExprNode) Constant {
 }
 
 func (self Constant) String() string {
-  panic("Constant#String called")
+  return fmt.Sprintf("<entity.Constant Name=%s TypeNode=%s Value=%s>", self.Name, self.TypeNode, self.Value)
 }
 
 func (self Constant) MarshalJSON() ([]byte, error) {

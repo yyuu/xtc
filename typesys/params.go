@@ -2,6 +2,7 @@ package typesys
 
 import (
   "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -17,7 +18,7 @@ func NewParamTypes(loc duck.ILocation, paramDescs []duck.IType, vararg bool) Par
 }
 
 func (self ParamTypes) String() string {
-  panic("ParamTypes#String called")
+  return fmt.Sprintf("<typesys.ParamTypes Location=%s ParamDescs=%s Vararg=%v>", self.Location, self.ParamDescs, self.Vararg)
 }
 
 func (self ParamTypes) MarshalJSON() ([]byte, error) {
@@ -98,7 +99,7 @@ func NewParamTypeRefs(loc duck.ILocation, paramDescs []duck.ITypeRef, vararg boo
 }
 
 func (self ParamTypeRefs) String() string {
-  panic("ParamTypeRefs#String called")
+  return fmt.Sprintf("<typesys.ParamTypeRefs Location=%s ParamDescs=%s Vararg=%v>", self.Location, self.ParamDescs, self.Vararg)
 }
 
 func (self ParamTypeRefs) MarshalJSON() ([]byte, error) {

@@ -204,11 +204,21 @@ func NewTypeDefinition(loc duck.ILocation, ref duck.ITypeRef, name string) TypeD
 }
 
 func (self TypeDefinition) String() string {
-  panic("not implemented")
+  return fmt.Sprintf("<ast.TypeDefinition Name=%s Location=%s TypeNode=%s>", self.Name, self.Location, self.TypeNode)
 }
 
 func (self TypeDefinition) MarshalJSON() ([]byte, error) {
-  panic("not implemented")
+  var x struct {
+    ClassName string
+    Location duck.ILocation
+    Name string
+    TypeNode duck.ITypeNode
+  }
+  x.ClassName = "ast.TypeDefinition"
+  x.Location = self.Location
+  x.Name = self.Name
+  x.TypeNode = self.TypeNode
+  return json.Marshal(x)
 }
 
 func (self TypeDefinition) IsTypeDefinition() bool {

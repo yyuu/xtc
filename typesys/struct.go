@@ -2,6 +2,7 @@ package typesys
 
 import (
   "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -17,7 +18,7 @@ func NewStructType(name string, membs []duck.ISlot, loc duck.ILocation) StructTy
 }
 
 func (self StructType) String() string {
-  panic("StructType#String called")
+  return fmt.Sprintf("<typesys.StructType Name=%s Location=%s Members=%s>", self.Name, self.Location, self.Members)
 }
 
 func (self StructType) MarshalJSON() ([]byte, error) {
@@ -97,7 +98,7 @@ func NewStructTypeRef(loc duck.ILocation, name string) StructTypeRef {
 }
 
 func (self StructTypeRef) String() string {
-  panic("StructTypeRef#String called")
+  return fmt.Sprintf("<typesys.StructTypeRef Name=%s Location=%s>", self.Name, self.Location)
 }
 
 func (self StructTypeRef) MarshalJSON() ([]byte, error) {

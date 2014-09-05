@@ -2,6 +2,7 @@ package ast
 
 import (
   "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
   "bitbucket.org/yyuu/bs/entity"
 )
@@ -135,7 +136,14 @@ func copyDeclarationsWithAddTypedef(original Declarations, t TypedefNode) Declar
 }
 
 func (self Declarations) String() string {
-  panic("Declarations#String called")
+  return fmt.Sprintf("(begin (define defvars %s)\n" +
+                     "       (define vardecls %s)\n" +
+                     "       (define defuns %s)\n" +
+                     "       (define funcdecls %s)\n" +
+                     "       (define constants %s)\n" +
+                     "       (define defstructs %s)\n" +
+                     "       (define defunions %s)\n" +
+                     "       (define typedefs %s))", self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
 func (self Declarations) MarshalJSON() ([]byte, error) {

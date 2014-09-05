@@ -1,6 +1,8 @@
 package ast
 
 import (
+  "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -16,11 +18,21 @@ func NewSlot(t duck.ITypeNode, n string) Slot {
 }
 
 func (self Slot) String() string {
-  panic("Slot#String called")
+  return fmt.Sprintf("<ast.Slot Name=%s TypeNode=%s Offset=%d>", self.Name, self.TypeNode, self.Offset)
 }
 
 func (self Slot) MarshalJSON() ([]byte, error) {
-  panic("Slot#MarshalJSON called")
+  var x struct {
+    ClassName string
+    TypeNode duck.ITypeNode
+    Name string
+    Offset int
+  }
+  x.ClassName = "ast.Slot"
+  x.TypeNode = self.TypeNode
+  x.Name = self.Name
+  x.Offset = self.Offset
+  return json.Marshal(x)
 }
 
 func (self Slot) GetName() string {

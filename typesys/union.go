@@ -2,6 +2,7 @@ package typesys
 
 import (
   "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -17,7 +18,7 @@ func NewUnionType(name string, membs []duck.ISlot, loc duck.ILocation) UnionType
 }
 
 func (self UnionType) String() string {
-  panic("UnionType#String called")
+  return fmt.Sprintf("<typesys.UnionType Name=%s Location=%s Members=%s>", self.Name, self.Location, self.Members)
 }
 
 func (self UnionType) MarshalJSON() ([]byte, error) {
@@ -97,7 +98,7 @@ func NewUnionTypeRef(loc duck.ILocation, name string) UnionTypeRef {
 }
 
 func (self UnionTypeRef) String() string {
-  panic("UnionTypeRef#String called")
+  return fmt.Sprintf("<typesys.UnionTypeRef Name=%s Location=%s>", self.Name, self.Location)
 }
 
 func (self UnionTypeRef) MarshalJSON() ([]byte, error) {

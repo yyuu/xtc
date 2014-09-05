@@ -2,6 +2,7 @@ package typesys
 
 import (
   "encoding/json"
+  "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
@@ -16,7 +17,7 @@ func NewFunctionType(ret duck.IType, paramTypes ParamTypes) FunctionType {
 }
 
 func (self FunctionType) String() string {
-  panic("FunctionType#String called")
+  return fmt.Sprintf("<typesys.FunctionType ReturnType=%s ParamTypes=%s>", self.ReturnType, self.ParamTypes)
 }
 
 func (self FunctionType) MarshalJSON() ([]byte, error) {
@@ -95,7 +96,7 @@ func NewFunctionTypeRef(returnType duck.ITypeRef, params duck.ITypeRef) Function
 }
 
 func (self FunctionTypeRef) String() string {
-  panic("FunctionTypeRef#String called")
+  return fmt.Sprintf("<typesys.FunctionTypeRef Location=%s ReturnType=%s Params=%s>", self.Location, self.ReturnType, self.Params)
 }
 
 func (self FunctionTypeRef) MarshalJSON() ([]byte, error) {
