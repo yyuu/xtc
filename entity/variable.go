@@ -7,25 +7,19 @@ import (
 )
 
 type DefinedVariable struct {
-  Private bool
-  Name string
-  TypeNode duck.ITypeNode
-  NumRefered int
-  Initializer duck.IExprNode
+  private bool
+  name string
+  typeNode duck.ITypeNode
+  numRefered int
+  initializer duck.IExprNode
 }
 
 func NewDefinedVariable(isPrivate bool, t duck.ITypeNode, name string, init duck.IExprNode) DefinedVariable {
-  return DefinedVariable {
-    Private: isPrivate,
-    Name: name,
-    TypeNode: t,
-    NumRefered: 0,
-    Initializer: init,
-  }
+  return DefinedVariable { isPrivate, name, t, 0, init }
 }
 
 func (self DefinedVariable) String() string {
-  return fmt.Sprintf("<entity.DefinedVariable Name=%s Private=%v TypeNode=%s NumRefered=%d Initializer=%s>", self.Name, self.Private, self.TypeNode, self.NumRefered, self.Initializer)
+  return fmt.Sprintf("<entity.DefinedVariable Name=%s Private=%v TypeNode=%s NumRefered=%d Initializer=%s>", self.name, self.private, self.typeNode, self.numRefered, self.initializer)
 }
 
 func (self DefinedVariable) MarshalJSON() ([]byte, error) {
@@ -38,11 +32,11 @@ func (self DefinedVariable) MarshalJSON() ([]byte, error) {
     Initializer duck.IExprNode
   }
   x.ClassName = "entity.DefinedVariable"
-  x.Private = self.Private
-  x.Name = self.Name
-  x.TypeNode = self.TypeNode
-  x.NumRefered = self.NumRefered
-  x.Initializer = self.Initializer
+  x.Private = self.private
+  x.Name = self.name
+  x.TypeNode = self.typeNode
+  x.NumRefered = self.numRefered
+  x.Initializer = self.initializer
   return json.Marshal(x)
 }
 
@@ -55,25 +49,21 @@ func (self DefinedVariable) IsDefined() bool {
 }
 
 func (self DefinedVariable) HasInitializer() bool {
-  return self.Initializer != nil
+  return self.initializer != nil
 }
 
 type UndefinedVariable struct {
-  Private bool
-  Name string
-  TypeNode duck.ITypeNode
+  private bool
+  name string
+  typeNode duck.ITypeNode
 }
 
 func NewUndefinedVariable(t duck.ITypeNode, name string) UndefinedVariable {
-  return UndefinedVariable {
-    Private: false,
-    Name: name,
-    TypeNode: t,
-  }
+  return UndefinedVariable { false, name, t }
 }
 
 func (self UndefinedVariable) String() string {
-  return fmt.Sprintf("<entity.UndefinedVariable Name=%s Private=%v TypeNode=%s>", self.Name, self.Private, self.TypeNode)
+  return fmt.Sprintf("<entity.UndefinedVariable Name=%s Private=%v TypeNode=%s>", self.name, self.private, self.typeNode)
 }
 
 func (self UndefinedVariable) MarshalJSON() ([]byte, error) {
@@ -84,9 +74,9 @@ func (self UndefinedVariable) MarshalJSON() ([]byte, error) {
     TypeNode duck.ITypeNode
   }
   x.ClassName = "entity.UndefinedVariable"
-  x.Private = self.Private
-  x.Name = self.Name
-  x.TypeNode = self.TypeNode
+  x.Private = self.private
+  x.Name = self.name
+  x.TypeNode = self.typeNode
   return json.Marshal(x)
 }
 

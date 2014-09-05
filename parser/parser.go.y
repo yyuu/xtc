@@ -216,11 +216,11 @@ params: VOID
       }
       | fixedparams
       {
-        $$._entity = entity.NewParams($1._token.location, asParams($1._entity).ParamDescs)
+        $$._entity = entity.NewParams($1._token.location, asParams($1._entity).GetParamDescs())
       }
       | fixedparams ',' DOTDOTDOT
       {
-        $$._entity = entity.NewParams($1._token.location, asParams($1._entity).ParamDescs)
+        $$._entity = entity.NewParams($1._token.location, asParams($1._entity).GetParamDescs())
 //      $$._entity.AcceptVarArgs()
       }
       ;
@@ -231,7 +231,7 @@ fixedparams: param
            }
            | fixedparams ',' param
            {
-             $$._entity = entity.NewParams($1._token.location, append(asParams($1._entity).ParamDescs, asParameter($3._entity)))
+             $$._entity = entity.NewParams($1._token.location, append(asParams($1._entity).GetParamDescs(), asParameter($3._entity)))
            }
            ;
 

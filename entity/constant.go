@@ -7,21 +7,17 @@ import (
 )
 
 type Constant struct {
-  Name string
-  TypeNode duck.ITypeNode
-  Value duck.IExprNode
+  name string
+  typeNode duck.ITypeNode
+  value duck.IExprNode
 }
 
 func NewConstant(t duck.ITypeNode, name string, value duck.IExprNode) Constant {
-  return Constant {
-    TypeNode: t,
-    Name: name,
-    Value: value,
-  }
+  return Constant { name, t, value }
 }
 
 func (self Constant) String() string {
-  return fmt.Sprintf("<entity.Constant Name=%s TypeNode=%s Value=%s>", self.Name, self.TypeNode, self.Value)
+  return fmt.Sprintf("<entity.Constant Name=%s TypeNode=%s Value=%s>", self.name, self.typeNode, self.value)
 }
 
 func (self Constant) MarshalJSON() ([]byte, error) {
@@ -32,9 +28,9 @@ func (self Constant) MarshalJSON() ([]byte, error) {
     Value duck.IExprNode
   }
   x.ClassName = "entity.Constant"
-  x.Name = self.Name
-  x.TypeNode = self.TypeNode
-  x.Value = self.Value
+  x.Name = self.name
+  x.TypeNode = self.typeNode
+  x.Value = self.value
   return json.Marshal(x)
 }
 

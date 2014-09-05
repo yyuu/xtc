@@ -7,25 +7,19 @@ import (
 )
 
 type DefinedFunction struct {
-  Private bool
-  TypeNode duck.ITypeNode
-  Name string
-  Params Params
-  Body duck.IStmtNode
+  private bool
+  typeNode duck.ITypeNode
+  name string
+  params Params
+  body duck.IStmtNode
 }
 
 func NewDefinedFunction(priv bool, t duck.ITypeNode, name string, params Params, body duck.IStmtNode) DefinedFunction {
-  return DefinedFunction {
-    Private: priv,
-    TypeNode: t,
-    Name: name,
-    Params: params,
-    Body: body,
-  }
+  return DefinedFunction { priv, t, name, params, body }
 }
 
 func (self DefinedFunction) String() string {
-  return fmt.Sprintf("<entity.DefinedFunction Name=%s Private=%v TypeNode=%s Params=%s Body=%s>", self.Name, self.Private, self.TypeNode, self.Params, self.Body)
+  return fmt.Sprintf("<entity.DefinedFunction Name=%s Private=%v TypeNode=%s Params=%s Body=%s>", self.name, self.private, self.typeNode, self.params, self.body)
 }
 
 func (self DefinedFunction) MarshalJSON() ([]byte, error) {
@@ -38,11 +32,11 @@ func (self DefinedFunction) MarshalJSON() ([]byte, error) {
     Body duck.IStmtNode
   }
   x.ClassName = "entity.DefinedFunction"
-  x.Private = self.Private
-  x.TypeNode = self.TypeNode
-  x.Name = self.Name
-  x.Params = self.Params
-  x.Body = self.Body
+  x.Private = self.private
+  x.TypeNode = self.typeNode
+  x.Name = self.name
+  x.Params = self.params
+  x.Body = self.body
   return json.Marshal(x)
 }
 
@@ -51,21 +45,17 @@ func (self DefinedFunction) IsEntity() bool {
 }
 
 type UndefinedFunction struct {
-  TypeNode duck.ITypeNode
-  Name string
-  Params Params
+  typeNode duck.ITypeNode
+  name string
+  params Params
 }
 
 func NewUndefinedFunction(t duck.ITypeNode, name string, params Params) UndefinedFunction {
-  return UndefinedFunction {
-    TypeNode: t,
-    Name: name,
-    Params: params,
-  }
+  return UndefinedFunction { t, name, params }
 }
 
 func (self UndefinedFunction) String() string {
-  return fmt.Sprintf("<entity.UndefinedFunction Name=%s TypeNode=%s Params=%s>", self.Name, self.TypeNode, self.Params)
+  return fmt.Sprintf("<entity.UndefinedFunction Name=%s TypeNode=%s Params=%s>", self.name, self.typeNode, self.params)
 }
 
 func (self UndefinedFunction) MarshalJSON() ([]byte, error) {
@@ -76,9 +66,9 @@ func (self UndefinedFunction) MarshalJSON() ([]byte, error) {
     Params Params
   }
   x.ClassName = "entity.UndefinedFunction"
-  x.TypeNode = self.TypeNode
-  x.Name = self.Name
-  x.Params = self.Params
+  x.TypeNode = self.typeNode
+  x.Name = self.name
+  x.Params = self.params
   return json.Marshal(x)
 }
 
