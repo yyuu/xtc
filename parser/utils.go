@@ -4,6 +4,7 @@ import (
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/duck"
   "bitbucket.org/yyuu/bs/entity"
+  "bitbucket.org/yyuu/bs/typesys"
 )
 
 func asExpr(x duck.INode) duck.IExprNode {
@@ -128,4 +129,13 @@ func asParams(x duck.IEntity) entity.Params {
 
 func asParameter(x duck.IEntity) entity.Parameter {
   return x.(entity.Parameter)
+}
+
+func parametersTypeRef(params entity.Params) typesys.ParamTypeRefs {
+  paramDescs := params.GetParamDescs()
+  ps := make([]duck.ITypeRef, len(paramDescs))
+  for i := range paramDescs {
+    ps[i] = paramDescs[i].GetTypeNode().GetTypeRef()
+  }
+  return typesys.NewParamTypeRefs(params.GetLocation(), ps, false)
 }

@@ -210,7 +210,7 @@ defun: storage typeref name '(' params ')' block
      {
        priv := $1._token.literal == "storage"
        ps := asParams($5._entity)
-       t := typesys.NewFunctionTypeRef($2._typeref, ps.ParametersTypeRef())
+       t := typesys.NewFunctionTypeRef($2._typeref, parametersTypeRef(ps))
        $$._entity = entity.NewDefinedFunction(priv, ast.NewTypeNode(t.GetLocation(), t), $3._token.literal, ps, asStmt($7._node))
      }
      ;
@@ -300,7 +300,7 @@ slot: type name
 funcdecl: EXTERN typeref name '(' params ')' ';'
         {
           ps := asParams($5._entity)
-          ref := typesys.NewFunctionTypeRef($2._typeref, ps.ParametersTypeRef())
+          ref := typesys.NewFunctionTypeRef($2._typeref, parametersTypeRef(ps))
           $$._entity = entity.NewUndefinedFunction(ast.NewTypeNode($1._token.location, ref), $3._token.literal, ps)
         }
         ;

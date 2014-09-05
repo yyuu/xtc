@@ -4,7 +4,6 @@ import (
   "encoding/json"
   "fmt"
   "bitbucket.org/yyuu/bs/duck"
-  "bitbucket.org/yyuu/bs/typesys"
 )
 
 type Params struct {
@@ -42,14 +41,6 @@ func (self Params) GetLocation() duck.ILocation {
 
 func (self Params) GetParamDescs() []duck.IParameter {
   return self.paramDescs
-}
-
-func (self Params) ParametersTypeRef() typesys.ParamTypeRefs {
-  ps := make([]duck.ITypeRef, len(self.paramDescs))
-  for i := range self.paramDescs {
-    ps[i] = self.paramDescs[i].GetTypeNode().GetTypeRef()
-  }
-  return typesys.NewParamTypeRefs(self.location, ps, false)
 }
 
 type Parameter struct {
