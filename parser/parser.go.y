@@ -157,11 +157,11 @@ import_name: name
 
 top_defs:
         {
-          defvars := []entity.DefinedVariable { }
-          vardecls := []entity.UndefinedVariable { }
-          defuns := []entity.DefinedFunction { }
-          funcdecls := []entity.UndefinedFunction { }
-          constants := []entity.Constant { }
+          defvars := []duck.IDefinedVariable { }
+          vardecls := []duck.IUndefinedVariable { }
+          defuns := []duck.IDefinedFunction { }
+          funcdecls := []duck.IUndefinedFunction { }
+          constants := []duck.IConstant { }
           defstructs := []ast.StructNode { }
           defunions := []ast.UnionNode { }
           typedefs := []ast.TypedefNode { }
@@ -221,7 +221,7 @@ storage:
 
 params: VOID
       {
-        $$._entity = entity.NewParams($1._token.location, []entity.Parameter { })
+        $$._entity = entity.NewParams($1._token.location, []duck.IParameter { })
       }
       | fixedparams
       {
@@ -236,7 +236,7 @@ params: VOID
 
 fixedparams: param
            {
-             $$._entity = entity.NewParams($1._token.location, []entity.Parameter { asParameter($1._entity) })
+             $$._entity = entity.NewParams($1._token.location, []duck.IParameter { asParameter($1._entity) })
            }
            | fixedparams ',' param
            {
@@ -252,7 +252,7 @@ param: type name
 
 block: '{' defvar_list stmts '}'
      {
-       $$._node = ast.NewBlockNode($1._token.location, asVariables($2._entities), asStmts($3._nodes))
+       $$._node = ast.NewBlockNode($1._token.location, asDefinedVariables($2._entities), asStmts($3._nodes))
      }
      ;
 

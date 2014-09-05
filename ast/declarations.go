@@ -4,21 +4,20 @@ import (
   "encoding/json"
   "fmt"
   "bitbucket.org/yyuu/bs/duck"
-  "bitbucket.org/yyuu/bs/entity"
 )
 
 type Declarations struct {
-  defvars []entity.DefinedVariable
-  vardecls []entity.UndefinedVariable
-  defuns []entity.DefinedFunction
-  funcdecls []entity.UndefinedFunction
-  constants []entity.Constant
+  defvars []duck.IDefinedVariable
+  vardecls []duck.IUndefinedVariable
+  defuns []duck.IDefinedFunction
+  funcdecls []duck.IUndefinedFunction
+  constants []duck.IConstant
   defstructs []StructNode
   defunions []UnionNode
   typedefs []TypedefNode
 }
 
-func NewDeclarations(defvars []entity.DefinedVariable, vardecls []entity.UndefinedVariable, defuns []entity.DefinedFunction, funcdecls []entity.UndefinedFunction, constants []entity.Constant, defstructs []StructNode, defunions []UnionNode, typedefs []TypedefNode) Declarations {
+func NewDeclarations(defvars []duck.IDefinedVariable, vardecls []duck.IUndefinedVariable, defuns []duck.IDefinedFunction, funcdecls []duck.IUndefinedFunction, constants []duck.IConstant, defstructs []StructNode, defunions []UnionNode, typedefs []TypedefNode) Declarations {
   return Declarations { defvars, vardecls, defuns, funcdecls, constants, defstructs, defunions, typedefs }
 }
 
@@ -36,11 +35,11 @@ func (self Declarations) String() string {
 func (self Declarations) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
-    Defvars []entity.DefinedVariable
-    Vardecls []entity.UndefinedVariable
-    Defuns []entity.DefinedFunction
-    Funcdecls []entity.UndefinedFunction
-    Constants []entity.Constant
+    Defvars []duck.IDefinedVariable
+    Vardecls []duck.IUndefinedVariable
+    Defuns []duck.IDefinedFunction
+    Funcdecls []duck.IUndefinedFunction
+    Constants []duck.IConstant
     Defstructs []StructNode
     Defunions []UnionNode
     Typedefs []TypedefNode
@@ -61,23 +60,23 @@ func (self Declarations) GetLocation() duck.ILocation {
   panic("Declarations#GetLocation called")
 }
 
-func (self Declarations) AddDefvar(v entity.DefinedVariable) Declarations {
+func (self Declarations) AddDefvar(v duck.IDefinedVariable) Declarations {
   return NewDeclarations(append(self.defvars, v), self.vardecls, self.defuns, self.funcdecls, self.constants, self.defstructs, self.defunions, self.typedefs)
 }
 
-func (self Declarations) AddVardecl(v entity.UndefinedVariable) Declarations {
+func (self Declarations) AddVardecl(v duck.IUndefinedVariable) Declarations {
   return NewDeclarations(self.defvars, append(self.vardecls, v), self.defuns, self.funcdecls, self.constants, self.defstructs, self.defunions, self.typedefs)
 }
 
-func (self Declarations) AddDefun(f entity.DefinedFunction) Declarations {
+func (self Declarations) AddDefun(f duck.IDefinedFunction) Declarations {
   return NewDeclarations(self.defvars, self.vardecls, append(self.defuns, f), self.funcdecls, self.constants, self.defstructs, self.defunions, self.typedefs)
 }
 
-func (self Declarations) AddFuncdecl(f entity.UndefinedFunction) Declarations {
+func (self Declarations) AddFuncdecl(f duck.IUndefinedFunction) Declarations {
   return NewDeclarations(self.defvars, self.vardecls, self.defuns, append(self.funcdecls, f), self.constants, self.defstructs, self.defunions, self.typedefs)
 }
 
-func (self Declarations) AddDefconst(c entity.Constant) Declarations {
+func (self Declarations) AddDefconst(c duck.IConstant) Declarations {
   return NewDeclarations(self.defvars, self.vardecls, self.defuns, self.funcdecls, append(self.constants, c), self.defstructs, self.defunions, self.typedefs)
 }
 
@@ -91,4 +90,36 @@ func (self Declarations) AddDefunion(u UnionNode) Declarations {
 
 func (self Declarations) AddTypedef(t TypedefNode) Declarations {
   return NewDeclarations(self.defvars, self.vardecls, self.defuns, self.funcdecls, self.constants, self.defstructs, self.defunions, append(self.typedefs, t))
+}
+
+func (self Declarations) GetDefvars() []duck.IDefinedVariable {
+  return self.defvars
+}
+
+func (self Declarations) GetVardecls() []duck.IUndefinedVariable {
+  return self.vardecls
+}
+
+func (self Declarations) GetDefuns() []duck.IDefinedFunction {
+  return self.defuns
+}
+
+func (self Declarations) GetFuncdecls() []duck.IUndefinedFunction {
+  return self.funcdecls
+}
+
+func (self Declarations) GetConstants() []duck.IConstant {
+  return self.constants
+}
+
+func (self Declarations) GetDefstructs() []StructNode {
+  return self.defstructs
+}
+
+func (self Declarations) GetDefunions() []UnionNode {
+  return self.defunions
+}
+
+func (self Declarations) GetTypedefs() []TypedefNode {
+  return self.typedefs
 }

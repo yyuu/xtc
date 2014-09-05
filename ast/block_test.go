@@ -16,7 +16,7 @@ func TestBlock1(t *testing.T) {
  */
   x := NewBlockNode(
     loc(0,0),
-    []duck.IVariable { },
+    []duck.IDefinedVariable { },
     []duck.IStmtNode {
       NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []duck.IExprNode { NewStringLiteralNode(loc(0,0), "\"hello, world\"") })),
     },
@@ -60,10 +60,10 @@ func TestBlock2(t *testing.T) {
  */
   x := NewBlockNode(
     loc(0,0),
-    []duck.IVariable {
+    []duck.IDefinedVariable {
 //    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "12345")),
       entity.NewDefinedVariable(
-        false,
+        true,
         NewTypeNode(loc(0,0), typesys.NewIntegerTypeRef(loc(0,0), "int")),
         "n",
         NewIntegerLiteralNode(loc(0,0), "12345"),
@@ -79,7 +79,7 @@ func TestBlock2(t *testing.T) {
   "Variables": [
     {
       "ClassName": "entity.DefinedVariable",
-      "Private": false,
+      "Private": true,
       "Name": "n",
       "TypeNode": {
         "ClassName": "ast.TypeNode",
@@ -140,17 +140,17 @@ func TestBlock3(t *testing.T) {
  */
   x := NewBlockNode(
     loc(0,0),
-    []duck.IVariable {
+    []duck.IDefinedVariable {
 //    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "12345")),
 //    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "m"), NewIntegerLiteralNode(loc(0,0), "67890")),
       entity.NewDefinedVariable(
-        false,
+        true,
         NewTypeNode(loc(0,0), typesys.NewIntegerTypeRef(loc(0,0), "int")),
         "n",
         NewIntegerLiteralNode(loc(0,0), "12345"),
       ),
       entity.NewDefinedVariable(
-        false,
+        true,
         NewTypeNode(loc(0,0), typesys.NewIntegerTypeRef(loc(0,0), "int")),
         "m",
         NewIntegerLiteralNode(loc(0,0), "67890"),
@@ -167,7 +167,7 @@ func TestBlock3(t *testing.T) {
   "Variables": [
     {
       "ClassName": "entity.DefinedVariable",
-      "Private": false,
+      "Private": true,
       "Name": "n",
       "TypeNode": {
         "ClassName": "ast.TypeNode",
@@ -187,7 +187,7 @@ func TestBlock3(t *testing.T) {
     },
     {
       "ClassName": "entity.DefinedVariable",
-      "Private": false,
+      "Private": true,
       "Name": "m",
       "TypeNode": {
         "ClassName": "ast.TypeNode",

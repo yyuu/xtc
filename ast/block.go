@@ -10,11 +10,11 @@ import (
 // BlockNode
 type BlockNode struct {
   location duck.ILocation
-  variables []duck.IVariable
+  variables []duck.IDefinedVariable
   stmts []duck.IStmtNode
 }
 
-func NewBlockNode(loc duck.ILocation, variables []duck.IVariable, stmts []duck.IStmtNode) BlockNode {
+func NewBlockNode(loc duck.ILocation, variables []duck.IDefinedVariable, stmts []duck.IStmtNode) BlockNode {
   return BlockNode { loc, variables, stmts }
 }
 
@@ -46,7 +46,7 @@ func (self BlockNode) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
     Location duck.ILocation
-    Variables []duck.IVariable
+    Variables []duck.IDefinedVariable
     Stmts []duck.IStmtNode
   }
   x.ClassName = "ast.BlockNode"
@@ -62,4 +62,12 @@ func (self BlockNode) IsStmt() bool {
 
 func (self BlockNode) GetLocation() duck.ILocation {
   return self.location
+}
+
+func (self BlockNode) GetVariables() []duck.IDefinedVariable {
+  return self.variables
+}
+
+func (self BlockNode) GetStmts() []duck.IStmtNode {
+  return self.stmts
 }

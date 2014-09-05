@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "encoding/json"
   "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
@@ -49,42 +50,22 @@ func (self AST) String() string {
   return fmt.Sprintf(";; %s\n%s", self.location, self.declarations)
 }
 
-type ASTVisitor interface {
-  // Statements
-  VisitBlockNode(BlockNode)
-  VisitExprStmtNode(BlockNode)
-  VisitIfNode(IfNode)
-  VisitSwitchNode(SwitchNode)
-  VisitCaseNode(CaseNode)
-  VisitWhileNode(WhileNode)
-  VisitDoWhileNode(DoWhileNode)
-  VisitForNode(ForNode)
-  VisitBreakNode(BreakNode)
-  VisitContinueNode(ContinueNode)
-  VisitGotoNode(GotoNode)
-  VisitLabelNode(LabelNode)
-  VisitReturnNode(ReturnNode)
+func (self AST) MarshalJSON() ([]byte, error) {
+  var x struct {
+    ClassName string
+    Location duck.ILocation
+    Declarations Declarations
+  }
+  x.ClassName = "ast.AST"
+  x.Location = self.location
+  x.Declarations = self.declarations
+  return json.Marshal(x)
+}
 
-  // Expressions
-  VisitAssignNode(AssignNode)
-  VisitOpAssignNode(OpAssignNode)
-  VisitCondExprNode(CondExprNode)
-  VisitLogicalOrNode(LogicalOrNode)
-  VisitLogicalAndNode(LogicalAndNode)
-  VisitBinaryOpNode(BinaryOpNode)
-  VisitUnaryOpNode(UnaryOpNode)
-  VisitPrefixOpNode(PrefixOpNode)
-  VisitSuffixOpNode(SuffixOpNode)
-  VisitArefNode(ArefNode)
-  VisitMemberNode(MemberNode)
-  VisitPtrMemberNode(PtrMemberNode)
-  VisitFuncallNode(FuncallNode)
-  VisitDereferenceNode(DereferenceNode)
-  VisitAddressNode(AddressNode)
-  VisitCastNode(CastNode)
-  VisitSizeofExprNode(SizeofExprNode)
-  VisitSizeofTypeNode(SizeofTypeNode)
-  VisitVariableNode(VariableNode)
-  VisitIntegerLiteralNode(IntegerLiteralNode)
-  VisitStringLiteralNode(StringLiteralNode)
+func (self AST) GetLocation() duck.ILocation {
+  return self.location
+}
+
+func (self AST) GetDeclarations() Declarations {
+  return self.declarations
 }

@@ -40,8 +40,36 @@ func (self DefinedFunction) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
+func (self DefinedFunction) IsPrivate() bool {
+  return self.private
+}
+
+func (self DefinedFunction) GetTypeNode() duck.ITypeNode {
+  return self.typeNode
+}
+
+func (self DefinedFunction) GetName() string {
+  return self.name
+}
+
 func (self DefinedFunction) IsEntity() bool {
   return true
+}
+
+func (self DefinedFunction) IsFunction() bool {
+  return true
+}
+
+func (self DefinedFunction) IsDefinedFunction() bool {
+  return true
+}
+
+func (self DefinedFunction) GetParams() duck.IParams {
+  return self.params
+}
+
+func (self DefinedFunction) GetBody() duck.IStmtNode {
+  return self.body
 }
 
 type UndefinedFunction struct {
@@ -74,4 +102,24 @@ func (self UndefinedFunction) MarshalJSON() ([]byte, error) {
 
 func (self UndefinedFunction) IsEntity() bool {
   return true
+}
+
+func (self UndefinedFunction) IsFunction() bool {
+  return true
+}
+
+func (self UndefinedFunction) IsUndefinedFunction() bool {
+  return true
+}
+
+func (self UndefinedFunction) GetTypeNode() duck.ITypeNode {
+  return self.typeNode
+}
+
+func (self UndefinedFunction) GetName() string {
+  return self.name
+}
+
+func (self UndefinedFunction) GetParams() Params {
+  return self.params
 }

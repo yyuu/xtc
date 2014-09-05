@@ -70,12 +70,12 @@ func asDeclarations(x duck.INode) ast.Declarations {
   return x.(ast.Declarations)
 }
 
-func asDefinedFunction(x duck.IEntity) entity.DefinedFunction {
-  return x.(entity.DefinedFunction)
+func asDefinedFunction(x duck.IEntity) duck.IDefinedFunction {
+  return x.(duck.IDefinedFunction)
 }
 
-func asUndefinedFunction(x duck.IEntity) entity.UndefinedFunction {
-  return x.(entity.UndefinedFunction)
+func asUndefinedFunction(x duck.IEntity) duck.IUndefinedFunction {
+  return x.(duck.IUndefinedFunction)
 }
 
 func asVariable(x duck.IEntity) duck.IVariable {
@@ -90,24 +90,24 @@ func asVariables(xs []duck.IEntity) []duck.IVariable {
   return ys
 }
 
-func asDefinedVariable(x duck.IEntity) entity.DefinedVariable {
-  return x.(entity.DefinedVariable)
+func asDefinedVariable(x duck.IEntity) duck.IDefinedVariable {
+  return x.(duck.IDefinedVariable)
 }
 
-func asDefinedVariables(xs []duck.IEntity) []entity.DefinedVariable {
-  ys := make([]entity.DefinedVariable, len(xs))
+func asDefinedVariables(xs []duck.IEntity) []duck.IDefinedVariable {
+  ys := make([]duck.IDefinedVariable, len(xs))
   for i := range xs {
     ys[i] = asDefinedVariable(xs[i])
   }
   return ys
 }
 
-func asUndefinedVariable(x duck.IEntity) entity.UndefinedVariable {
-  return x.(entity.UndefinedVariable)
+func asUndefinedVariable(x duck.IEntity) duck.IUndefinedVariable {
+  return x.(duck.IUndefinedVariable)
 }
 
-func asConstant(x duck.IEntity) entity.Constant {
-  return x.(entity.Constant)
+func asConstant(x duck.IEntity) duck.IConstant {
+  return x.(duck.IConstant)
 }
 
 func asStructNode(x duck.INode) ast.StructNode {

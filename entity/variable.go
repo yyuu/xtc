@@ -48,12 +48,32 @@ func (self DefinedVariable) IsVariable() bool {
   return true
 }
 
-func (self DefinedVariable) IsDefined() bool {
+func (self DefinedVariable) IsDefinedVariable() bool {
   return true
 }
 
 func (self DefinedVariable) HasInitializer() bool {
   return self.initializer != nil
+}
+
+func (self DefinedVariable) IsPrivate() bool {
+  return self.private
+}
+
+func (self DefinedVariable) GetName() string {
+  return self.name
+}
+
+func (self DefinedVariable) GetTypeNode() duck.ITypeNode {
+  return self.typeNode
+}
+
+func (self DefinedVariable) NumRefered() int {
+  return self.numRefered
+}
+
+func (self DefinedVariable) GetInitializer() duck.IExprNode {
+  return self.initializer
 }
 
 type UndefinedVariable struct {
@@ -89,5 +109,9 @@ func (self UndefinedVariable) IsEntity() bool {
 }
 
 func (self UndefinedVariable) IsVariable() bool {
+  return true
+}
+
+func (self UndefinedVariable) IsUndefinedVariable() bool {
   return true
 }

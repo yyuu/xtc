@@ -37,3 +37,19 @@ func (self Constant) MarshalJSON() ([]byte, error) {
 func (self Constant) IsEntity() bool {
   return true
 }
+
+func (self Constant) IsConstant() bool {
+  return true
+}
+
+func (self Constant) GetName() string {
+  return self.name
+}
+
+func (self Constant) GetTypeNode() duck.ITypeNode {
+  return self.typeNode
+}
+
+func (self Constant) GetValue() duck.IExprNode {
+  return self.value
+}

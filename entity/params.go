@@ -9,10 +9,10 @@ import (
 
 type Params struct {
   location duck.ILocation
-  paramDescs []Parameter
+  paramDescs []duck.IParameter
 }
 
-func NewParams(loc duck.ILocation, paramDescs []Parameter) Params {
+func NewParams(loc duck.ILocation, paramDescs []duck.IParameter) Params {
   return Params { loc, paramDescs }
 }
 
@@ -24,7 +24,7 @@ func (self Params) MarshalJSON() ([]byte, error) {
   var x struct {
     ClassName string
     Location duck.ILocation
-    ParamDescs []Parameter
+    ParamDescs []duck.IParameter
   }
   x.ClassName = "entity.Params"
   x.Location = self.location
@@ -36,14 +36,18 @@ func (self Params) IsEntity() bool {
   return true
 }
 
-func (self Params) GetParamDescs() []Parameter {
+func (self Params) GetLocation() duck.ILocation {
+  return self.location
+}
+
+func (self Params) GetParamDescs() []duck.IParameter {
   return self.paramDescs
 }
 
 func (self Params) ParametersTypeRef() typesys.ParamTypeRefs {
   ps := make([]duck.ITypeRef, len(self.paramDescs))
   for i := range self.paramDescs {
-    ps[i] = self.paramDescs[i].typeNode.GetTypeRef()
+    ps[i] = self.paramDescs[i].GetTypeNode().GetTypeRef()
   }
   return typesys.NewParamTypeRefs(self.location, ps, false)
 }
@@ -75,4 +79,12 @@ func (self Parameter) MarshalJSON() ([]byte, error) {
 
 func (self Parameter) IsEntity() bool {
   return true
+}
+
+func (self Parameter) GetTypeNode() duck.ITypeNode {
+  return self.typeNode
+}
+
+func (self Parameter) GetName() string {
+  return self.name
 }

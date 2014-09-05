@@ -206,3 +206,7 @@ func (self ReturnNode) IsStmt() bool {
 func (self ReturnNode) GetLocation() duck.ILocation {
   return self.location
 }
+
+func (self ReturnNode) GetExpr() duck.IExprNode {
+  return self.expr
+}
