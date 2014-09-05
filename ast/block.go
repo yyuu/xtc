@@ -15,6 +15,7 @@ type BlockNode struct {
 }
 
 func NewBlockNode(loc duck.ILocation, variables []duck.IDefinedVariable, stmts []duck.IStmtNode) BlockNode {
+  if loc == nil { panic("location is nil") }
   return BlockNode { loc, variables, stmts }
 }
 

@@ -15,6 +15,9 @@ type BinaryOpNode struct {
 }
 
 func NewBinaryOpNode(loc duck.ILocation, operator string, left duck.IExprNode, right duck.IExprNode) BinaryOpNode {
+  if loc == nil { panic("location is nil") }
+  if left == nil { panic("left is nil") }
+  if right == nil { panic("right is nil") }
   return BinaryOpNode { loc, operator, left, right }
 }
 
@@ -63,6 +66,9 @@ type LogicalAndNode struct {
 }
 
 func NewLogicalAndNode(loc duck.ILocation, left duck.IExprNode, right duck.IExprNode) LogicalAndNode {
+  if loc == nil { panic("location is nil") }
+  if left == nil { panic("left is nil") }
+  if right == nil { panic("right is nil") }
   return LogicalAndNode { loc, left, right }
 }
 
@@ -100,6 +106,9 @@ type LogicalOrNode struct {
 }
 
 func NewLogicalOrNode(loc duck.ILocation, left duck.IExprNode, right duck.IExprNode) LogicalOrNode {
+  if loc == nil { panic("location is nil") }
+  if left == nil { panic("left is nil") }
+  if right == nil { panic("right is nil") }
   return LogicalOrNode { loc, left, right }
 }
 
@@ -137,6 +146,8 @@ type PrefixOpNode struct {
 }
 
 func NewPrefixOpNode(loc duck.ILocation, operator string, expr duck.IExprNode) PrefixOpNode {
+  if loc == nil { panic("location is nil") }
+  if expr == nil { panic("expr is nil") }
   return PrefixOpNode { loc, operator, expr }
 }
 
@@ -178,6 +189,8 @@ type SuffixOpNode struct {
 }
 
 func NewSuffixOpNode(loc duck.ILocation, operator string, expr duck.IExprNode) SuffixOpNode {
+  if loc == nil { panic("location is nil") }
+  if expr == nil { panic("expr is nil") }
   return SuffixOpNode { loc, operator, expr }
 }
 
@@ -219,6 +232,8 @@ type UnaryOpNode struct {
 }
 
 func NewUnaryOpNode(loc duck.ILocation, operator string, expr duck.IExprNode) UnaryOpNode {
+  if loc == nil { panic("location is nil") }
+  if expr == nil { panic("expr is nil") }
   return UnaryOpNode { loc, operator, expr }
 }
 

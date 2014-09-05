@@ -14,6 +14,9 @@ type DoWhileNode struct {
 }
 
 func NewDoWhileNode(loc duck.ILocation, body duck.IStmtNode, cond duck.IExprNode) DoWhileNode {
+  if loc == nil { panic("location is nil") }
+  if body == nil { panic("body is nil") }
+  if cond == nil { panic("cond is nil") }
   return DoWhileNode { loc, body, cond }
 }
 
@@ -53,6 +56,11 @@ type ForNode struct {
 }
 
 func NewForNode(loc duck.ILocation, init duck.IExprNode, cond duck.IExprNode, incr duck.IExprNode, body duck.IStmtNode) ForNode {
+  if loc == nil { panic("location is nil") }
+  if init == nil { panic("init is nil") }
+  if cond == nil { panic("cond is nil") }
+  if incr == nil { panic("incr is nil") }
+  if body == nil { panic("body is nil") }
   return ForNode { loc, init, cond, incr, body }
 }
 
@@ -94,6 +102,9 @@ type WhileNode struct {
 }
 
 func NewWhileNode(loc duck.ILocation, cond duck.IExprNode, body duck.IStmtNode) WhileNode {
+  if loc == nil { panic("location is nil") }
+  if cond == nil { panic("cond is nil") }
+  if body == nil { panic("body is nil") }
   return WhileNode { loc, cond, body }
 }
 

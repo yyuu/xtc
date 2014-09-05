@@ -12,6 +12,7 @@ type BreakNode struct {
 }
 
 func NewBreakNode(loc duck.ILocation) BreakNode {
+  if loc == nil { panic("location is nil") }
   return BreakNode { loc }
 }
 
@@ -43,6 +44,7 @@ type ContinueNode struct {
 }
 
 func NewContinueNode(loc duck.ILocation) ContinueNode {
+  if loc == nil { panic("location is nil") }
   return ContinueNode { loc }
 }
 
@@ -75,6 +77,8 @@ type ExprStmtNode struct {
 }
 
 func NewExprStmtNode(loc duck.ILocation, expr duck.IExprNode) ExprStmtNode {
+  if loc == nil { panic("location is nil") }
+  if expr == nil { panic("expr is nil") }
   return ExprStmtNode { loc, expr }
 }
 
@@ -109,6 +113,7 @@ type GotoNode struct {
 }
 
 func NewGotoNode(loc duck.ILocation, target string) GotoNode {
+  if loc == nil { panic("location is nil") }
   return GotoNode { loc, target }
 }
 
@@ -144,6 +149,8 @@ type LabelNode struct {
 }
 
 func NewLabelNode(loc duck.ILocation, name string, stmt duck.IStmtNode) LabelNode {
+  if loc == nil { panic("location is nil") }
+  if stmt == nil { panic("stmt is nil") }
   return LabelNode { loc, name, stmt }
 }
 
@@ -180,6 +187,8 @@ type ReturnNode struct {
 }
 
 func NewReturnNode(loc duck.ILocation, expr duck.IExprNode) ReturnNode {
+  if loc == nil { panic("location is nil") }
+  if expr == nil { panic("expr is nil") }
   return ReturnNode { loc, expr }
 }
 

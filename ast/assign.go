@@ -14,6 +14,9 @@ type AssignNode struct {
 }
 
 func NewAssignNode(loc duck.ILocation, lhs duck.IExprNode, rhs duck.IExprNode) AssignNode {
+  if loc == nil { panic("location is nil") }
+  if lhs == nil { panic("lhs is nil") }
+  if rhs == nil { panic("rhs is nil") }
   return AssignNode { loc, lhs, rhs }
 }
 
@@ -52,6 +55,9 @@ type OpAssignNode struct {
 }
 
 func NewOpAssignNode(loc duck.ILocation, operator string, lhs duck.IExprNode, rhs duck.IExprNode) OpAssignNode {
+  if loc == nil { panic("location is nil") }
+  if lhs == nil { panic("lhs is nil") }
+  if rhs == nil { panic("rhs is nil") }
   return OpAssignNode { loc, operator, lhs, rhs }
 }
 

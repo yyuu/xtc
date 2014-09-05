@@ -15,6 +15,8 @@ type StructNode struct {
 }
 
 func NewStructNode(loc duck.ILocation, ref duck.ITypeRef, name string, membs []Slot) StructNode {
+  if loc == nil { panic("location is nil") }
+  if ref == nil { panic("ref is nil") }
   return StructNode { loc, NewTypeNode(loc, ref), name, membs }
 }
 
@@ -55,6 +57,8 @@ type UnionNode struct {
 }
 
 func NewUnionNode(loc duck.ILocation, ref duck.ITypeRef, name string, membs []Slot) UnionNode {
+  if loc == nil { panic("location is nil") }
+  if ref == nil { panic("ref is nil") }
   return UnionNode { loc, NewTypeNode(loc, ref), name, membs }
 }
 

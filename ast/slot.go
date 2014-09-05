@@ -14,6 +14,7 @@ type Slot struct {
 }
 
 func NewSlot(t duck.ITypeNode, n string) Slot {
+  if t == nil { panic("t is nil") }
   return Slot { t, n, -1 }
 }
 

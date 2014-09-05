@@ -14,6 +14,8 @@ type AddressNode struct {
 }
 
 func NewAddressNode(loc duck.ILocation, expr duck.IExprNode) AddressNode {
+  if loc == nil { panic("location is nil") }
+  if expr == nil { panic("expr is nil") }
   return AddressNode { loc, expr }
 }
 
@@ -49,6 +51,9 @@ type ArefNode struct {
 }
 
 func NewArefNode(loc duck.ILocation, expr duck.IExprNode, index duck.IExprNode) ArefNode {
+  if loc == nil { panic("location is nil") }
+  if expr == nil { panic("expr is nil") }
+  if index == nil { panic("index is nil") }
   return ArefNode { loc, expr, index }
 }
 
@@ -84,7 +89,9 @@ type DereferenceNode struct {
   expr duck.IExprNode
 }
 
-func NewDereferenceNode(loc Location, expr duck.IExprNode) DereferenceNode {
+func NewDereferenceNode(loc duck.ILocation, expr duck.IExprNode) DereferenceNode {
+  if loc == nil { panic("location is nil") }
+  if expr == nil { panic("expr is nil") }
   return DereferenceNode { loc, expr }
 }
 
@@ -120,6 +127,8 @@ type FuncallNode struct {
 }
 
 func NewFuncallNode(loc duck.ILocation, expr duck.IExprNode, args []duck.IExprNode) FuncallNode {
+  if loc == nil { panic("location is nil") }
+  if expr == nil { panic("expr is nil") }
   return FuncallNode { loc, expr, args }
 }
 
@@ -165,6 +174,8 @@ type MemberNode struct {
 }
 
 func NewMemberNode(loc duck.ILocation, expr duck.IExprNode, member string) MemberNode {
+  if loc == nil { panic("location is nil") }
+  if expr == nil { panic("expr is nil") }
   return MemberNode { loc, expr, member }
 }
 
@@ -202,6 +213,8 @@ type PtrMemberNode struct {
 }
 
 func NewPtrMemberNode(loc duck.ILocation, expr duck.IExprNode, member string) PtrMemberNode {
+  if loc == nil { panic("location is nil") }
+  if expr == nil { panic("expr is nil") }
   return PtrMemberNode { loc, expr, member }
 }
 
@@ -238,6 +251,7 @@ type VariableNode struct {
 }
 
 func NewVariableNode(loc duck.ILocation, name string) VariableNode {
+  if loc == nil { panic("location is nil") }
   return VariableNode { loc, name }
 }
 

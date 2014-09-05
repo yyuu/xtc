@@ -14,6 +14,9 @@ type CastNode struct {
 }
 
 func NewCastNode(loc duck.ILocation, t duck.ITypeNode, expr duck.IExprNode) CastNode {
+  if loc == nil { panic("location is nil") }
+  if t == nil { panic("t is nil") }
+  if expr == nil { panic("expr is nil") }
   return CastNode { loc, t, expr }
 }
 
@@ -51,6 +54,9 @@ type SizeofExprNode struct {
 }
 
 func NewSizeofExprNode(loc duck.ILocation, expr duck.IExprNode, t duck.ITypeRef) SizeofExprNode {
+  if loc == nil { panic("location is nil") }
+  if expr == nil { panic("expr is nil") }
+  if t == nil { panic("t is nil") }
   return SizeofExprNode { loc, expr, NewTypeNode(loc, t) }
 }
 
@@ -88,6 +94,9 @@ type SizeofTypeNode struct {
 }
 
 func NewSizeofTypeNode(loc duck.ILocation, operand duck.ITypeNode, t duck.ITypeRef) SizeofTypeNode {
+  if loc == nil { panic("location is nil") }
+  if operand == nil { panic("operand is nil") }
+  if t == nil { panic("t is nil") }
   return SizeofTypeNode { loc, operand, NewTypeNode(loc, t) }
 }
 
@@ -124,6 +133,8 @@ type TypeNode struct {
 }
 
 func NewTypeNode(loc duck.ILocation, t duck.ITypeRef) TypeNode {
+  if loc == nil { panic("location is nil") }
+  if t == nil { panic("t is nil") }
   return TypeNode { loc, t }
 }
 
@@ -163,6 +174,8 @@ type TypedefNode struct {
 }
 
 func NewTypedefNode(loc duck.ILocation, real duck.ITypeRef, name string) TypedefNode {
+  if loc == nil { panic("location is nil") }
+  if real == nil { panic("real is nil") }
   return TypedefNode { loc, real, name }
 }
 
@@ -200,6 +213,8 @@ type TypeDefinition struct {
 }
 
 func NewTypeDefinition(loc duck.ILocation, ref duck.ITypeRef, name string) TypeDefinition {
+  if loc == nil { panic("location is nil") }
+  if ref == nil { panic("ref is nil") }
   return TypeDefinition { loc, name, NewTypeNode(loc, ref) }
 }
 

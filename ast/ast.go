@@ -42,8 +42,9 @@ type AST struct {
   declarations Declarations
 }
 
-func NewAST(source duck.ILocation, declarations Declarations) AST {
-  return AST { source, declarations }
+func NewAST(loc duck.ILocation, declarations Declarations) AST {
+  if loc == nil { panic("location is nil") }
+  return AST { loc, declarations }
 }
 
 func (self AST) String() string {

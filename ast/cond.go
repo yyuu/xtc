@@ -16,6 +16,10 @@ type CondExprNode struct {
 }
 
 func NewCondExprNode(loc duck.ILocation, cond duck.IExprNode, thenExpr duck.IExprNode, elseExpr duck.IExprNode) CondExprNode {
+  if loc == nil { panic("location is nil") }
+  if cond == nil { panic("cond is nil") }
+  if thenExpr == nil { panic("thenExpr is nil") }
+  if elseExpr == nil { panic("elseExpr is nil") }
   return CondExprNode { loc, cond, thenExpr, elseExpr }
 }
 
@@ -55,6 +59,8 @@ type CaseNode struct {
 }
 
 func NewCaseNode(loc duck.ILocation, values []duck.IExprNode, body duck.IStmtNode) CaseNode {
+  if loc == nil { panic("location is nil") }
+  if body == nil { panic("body is nil") }
   return CaseNode { loc, values, body }
 }
 
@@ -101,6 +107,9 @@ type IfNode struct {
 }
 
 func NewIfNode(loc duck.ILocation, cond duck.IExprNode, thenBody duck.IStmtNode, elseBody duck.IStmtNode) IfNode {
+  if loc == nil { panic("location is nil") }
+  if cond == nil { panic("cond is nil") }
+  if thenBody == nil { panic("thenBody is nil") }
   return IfNode { loc, cond, thenBody, elseBody }
 }
 
@@ -140,6 +149,8 @@ type SwitchNode struct {
 }
 
 func NewSwitchNode(loc duck.ILocation, cond duck.IExprNode, _cases []duck.IStmtNode) SwitchNode {
+  if loc == nil { panic("location is nil") }
+  if cond == nil { panic("cond is nil") }
   cases := make([]CaseNode, len(_cases))
   for i := range _cases {
     cases[i] = _cases[i].(CaseNode)

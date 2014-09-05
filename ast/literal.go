@@ -14,6 +14,7 @@ type IntegerLiteralNode struct {
 }
 
 func NewIntegerLiteralNode(loc duck.ILocation, literal string) IntegerLiteralNode {
+  if loc == nil { panic("location is nil") }
   var value int
   var err error
   if ( strings.Index(literal, "'") == 0 && strings.LastIndex(literal, "'") == len(literal)-1 ) && 2 < len(literal) {
@@ -69,6 +70,7 @@ type StringLiteralNode struct {
 }
 
 func NewStringLiteralNode(loc duck.ILocation, literal string) StringLiteralNode {
+  if loc == nil { panic("location is nil") }
   return StringLiteralNode { loc, literal }
 }
 
