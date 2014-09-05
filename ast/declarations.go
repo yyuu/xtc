@@ -18,121 +18,8 @@ type Declarations struct {
   typedefs []TypedefNode
 }
 
-func NewDeclarations() Declarations {
-  return Declarations {
-    defvars: []entity.DefinedVariable { },
-    vardecls: []entity.UndefinedVariable { },
-    defuns: []entity.DefinedFunction { },
-    funcdecls: []entity.UndefinedFunction { },
-    constants: []entity.Constant { },
-    defstructs: []StructNode { },
-    defunions: []UnionNode { },
-    typedefs: []TypedefNode { },
-  }
-}
-
-func copyDeclarationsWithAddDefvar(original Declarations, v entity.DefinedVariable) Declarations {
-  return Declarations {
-    defvars: append(original.defvars, v),
-    vardecls: original.vardecls,
-    defuns: original.defuns,
-    funcdecls: original.funcdecls,
-    constants: original.constants,
-    defstructs: original.defstructs,
-    defunions: original.defunions,
-    typedefs: original.typedefs,
-  }
-}
-
-func copyDeclarationsWithAddVardecl(original Declarations, v entity.UndefinedVariable) Declarations {
-  return Declarations {
-    defvars: original.defvars,
-    vardecls: append(original.vardecls, v),
-    defuns: original.defuns,
-    funcdecls: original.funcdecls,
-    constants: original.constants,
-    defstructs: original.defstructs,
-    defunions: original.defunions,
-    typedefs: original.typedefs,
-  }
-}
-
-func copyDeclarationsWithAddDefun(original Declarations, f entity.DefinedFunction) Declarations {
-  return Declarations {
-    defvars: original.defvars,
-    vardecls: original.vardecls,
-    defuns: append(original.defuns, f),
-    funcdecls: original.funcdecls,
-    constants: original.constants,
-    defstructs: original.defstructs,
-    defunions: original.defunions,
-    typedefs: original.typedefs,
-  }
-}
-
-func copyDeclarationsWithAddFuncdecl(original Declarations, f entity.UndefinedFunction) Declarations {
-  return Declarations {
-    defvars: original.defvars,
-    vardecls: original.vardecls,
-    defuns: original.defuns,
-    funcdecls: append(original.funcdecls, f),
-    constants: original.constants,
-    defstructs: original.defstructs,
-    defunions: original.defunions,
-    typedefs: original.typedefs,
-  }
-}
-
-func copyDeclarationsWithAddDefconst(original Declarations, c entity.Constant) Declarations {
-  return Declarations {
-    defvars: original.defvars,
-    vardecls: original.vardecls,
-    defuns: original.defuns,
-    funcdecls: original.funcdecls,
-    constants: append(original.constants, c),
-    defstructs: original.defstructs,
-    defunions: original.defunions,
-    typedefs: original.typedefs,
-  }
-}
-
-func copyDeclarationsWithAddDefstruct(original Declarations, s StructNode) Declarations {
-  return Declarations {
-    defvars: original.defvars,
-    vardecls: original.vardecls,
-    defuns: original.defuns,
-    funcdecls: original.funcdecls,
-    constants: original.constants,
-    defstructs: append(original.defstructs, s),
-    defunions: original.defunions,
-    typedefs: original.typedefs,
-  }
-}
-
-func copyDeclarationsWithAddDefunion(original Declarations, u UnionNode) Declarations {
-  return Declarations {
-    defvars: original.defvars,
-    vardecls: original.vardecls,
-    defuns: original.defuns,
-    funcdecls: original.funcdecls,
-    constants: original.constants,
-    defstructs: original.defstructs,
-    defunions: append(original.defunions, u),
-    typedefs: original.typedefs,
-  }
-}
-
-func copyDeclarationsWithAddTypedef(original Declarations, t TypedefNode) Declarations {
-  return Declarations {
-    defvars: original.defvars,
-    vardecls: original.vardecls,
-    defuns: original.defuns,
-    funcdecls: original.funcdecls,
-    constants: original.constants,
-    defstructs: original.defstructs,
-    defunions: original.defunions,
-    typedefs: append(original.typedefs, t),
-  }
+func NewDeclarations(defvars []entity.DefinedVariable, vardecls []entity.UndefinedVariable, defuns []entity.DefinedFunction, funcdecls []entity.UndefinedFunction, constants []entity.Constant, defstructs []StructNode, defunions []UnionNode, typedefs []TypedefNode) Declarations {
+  return Declarations { defvars, vardecls, defuns, funcdecls, constants, defstructs, defunions, typedefs }
 }
 
 func (self Declarations) String() string {
@@ -175,33 +62,33 @@ func (self Declarations) GetLocation() duck.ILocation {
 }
 
 func (self Declarations) AddDefvar(v entity.DefinedVariable) Declarations {
-  return copyDeclarationsWithAddDefvar(self, v)
+  return NewDeclarations(append(self.defvars, v), self.vardecls, self.defuns, self.funcdecls, self.constants, self.defstructs, self.defunions, self.typedefs)
 }
 
 func (self Declarations) AddVardecl(v entity.UndefinedVariable) Declarations {
-  return copyDeclarationsWithAddVardecl(self, v)
+  return NewDeclarations(self.defvars, append(self.vardecls, v), self.defuns, self.funcdecls, self.constants, self.defstructs, self.defunions, self.typedefs)
 }
 
 func (self Declarations) AddDefun(f entity.DefinedFunction) Declarations {
-  return copyDeclarationsWithAddDefun(self, f)
+  return NewDeclarations(self.defvars, self.vardecls, append(self.defuns, f), self.funcdecls, self.constants, self.defstructs, self.defunions, self.typedefs)
 }
 
 func (self Declarations) AddFuncdecl(f entity.UndefinedFunction) Declarations {
-  return copyDeclarationsWithAddFuncdecl(self, f)
+  return NewDeclarations(self.defvars, self.vardecls, self.defuns, append(self.funcdecls, f), self.constants, self.defstructs, self.defunions, self.typedefs)
 }
 
 func (self Declarations) AddDefconst(c entity.Constant) Declarations {
-  return copyDeclarationsWithAddDefconst(self, c)
+  return NewDeclarations(self.defvars, self.vardecls, self.defuns, self.funcdecls, append(self.constants, c), self.defstructs, self.defunions, self.typedefs)
 }
 
 func (self Declarations) AddDefstruct(s StructNode) Declarations {
-  return copyDeclarationsWithAddDefstruct(self, s)
+  return NewDeclarations(self.defvars, self.vardecls, self.defuns, self.funcdecls, self.constants, append(self.defstructs, s), self.defunions, self.typedefs)
 }
 
 func (self Declarations) AddDefunion(u UnionNode) Declarations {
-  return copyDeclarationsWithAddDefunion(self, u)
+  return NewDeclarations(self.defvars, self.vardecls, self.defuns, self.funcdecls, self.constants, self.defstructs, append(self.defunions, u), self.typedefs)
 }
 
 func (self Declarations) AddTypedef(t TypedefNode) Declarations {
-  return copyDeclarationsWithAddTypedef(self, t)
+  return NewDeclarations(self.defvars, self.vardecls, self.defuns, self.funcdecls, self.constants, self.defstructs, self.defunions, append(self.typedefs, t))
 }

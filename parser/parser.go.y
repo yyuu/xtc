@@ -156,7 +156,15 @@ import_name: name
 
 top_defs:
         {
-          $$._node = ast.NewDeclarations()
+          defvars := []entity.DefinedVariable { }
+          vardecls := []entity.UndefinedVariable { }
+          defuns := []entity.DefinedFunction { }
+          funcdecls := []entity.UndefinedFunction { }
+          constants := []entity.Constant { }
+          defstructs := []ast.StructNode { }
+          defunions := []ast.UnionNode { }
+          typedefs := []ast.TypedefNode { }
+          $$._node = ast.NewDeclarations(defvars, vardecls, defuns, funcdecls, constants, defstructs, defunions, typedefs)
         }
         | top_defs defun
         {
