@@ -195,7 +195,7 @@ top_defs:
 
 defvars: storage type name '=' expr ';'
        {
-         priv := $1._token.literal == "storage"
+         priv := $1._token.literal != "static"
          $$._entity = entity.NewDefinedVariable(priv, asType($2._node), $3._token.literal, asExpr($5._node))
        }
        ;
@@ -208,7 +208,7 @@ defconst: CONST type name '=' expr ';'
 
 defun: storage typeref name '(' params ')' block
      {
-       priv := $1._token.literal == "storage"
+       priv := $1._token.literal != "static"
        ps := asParams($5._entity)
        t := typesys.NewFunctionTypeRef($2._typeref, parametersTypeRef(ps))
        $$._entity = entity.NewDefinedFunction(priv, ast.NewTypeNode(t.GetLocation(), t), $3._token.literal, ps, asStmt($7._node))
