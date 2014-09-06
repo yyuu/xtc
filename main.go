@@ -13,8 +13,8 @@ import (
 )
 
 var flagSet = flag.NewFlagSet(os.Args[0], 1)
-var dump = flagSet.Bool("D", true, "dump mode")
-var verbose = flagSet.Int("v", 0, "verbose mode")
+var dump = flagSet.Bool("D", true, "dump mode")   // TODO: disable dump
+var verbose = flagSet.Int("v", 4, "verbose mode") // TODO: disable yyDebug
 
 func main() {
   flagSet.Parse(os.Args[1:])
