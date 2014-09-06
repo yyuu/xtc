@@ -19,6 +19,7 @@ type lex struct {
   ignoreComments bool
   ast *ast.AST
   firstToken *token
+  isEOF bool
   error error
 }
 
@@ -47,6 +48,8 @@ func lexer(filename string, source string) *lex {
     ignoreSpaces: true,
     ignoreComments: true,
     ast: nil,
+    firstToken: nil,
+    isEOF: false,
     error: nil,
   }
 }

@@ -25,6 +25,7 @@ import (
   _typerefs []duck.ITypeRef
 }
 
+%token EOF
 %token SPACES
 %token BLOCK_COMMENT
 %token LINE_COMMENT
@@ -89,8 +90,8 @@ import (
 
 %%
 
-compilation_unit:
-                | import_stmts top_defs
+compilation_unit: EOF
+                | import_stmts top_defs EOF
                 {
                   if lex, ok := yylex.(*lex); ok {
                     var loc duck.ILocation
@@ -776,13 +777,17 @@ primary: INTEGER
 
 %%
 
-const EOF = 0
 var Verbose = 0
 
 func (self *lex) Lex(lval *yySymType) int {
   t := self.getNextToken()
   if t == nil {
-    return EOF
+    if self.isEOF {
+      return 0
+    } else {
+      self.isEOF = true
+      return EOF
+    }
   } else {
     lval._token = *t
     return t.id
