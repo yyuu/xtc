@@ -2,6 +2,7 @@ package main
 
 import (
   "bufio"
+  "encoding/json"
   "flag"
   "fmt"
   "io/ioutil"
@@ -12,6 +13,7 @@ import (
 )
 
 var flagSet = flag.NewFlagSet(os.Args[0], 1)
+var dump = flagSet.Bool("d", true, "dump mode")
 var verbose = flagSet.Bool("v", false, "verbose mode")
 
 func main() {
@@ -26,7 +28,7 @@ func main() {
         fmt.Fprintln(os.Stderr, err)
         os.Exit(1)
       }
-      p(parser.ParseExpr(string(cs)))
+      ep(parser.ParseExpr(string(cs)))
     }
   } else {
     repl()
@@ -50,14 +52,28 @@ func repl() {
       break
     }
     if strings.TrimSpace(s) != "" {
-      p(parser.ParseExpr(s))
+      ep(parser.ParseExpr(s))
     }
   }
 }
 
-func p(ast *ast.AST, err error) {
+func ep(ast *ast.AST, err error) *ast.AST {
   if err != nil {
     panic(err)
   }
-  fmt.Println(*ast)
+  if *dump == true {
+    d(ast)
+  }
+  // TODO: evaluate AST
+  fmt.Println(ast)
+  return ast
+}
+
+func d(ast *ast.AST) *ast.AST {
+  cs, err := json.MarshalIndent(ast, "", "  ")
+  if err != nil {
+    panic(err)
+  }
+  fmt.Println(string(cs))
+  return ast
 }
