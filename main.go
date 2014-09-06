@@ -13,12 +13,12 @@ import (
 )
 
 var flagSet = flag.NewFlagSet(os.Args[0], 1)
-var dump = flagSet.Bool("d", true, "dump mode")
-var verbose = flagSet.Bool("v", false, "verbose mode")
+var dump = flagSet.Bool("D", true, "dump mode")
+var verbose = flagSet.Int("v", 0, "verbose mode")
 
 func main() {
   flagSet.Parse(os.Args[1:])
-  parser.VERBOSE = *verbose
+  parser.Verbose = *verbose
 
   files := flagSet.Args()
   if 0 < len(files) {

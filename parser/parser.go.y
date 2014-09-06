@@ -777,16 +777,13 @@ primary: INTEGER
 %%
 
 const EOF = 0
-var VERBOSE = false
+var Verbose = 0
 
 func (self *lex) Lex(lval *yySymType) int {
   t := self.getNextToken()
   if t == nil {
     return EOF
   } else {
-    if VERBOSE {
-      fmt.Println("token:", t)
-    }
     lval._token = *t
     return t.id
   }
@@ -798,6 +795,7 @@ func (self *lex) Error(s string) {
 }
 
 func ParseExpr(s string) (*ast.AST, error) {
+  yyDebug = Verbose
   lex := lexer("", s)
   if yyParse(lex) == 0 {
     return lex.ast, nil // success
