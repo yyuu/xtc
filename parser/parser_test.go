@@ -16,7 +16,7 @@ func TestParseEmpty(t *testing.T) {
 
 func TestParseFuncallWithoutArguments(t *testing.T) {
   s := `
-    int f(void) {
+    int f() {
       return getc();
     }
   `
@@ -30,17 +30,17 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
           ast.NewTypeNode(loc(1,5),
             typesys.NewFunctionTypeRef(
               typesys.NewIntegerTypeRef(loc(1,5), "int"),
-              typesys.NewParamTypeRefs(loc(1,11),
+              typesys.NewParamTypeRefs(loc(1,10),
                 []duck.ITypeRef { },
                 false,
               ),
             ),
           ),
           "f",
-          entity.NewParams(loc(1,11),
+          entity.NewParams(loc(1,10),
             []duck.IParameter { },
           ),
-          ast.NewBlockNode(loc(1,17),
+          ast.NewBlockNode(loc(1,13),
             []duck.IDefinedVariable { },
             []duck.IStmtNode {
               ast.NewReturnNode(loc(2,7),

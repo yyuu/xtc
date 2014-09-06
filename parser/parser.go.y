@@ -207,7 +207,14 @@ defconst: CONST type name '=' expr ';'
         }
         ;
 
-defun: storage typeref name '(' params ')' block
+defun: storage typeref name '(' ')' block
+     {
+       priv := $1._token.literal != "static"
+       ps := entity.NewParams($4._token.location, []duck.IParameter { })
+       t := typesys.NewFunctionTypeRef($2._typeref, parametersTypeRef(ps))
+       $$._entity = entity.NewDefinedFunction(priv, ast.NewTypeNode(t.GetLocation(), t), $3._token.literal, ps, asStmt($6._node))
+     }
+     | storage typeref name '(' params ')' block
      {
        priv := $1._token.literal != "static"
        ps := asParams($5._entity)
@@ -220,11 +227,7 @@ storage:
        | STATIC
        ;
 
-params: VOID
-      {
-        $$._entity = entity.NewParams($1._token.location, []duck.IParameter { })
-      }
-      | fixedparams
+params: fixedparams
       {
         $$._entity = entity.NewParams($1._token.location, asParams($1._entity).GetParamDescs())
       }
@@ -332,17 +335,17 @@ typeref: typeref_base
        {
          $$._typeref = typesys.NewPointerTypeRef($1._typeref)
        }
+       | typeref '(' ')'
+       {
+         $$._typeref = typesys.NewFunctionTypeRef($1._typeref, typesys.NewParamTypeRefs($2._token.location, []duck.ITypeRef { }, false))
+       }
        | typeref '(' param_typerefs ')'
        {
          $$._typeref = typesys.NewFunctionTypeRef($1._typeref, $3._typeref)
        }
        ;
 
-param_typerefs: VOID
-              {
-                $$._typeref = typesys.NewParamTypeRefs($1._token.location, []duck.ITypeRef { }, false)
-              }
-              | fixedparam_typerefs
+param_typerefs: fixedparam_typerefs
               {
 //              $1._typerefs.AcceptVArgs()
                 $$._typerefs = $1._typerefs
