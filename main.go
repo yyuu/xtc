@@ -65,7 +65,7 @@ func ep(ast *ast.AST, err error) *ast.AST {
     d(ast)
   }
   // TODO: evaluate AST
-  fmt.Println(ast)
+  fmt.Fprintln(os.Stdout, ast)
   return ast
 }
 
@@ -74,6 +74,6 @@ func d(ast *ast.AST) *ast.AST {
   if err != nil {
     panic(err)
   }
-  fmt.Println(string(cs))
+  fmt.Fprintln(os.Stderr, string(cs))
   return ast
 }
