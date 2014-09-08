@@ -7,38 +7,38 @@ import (
   "bitbucket.org/yyuu/bs/typesys"
 )
 
-func asExpr(x duck.INode) duck.IExprNode {
+func asExprNode(x duck.INode) duck.IExprNode {
   return x.(duck.IExprNode)
 }
 
-func asExprs(xs []duck.INode) []duck.IExprNode {
+func asExprNodes(xs []duck.INode) []duck.IExprNode {
   ys := make([]duck.IExprNode, len(xs))
   for i := range xs {
-    ys[i] = asExpr(xs[i])
+    ys[i] = asExprNode(xs[i])
   }
   return ys
 }
 
-func asStmt(x duck.INode) duck.IStmtNode {
+func asStmtNode(x duck.INode) duck.IStmtNode {
   return x.(duck.IStmtNode)
 }
 
-func asStmts(xs []duck.INode) []duck.IStmtNode {
+func asStmtNodes(xs []duck.INode) []duck.IStmtNode {
   ys := make([]duck.IStmtNode, len(xs))
   for i := range xs {
-    ys[i] = asStmt(xs[i])
+    ys[i] = asStmtNode(xs[i])
   }
   return ys
 }
 
-func asType(x duck.INode) duck.ITypeNode {
+func asTypeNode(x duck.INode) duck.ITypeNode {
   return x.(duck.ITypeNode)
 }
 
-func asTypes(xs []duck.INode) []duck.ITypeNode {
+func asTypeNodes(xs []duck.INode) []duck.ITypeNode {
   ys := make([]duck.ITypeNode, len(xs))
   for i := range xs {
-    ys[i] = asType(xs[i])
+    ys[i] = asTypeNode(xs[i])
   }
   return ys
 }
