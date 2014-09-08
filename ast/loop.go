@@ -1,41 +1,27 @@
 package ast
 
 import (
-  "encoding/json"
   "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
 // DoWhileNode
 type DoWhileNode struct {
-  location duck.ILocation
-  body duck.IStmtNode
-  cond duck.IExprNode
+  ClassName string
+  Location duck.ILocation
+  Body duck.IStmtNode
+  Cond duck.IExprNode
 }
 
 func NewDoWhileNode(loc duck.ILocation, body duck.IStmtNode, cond duck.IExprNode) DoWhileNode {
   if loc == nil { panic("location is nil") }
   if body == nil { panic("body is nil") }
   if cond == nil { panic("cond is nil") }
-  return DoWhileNode { loc, body, cond }
+  return DoWhileNode { "ast.DoWhileNode", loc, body, cond }
 }
 
 func (self DoWhileNode) String() string {
-  return fmt.Sprintf("(let do-while-loop () (begin %s (if %s (do-while-loop))))", self.body, self.cond)
-}
-
-func (self DoWhileNode) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Body duck.IStmtNode
-    Cond duck.IExprNode
-  }
-  x.ClassName = "ast.DoWhileNode"
-  x.Location = self.location
-  x.Body = self.body
-  x.Cond = self.cond
-  return json.Marshal(x)
+  return fmt.Sprintf("(let do-while-loop () (begin %s (if %s (do-while-loop))))", self.Body, self.Cond)
 }
 
 func (self DoWhileNode) IsStmtNode() bool {
@@ -43,16 +29,17 @@ func (self DoWhileNode) IsStmtNode() bool {
 }
 
 func (self DoWhileNode) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 // ForNode
 type ForNode struct {
-  location duck.ILocation
-  init duck.IExprNode
-  cond duck.IExprNode
-  incr duck.IExprNode
-  body duck.IStmtNode
+  ClassName string
+  Location duck.ILocation
+  Init duck.IExprNode
+  Cond duck.IExprNode
+  Incr duck.IExprNode
+  Body duck.IStmtNode
 }
 
 func NewForNode(loc duck.ILocation, init duck.IExprNode, cond duck.IExprNode, incr duck.IExprNode, body duck.IStmtNode) ForNode {
@@ -61,29 +48,11 @@ func NewForNode(loc duck.ILocation, init duck.IExprNode, cond duck.IExprNode, in
   if cond == nil { panic("cond is nil") }
   if incr == nil { panic("incr is nil") }
   if body == nil { panic("body is nil") }
-  return ForNode { loc, init, cond, incr, body }
+  return ForNode { "ast.ForNode", loc, init, cond, incr, body }
 }
 
 func (self ForNode) String() string {
-  return fmt.Sprintf("(let for-loop (%s) (if %s (begin %s (for-loop %s))))", self.init, self.cond, self.body, self.incr)
-}
-
-func (self ForNode) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Init duck.IExprNode
-    Cond duck.IExprNode
-    Incr duck.IExprNode
-    Body duck.IStmtNode
-  }
-  x.ClassName = "ast.ForNode"
-  x.Location = self.location
-  x.Init = self.init
-  x.Cond = self.cond
-  x.Incr = self.incr
-  x.Body = self.body
-  return json.Marshal(x)
+  return fmt.Sprintf("(let for-loop (%s) (if %s (begin %s (for-loop %s))))", self.Init, self.Cond, self.Body, self.Incr)
 }
 
 func (self ForNode) IsStmtNode() bool {
@@ -91,39 +60,26 @@ func (self ForNode) IsStmtNode() bool {
 }
 
 func (self ForNode) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 // WhileNode
 type WhileNode struct {
-  location duck.ILocation
-  cond duck.IExprNode
-  body duck.IStmtNode
+  ClassName string
+  Location duck.ILocation
+  Cond duck.IExprNode
+  Body duck.IStmtNode
 }
 
 func NewWhileNode(loc duck.ILocation, cond duck.IExprNode, body duck.IStmtNode) WhileNode {
   if loc == nil { panic("location is nil") }
   if cond == nil { panic("cond is nil") }
   if body == nil { panic("body is nil") }
-  return WhileNode { loc, cond, body }
+  return WhileNode { "ast.WhileNode", loc, cond, body }
 }
 
 func (self WhileNode) String() string {
-  return fmt.Sprintf("(let while-loop ((while-cond %s)) (if while-cond (begin %s (while-loop %s))))", self.cond, self.body, self.cond)
-}
-
-func (self WhileNode) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Cond duck.IExprNode
-    Body duck.IStmtNode
-  }
-  x.ClassName = "ast.WhileNode"
-  x.Location = self.location
-  x.Cond = self.cond
-  x.Body = self.body
-  return json.Marshal(x)
+  return fmt.Sprintf("(let while-loop ((while-cond %s)) (if while-cond (begin %s (while-loop %s))))", self.Cond, self.Body, self.Cond)
 }
 
 func (self WhileNode) IsStmtNode() bool {
@@ -131,5 +87,5 @@ func (self WhileNode) IsStmtNode() bool {
 }
 
 func (self WhileNode) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }

@@ -1,7 +1,6 @@
 package ast
 
 import (
-  "encoding/json"
   "fmt"
   "strings"
   "bitbucket.org/yyuu/bs/duck"
@@ -9,8 +8,9 @@ import (
 
 // IntegerLiteralNode
 type IntegerLiteralNode struct {
-  location duck.ILocation
-  value int
+  ClassName string
+  Location duck.ILocation
+  Value int
 }
 
 func NewIntegerLiteralNode(loc duck.ILocation, literal string) IntegerLiteralNode {
@@ -36,23 +36,11 @@ func NewIntegerLiteralNode(loc duck.ILocation, literal string) IntegerLiteralNod
   if err != nil {
     panic(err)
   }
-  return IntegerLiteralNode { loc, value }
+  return IntegerLiteralNode { "ast.IntegerLiteralNode", loc, value }
 }
 
 func (self IntegerLiteralNode) String() string {
-  return fmt.Sprintf("%d", self.value)
-}
-
-func (self IntegerLiteralNode) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Value int
-  }
-  x.ClassName = "ast.IntegerLiteralNode"
-  x.Location = self.location
-  x.Value = self.value
-  return json.Marshal(x)
+  return fmt.Sprintf("%d", self.Value)
 }
 
 func (self IntegerLiteralNode) IsExprNode() bool {
@@ -60,34 +48,23 @@ func (self IntegerLiteralNode) IsExprNode() bool {
 }
 
 func (self IntegerLiteralNode) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 // StringLiteralNode
 type StringLiteralNode struct {
-  location duck.ILocation
-  value string
+  ClassName string
+  Location duck.ILocation
+  Value string
 }
 
 func NewStringLiteralNode(loc duck.ILocation, literal string) StringLiteralNode {
   if loc == nil { panic("location is nil") }
-  return StringLiteralNode { loc, literal }
+  return StringLiteralNode { "ast.StringLiteralNode", loc, literal }
 }
 
 func (self StringLiteralNode) String() string {
-  return self.value
-}
-
-func (self StringLiteralNode) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Value string
-  }
-  x.ClassName = "ast.StringLiteralNode"
-  x.Location = self.location
-  x.Value = self.value
-  return json.Marshal(x)
+  return self.Value
 }
 
 func (self StringLiteralNode) IsExprNode() bool {
@@ -95,5 +72,5 @@ func (self StringLiteralNode) IsExprNode() bool {
 }
 
 func (self StringLiteralNode) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }

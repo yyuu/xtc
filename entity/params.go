@@ -1,34 +1,22 @@
 package entity
 
 import (
-  "encoding/json"
   "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
 type Params struct {
-  location duck.ILocation
-  paramDescs []duck.IParameter
+  ClassName string
+  Location duck.ILocation
+  ParamDescs []duck.IParameter
 }
 
 func NewParams(loc duck.ILocation, paramDescs []duck.IParameter) Params {
-  return Params { loc, paramDescs }
+  return Params { "entity.Params", loc, paramDescs }
 }
 
 func (self Params) String() string {
-  return fmt.Sprintf("<entity.Params Location=%s ParamDescs=%s>", self.location, self.paramDescs)
-}
-
-func (self Params) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    ParamDescs []duck.IParameter
-  }
-  x.ClassName = "entity.Params"
-  x.Location = self.location
-  x.ParamDescs = self.paramDescs
-  return json.Marshal(x)
+  return fmt.Sprintf("<entity.Params Location=%s ParamDescs=%s>", self.Location, self.ParamDescs)
 }
 
 func (self Params) IsEntity() bool {
@@ -36,36 +24,25 @@ func (self Params) IsEntity() bool {
 }
 
 func (self Params) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 func (self Params) GetParamDescs() []duck.IParameter {
-  return self.paramDescs
+  return self.ParamDescs
 }
 
 type Parameter struct {
-  typeNode duck.ITypeNode
-  name string
+  ClassName string
+  TypeNode duck.ITypeNode
+  Name string
 }
 
 func NewParameter(t duck.ITypeNode, name string) Parameter {
-  return Parameter { t, name }
+  return Parameter { "entity.Parameter", t, name }
 }
 
 func (self Parameter) String() string {
-  return fmt.Sprintf("<entity.Parameter Name=%s TypeNode=%s>", self.name, self.typeNode)
-}
-
-func (self Parameter) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    TypeNode duck.ITypeNode
-    Name string
-  }
-  x.ClassName = "entity.Parameter"
-  x.TypeNode = self.typeNode
-  x.Name = self.name
-  return json.Marshal(x)
+  return fmt.Sprintf("<entity.Parameter Name=%s TypeNode=%s>", self.Name, self.TypeNode)
 }
 
 func (self Parameter) IsEntity() bool {
@@ -73,9 +50,9 @@ func (self Parameter) IsEntity() bool {
 }
 
 func (self Parameter) GetTypeNode() duck.ITypeNode {
-  return self.typeNode
+  return self.TypeNode
 }
 
 func (self Parameter) GetName() string {
-  return self.name
+  return self.Name
 }

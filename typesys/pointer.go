@@ -1,39 +1,27 @@
 package typesys
 
 import (
-  "encoding/json"
   "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
 // PointerType
 type PointerType struct {
-  pointerSize int
-  baseType duck.IType
+  ClassName string
+  PointerSize int
+  BaseType duck.IType
 }
 
 func NewPointerType(size int, baseType duck.IType) PointerType {
-  return PointerType { size, baseType }
+  return PointerType { "typesys.PointerType", size, baseType }
 }
 
 func (self PointerType) String() string {
-  return fmt.Sprintf("<typesys.PointerType PointerSize=%d BaseType=%s>", self.pointerSize, self.baseType)
-}
-
-func (self PointerType) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    PointerSize int
-    BaseType duck.IType
-  }
-  x.ClassName = "typesys.PointerType"
-  x.PointerSize = self.pointerSize
-  x.BaseType = self.baseType
-  return json.Marshal(x)
+  return fmt.Sprintf("<typesys.PointerType PointerSize=%d BaseType=%s>", self.PointerSize, self.BaseType)
 }
 
 func (self PointerType) Size() int {
-  return self.pointerSize
+  return self.PointerSize
 }
 
 func (self PointerType) AllocSize() int {
@@ -86,32 +74,21 @@ func (self PointerType) IsFunction() bool {
 
 // PointerTypeRef
 type PointerTypeRef struct {
-  location duck.ILocation
-  baseType duck.ITypeRef
+  ClassName string
+  Location duck.ILocation
+  BaseType duck.ITypeRef
 }
 
 func NewPointerTypeRef(baseType duck.ITypeRef) PointerTypeRef {
-  return PointerTypeRef { baseType.GetLocation(), baseType }
+  return PointerTypeRef { "typesys.PointerTypeRef", baseType.GetLocation(), baseType }
 }
 
 func (self PointerTypeRef) String() string {
-  return fmt.Sprintf("<typesys.PointerTypeRef Location=%s BaseType=%s>", self.location, self.baseType)
-}
-
-func (self PointerTypeRef) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    BaseType duck.ITypeRef
-  }
-  x.ClassName = "typesys.PointerTypeRef"
-  x.Location = self.location
-  x.BaseType = self.baseType
-  return json.Marshal(x)
+  return fmt.Sprintf("<typesys.PointerTypeRef Location=%s BaseType=%s>", self.Location, self.BaseType)
 }
 
 func (self PointerTypeRef) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 func (self PointerTypeRef) IsTypeRef() bool {

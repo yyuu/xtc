@@ -1,7 +1,6 @@
 package ast
 
 import (
-  "encoding/json"
   "fmt"
   "strings"
   "bitbucket.org/yyuu/bs/duck"
@@ -9,10 +8,11 @@ import (
 
 // CondExprNode
 type CondExprNode struct {
-  location duck.ILocation
-  cond duck.IExprNode
-  thenExpr duck.IExprNode
-  elseExpr duck.IExprNode
+  ClassName string
+  Location duck.ILocation
+  Cond duck.IExprNode
+  ThenExpr duck.IExprNode
+  ElseExpr duck.IExprNode
 }
 
 func NewCondExprNode(loc duck.ILocation, cond duck.IExprNode, thenExpr duck.IExprNode, elseExpr duck.IExprNode) CondExprNode {
@@ -20,27 +20,11 @@ func NewCondExprNode(loc duck.ILocation, cond duck.IExprNode, thenExpr duck.IExp
   if cond == nil { panic("cond is nil") }
   if thenExpr == nil { panic("thenExpr is nil") }
   if elseExpr == nil { panic("elseExpr is nil") }
-  return CondExprNode { loc, cond, thenExpr, elseExpr }
+  return CondExprNode { "ast.CondExprNode", loc, cond, thenExpr, elseExpr }
 }
 
 func (self CondExprNode) String() string {
-  return fmt.Sprintf("(if %s %s %s)", self.cond, self.thenExpr, self.elseExpr)
-}
-
-func (self CondExprNode) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Cond duck.IExprNode
-    ThenExpr duck.IExprNode
-    ElseExpr duck.IExprNode
-  }
-  x.ClassName = "ast.CondExprNode"
-  x.Location = self.location
-  x.Cond = self.cond
-  x.ThenExpr = self.thenExpr
-  x.ElseExpr = self.elseExpr
-  return json.Marshal(x)
+  return fmt.Sprintf("(if %s %s %s)", self.Cond, self.ThenExpr, self.ElseExpr)
 }
 
 func (self CondExprNode) IsExprNode() bool {
@@ -48,46 +32,33 @@ func (self CondExprNode) IsExprNode() bool {
 }
 
 func (self CondExprNode) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 // CaseNode
 type CaseNode struct {
-  location duck.ILocation
-  values []duck.IExprNode
-  body duck.IStmtNode
+  ClassName string
+  Location duck.ILocation
+  Values []duck.IExprNode
+  Body duck.IStmtNode
 }
 
 func NewCaseNode(loc duck.ILocation, values []duck.IExprNode, body duck.IStmtNode) CaseNode {
   if loc == nil { panic("location is nil") }
   if body == nil { panic("body is nil") }
-  return CaseNode { loc, values, body }
+  return CaseNode { "ast.CaseNode", loc, values, body }
 }
 
 func (self CaseNode) String() string {
-  sValues := make([]string, len(self.values))
-  for i := range self.values {
-    sValues[i] = fmt.Sprintf("(= switch-cond %s)", self.values[i])
+  sValues := make([]string, len(self.Values))
+  for i := range self.Values {
+    sValues[i] = fmt.Sprintf("(= switch-cond %s)", self.Values[i])
   }
   switch len(sValues) {
-    case 0:  return fmt.Sprintf("(else %s)", self.body)
-    case 1:  return fmt.Sprintf("(%s %s)", sValues[0], self.body)
-    default: return fmt.Sprintf("((or %s) %s)", strings.Join(sValues, " "), self.body)
+    case 0:  return fmt.Sprintf("(else %s)", self.Body)
+    case 1:  return fmt.Sprintf("(%s %s)", sValues[0], self.Body)
+    default: return fmt.Sprintf("((or %s) %s)", strings.Join(sValues, " "), self.Body)
   }
-}
-
-func (self CaseNode) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Values []duck.IExprNode
-    Body duck.IStmtNode
-  }
-  x.ClassName = "ast.CaseNode"
-  x.Location = self.location
-  x.Values = self.values
-  x.Body = self.body
-  return json.Marshal(x)
 }
 
 func (self CaseNode) IsStmtNode() bool {
@@ -95,42 +66,27 @@ func (self CaseNode) IsStmtNode() bool {
 }
 
 func (self CaseNode) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 // IfNode
 type IfNode struct {
-  location duck.ILocation
-  cond duck.IExprNode
-  thenBody duck.IStmtNode
-  elseBody duck.IStmtNode
+  ClassName string
+  Location duck.ILocation
+  Cond duck.IExprNode
+  ThenBody duck.IStmtNode
+  ElseBody duck.IStmtNode
 }
 
 func NewIfNode(loc duck.ILocation, cond duck.IExprNode, thenBody duck.IStmtNode, elseBody duck.IStmtNode) IfNode {
   if loc == nil { panic("location is nil") }
   if cond == nil { panic("cond is nil") }
   if thenBody == nil { panic("thenBody is nil") }
-  return IfNode { loc, cond, thenBody, elseBody }
+  return IfNode { "ast.IfNode", loc, cond, thenBody, elseBody }
 }
 
 func (self IfNode) String() string {
-  return fmt.Sprintf("(if %s %s %s)", self.cond, self.thenBody, self.elseBody)
-}
-
-func (self IfNode) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Cond duck.IExprNode
-    ThenBody duck.IStmtNode
-    ElseBody duck.IStmtNode
-  }
-  x.ClassName = "ast.IfNode"
-  x.Location = self.location
-  x.Cond = self.cond
-  x.ThenBody = self.thenBody
-  x.ElseBody = self.elseBody
-  return json.Marshal(x)
+  return fmt.Sprintf("(if %s %s %s)", self.Cond, self.ThenBody, self.ElseBody)
 }
 
 func (self IfNode) IsStmtNode() bool {
@@ -138,14 +94,15 @@ func (self IfNode) IsStmtNode() bool {
 }
 
 func (self IfNode) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 // SwitchNode
 type SwitchNode struct {
-  location duck.ILocation
-  cond duck.IExprNode
-  cases []CaseNode
+  ClassName string
+  Location duck.ILocation
+  Cond duck.IExprNode
+  Cases []CaseNode
 }
 
 func NewSwitchNode(loc duck.ILocation, cond duck.IExprNode, _cases []duck.IStmtNode) SwitchNode {
@@ -155,33 +112,19 @@ func NewSwitchNode(loc duck.ILocation, cond duck.IExprNode, _cases []duck.IStmtN
   for i := range _cases {
     cases[i] = _cases[i].(CaseNode)
   }
-  return SwitchNode { loc, cond, cases }
+  return SwitchNode { "ast.SwitchNode", loc, cond, cases }
 }
 
 func (self SwitchNode) String() string {
-  sCases := make([]string, len(self.cases))
-  for i := range self.cases {
-    sCases[i] = fmt.Sprintf("%s", self.cases[i])
+  sCases := make([]string, len(self.Cases))
+  for i := range self.Cases {
+    sCases[i] = fmt.Sprintf("%s", self.Cases[i])
   }
   if len(sCases) == 0 {
-    return fmt.Sprintf("(let ((switch-cond %s)) ())", self.cond)
+    return fmt.Sprintf("(let ((switch-cond %s)) ())", self.Cond)
   } else {
-    return fmt.Sprintf("(let ((switch-cond %s)) (cond %s))", self.cond, strings.Join(sCases, " "))
+    return fmt.Sprintf("(let ((switch-cond %s)) (cond %s))", self.Cond, strings.Join(sCases, " "))
   }
-}
-
-func (self SwitchNode) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Cond duck.IExprNode
-    Cases []CaseNode
-  }
-  x.ClassName = "ast.SwitchNode"
-  x.Location = self.location
-  x.Cond = self.cond
-  x.Cases = self.cases
-  return json.Marshal(x)
 }
 
 func (self SwitchNode) IsStmtNode() bool {
@@ -189,5 +132,5 @@ func (self SwitchNode) IsStmtNode() bool {
 }
 
 func (self SwitchNode) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }

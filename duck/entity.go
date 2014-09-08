@@ -2,7 +2,6 @@ package duck
 
 type IEntity interface {
   String() string
-  MarshalJSON() ([]byte, error)
   IsEntity() bool
 }
 
@@ -17,7 +16,7 @@ type IVariable interface {
 type IDefinedVariable interface {
   IVariable
   IsDefinedVariable() bool
-  NumRefered() int
+  GetNumRefered() int
   GetInitializer() IExprNode
 }
 

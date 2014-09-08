@@ -1,7 +1,6 @@
 package ast
 
 import (
-  "encoding/json"
   "fmt"
   "strings"
   "bitbucket.org/yyuu/bs/duck"
@@ -9,24 +8,25 @@ import (
 
 // BlockNode
 type BlockNode struct {
-  location duck.ILocation
-  variables []duck.IDefinedVariable
-  stmts []duck.IStmtNode
+  ClassName string
+  Location duck.ILocation
+  Variables []duck.IDefinedVariable
+  Stmts []duck.IStmtNode
 }
 
 func NewBlockNode(loc duck.ILocation, variables []duck.IDefinedVariable, stmts []duck.IStmtNode) BlockNode {
   if loc == nil { panic("location is nil") }
-  return BlockNode { loc, variables, stmts }
+  return BlockNode { "ast.BlockNode", loc, variables, stmts }
 }
 
 func (self BlockNode) String() string {
-  sVariables := make([]string, len(self.variables))
-  for i := range self.variables {
-    sVariables[i] = fmt.Sprintf("%s", self.variables[i])
+  sVariables := make([]string, len(self.Variables))
+  for i := range self.Variables {
+    sVariables[i] = fmt.Sprintf("%s", self.Variables[i])
   }
-  sStmts := make([]string, len(self.stmts))
-  for j := range self.stmts {
-    sStmts[j] = fmt.Sprintf("%s", self.stmts[j])
+  sStmts := make([]string, len(self.Stmts))
+  for j := range self.Stmts {
+    sStmts[j] = fmt.Sprintf("%s", self.Stmts[j])
   }
 
   stmts := ""
@@ -43,32 +43,18 @@ func (self BlockNode) String() string {
   }
 }
 
-func (self BlockNode) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Variables []duck.IDefinedVariable
-    Stmts []duck.IStmtNode
-  }
-  x.ClassName = "ast.BlockNode"
-  x.Location = self.location
-  x.Variables = self.variables
-  x.Stmts = self.stmts
-  return json.Marshal(x)
-}
-
 func (self BlockNode) IsStmtNode() bool {
   return true
 }
 
 func (self BlockNode) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 func (self BlockNode) GetVariables() []duck.IDefinedVariable {
-  return self.variables
+  return self.Variables
 }
 
 func (self BlockNode) GetStmts() []duck.IStmtNode {
-  return self.stmts
+  return self.Stmts
 }
