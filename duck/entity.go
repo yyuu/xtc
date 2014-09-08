@@ -2,7 +2,6 @@ package duck
 
 type IEntity interface {
   String() string
-  MarshalJSON() ([]byte, error)
   IsEntity() bool
 }
 

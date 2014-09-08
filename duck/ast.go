@@ -2,7 +2,6 @@ package duck
 
 type INode interface {
   String() string
-  MarshalJSON() ([]byte, error)
   GetLocation() ILocation
 }
 
@@ -29,7 +28,6 @@ type ITypeDefinition interface {
 
 type ILocation interface {
   String() string
-  MarshalJSON() ([]byte, error)
   GetSourceName() string
   GetLineNumber() int
   GetLineOffset() int

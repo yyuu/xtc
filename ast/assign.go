@@ -1,41 +1,27 @@
 package ast
 
 import (
-  "encoding/json"
   "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
 // AssignNode
 type AssignNode struct {
-  location duck.ILocation
-  lhs duck.IExprNode
-  rhs duck.IExprNode
+  ClassName string
+  Location duck.ILocation
+  Lhs duck.IExprNode
+  Rhs duck.IExprNode
 }
 
 func NewAssignNode(loc duck.ILocation, lhs duck.IExprNode, rhs duck.IExprNode) AssignNode {
   if loc == nil { panic("location is nil") }
   if lhs == nil { panic("lhs is nil") }
   if rhs == nil { panic("rhs is nil") }
-  return AssignNode { loc, lhs, rhs }
+  return AssignNode { "ast.AssignNode", loc, lhs, rhs }
 }
 
 func (self AssignNode) String() string {
-  return fmt.Sprintf("(%s %s)", self.lhs, self.rhs)
-}
-
-func (self AssignNode) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Lhs duck.IExprNode
-    Rhs duck.IExprNode
-  }
-  x.ClassName = "ast.AssignNode"
-  x.Location = self.location
-  x.Lhs = self.lhs
-  x.Rhs = self.rhs
-  return json.Marshal(x)
+  return fmt.Sprintf("(%s %s)", self.Lhs, self.Rhs)
 }
 
 func (self AssignNode) IsExprNode() bool {
@@ -43,42 +29,27 @@ func (self AssignNode) IsExprNode() bool {
 }
 
 func (self AssignNode) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 // OpAssignNode
 type OpAssignNode struct {
-  location duck.ILocation
-  operator string
-  lhs duck.IExprNode
-  rhs duck.IExprNode
+  ClassName string
+  Location duck.ILocation
+  Operator string
+  Lhs duck.IExprNode
+  Rhs duck.IExprNode
 }
 
 func NewOpAssignNode(loc duck.ILocation, operator string, lhs duck.IExprNode, rhs duck.IExprNode) OpAssignNode {
   if loc == nil { panic("location is nil") }
   if lhs == nil { panic("lhs is nil") }
   if rhs == nil { panic("rhs is nil") }
-  return OpAssignNode { loc, operator, lhs, rhs }
+  return OpAssignNode { "ast.OpAssignNode", loc, operator, lhs, rhs }
 }
 
 func (self OpAssignNode) String() string {
-  return fmt.Sprintf("(%s (%s %s %s))", self.lhs, self.operator, self.lhs, self.rhs)
-}
-
-func (self OpAssignNode) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Operator string
-    Lhs duck.IExprNode
-    Rhs duck.IExprNode
-  }
-  x.ClassName = "ast.OpAssignNode"
-  x.Location = self.location
-  x.Operator = self.operator
-  x.Lhs = self.lhs
-  x.Rhs = self.rhs
-  return json.Marshal(x)
+  return fmt.Sprintf("(%s (%s %s %s))", self.Lhs, self.Operator, self.Lhs, self.Rhs)
 }
 
 func (self OpAssignNode) IsExprNode() bool {
@@ -86,5 +57,5 @@ func (self OpAssignNode) IsExprNode() bool {
 }
 
 func (self OpAssignNode) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }

@@ -1,35 +1,35 @@
 package ast
 
 import (
-  "encoding/json"
   "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
 type Location struct {
-  sourceName string
-  lineNumber int
-  lineOffset int
+  ClassName string
+  SourceName string
+  LineNumber int
+  LineOffset int
 }
 
 func NewLocation(sourceName string, lineNumber int, lineOffset int) duck.ILocation {
-  return Location { sourceName, lineNumber, lineOffset }
+  return Location { "ast.Locationn", sourceName, lineNumber, lineOffset }
 }
 
 func (self Location) GetSourceName() string {
-  return self.sourceName
+  return self.SourceName
 }
 
 func (self Location) GetLineNumber() int {
-  return self.lineNumber
+  return self.LineNumber
 }
 
 func (self Location) GetLineOffset() int {
-  return self.lineOffset
+  return self.LineOffset
 }
 
 func (self Location) String() string {
-  return fmt.Sprintf("[%s:%d,%d]", self.sourceName, self.lineNumber, self.lineOffset)
+  return fmt.Sprintf("[%s:%d,%d]", self.SourceName, self.LineNumber, self.LineOffset)
 }
 
 func (self Location) MarshalJSON() ([]byte, error) {
@@ -38,35 +38,24 @@ func (self Location) MarshalJSON() ([]byte, error) {
 }
 
 type AST struct {
-  location duck.ILocation
-  declarations Declarations
+  ClassName string
+  Location duck.ILocation
+  Declarations Declarations
 }
 
 func NewAST(loc duck.ILocation, declarations Declarations) AST {
   if loc == nil { panic("location is nil") }
-  return AST { loc, declarations }
+  return AST { "ast.AST", loc, declarations }
 }
 
 func (self AST) String() string {
-  return fmt.Sprintf(";; %s\n%s", self.location, self.declarations)
-}
-
-func (self AST) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Declarations Declarations
-  }
-  x.ClassName = "ast.AST"
-  x.Location = self.location
-  x.Declarations = self.declarations
-  return json.Marshal(x)
+  return fmt.Sprintf(";; %s\n%s", self.Location, self.Declarations)
 }
 
 func (self AST) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 func (self AST) GetDeclarations() Declarations {
-  return self.declarations
+  return self.Declarations
 }
