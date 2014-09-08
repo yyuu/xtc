@@ -17,8 +17,12 @@ type IVariable interface {
 type IDefinedVariable interface {
   IVariable
   IsDefinedVariable() bool
-  GetNumRefered() int
   GetInitializer() IExprNode
+  SetInitializer(IExprNode) IDefinedVariable
+  HasInitializer() bool
+  GetNumRefered() int
+//Refered()
+  IsRefered() bool
 }
 
 type IUndefinedVariable interface {
@@ -63,8 +67,17 @@ type IConstant interface {
   GetValue() IExprNode
 }
 
-type IScope interface {
+type IVariableScope interface {
   IsToplevel() bool
-  GetToplevel() IScope
-  GetParent() IScope
+  GetToplevel() IVariableScope
+  GetParent() IVariableScope
+  GetByName(string) *IEntity
+}
+
+type IConstantTable interface {
+  IsConstantTable() bool
+}
+
+type IConstantEntry interface {
+  IsConstantEntry() bool
 }

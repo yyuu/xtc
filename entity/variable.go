@@ -58,8 +58,21 @@ func (self DefinedVariable) GetNumRefered() int {
   return self.NumRefered
 }
 
+func (self DefinedVariable) IsRefered() bool {
+  return 0 < self.NumRefered
+}
+
+func (self *DefinedVariable) Refered() {
+  self.NumRefered++
+}
+
 func (self DefinedVariable) GetInitializer() duck.IExprNode {
   return self.Initializer
+}
+
+func (self DefinedVariable) SetInitializer(init duck.IExprNode) duck.IDefinedVariable {
+  self.Initializer = init
+  return self
 }
 
 type UndefinedVariable struct {

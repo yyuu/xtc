@@ -56,11 +56,12 @@ type StringLiteralNode struct {
   ClassName string
   Location duck.ILocation
   Value string
+  entry duck.IConstantEntry
 }
 
 func NewStringLiteralNode(loc duck.ILocation, literal string) StringLiteralNode {
   if loc == nil { panic("location is nil") }
-  return StringLiteralNode { "ast.StringLiteralNode", loc, literal }
+  return StringLiteralNode { "ast.StringLiteralNode", loc, literal, nil }
 }
 
 func (self StringLiteralNode) String() string {
@@ -73,4 +74,16 @@ func (self StringLiteralNode) IsExprNode() bool {
 
 func (self StringLiteralNode) GetLocation() duck.ILocation {
   return self.Location
+}
+
+func (self StringLiteralNode) GetValue() string {
+  return self.Value
+}
+
+func (self StringLiteralNode) GetEntry() duck.IConstantEntry {
+  return self.entry
+}
+
+func (self *StringLiteralNode) SetEntry(e duck.IConstantEntry) {
+  self.entry = e
 }

@@ -5,53 +5,80 @@ import (
   "bitbucket.org/yyuu/bs/duck"
 )
 
-type ToplevelScope struct {
-  Entities map[string]duck.IEntity
-  Children []LocalScope
+type VariableScope struct {
+  Parent *VariableScope
+  Children []*VariableScope
+  Variables map[string]*duck.IEntity
 }
 
-func NewToplevelScope() ToplevelScope {
-  return ToplevelScope { make(map[string]duck.IEntity), []LocalScope { } }
+func NewToplevelScope() *VariableScope {
+  return &VariableScope { nil, []*VariableScope { }, make(map[string]*duck.IEntity) }
 }
 
-func (self ToplevelScope) IsToplevel() bool {
+func NewLocalScope(parent *VariableScope) *VariableScope {
+  return &VariableScope { parent, []*VariableScope { }, make(map[string]*duck.IEntity) }
+}
+
+func (self *VariableScope) IsVariableScope() bool {
   return true
 }
 
-func (self ToplevelScope) GetToplevel() duck.IScope {
-  return self
+func (self *VariableScope) IsToplevel() bool {
+  return self.Parent == nil
 }
 
-func (self ToplevelScope) GetParent() duck.IScope {
-  return self
+func (self *VariableScope) GetParent() duck.IVariableScope {
+  return self.Parent
 }
 
-func (self *ToplevelScope) AddChild(s LocalScope) {
-  self.Children = append(self.Children, s)
+func (self *VariableScope) AddChild(scope *VariableScope) {
+  self.Children = append(self.Children, scope)
 }
 
-func (self ToplevelScope) Get(name string) duck.IEntity {
-  return self.Entities[name]
+func (self *VariableScope) GetByName(name string) *duck.IEntity {
+  return self.Variables[name]
 }
 
-func (self ToplevelScope) DeclareEntity(entity duck.IEntity) {
+func (self *VariableScope) DeclareEntity(entity duck.IEntity) {
   name := entity.GetName()
-  e := self.Get(name)
+  e := self.GetByName(name)
   if e != nil {
-    panic(fmt.Sprintf("semantic exception: duplicated declaration: %s", name))
+    panic(fmt.Errorf("duplicated declaration: %s", name))
   } else {
-    self.Entities[name] = entity
+    self.Variables[name] = &entity
   }
 }
 
-func (self ToplevelScope) DefineEntity(entity duck.IEntity) {
+func (self *VariableScope) DefineEntity(entity duck.IEntity) {
   name := entity.GetName()
-  e := self.Get(name)
-  if e != nil && e.IsDefined() {
-    panic(fmt.Sprintf("semantic exception: duplicated definition: %s", name))
+  e := self.GetByName(name)
+  if e != nil && (*e).IsDefined() {
+    panic(fmt.Errorf("duplicated definition: %s", name))
   } else {
-    self.Entities[name] = entity
+    self.Variables[name] = &entity
   }
+}
+
+func (self *VariableScope) DefineVariable(v duck.IDefinedVariable) {
+  name := v.GetName()
+  if self.IsDefinedLocally(name) {
+    panic(fmt.Errorf("duplicated variable: %s", name))
+  }
+  entity := v.(duck.IEntity)
+  self.Variables[name] = &entity
+}
+
+func (self *VariableScope) GetToplevel() duck.IVariableScope {
+  if self.Parent == nil {
+    return self
+  } else {
+    return self.Parent.GetToplevel()
+  }
+}
+
+func (self *VariableScope) IsDefinedLocally(name string) bool {
+  _, ok := self.Variables[name]
+  return ok
 }
 
 /*
@@ -74,27 +101,26 @@ func (self ToplevelScope) CheckReferences() {
 }
  */
 
-type LocalScope struct {
-  Parent duck.IScope
-  Variables map[string]duck.IEntity
+type ConstantTable struct {
+  Constants map[string]*duck.IEntity
 }
 
-func NewLocalScope(parent duck.IScope) LocalScope {
-  return LocalScope { parent, make(map[string]duck.IEntity) }
+func NewConstantTable() *ConstantTable {
+  return &ConstantTable { make(map[string]*duck.IEntity) }
 }
 
-func (self LocalScope) IsToplevel() bool {
-  return false
+func (self *ConstantTable) IsConstantTable() bool {
+  return true
 }
 
-func (self LocalScope) GetToplevel() duck.IScope {
-  if self.Parent.IsToplevel() {
-    return self.Parent
-  } else {
-    return self.Parent.GetToplevel()
-  }
+func (self *ConstantTable) Intern(s string) *ConstantEntry {
+  return &ConstantEntry { s }
 }
 
-func (self LocalScope) GetParent() duck.IScope {
-  return self
+type ConstantEntry struct {
+  s string
+}
+
+func (self *ConstantEntry) IsConstantEntry() bool {
+  return true
 }

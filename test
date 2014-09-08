@@ -22,3 +22,6 @@ go test -v ./ast
 
 go test -i ./parser
 go test -v ./parser
+
+go test -i ./compiler
+go test -v ./compiler
