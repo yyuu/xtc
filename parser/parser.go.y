@@ -206,45 +206,62 @@ top_defs: defun
         }
         ;
 
-defvars: type name '=' expr ';'
+typeref_name: typeref name
+            {
+              $$._token = $2._token
+              $$._typeref = $1._typeref
+            }
+            ;
+
+static_typeref_name: STATIC typeref_name
+                   {
+                     $$._token = $2._token
+                     $$._typeref = $2._typeref
+                   }
+                   ;
+
+defvars: typeref_name '=' expr ';'
        {
-         $$._entity = entity.NewDefinedVariable(true, asTypeNode($1._node), $2._token.literal, asExprNode($4._node))
+         ref := $1._typeref
+         $$._entity = entity.NewDefinedVariable(true, ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, asExprNode($3._node))
        }
-       | STATIC type name '=' expr ';'
+       | static_typeref_name '=' expr ';'
        {
-         $$._entity = entity.NewDefinedVariable(false, asTypeNode($2._node), $3._token.literal, asExprNode($5._node))
+         ref := $1._typeref
+         $$._entity = entity.NewDefinedVariable(false, ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, asExprNode($3._node))
        }
        ;
 
-defconst: CONST type name '=' expr ';'
+defconst: CONST typeref_name '=' expr ';'
         {
-          $$._entity = entity.NewConstant(asTypeNode($2._node), $3._token.literal, asExprNode($5._node))
+          ref := $2._typeref
+          $$._entity = entity.NewConstant(ast.NewTypeNode(ref.GetLocation(), ref), $2._token.literal, asExprNode($4._node))
         }
         ;
 
-defun: typeref name '(' ')' block
+defun: typeref_name '(' ')' block
      {
-       ps := entity.NewParams($3._token.location, []duck.IParameter { })
+       ps := entity.NewParams($2._token.location, []duck.IParameter { })
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $2._token.literal, ps, asStmtNode($5._node))
+       $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, asStmtNode($4._node))
      }
-     | typeref name '(' params ')' block
+     | typeref_name '(' params ')' block
      {
-       ps := asParams($4._entity)
+       ps := asParams($3._entity)
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $2._token.literal, ps, asStmtNode($6._node))
+       $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, asStmtNode($5._node))
      }
-     | STATIC typeref name '(' ')' block
+     | static_typeref_name '(' ')' block
      {
-       ps := entity.NewParams($4._token.location, []duck.IParameter { })
-       t := typesys.NewFunctionTypeRef($2._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $3._token.literal, ps, asStmtNode($6._node))
+       ps := entity.NewParams($2._token.location, []duck.IParameter { })
+       t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
+       $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, asStmtNode($4._node))
      }
-     | STATIC typeref name '(' params ')' block
+     | static_typeref_name '(' params ')' block
      {
-       ps := asParams($5._entity)
-       t := typesys.NewFunctionTypeRef($2._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $3._token.literal, ps, asStmtNode($7._node))
+       ps := asParams($3._entity)
+       t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
+       $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, asStmtNode($5._node))
      }
      ;
 
@@ -328,17 +345,31 @@ slot: type name
     }
     ;
 
-funcdecl: EXTERN typeref name '(' params ')' ';'
+extern_typeref_name: EXTERN typeref_name
+              {
+                $$._token = $1._token
+                $$._typeref = $2._typeref
+              }
+              ;
+
+funcdecl: extern_typeref_name '(' ')' ';'
         {
-          ps := asParams($5._entity)
-          ref := typesys.NewFunctionTypeRef($2._typeref, parametersTypeRef(ps))
-          $$._entity = entity.NewUndefinedFunction(ast.NewTypeNode($1._token.location, ref), $3._token.literal, ps)
+          ps := entity.NewParams($1._typeref.GetLocation(), []duck.IParameter { })
+          ref := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
+          $$._entity = entity.NewUndefinedFunction(ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ps)
+        }
+        | extern_typeref_name '(' params ')' ';'
+        {
+          ps := asParams($3._entity)
+          ref := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
+          $$._entity = entity.NewUndefinedFunction(ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ps)
         }
         ;
 
-vardecl: EXTERN type name ';'
+vardecl: extern_typeref_name ';'
        {
-         $$._entity = entity.NewUndefinedVariable(asTypeNode($2._node), $3._token.literal)
+         ref := $1._typeref
+         $$._entity = entity.NewUndefinedVariable(ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal)
        }
        ;
 
