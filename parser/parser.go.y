@@ -749,6 +749,10 @@ postfix: primary
        {
          $$._node = ast.NewSuffixOpNode($1._token.location, "--", asExprNode($1._node))
        }
+       | primary '(' ')'
+       {
+         $$._node = ast.NewFuncallNode($1._token.location, asExprNode($1._node), []duck.IExprNode { })
+       }
        | primary '(' args ')'
        {
          $$._node = ast.NewFuncallNode($1._token.location, asExprNode($1._node), asExprNodes($3._nodes))
@@ -758,11 +762,7 @@ postfix: primary
 name: IDENTIFIER
     ;
 
-args:
-    {
-      $$._nodes = []duck.INode { }
-    }
-    | expr
+args: expr
     {
       $$._nodes = append($1._nodes, $1._node)
     }
