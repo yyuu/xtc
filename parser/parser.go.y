@@ -194,10 +194,13 @@ top_defs:
         }
         ;
 
-defvars: storage type name '=' expr ';'
+defvars: type name '=' expr ';'
        {
-         priv := $1._token.literal != "static"
-         $$._entity = entity.NewDefinedVariable(priv, asTypeNode($2._node), $3._token.literal, asExprNode($5._node))
+         $$._entity = entity.NewDefinedVariable(true, asTypeNode($1._node), $2._token.literal, asExprNode($4._node))
+       }
+       | STATIC type name '=' expr ';'
+       {
+         $$._entity = entity.NewDefinedVariable(false, asTypeNode($2._node), $3._token.literal, asExprNode($5._node))
        }
        ;
 
@@ -207,25 +210,37 @@ defconst: CONST type name '=' expr ';'
         }
         ;
 
-defun: storage typeref name '(' ')' block
+defun: typeref name '(' ')' block
      {
-       priv := $1._token.literal != "static"
+       ps := entity.NewParams($3._token.location, []duck.IParameter { })
+       t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
+       $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $2._token.literal, ps, asStmtNode($5._node))
+     }
+     | typeref name '(' params ')' block
+     {
+       ps := asParams($4._entity)
+       t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
+       $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $2._token.literal, ps, asStmtNode($6._node))
+     }
+     | STATIC typeref name '(' ')' block
+     {
        ps := entity.NewParams($4._token.location, []duck.IParameter { })
        t := typesys.NewFunctionTypeRef($2._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(priv, ast.NewTypeNode(t.GetLocation(), t), $3._token.literal, ps, asStmtNode($6._node))
+       $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $3._token.literal, ps, asStmtNode($6._node))
      }
-     | storage typeref name '(' params ')' block
+     | STATIC typeref name '(' params ')' block
      {
-       priv := $1._token.literal != "static"
        ps := asParams($5._entity)
        t := typesys.NewFunctionTypeRef($2._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(priv, ast.NewTypeNode(t.GetLocation(), t), $3._token.literal, ps, asStmtNode($7._node))
+       $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $3._token.literal, ps, asStmtNode($7._node))
      }
      ;
 
+/*
 storage:
        | STATIC
        ;
+ */
 
 params: fixedparams
       {
