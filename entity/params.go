@@ -23,12 +23,20 @@ func (self Params) IsEntity() bool {
   return true
 }
 
+func (self Params) IsDefined() bool {
+  return false
+}
+
 func (self Params) GetLocation() duck.ILocation {
   return self.Location
 }
 
 func (self Params) GetParamDescs() []duck.IParameter {
   return self.ParamDescs
+}
+
+func (self Params) GetName() string {
+  panic("Parameter#GetName called")
 }
 
 type Parameter struct {
@@ -46,6 +54,10 @@ func (self Parameter) String() string {
 }
 
 func (self Parameter) IsEntity() bool {
+  return true
+}
+
+func (self Parameter) IsDefined() bool {
   return true
 }
 

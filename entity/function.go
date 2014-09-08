@@ -46,6 +46,10 @@ func (self DefinedFunction) IsDefinedFunction() bool {
   return true
 }
 
+func (self DefinedFunction) IsDefined() bool {
+  return true
+}
+
 func (self DefinedFunction) GetParams() duck.IParams {
   return self.Params
 }
@@ -79,6 +83,10 @@ func (self UndefinedFunction) IsFunction() bool {
 
 func (self UndefinedFunction) IsUndefinedFunction() bool {
   return true
+}
+
+func (self UndefinedFunction) IsDefined() bool {
+  return false
 }
 
 func (self UndefinedFunction) GetTypeNode() duck.ITypeNode {

@@ -3,13 +3,14 @@ package duck
 type IEntity interface {
   String() string
   IsEntity() bool
+  GetName() string
+  IsDefined() bool
 }
 
 type IVariable interface {
   IEntity
   IsVariable() bool
   IsPrivate() bool
-  GetName() string
   GetTypeNode() ITypeNode
 }
 
@@ -42,7 +43,6 @@ type IDefinedFunction interface {
 type IUndefinedFunction interface {
   IFunction
   IsUndefinedFunction() bool
-  GetName() string
 }
 
 type IParams interface {
@@ -54,13 +54,17 @@ type IParams interface {
 type IParameter interface {
   IEntity
   GetTypeNode() ITypeNode
-  GetName() string
 }
 
 type IConstant interface {
   IEntity
   IsConstant() bool
-  GetName() string
   GetTypeNode() ITypeNode
   GetValue() IExprNode
+}
+
+type IScope interface {
+  IsToplevel() bool
+  GetToplevel() IScope
+  GetParent() IScope
 }

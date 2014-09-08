@@ -34,6 +34,10 @@ func (self DefinedVariable) IsDefinedVariable() bool {
   return true
 }
 
+func (self DefinedVariable) IsDefined() bool {
+  return true
+}
+
 func (self DefinedVariable) HasInitializer() bool {
   return self.Initializer != nil
 }
@@ -83,4 +87,12 @@ func (self UndefinedVariable) IsVariable() bool {
 
 func (self UndefinedVariable) IsUndefinedVariable() bool {
   return true
+}
+
+func (self UndefinedVariable) IsDefined() bool {
+  return false
+}
+
+func (self UndefinedVariable) GetName() string {
+  return self.Name
 }

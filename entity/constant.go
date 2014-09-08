@@ -28,6 +28,10 @@ func (self Constant) IsConstant() bool {
   return true
 }
 
+func (self Constant) IsDefined() bool {
+  return true
+}
+
 func (self Constant) GetName() string {
   return self.Name
 }
