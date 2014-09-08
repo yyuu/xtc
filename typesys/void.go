@@ -1,29 +1,21 @@
 package typesys
 
 import (
-  "encoding/json"
   "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
 // VoidType
 type VoidType struct {
+  ClassName string
 }
 
 func NewVoidType() VoidType {
-  return VoidType { }
+  return VoidType { "typesys.VoidType" }
 }
 
 func (self VoidType) String() string {
   return fmt.Sprintf("<typesys.VoidType>")
-}
-
-func (self VoidType) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-  }
-  x.ClassName = "typesys.VoidType"
-  return json.Marshal(x)
 }
 
 func (self VoidType) Size() int {
@@ -80,29 +72,20 @@ func (self VoidType) IsFunction() bool {
 
 // VoidTypeRef
 type VoidTypeRef struct {
-  location duck.ILocation
+  ClassName string
+  Location duck.ILocation
 }
 
 func NewVoidTypeRef(loc duck.ILocation) VoidTypeRef {
-  return VoidTypeRef { loc }
+  return VoidTypeRef { "typesys.VoidTypeRef", loc }
 }
 
 func (self VoidTypeRef) String() string {
-  return fmt.Sprintf("<typesys.VoidTypeRef Location=%s>", self.location)
-}
-
-func (self VoidTypeRef) MarshalJSON() ([]byte, error) {
-  var x struct {
-    Classname string
-    Location duck.ILocation
-  }
-  x.Classname = "typesys.VoidTypeRef"
-  x.Location = self.location
-  return json.Marshal(x)
+  return fmt.Sprintf("<typesys.VoidTypeRef Location=%s>", self.Location)
 }
 
 func (self VoidTypeRef) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 func (self VoidTypeRef) IsTypeRef() bool {

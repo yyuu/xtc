@@ -1,35 +1,23 @@
 package typesys
 
 import (
-  "encoding/json"
   "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
 // FunctionType
 type FunctionType struct {
-  returnType duck.IType
-  paramTypes ParamTypes
+  ClassName string
+  ReturnType duck.IType
+  ParamTypes ParamTypes
 }
 
 func NewFunctionType(ret duck.IType, paramTypes ParamTypes) FunctionType {
-  return FunctionType { ret, paramTypes }
+  return FunctionType { "typesys.FunctionType", ret, paramTypes }
 }
 
 func (self FunctionType) String() string {
-  return fmt.Sprintf("<typesys.FunctionType ReturnType=%s ParamTypes=%s>", self.returnType, self.paramTypes)
-}
-
-func (self FunctionType) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    ReturnType duck.IType
-    ParamTypes ParamTypes
-  }
-  x.ClassName = "typesys.FunctionType"
-  x.ReturnType = self.returnType
-  x.ParamTypes = self.paramTypes
-  return json.Marshal(x)
+  return fmt.Sprintf("<typesys.FunctionType ReturnType=%s ParamTypes=%s>", self.ReturnType, self.ParamTypes)
 }
 
 func (self FunctionType) Size() int {
@@ -86,35 +74,22 @@ func (self FunctionType) IsFunction() bool {
 
 // FunctionTypeRef
 type FunctionTypeRef struct {
-  location duck.ILocation
-  returnType duck.ITypeRef
-  params ParamTypeRefs
+  ClassName string
+  Location duck.ILocation
+  ReturnType duck.ITypeRef
+  Params ParamTypeRefs
 }
 
 func NewFunctionTypeRef(returnType duck.ITypeRef, params duck.ITypeRef) FunctionTypeRef {
-  return FunctionTypeRef { returnType.GetLocation(), returnType, params.(ParamTypeRefs) }
+  return FunctionTypeRef { "typesys.FunctionTypeRef", returnType.GetLocation(), returnType, params.(ParamTypeRefs) }
 }
 
 func (self FunctionTypeRef) String() string {
-  return fmt.Sprintf("<typesys.FunctionTypeRef Location=%s ReturnType=%s Params=%s>", self.location, self.returnType, self.params)
-}
-
-func (self FunctionTypeRef) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    ReturnType duck.ITypeRef
-    Params ParamTypeRefs
-  }
-  x.ClassName = "typesys.FunctionTypeRef"
-  x.Location = self.location
-  x.ReturnType = self.returnType
-  x.Params = self.params
-  return json.Marshal(x)
+  return fmt.Sprintf("<typesys.FunctionTypeRef Location=%s ReturnType=%s Params=%s>", self.Location, self.ReturnType, self.Params)
 }
 
 func (self FunctionTypeRef) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 func (self FunctionTypeRef) IsTypeRef() bool {

@@ -1,38 +1,24 @@
 package typesys
 
 import (
-  "encoding/json"
   "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
 // StructType
 type StructType struct {
-  location duck.ILocation
-  name string
-  members []duck.ISlot
+  ClassName string
+  Location duck.ILocation
+  Name string
+  Members []duck.ISlot
 }
 
 func NewStructType(name string, membs []duck.ISlot, loc duck.ILocation) StructType {
-  return StructType { loc, name, membs }
+  return StructType { "typesys.StructType", loc, name, membs }
 }
 
 func (self StructType) String() string {
-  return fmt.Sprintf("<typesys.StructType Name=%s Location=%s Members=%s>", self.name, self.location, self.members)
-}
-
-func (self StructType) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Name string
-    Members []duck.ISlot
-  }
-  x.ClassName = "typesys.StructType"
-  x.Location = self.location
-  x.Name = self.name
-  x.Members = self.members
-  return json.Marshal(x)
+  return fmt.Sprintf("<typesys.StructType Name=%s Location=%s Members=%s>", self.Name, self.Location, self.Members)
 }
 
 func (self StructType) Size() int {
@@ -89,32 +75,21 @@ func (self StructType) IsFunction() bool {
 
 // StructTypeRef
 type StructTypeRef struct {
-  location duck.ILocation
-  name string
+  ClassName string
+  Location duck.ILocation
+  Name string
 }
 
 func NewStructTypeRef(loc duck.ILocation, name string) StructTypeRef {
-  return StructTypeRef { loc, name }
+  return StructTypeRef { "typesys.StructTypeRef", loc, name }
 }
 
 func (self StructTypeRef) String() string {
-  return fmt.Sprintf("<typesys.StructTypeRef Name=%s Location=%s>", self.name, self.location)
-}
-
-func (self StructTypeRef) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Name string
-  }
-  x.ClassName = "typesys.StructTypeRef"
-  x.Location = self.location
-  x.Name = self.name
-  return json.Marshal(x)
+  return fmt.Sprintf("<typesys.StructTypeRef Name=%s Location=%s>", self.Name, self.Location)
 }
 
 func (self StructTypeRef) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 func (self StructTypeRef) IsTypeRef() bool {

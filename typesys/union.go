@@ -1,38 +1,24 @@
 package typesys
 
 import (
-  "encoding/json"
   "fmt"
   "bitbucket.org/yyuu/bs/duck"
 )
 
 // UnionType
 type UnionType struct {
-  location duck.ILocation
-  name string
-  members []duck.ISlot
+  ClassName string
+  Location duck.ILocation
+  Name string
+  Members []duck.ISlot
 }
 
 func NewUnionType(name string, membs []duck.ISlot, loc duck.ILocation) UnionType {
-  return UnionType { loc, name, membs }
+  return UnionType { "typesys.UnionType", loc, name, membs }
 }
 
 func (self UnionType) String() string {
-  return fmt.Sprintf("<typesys.UnionType Name=%s Location=%s Members=%s>", self.name, self.location, self.members)
-}
-
-func (self UnionType) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Name string
-    Members []duck.ISlot
-  }
-  x.ClassName = "typesys.UnionType"
-  x.Location = self.location
-  x.Name = self.name
-  x.Members = self.members
-  return json.Marshal(x)
+  return fmt.Sprintf("<typesys.UnionType Name=%s Location=%s Members=%s>", self.Name, self.Location, self.Members)
 }
 
 func (self UnionType) Size() int {
@@ -89,32 +75,21 @@ func (self UnionType) IsFunction() bool {
 
 // UnionTypeRef
 type UnionTypeRef struct {
-  location duck.ILocation
-  name string
+  ClassName string
+  Location duck.ILocation
+  Name string
 }
 
 func NewUnionTypeRef(loc duck.ILocation, name string) UnionTypeRef {
-  return UnionTypeRef { loc, name }
+  return UnionTypeRef { "typesys.UnionTypeRef", loc, name }
 }
 
 func (self UnionTypeRef) String() string {
-  return fmt.Sprintf("<typesys.UnionTypeRef Name=%s Location=%s>", self.name, self.location)
-}
-
-func (self UnionTypeRef) MarshalJSON() ([]byte, error) {
-  var x struct {
-    ClassName string
-    Location duck.ILocation
-    Name string
-  }
-  x.ClassName = "typesys.UnionTypeRef"
-  x.Location = self.location
-  x.Name = self.name
-  return json.Marshal(x)
+  return fmt.Sprintf("<typesys.UnionTypeRef Name=%s Location=%s>", self.Name, self.Location)
 }
 
 func (self UnionTypeRef) GetLocation() duck.ILocation {
-  return self.location
+  return self.Location
 }
 
 func (self UnionTypeRef) IsTypeRef() bool {
