@@ -139,3 +139,67 @@ func parametersTypeRef(params entity.Params) typesys.ParamTypeRefs {
   }
   return typesys.NewParamTypeRefs(params.GetLocation(), ps, false)
 }
+
+func defvars(xs...duck.IDefinedVariable) []duck.IDefinedVariable {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []duck.IDefinedVariable { }
+  }
+}
+
+func vardecls(xs...duck.IUndefinedVariable) []duck.IUndefinedVariable {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []duck.IUndefinedVariable { }
+  }
+}
+
+func defuns(xs...duck.IDefinedFunction) []duck.IDefinedFunction {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []duck.IDefinedFunction { }
+  }
+}
+
+func funcdecls(xs...duck.IUndefinedFunction) []duck.IUndefinedFunction {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []duck.IUndefinedFunction { }
+  }
+}
+
+func defconsts(xs...duck.IConstant) []duck.IConstant {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []duck.IConstant { }
+  }
+}
+
+func defstructs(xs...ast.StructNode) []ast.StructNode {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []ast.StructNode { }
+  }
+}
+
+func defunions(xs...ast.UnionNode) []ast.UnionNode {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []ast.UnionNode { }
+  }
+}
+
+func typedefs(xs...ast.TypedefNode) []ast.TypedefNode {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []ast.TypedefNode { }
+  }
+}

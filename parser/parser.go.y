@@ -156,17 +156,29 @@ import_name: name
            }
            ;
 
-top_defs:
+top_defs: defun
         {
-          defvars := []duck.IDefinedVariable { }
-          vardecls := []duck.IUndefinedVariable { }
-          defuns := []duck.IDefinedFunction { }
-          funcdecls := []duck.IUndefinedFunction { }
-          constants := []duck.IConstant { }
-          defstructs := []ast.StructNode { }
-          defunions := []ast.UnionNode { }
-          typedefs := []ast.TypedefNode { }
-          $$._node = ast.NewDeclarations(defvars, vardecls, defuns, funcdecls, constants, defstructs, defunions, typedefs)
+          $$._node = ast.NewDeclarations(defvars(), vardecls(), defuns(asDefinedFunction($1._entity)), funcdecls(), defconsts(), defstructs(), defunions(), typedefs())
+        }
+        | defvars
+        {
+          $$._node = ast.NewDeclarations(defvars(asDefinedVariable($1._entity)), vardecls(), defuns(), funcdecls(), defconsts(), defstructs(), defunions(), typedefs())
+        }
+        | defconst
+        {
+          $$._node = ast.NewDeclarations(defvars(), vardecls(), defuns(), funcdecls(), defconsts(asConstant($1._entity)), defstructs(), defunions(), typedefs())
+        }
+        | defstruct
+        {
+          $$._node = ast.NewDeclarations(defvars(), vardecls(), defuns(), funcdecls(), defconsts(), defstructs(asStructNode($1._node)), defunions(), typedefs())
+        }
+        | defunion
+        {
+          $$._node = ast.NewDeclarations(defvars(), vardecls(), defuns(), funcdecls(), defconsts(), defstructs(), defunions(asUnionNode($1._node)), typedefs())
+        }
+        | typedef
+        {
+          $$._node = ast.NewDeclarations(defvars(), vardecls(), defuns(), funcdecls(), defconsts(), defstructs(), defunions(), typedefs(asTypedefNode($1._node)))
         }
         | top_defs defun
         {
