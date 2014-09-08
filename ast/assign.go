@@ -38,7 +38,7 @@ func (self AssignNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self AssignNode) IsExpr() bool {
+func (self AssignNode) IsExprNode() bool {
   return true
 }
 
@@ -81,7 +81,7 @@ func (self OpAssignNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self OpAssignNode) IsExpr() bool {
+func (self OpAssignNode) IsExprNode() bool {
   return true
 }
 

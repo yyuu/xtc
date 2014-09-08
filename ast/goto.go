@@ -30,7 +30,7 @@ func (self BreakNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self BreakNode) IsStmt() bool {
+func (self BreakNode) IsStmtNode() bool {
   return true
 }
 
@@ -62,7 +62,7 @@ func (self ContinueNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self ContinueNode) IsStmt() bool {
+func (self ContinueNode) IsStmtNode() bool {
   return true
 }
 
@@ -98,7 +98,7 @@ func (self ExprStmtNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self ExprStmtNode) IsStmt() bool {
+func (self ExprStmtNode) IsStmtNode() bool {
   return true
 }
 
@@ -133,7 +133,7 @@ func (self GotoNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self GotoNode) IsStmt() bool {
+func (self GotoNode) IsStmtNode() bool {
   return true
 }
 
@@ -172,7 +172,7 @@ func (self LabelNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self LabelNode) IsStmt() bool {
+func (self LabelNode) IsStmtNode() bool {
   return true
 }
 
@@ -208,7 +208,7 @@ func (self ReturnNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self ReturnNode) IsStmt() bool {
+func (self ReturnNode) IsStmtNode() bool {
   return true
 }
 

@@ -35,7 +35,7 @@ func (self AddressNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self AddressNode) IsExpr() bool {
+func (self AddressNode) IsExprNode() bool {
   return true
 }
 
@@ -75,7 +75,7 @@ func (self ArefNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self ArefNode) IsExpr() bool {
+func (self ArefNode) IsExprNode() bool {
   return true
 }
 
@@ -111,7 +111,7 @@ func (self DereferenceNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self DereferenceNode) IsExpr() bool {
+func (self DereferenceNode) IsExprNode() bool {
   return true
 }
 
@@ -158,7 +158,7 @@ func (self FuncallNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self FuncallNode) IsExpr() bool {
+func (self FuncallNode) IsExprNode() bool {
   return true
 }
 
@@ -197,7 +197,7 @@ func (self MemberNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self MemberNode) IsExpr() bool {
+func (self MemberNode) IsExprNode() bool {
   return true
 }
 
@@ -236,7 +236,7 @@ func (self PtrMemberNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self PtrMemberNode) IsExpr() bool {
+func (self PtrMemberNode) IsExprNode() bool {
   return true
 }
 
@@ -271,7 +271,7 @@ func (self VariableNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self VariableNode) IsExpr() bool {
+func (self VariableNode) IsExprNode() bool {
   return true
 }
 

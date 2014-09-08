@@ -43,7 +43,7 @@ func (self CondExprNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self CondExprNode) IsExpr() bool {
+func (self CondExprNode) IsExprNode() bool {
   return true
 }
 
@@ -90,7 +90,7 @@ func (self CaseNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self CaseNode) IsStmt() bool {
+func (self CaseNode) IsStmtNode() bool {
   return true
 }
 
@@ -133,7 +133,7 @@ func (self IfNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self IfNode) IsStmt() bool {
+func (self IfNode) IsStmtNode() bool {
   return true
 }
 
@@ -184,7 +184,7 @@ func (self SwitchNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self SwitchNode) IsStmt() bool {
+func (self SwitchNode) IsStmtNode() bool {
   return true
 }
 

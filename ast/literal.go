@@ -55,7 +55,7 @@ func (self IntegerLiteralNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self IntegerLiteralNode) IsExpr() bool {
+func (self IntegerLiteralNode) IsExprNode() bool {
   return true
 }
 
@@ -90,7 +90,7 @@ func (self StringLiteralNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self StringLiteralNode) IsExpr() bool {
+func (self StringLiteralNode) IsExprNode() bool {
   return true
 }
 

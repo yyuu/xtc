@@ -8,17 +8,17 @@ type INode interface {
 
 type IExprNode interface {
   INode
-  IsExpr() bool
+  IsExprNode() bool
 }
 
 type IStmtNode interface {
   INode
-  IsStmt() bool
+  IsStmtNode() bool
 }
 
 type ITypeNode interface {
   INode
-  IsType() bool
+  IsTypeNode() bool
   GetTypeRef() ITypeRef
 }
 

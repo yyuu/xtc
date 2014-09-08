@@ -50,7 +50,7 @@ func (self BinaryOpNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self BinaryOpNode) IsExpr() bool {
+func (self BinaryOpNode) IsExprNode() bool {
   return true
 }
 
@@ -90,7 +90,7 @@ func (self LogicalAndNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self LogicalAndNode) IsExpr() bool {
+func (self LogicalAndNode) IsExprNode() bool {
   return true
 }
 
@@ -130,7 +130,7 @@ func (self LogicalOrNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self LogicalOrNode) IsExpr() bool {
+func (self LogicalOrNode) IsExprNode() bool {
   return true
 }
 
@@ -173,7 +173,7 @@ func (self PrefixOpNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self PrefixOpNode) IsExpr() bool {
+func (self PrefixOpNode) IsExprNode() bool {
   return true
 }
 
@@ -216,7 +216,7 @@ func (self SuffixOpNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self SuffixOpNode) IsExpr() bool {
+func (self SuffixOpNode) IsExprNode() bool {
   return true
 }
 
@@ -258,7 +258,7 @@ func (self UnaryOpNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self UnaryOpNode) IsExpr() bool {
+func (self UnaryOpNode) IsExprNode() bool {
   return true
 }
 

@@ -38,7 +38,7 @@ func (self CastNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self CastNode) IsExpr() bool {
+func (self CastNode) IsExprNode() bool {
   return true
 }
 
@@ -78,7 +78,7 @@ func (self SizeofExprNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self SizeofExprNode) IsExpr() bool {
+func (self SizeofExprNode) IsExprNode() bool {
   return true
 }
 
@@ -118,7 +118,7 @@ func (self SizeofTypeNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self SizeofTypeNode) IsExpr() bool {
+func (self SizeofTypeNode) IsExprNode() bool {
   return true
 }
 
@@ -158,7 +158,7 @@ func (self TypeNode) GetTypeRef() duck.ITypeRef {
   return self.typeRef
 }
 
-func (self TypeNode) IsType() bool {
+func (self TypeNode) IsTypeNode() bool {
   return true
 }
 

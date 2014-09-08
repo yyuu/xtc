@@ -38,7 +38,7 @@ func (self DoWhileNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self DoWhileNode) IsStmt() bool {
+func (self DoWhileNode) IsStmtNode() bool {
   return true
 }
 
@@ -86,7 +86,7 @@ func (self ForNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self ForNode) IsStmt() bool {
+func (self ForNode) IsStmtNode() bool {
   return true
 }
 
@@ -126,7 +126,7 @@ func (self WhileNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self WhileNode) IsStmt() bool {
+func (self WhileNode) IsStmtNode() bool {
   return true
 }
 

@@ -57,7 +57,7 @@ func (self BlockNode) MarshalJSON() ([]byte, error) {
   return json.Marshal(x)
 }
 
-func (self BlockNode) IsStmt() bool {
+func (self BlockNode) IsStmtNode() bool {
   return true
 }
 
