@@ -348,7 +348,50 @@ type: typeref
     }
     ;
 
-typeref: typeref_base
+typeref: VOID
+       {
+         $$._typeref = typesys.NewVoidTypeRef($1._token.location)
+       }
+       | CHAR
+       {
+         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "char")
+       }
+       | SHORT
+       {
+         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "short")
+       }
+       | INT
+       {
+         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "int")
+       }
+       | LONG
+       {
+         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "long")
+       }
+       | UNSIGNED CHAR
+       {
+         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned char")
+       }
+       | UNSIGNED SHORT
+       {
+         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned short")
+       }
+       | UNSIGNED INT
+       {
+         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned int")
+       }
+       | UNSIGNED LONG
+       {
+         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned long")
+       }
+       | STRUCT IDENTIFIER
+       {
+         $$._typeref = typesys.NewStructTypeRef($1._token.location, $2._token.literal)
+       }
+       | UNION IDENTIFIER
+       {
+         $$._typeref = typesys.NewUnionTypeRef($1._token.location, $2._token.literal)
+       }
        | typeref '[' ']'
        {
          $$._typeref = typesys.NewArrayTypeRef($1._typeref, 0)
@@ -372,68 +415,15 @@ typeref: typeref_base
        }
        ;
 
-param_typerefs: fixedparam_typerefs
-              {
-//              $1._typerefs.AcceptVArgs()
-                $$._typerefs = $1._typerefs
-              }
-              ;
-
-fixedparam_typerefs: typeref
-                   {
-                     $$._typerefs = []duck.ITypeRef { $1._typeref }
-                   }
-                   | fixedparam_typerefs ',' typeref
-                   {
-                     $$._typerefs = append($1._typerefs, $3._typeref)
-                   }
-                   ;
-
-typeref_base: VOID
-            {
-              $$._typeref = typesys.NewVoidTypeRef($1._token.location)
-            }
-            | CHAR
-            {
-              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "char")
-            }
-            | SHORT
-            {
-              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "short")
-            }
-            | INT
-            {
-              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "int")
-            }
-            | LONG
-            {
-              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "long")
-            }
-            | UNSIGNED CHAR
-            {
-              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned char")
-            }
-            | UNSIGNED SHORT
-            {
-              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned short")
-            }
-            | UNSIGNED INT
-            {
-              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned int")
-            }
-            | UNSIGNED LONG
-            {
-              $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned long")
-            }
-            | STRUCT IDENTIFIER
-            {
-              $$._typeref = typesys.NewStructTypeRef($1._token.location, $2._token.literal)
-            }
-            | UNION IDENTIFIER
-            {
-              $$._typeref = typesys.NewUnionTypeRef($1._token.location, $2._token.literal)
-            }
-            ;
+param_typerefs: typeref
+               {
+                 $$._typerefs = []duck.ITypeRef { $1._typeref }
+               }
+               | param_typerefs ',' typeref
+               {
+                 $$._typerefs = append($1._typerefs, $3._typeref)
+               }
+               ;
 
 typedef: TYPEDEF typeref IDENTIFIER ';'
        {
