@@ -16,7 +16,7 @@ type IVariable interface {
 type IDefinedVariable interface {
   IVariable
   IsDefinedVariable() bool
-  NumRefered() int
+  GetNumRefered() int
   GetInitializer() IExprNode
 }
 
