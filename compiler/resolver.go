@@ -31,7 +31,7 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
 
   self.resolveGvarInitializers(a)
   self.resolveConstantValues(a)
-//a.SetDefinedFunctions(self.resolveFunctions(a.GetDefinedFunctions()))
+  self.resolveFunctions(a)
 
 //toplevel.checkReferences()
 
@@ -67,8 +67,19 @@ func (self *LocalResolver) resolveConstantValues(a *ast.AST) {
   a.SetConstants(ys)
 }
 
-func (self *LocalResolver) resolveFunctions(xs []duck.IDefinedFunction) {
-  panic("not implemented")
+func (self *LocalResolver) resolveFunctions(a *ast.AST) {
+  xs := a.GetDefinedFunctions()
+  ys := make([]duck.IDefinedFunction, len(xs))
+  for i := range xs {
+    function := xs[i]
+    self.pushScope(function.ListParameters())
+    body := function.GetBody()
+    ast.Visit(self, &body)
+    function = function.SetBody(body)
+    function = function.SetScope(self.popScope())
+    ys[i] = function
+  }
+  a.SetDefinedFunctions(ys)
 }
 
 func (self *LocalResolver) currentScope() *entity.VariableScope {
@@ -95,7 +106,7 @@ func (self *LocalResolver) popScope() *entity.VariableScope {
     panic("stack is empty")
   }
   scope := self.scopeStack[len(self.scopeStack)-1]
-  self.scopeStack = self.scopeStack[0:len(self.scopeStack)-2]
+  self.scopeStack = self.scopeStack[0:len(self.scopeStack)-1]
   return scope
 }
 

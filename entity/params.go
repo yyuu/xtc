@@ -57,6 +57,38 @@ func (self Parameter) IsEntity() bool {
   return true
 }
 
+func (self Parameter) IsPrivate() bool {
+  return false
+}
+
+func (self Parameter) IsVariable() bool {
+  return true
+}
+
+func (self Parameter) IsDefinedVariable() bool {
+  return true
+}
+
+func (self Parameter) GetInitializer() duck.IExprNode {
+  return nil
+}
+
+func (self Parameter) SetInitializer(e duck.IExprNode) duck.IDefinedVariable {
+  return self
+}
+
+func (self Parameter) HasInitializer() bool {
+  return false
+}
+
+func (self Parameter) GetNumRefered() int {
+  return 0
+}
+
+func (self Parameter) IsRefered() bool {
+  return false
+}
+
 func (self Parameter) IsDefined() bool {
   return true
 }

@@ -12,10 +12,11 @@ type DefinedFunction struct {
   Name string
   Params Params
   Body duck.IStmtNode
+  scope duck.IVariableScope
 }
 
 func NewDefinedFunction(priv bool, t duck.ITypeNode, name string, params Params, body duck.IStmtNode) DefinedFunction {
-  return DefinedFunction { "entity.DefinedFunction", priv, t, name, params, body }
+  return DefinedFunction { "entity.DefinedFunction", priv, t, name, params, body, nil }
 }
 
 func (self DefinedFunction) String() string {
@@ -54,8 +55,31 @@ func (self DefinedFunction) GetParams() duck.IParams {
   return self.Params
 }
 
+func (self DefinedFunction) ListParameters() []duck.IDefinedVariable {
+  xs := self.Params.ParamDescs
+  ys := make([]duck.IDefinedVariable, len(xs))
+  for i := range xs {
+    ys[i] = xs[i].(duck.IDefinedVariable)
+  }
+  return ys
+}
+
 func (self DefinedFunction) GetBody() duck.IStmtNode {
   return self.Body
+}
+
+func (self DefinedFunction) SetBody(body duck.IStmtNode) duck.IDefinedFunction {
+  self.Body = body
+  return self
+}
+
+func (self DefinedFunction) GetScope() duck.IVariableScope {
+  return self.scope
+}
+
+func (self DefinedFunction) SetScope(scope duck.IVariableScope) duck.IDefinedFunction {
+  self.scope = scope
+  return self
 }
 
 type UndefinedFunction struct {

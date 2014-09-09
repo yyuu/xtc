@@ -42,6 +42,10 @@ type IDefinedFunction interface {
   IsDefinedFunction() bool
   IsPrivate() bool
   GetBody() IStmtNode
+  SetBody(IStmtNode) IDefinedFunction
+  GetScope() IVariableScope
+  SetScope(IVariableScope) IDefinedFunction
+  ListParameters() []IDefinedVariable
 }
 
 type IUndefinedFunction interface {
