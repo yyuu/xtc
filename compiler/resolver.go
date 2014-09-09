@@ -30,7 +30,7 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
   }
 
   self.resolveGvarInitializers(a)
-//a.SetConstants(self.resolveConstantValues(a.GetConstants()))
+  self.resolveConstantValues(a)
 //a.SetDefinedFunctions(self.resolveFunctions(a.GetDefinedFunctions()))
 
 //toplevel.checkReferences()
@@ -54,8 +54,17 @@ func (self *LocalResolver) resolveGvarInitializers(a *ast.AST) {
   a.SetDefinedVariables(ys)
 }
 
-func (self *LocalResolver) resolveConstantValues(xs []duck.IConstant) {
-  panic("not implemented")
+func (self *LocalResolver) resolveConstantValues(a *ast.AST) {
+  xs := a.GetConstants()
+  ys := make([]duck.IConstant, len(xs))
+  for i := range xs {
+    constant := xs[i]
+    value := constant.GetValue()
+    ast.Visit(self, &value)
+    constant = constant.SetValue(value)
+    ys[i] = constant
+  }
+  a.SetConstants(ys)
 }
 
 func (self *LocalResolver) resolveFunctions(xs []duck.IDefinedFunction) {

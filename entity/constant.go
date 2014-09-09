@@ -43,3 +43,8 @@ func (self Constant) GetTypeNode() duck.ITypeNode {
 func (self Constant) GetValue() duck.IExprNode {
   return self.Value
 }
+
+func (self Constant) SetValue(val duck.IExprNode) duck.IConstant {
+  self.Value = val
+  return self
+}

@@ -65,6 +65,7 @@ type IConstant interface {
   IsConstant() bool
   GetTypeNode() ITypeNode
   GetValue() IExprNode
+  SetValue(IExprNode) IConstant
 }
 
 type IVariableScope interface {
