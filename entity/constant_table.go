@@ -17,5 +17,5 @@ func (self *ConstantTable) IsConstantTable() bool {
 }
 
 func (self *ConstantTable) Intern(s string) *ConstantEntry {
-  return &ConstantEntry { s }
+  return NewConstantEntry(s)
 }

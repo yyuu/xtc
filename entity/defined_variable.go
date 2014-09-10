@@ -18,6 +18,14 @@ func NewDefinedVariable(isPrivate bool, t core.ITypeNode, name string, init core
   return &DefinedVariable { "entity.DefinedVariable", isPrivate, name, t, 0, init }
 }
 
+func NewDefinedVariables(xs...*DefinedVariable) []*DefinedVariable {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []*DefinedVariable { }
+  }
+}
+
 func (self DefinedVariable) String() string {
   return fmt.Sprintf("<entity.DefinedVariable Name=%s Private=%v TypeNode=%s NumRefered=%d Initializer=%s>", self.Name, self.Private, self.TypeNode, self.NumRefered, self.Initializer)
 }

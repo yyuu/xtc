@@ -19,6 +19,14 @@ func NewDefinedFunction(priv bool, t core.ITypeNode, name string, params *Params
   return &DefinedFunction { "entity.DefinedFunction", priv, t, name, params, body, nil }
 }
 
+func NewDefinedFunctions(xs...*DefinedFunction) []*DefinedFunction {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []*DefinedFunction { }
+  }
+}
+
 func (self DefinedFunction) String() string {
   return fmt.Sprintf("<entity.DefinedFunction Name=%s Private=%v TypeNode=%s Params=%s Body=%s>", self.Name, self.Private, self.TypeNode, self.Params, self.Body)
 }

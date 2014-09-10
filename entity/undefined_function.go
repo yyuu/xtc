@@ -16,6 +16,14 @@ func NewUndefinedFunction(t core.ITypeNode, name string, params *Params) *Undefi
   return &UndefinedFunction { "entity.UndefinedFunction", t, name, params }
 }
 
+func NewUndefinedFunctions(xs...*UndefinedFunction) []*UndefinedFunction {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []*UndefinedFunction { }
+  }
+}
+
 func (self UndefinedFunction) String() string {
   return fmt.Sprintf("<entity.UndefinedFunction Name=%s TypeNode=%s Params=%s>", self.Name, self.TypeNode, self.Params)
 }

@@ -16,6 +16,14 @@ func NewConstant(t core.ITypeNode, name string, value core.IExprNode) *Constant 
   return &Constant { "entity.Constant", name, t, value }
 }
 
+func NewConstants(xs...*Constant) []*Constant {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []*Constant { }
+  }
+}
+
 func (self Constant) String() string {
   return fmt.Sprintf("<entity.Constant Name=%s TypeNode=%s Value=%s>", self.Name, self.TypeNode, self.Value)
 }
