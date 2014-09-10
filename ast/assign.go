@@ -2,18 +2,18 @@ package ast
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // AssignNode
 type AssignNode struct {
   ClassName string
-  Location duck.Location
-  Lhs duck.IExprNode
-  Rhs duck.IExprNode
+  Location core.Location
+  Lhs core.IExprNode
+  Rhs core.IExprNode
 }
 
-func NewAssignNode(loc duck.Location, lhs duck.IExprNode, rhs duck.IExprNode) AssignNode {
+func NewAssignNode(loc core.Location, lhs core.IExprNode, rhs core.IExprNode) AssignNode {
   if lhs == nil { panic("lhs is nil") }
   if rhs == nil { panic("rhs is nil") }
   return AssignNode { "ast.AssignNode", loc, lhs, rhs }
@@ -27,20 +27,20 @@ func (self AssignNode) IsExprNode() bool {
   return true
 }
 
-func (self AssignNode) GetLocation() duck.Location {
+func (self AssignNode) GetLocation() core.Location {
   return self.Location
 }
 
 // OpAssignNode
 type OpAssignNode struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Operator string
-  Lhs duck.IExprNode
-  Rhs duck.IExprNode
+  Lhs core.IExprNode
+  Rhs core.IExprNode
 }
 
-func NewOpAssignNode(loc duck.Location, operator string, lhs duck.IExprNode, rhs duck.IExprNode) OpAssignNode {
+func NewOpAssignNode(loc core.Location, operator string, lhs core.IExprNode, rhs core.IExprNode) OpAssignNode {
   if lhs == nil { panic("lhs is nil") }
   if rhs == nil { panic("rhs is nil") }
   return OpAssignNode { "ast.OpAssignNode", loc, operator, lhs, rhs }
@@ -54,6 +54,6 @@ func (self OpAssignNode) IsExprNode() bool {
   return true
 }
 
-func (self OpAssignNode) GetLocation() duck.Location {
+func (self OpAssignNode) GetLocation() core.Location {
   return self.Location
 }

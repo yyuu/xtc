@@ -2,20 +2,20 @@ package ast
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/typesys"
 )
 
 // StructNode
 type StructNode struct {
   ClassName string
-  Location duck.Location
-  TypeNode duck.ITypeNode
+  Location core.Location
+  TypeNode core.ITypeNode
   Name string
   Members []Slot
 }
 
-func NewStructNode(loc duck.Location, ref duck.ITypeRef, name string, membs []Slot) StructNode {
+func NewStructNode(loc core.Location, ref core.ITypeRef, name string, membs []Slot) StructNode {
   if ref == nil { panic("ref is nil") }
   return StructNode { "ast.StructNode", loc, NewTypeNode(loc, ref), name, membs }
 }
@@ -28,16 +28,16 @@ func (self StructNode) IsTypeDefinition() bool {
   return true
 }
 
-func (self StructNode) GetLocation() duck.Location {
+func (self StructNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self StructNode) GetTypeRef() duck.ITypeRef {
+func (self StructNode) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
-func (self StructNode) DefiningType() duck.IType {
-  var membs []duck.ISlot
+func (self StructNode) DefiningType() core.IType {
+  var membs []core.ISlot
   for i := range self.Members {
     membs[i] = self.Members[i]
   }
@@ -47,13 +47,13 @@ func (self StructNode) DefiningType() duck.IType {
 // UnionNode
 type UnionNode struct {
   ClassName string
-  Location duck.Location
-  TypeNode duck.ITypeNode
+  Location core.Location
+  TypeNode core.ITypeNode
   Name string
   Members []Slot
 }
 
-func NewUnionNode(loc duck.Location, ref duck.ITypeRef, name string, membs []Slot) UnionNode {
+func NewUnionNode(loc core.Location, ref core.ITypeRef, name string, membs []Slot) UnionNode {
   if ref == nil { panic("ref is nil") }
   return UnionNode { "ast.UnionNode", loc, NewTypeNode(loc, ref), name, membs }
 }
@@ -66,16 +66,16 @@ func (self UnionNode) IsTypeDefinition() bool {
   return true
 }
 
-func (self UnionNode) GetLocation() duck.Location {
+func (self UnionNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self UnionNode) GetTypeRef() duck.ITypeRef {
+func (self UnionNode) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
-func (self UnionNode) DefiningType() duck.IType {
-  var membs []duck.ISlot
+func (self UnionNode) DefiningType() core.IType {
+  var membs []core.ISlot
   for i := range self.Members {
     membs[i] = self.Members[i]
   }

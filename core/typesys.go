@@ -1,4 +1,4 @@
-package duck
+package core
 
 // IType
 type IType interface {

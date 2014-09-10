@@ -2,7 +2,7 @@ package ast
 
 import (
   "testing"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/entity"
   "bitbucket.org/yyuu/bs/typesys"
   "bitbucket.org/yyuu/bs/xt"
@@ -16,9 +16,9 @@ func TestBlock1(t *testing.T) {
  */
   x := NewBlockNode(
     loc(0,0),
-    []duck.IDefinedVariable { },
-    []duck.IStmtNode {
-      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []duck.IExprNode { NewStringLiteralNode(loc(0,0), "\"hello, world\"") })),
+    []core.IDefinedVariable { },
+    []core.IStmtNode {
+      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"hello, world\"") })),
     },
   )
   s := `{
@@ -60,7 +60,7 @@ func TestBlock2(t *testing.T) {
  */
   x := NewBlockNode(
     loc(0,0),
-    []duck.IDefinedVariable {
+    []core.IDefinedVariable {
 //    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "12345")),
       entity.NewDefinedVariable(
         true,
@@ -69,8 +69,8 @@ func TestBlock2(t *testing.T) {
         NewIntegerLiteralNode(loc(0,0), "12345"),
       ),
     },
-    []duck.IStmtNode {
-      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []duck.IExprNode { NewStringLiteralNode(loc(0,0), "\"%d\""), NewVariableNode(loc(0,0), "n") })),
+    []core.IStmtNode {
+      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"%d\""), NewVariableNode(loc(0,0), "n") })),
     },
   )
   s := `{
@@ -140,7 +140,7 @@ func TestBlock3(t *testing.T) {
  */
   x := NewBlockNode(
     loc(0,0),
-    []duck.IDefinedVariable {
+    []core.IDefinedVariable {
 //    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "12345")),
 //    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "m"), NewIntegerLiteralNode(loc(0,0), "67890")),
       entity.NewDefinedVariable(
@@ -156,9 +156,9 @@ func TestBlock3(t *testing.T) {
         NewIntegerLiteralNode(loc(0,0), "67890"),
       ),
     },
-    []duck.IStmtNode {
-      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []duck.IExprNode { NewStringLiteralNode(loc(0,0), "\"%d\""), NewVariableNode(loc(0,0), "n") })),
-      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []duck.IExprNode { NewStringLiteralNode(loc(0,0), "\"%d\""), NewVariableNode(loc(0,0), "m") })),
+    []core.IStmtNode {
+      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"%d\""), NewVariableNode(loc(0,0), "n") })),
+      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"%d\""), NewVariableNode(loc(0,0), "m") })),
     },
   )
   s := `{

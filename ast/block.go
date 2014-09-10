@@ -3,19 +3,19 @@ package ast
 import (
   "fmt"
   "strings"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // BlockNode
 type BlockNode struct {
   ClassName string
-  Location duck.Location
-  Variables []duck.IDefinedVariable
-  Stmts []duck.IStmtNode
-  scope duck.IVariableScope
+  Location core.Location
+  Variables []core.IDefinedVariable
+  Stmts []core.IStmtNode
+  scope core.IVariableScope
 }
 
-func NewBlockNode(loc duck.Location, variables []duck.IDefinedVariable, stmts []duck.IStmtNode) BlockNode {
+func NewBlockNode(loc core.Location, variables []core.IDefinedVariable, stmts []core.IStmtNode) BlockNode {
   return BlockNode { "ast.BlockNode", loc, variables, stmts, nil }
 }
 
@@ -47,22 +47,22 @@ func (self BlockNode) IsStmtNode() bool {
   return true
 }
 
-func (self BlockNode) GetLocation() duck.Location {
+func (self BlockNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self BlockNode) GetVariables() []duck.IDefinedVariable {
+func (self BlockNode) GetVariables() []core.IDefinedVariable {
   return self.Variables
 }
 
-func (self BlockNode) GetStmts() []duck.IStmtNode {
+func (self BlockNode) GetStmts() []core.IStmtNode {
   return self.Stmts
 }
 
-func (self BlockNode) GetScope() duck.IVariableScope {
+func (self BlockNode) GetScope() core.IVariableScope {
   return self.scope
 }
 
-func (self *BlockNode) SetScope(scope duck.IVariableScope) {
+func (self *BlockNode) SetScope(scope core.IVariableScope) {
   self.scope = scope
 }

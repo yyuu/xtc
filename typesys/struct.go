@@ -2,18 +2,18 @@ package typesys
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // StructType
 type StructType struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Name string
-  Members []duck.ISlot
+  Members []core.ISlot
 }
 
-func NewStructType(name string, membs []duck.ISlot, loc duck.Location) *StructType {
+func NewStructType(name string, membs []core.ISlot, loc core.Location) *StructType {
   return &StructType { "typesys.StructType", loc, name, membs }
 }
 
@@ -76,11 +76,11 @@ func (self StructType) IsFunction() bool {
 // StructTypeRef
 type StructTypeRef struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Name string
 }
 
-func NewStructTypeRef(loc duck.Location, name string) StructTypeRef {
+func NewStructTypeRef(loc core.Location, name string) StructTypeRef {
   return StructTypeRef { "typesys.StructTypeRef", loc, name }
 }
 
@@ -88,7 +88,7 @@ func (self StructTypeRef) String() string {
   return fmt.Sprintf("<typesys.StructTypeRef Name=%s Location=%s>", self.Name, self.Location)
 }
 
-func (self StructTypeRef) GetLocation() duck.Location {
+func (self StructTypeRef) GetLocation() core.Location {
   return self.Location
 }
 

@@ -2,18 +2,18 @@ package typesys
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // ArrayType
 type ArrayType struct {
   ClassName string
-  BaseType duck.IType
+  BaseType core.IType
   Length int
   PointerSize int
 }
 
-func NewArrayType(baseType duck.IType, length int, pointerSize int) *ArrayType {
+func NewArrayType(baseType core.IType, length int, pointerSize int) *ArrayType {
   return &ArrayType { "typesys.ArrayType", baseType, length, pointerSize }
 }
 
@@ -76,12 +76,12 @@ func (self ArrayType) IsFunction() bool {
 // ArrayTypeRef
 type ArrayTypeRef struct {
   ClassName string
-  Location duck.Location
-  BaseType duck.ITypeRef
+  Location core.Location
+  BaseType core.ITypeRef
   Length int
 }
 
-func NewArrayTypeRef(baseType duck.ITypeRef, length int) ArrayTypeRef {
+func NewArrayTypeRef(baseType core.ITypeRef, length int) ArrayTypeRef {
   return ArrayTypeRef { "typesys.ArrayTypeRef", baseType.GetLocation(), baseType, length }
 }
 
@@ -89,7 +89,7 @@ func (self ArrayTypeRef) String() string {
   return fmt.Sprintf("<typesys.ArrayTypeRef Location=%s BaseType=%s Length=%d>", self.Location, self.BaseType, self.Length)
 }
 
-func (self ArrayTypeRef) GetLocation() duck.Location {
+func (self ArrayTypeRef) GetLocation() core.Location {
   return self.Location
 }
 

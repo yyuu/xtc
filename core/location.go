@@ -1,4 +1,4 @@
-package location
+package core
 
 import (
   "fmt"
@@ -12,23 +12,23 @@ type Location struct {
 }
 
 func NewLocation(sourceName string, lineNumber int, lineOffset int) Location {
-  return Location { "location.Locationn", sourceName, lineNumber, lineOffset }
+  return Location { "core.Locationn", sourceName, lineNumber, lineOffset }
 }
 
 func (self Location) GetSourceName() string {
-  return self.SourceName
+  return self.sourceName
 }
 
 func (self Location) GetLineNumber() int {
-  return self.LineNumber
+  return self.lineNumber
 }
 
 func (self Location) GetLineOffset() int {
-  return self.LineOffset
+  return self.lineOffset
 }
 
 func (self Location) String() string {
-  return fmt.Sprintf("[%s:%d,%d]", self.SourceName, self.LineNumber, self.LineOffset)
+  return fmt.Sprintf("[%s:%d,%d]", self.sourceName, self.lineNumber, self.lineOffset)
 }
 
 func (self Location) MarshalJSON() ([]byte, error) {

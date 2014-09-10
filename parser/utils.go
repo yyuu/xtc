@@ -2,52 +2,52 @@ package parser
 
 import (
   "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/entity"
   "bitbucket.org/yyuu/bs/typesys"
 )
 
-func asExprNode(x duck.INode) duck.IExprNode {
-  return x.(duck.IExprNode)
+func asExprNode(x core.INode) core.IExprNode {
+  return x.(core.IExprNode)
 }
 
-func asExprNodes(xs []duck.INode) []duck.IExprNode {
-  ys := make([]duck.IExprNode, len(xs))
+func asExprNodes(xs []core.INode) []core.IExprNode {
+  ys := make([]core.IExprNode, len(xs))
   for i := range xs {
     ys[i] = asExprNode(xs[i])
   }
   return ys
 }
 
-func asStmtNode(x duck.INode) duck.IStmtNode {
-  return x.(duck.IStmtNode)
+func asStmtNode(x core.INode) core.IStmtNode {
+  return x.(core.IStmtNode)
 }
 
-func asStmtNodes(xs []duck.INode) []duck.IStmtNode {
-  ys := make([]duck.IStmtNode, len(xs))
+func asStmtNodes(xs []core.INode) []core.IStmtNode {
+  ys := make([]core.IStmtNode, len(xs))
   for i := range xs {
     ys[i] = asStmtNode(xs[i])
   }
   return ys
 }
 
-func asTypeNode(x duck.INode) duck.ITypeNode {
-  return x.(duck.ITypeNode)
+func asTypeNode(x core.INode) core.ITypeNode {
+  return x.(core.ITypeNode)
 }
 
-func asTypeNodes(xs []duck.INode) []duck.ITypeNode {
-  ys := make([]duck.ITypeNode, len(xs))
+func asTypeNodes(xs []core.INode) []core.ITypeNode {
+  ys := make([]core.ITypeNode, len(xs))
   for i := range xs {
     ys[i] = asTypeNode(xs[i])
   }
   return ys
 }
 
-func asSlot(x duck.INode) ast.Slot {
+func asSlot(x core.INode) ast.Slot {
   return x.(ast.Slot)
 }
 
-func asSlots(xs []duck.INode) []ast.Slot {
+func asSlots(xs []core.INode) []ast.Slot {
   ys := make([]ast.Slot, len(xs))
   for i := range xs {
     ys[i] = asSlot(xs[i])
@@ -55,128 +55,128 @@ func asSlots(xs []duck.INode) []ast.Slot {
   return ys
 }
 
-func asTypeDefinition(x duck.INode) duck.ITypeDefinition {
-  return x.(duck.ITypeDefinition)
+func asTypeDefinition(x core.INode) core.ITypeDefinition {
+  return x.(core.ITypeDefinition)
 }
 
-func asTypeDefinitions(xs []duck.INode) []duck.ITypeDefinition {
-  ys := make([]duck.ITypeDefinition, len(xs))
+func asTypeDefinitions(xs []core.INode) []core.ITypeDefinition {
+  ys := make([]core.ITypeDefinition, len(xs))
   for i := range xs {
     ys[i] = asTypeDefinition(xs[i])
   }
   return ys
 }
 
-func asDeclarations(x duck.INode) ast.Declarations {
+func asDeclarations(x core.INode) ast.Declarations {
   return x.(ast.Declarations)
 }
 
-func asDefinedFunction(x duck.IEntity) duck.IDefinedFunction {
-  return x.(duck.IDefinedFunction)
+func asDefinedFunction(x core.IEntity) core.IDefinedFunction {
+  return x.(core.IDefinedFunction)
 }
 
-func asUndefinedFunction(x duck.IEntity) duck.IUndefinedFunction {
-  return x.(duck.IUndefinedFunction)
+func asUndefinedFunction(x core.IEntity) core.IUndefinedFunction {
+  return x.(core.IUndefinedFunction)
 }
 
-func asVariable(x duck.IEntity) duck.IVariable {
-  return x.(duck.IVariable)
+func asVariable(x core.IEntity) core.IVariable {
+  return x.(core.IVariable)
 }
 
-func asVariables(xs []duck.IEntity) []duck.IVariable {
-  ys := make([]duck.IVariable, len(xs))
+func asVariables(xs []core.IEntity) []core.IVariable {
+  ys := make([]core.IVariable, len(xs))
   for i := range xs {
     ys[i] = asVariable(xs[i])
   }
   return ys
 }
 
-func asDefinedVariable(x duck.IEntity) duck.IDefinedVariable {
-  return x.(duck.IDefinedVariable)
+func asDefinedVariable(x core.IEntity) core.IDefinedVariable {
+  return x.(core.IDefinedVariable)
 }
 
-func asDefinedVariables(xs []duck.IEntity) []duck.IDefinedVariable {
-  ys := make([]duck.IDefinedVariable, len(xs))
+func asDefinedVariables(xs []core.IEntity) []core.IDefinedVariable {
+  ys := make([]core.IDefinedVariable, len(xs))
   for i := range xs {
     ys[i] = asDefinedVariable(xs[i])
   }
   return ys
 }
 
-func asUndefinedVariable(x duck.IEntity) duck.IUndefinedVariable {
-  return x.(duck.IUndefinedVariable)
+func asUndefinedVariable(x core.IEntity) core.IUndefinedVariable {
+  return x.(core.IUndefinedVariable)
 }
 
-func asConstant(x duck.IEntity) duck.IConstant {
-  return x.(duck.IConstant)
+func asConstant(x core.IEntity) core.IConstant {
+  return x.(core.IConstant)
 }
 
-func asStructNode(x duck.INode) ast.StructNode {
+func asStructNode(x core.INode) ast.StructNode {
   return x.(ast.StructNode)
 }
 
-func asUnionNode(x duck.INode) ast.UnionNode {
+func asUnionNode(x core.INode) ast.UnionNode {
   return x.(ast.UnionNode)
 }
 
-func asTypedefNode(x duck.INode) ast.TypedefNode {
+func asTypedefNode(x core.INode) ast.TypedefNode {
   return x.(ast.TypedefNode)
 }
 
-func asParams(x duck.IEntity) entity.Params {
+func asParams(x core.IEntity) entity.Params {
   return x.(entity.Params)
 }
 
-func asParameter(x duck.IEntity) entity.Parameter {
+func asParameter(x core.IEntity) entity.Parameter {
   return x.(entity.Parameter)
 }
 
 func parametersTypeRef(params entity.Params) typesys.ParamTypeRefs {
   paramDescs := params.GetParamDescs()
-  ps := make([]duck.ITypeRef, len(paramDescs))
+  ps := make([]core.ITypeRef, len(paramDescs))
   for i := range paramDescs {
     ps[i] = paramDescs[i].GetTypeNode().GetTypeRef()
   }
   return typesys.NewParamTypeRefs(params.GetLocation(), ps, false)
 }
 
-func defvars(xs...duck.IDefinedVariable) []duck.IDefinedVariable {
+func defvars(xs...core.IDefinedVariable) []core.IDefinedVariable {
   if 0 < len(xs) {
     return xs
   } else {
-    return []duck.IDefinedVariable { }
+    return []core.IDefinedVariable { }
   }
 }
 
-func vardecls(xs...duck.IUndefinedVariable) []duck.IUndefinedVariable {
+func vardecls(xs...core.IUndefinedVariable) []core.IUndefinedVariable {
   if 0 < len(xs) {
     return xs
   } else {
-    return []duck.IUndefinedVariable { }
+    return []core.IUndefinedVariable { }
   }
 }
 
-func defuns(xs...duck.IDefinedFunction) []duck.IDefinedFunction {
+func defuns(xs...core.IDefinedFunction) []core.IDefinedFunction {
   if 0 < len(xs) {
     return xs
   } else {
-    return []duck.IDefinedFunction { }
+    return []core.IDefinedFunction { }
   }
 }
 
-func funcdecls(xs...duck.IUndefinedFunction) []duck.IUndefinedFunction {
+func funcdecls(xs...core.IUndefinedFunction) []core.IUndefinedFunction {
   if 0 < len(xs) {
     return xs
   } else {
-    return []duck.IUndefinedFunction { }
+    return []core.IUndefinedFunction { }
   }
 }
 
-func defconsts(xs...duck.IConstant) []duck.IConstant {
+func defconsts(xs...core.IConstant) []core.IConstant {
   if 0 < len(xs) {
     return xs
   } else {
-    return []duck.IConstant { }
+    return []core.IConstant { }
   }
 }
 

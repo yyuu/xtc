@@ -1,4 +1,4 @@
-package duck
+package core
 
 type INode interface {
   String() string

@@ -2,20 +2,20 @@ package entity
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 type DefinedFunction struct {
   ClassName string
   Private bool
-  TypeNode duck.ITypeNode
+  TypeNode core.ITypeNode
   Name string
   Params Params
-  Body duck.IStmtNode
-  scope duck.IVariableScope
+  Body core.IStmtNode
+  scope core.IVariableScope
 }
 
-func NewDefinedFunction(priv bool, t duck.ITypeNode, name string, params Params, body duck.IStmtNode) DefinedFunction {
+func NewDefinedFunction(priv bool, t core.ITypeNode, name string, params Params, body core.IStmtNode) DefinedFunction {
   return DefinedFunction { "entity.DefinedFunction", priv, t, name, params, body, nil }
 }
 
@@ -27,7 +27,7 @@ func (self DefinedFunction) IsPrivate() bool {
   return self.Private
 }
 
-func (self DefinedFunction) GetTypeNode() duck.ITypeNode {
+func (self DefinedFunction) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
@@ -59,45 +59,45 @@ func (self DefinedFunction) IsRefered() bool {
   return true // FIXME: count up references
 }
 
-func (self DefinedFunction) GetParams() duck.IParams {
+func (self DefinedFunction) GetParams() core.IParams {
   return self.Params
 }
 
-func (self DefinedFunction) ListParameters() []duck.IDefinedVariable {
+func (self DefinedFunction) ListParameters() []core.IDefinedVariable {
   xs := self.Params.ParamDescs
-  ys := make([]duck.IDefinedVariable, len(xs))
+  ys := make([]core.IDefinedVariable, len(xs))
   for i := range xs {
-    ys[i] = xs[i].(duck.IDefinedVariable)
+    ys[i] = xs[i].(core.IDefinedVariable)
   }
   return ys
 }
 
-func (self DefinedFunction) GetBody() duck.IStmtNode {
+func (self DefinedFunction) GetBody() core.IStmtNode {
   return self.Body
 }
 
-func (self DefinedFunction) SetBody(body duck.IStmtNode) duck.IDefinedFunction {
+func (self DefinedFunction) SetBody(body core.IStmtNode) core.IDefinedFunction {
   self.Body = body
   return self
 }
 
-func (self DefinedFunction) GetScope() duck.IVariableScope {
+func (self DefinedFunction) GetScope() core.IVariableScope {
   return self.scope
 }
 
-func (self DefinedFunction) SetScope(scope duck.IVariableScope) duck.IDefinedFunction {
+func (self DefinedFunction) SetScope(scope core.IVariableScope) core.IDefinedFunction {
   self.scope = scope
   return self
 }
 
 type UndefinedFunction struct {
   ClassName string
-  TypeNode duck.ITypeNode
+  TypeNode core.ITypeNode
   Name string
   Params Params
 }
 
-func NewUndefinedFunction(t duck.ITypeNode, name string, params Params) UndefinedFunction {
+func NewUndefinedFunction(t core.ITypeNode, name string, params Params) UndefinedFunction {
   return UndefinedFunction { "entity.UndefinedFunction", t, name, params }
 }
 
@@ -133,7 +133,7 @@ func (self UndefinedFunction) IsRefered() bool {
   return true // FIXME: count up references
 }
 
-func (self UndefinedFunction) GetTypeNode() duck.ITypeNode {
+func (self UndefinedFunction) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 

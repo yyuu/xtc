@@ -2,17 +2,17 @@ package typesys
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // FunctionType
 type FunctionType struct {
   ClassName string
-  ReturnType duck.IType
+  ReturnType core.IType
   ParamTypes ParamTypes
 }
 
-func NewFunctionType(ret duck.IType, paramTypes ParamTypes) *FunctionType {
+func NewFunctionType(ret core.IType, paramTypes ParamTypes) *FunctionType {
   return &FunctionType { "typesys.FunctionType", ret, paramTypes }
 }
 
@@ -75,12 +75,12 @@ func (self FunctionType) IsFunction() bool {
 // FunctionTypeRef
 type FunctionTypeRef struct {
   ClassName string
-  Location duck.Location
-  ReturnType duck.ITypeRef
+  Location core.Location
+  ReturnType core.ITypeRef
   Params ParamTypeRefs
 }
 
-func NewFunctionTypeRef(returnType duck.ITypeRef, params duck.ITypeRef) FunctionTypeRef {
+func NewFunctionTypeRef(returnType core.ITypeRef, params core.ITypeRef) FunctionTypeRef {
   return FunctionTypeRef { "typesys.FunctionTypeRef", returnType.GetLocation(), returnType, params.(ParamTypeRefs) }
 }
 
@@ -88,7 +88,7 @@ func (self FunctionTypeRef) String() string {
   return fmt.Sprintf("<typesys.FunctionTypeRef Location=%s ReturnType=%s Params=%s>", self.Location, self.ReturnType, self.Params)
 }
 
-func (self FunctionTypeRef) GetLocation() duck.Location {
+func (self FunctionTypeRef) GetLocation() core.Location {
   return self.Location
 }
 

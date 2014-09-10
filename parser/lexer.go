@@ -6,7 +6,7 @@ import (
   "strings"
   "unicode/utf8"
   "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/strscan"
 )
 
@@ -24,7 +24,7 @@ type lex struct {
 }
 
 func (self lex) String() string {
-  location := duck.NewLocation(self.sourceName, self.lineNumber, self.lineOffset)
+  location := core.NewLocation(self.sourceName, self.lineNumber, self.lineOffset)
   source := fmt.Sprintf("%s", self.scanner.Peek(16))
   return fmt.Sprintf("%s: %q", location, source)
 }
@@ -32,7 +32,7 @@ func (self lex) String() string {
 type token struct {
   id int
   literal string
-  location duck.Location
+  location core.Location
 }
 
 func (self token) String() string {
@@ -187,7 +187,7 @@ func (self *lex) consume(id int, literal string) (t *token) {
   t = &token {
     id: id,
     literal: literal,
-    location: duck.NewLocation(self.sourceName, self.lineNumber, self.lineOffset),
+    location: core.NewLocation(self.sourceName, self.lineNumber, self.lineOffset),
   }
 
   if self.firstToken == nil {

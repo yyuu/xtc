@@ -2,18 +2,18 @@ package ast
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // DoWhileNode
 type DoWhileNode struct {
   ClassName string
-  Location duck.Location
-  Body duck.IStmtNode
-  Cond duck.IExprNode
+  Location core.Location
+  Body core.IStmtNode
+  Cond core.IExprNode
 }
 
-func NewDoWhileNode(loc duck.Location, body duck.IStmtNode, cond duck.IExprNode) DoWhileNode {
+func NewDoWhileNode(loc core.Location, body core.IStmtNode, cond core.IExprNode) DoWhileNode {
   if body == nil { panic("body is nil") }
   if cond == nil { panic("cond is nil") }
   return DoWhileNode { "ast.DoWhileNode", loc, body, cond }
@@ -27,21 +27,21 @@ func (self DoWhileNode) IsStmtNode() bool {
   return true
 }
 
-func (self DoWhileNode) GetLocation() duck.Location {
+func (self DoWhileNode) GetLocation() core.Location {
   return self.Location
 }
 
 // ForNode
 type ForNode struct {
   ClassName string
-  Location duck.Location
-  Init duck.IExprNode
-  Cond duck.IExprNode
-  Incr duck.IExprNode
-  Body duck.IStmtNode
+  Location core.Location
+  Init core.IExprNode
+  Cond core.IExprNode
+  Incr core.IExprNode
+  Body core.IStmtNode
 }
 
-func NewForNode(loc duck.Location, init duck.IExprNode, cond duck.IExprNode, incr duck.IExprNode, body duck.IStmtNode) ForNode {
+func NewForNode(loc core.Location, init core.IExprNode, cond core.IExprNode, incr core.IExprNode, body core.IStmtNode) ForNode {
   if init == nil { panic("init is nil") }
   if cond == nil { panic("cond is nil") }
   if incr == nil { panic("incr is nil") }
@@ -57,19 +57,19 @@ func (self ForNode) IsStmtNode() bool {
   return true
 }
 
-func (self ForNode) GetLocation() duck.Location {
+func (self ForNode) GetLocation() core.Location {
   return self.Location
 }
 
 // WhileNode
 type WhileNode struct {
   ClassName string
-  Location duck.Location
-  Cond duck.IExprNode
-  Body duck.IStmtNode
+  Location core.Location
+  Cond core.IExprNode
+  Body core.IStmtNode
 }
 
-func NewWhileNode(loc duck.Location, cond duck.IExprNode, body duck.IStmtNode) WhileNode {
+func NewWhileNode(loc core.Location, cond core.IExprNode, body core.IStmtNode) WhileNode {
   if cond == nil { panic("cond is nil") }
   if body == nil { panic("body is nil") }
   return WhileNode { "ast.WhileNode", loc, cond, body }
@@ -83,6 +83,6 @@ func (self WhileNode) IsStmtNode() bool {
   return true
 }
 
-func (self WhileNode) GetLocation() duck.Location {
+func (self WhileNode) GetLocation() core.Location {
   return self.Location
 }

@@ -2,18 +2,18 @@ package typesys
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // ParamTypes
 type ParamTypes struct {
   ClassName string
-  Location duck.Location
-  ParamDescs []duck.IType
+  Location core.Location
+  ParamDescs []core.IType
   Vararg bool
 }
 
-func NewParamTypes(loc duck.Location, paramDescs []duck.IType, vararg bool) *ParamTypes {
+func NewParamTypes(loc core.Location, paramDescs []core.IType, vararg bool) *ParamTypes {
   return &ParamTypes { "typesys.ParamTypes", loc, paramDescs, vararg }
 }
 
@@ -76,12 +76,12 @@ func (self ParamTypes) IsFunction() bool {
 // ParamTypeRefs
 type ParamTypeRefs struct {
   ClassName string
-  Location duck.Location
-  ParamDescs []duck.ITypeRef
+  Location core.Location
+  ParamDescs []core.ITypeRef
   Vararg bool
 }
 
-func NewParamTypeRefs(loc duck.Location, paramDescs []duck.ITypeRef, vararg bool) ParamTypeRefs {
+func NewParamTypeRefs(loc core.Location, paramDescs []core.ITypeRef, vararg bool) ParamTypeRefs {
   return ParamTypeRefs { "typesys.ParamTypeRefs", loc, paramDescs, vararg }
 }
 
@@ -89,7 +89,7 @@ func (self ParamTypeRefs) String() string {
   return fmt.Sprintf("<typesys.ParamTypeRefs Location=%s ParamDescs=%s Vararg=%v>", self.Location, self.ParamDescs, self.Vararg)
 }
 
-func (self ParamTypeRefs) GetLocation() duck.Location {
+func (self ParamTypeRefs) GetLocation() core.Location {
   return self.Location
 }
 

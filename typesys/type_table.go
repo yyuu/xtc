@@ -2,7 +2,7 @@ package typesys
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 type TypeTable struct {
@@ -11,12 +11,12 @@ type TypeTable struct {
   intSize int
   longSize int
   ptrSize int
-  table map[duck.ITypeRef]*duck.IType
+  table map[core.ITypeRef]*core.IType
 }
 
 func NewTypeTable(charSize, shortSize, intSize, longSize, ptrSize int) *TypeTable {
-  loc := duck.NewLocation("[builtin:typesys]", 0, 0)
-  tt := TypeTable { charSize, shortSize, intSize, longSize, ptrSize, make(map[duck.ITypeRef]*duck.IType) }
+  loc := core.NewLocation("[builtin:typesys]", 0, 0)
+  tt := TypeTable { charSize, shortSize, intSize, longSize, ptrSize, make(map[core.ITypeRef]*core.IType) }
   tt.PutType(NewVoidTypeRef(loc),
              NewVoidType())
   tt.PutType(NewIntegerTypeRef(loc, "char"),
@@ -62,11 +62,11 @@ func NewTypeTableFor(platform string) *TypeTable {
   }
 }
 
-func (self *TypeTable) PutType(ref duck.ITypeRef, t duck.IType) {
+func (self *TypeTable) PutType(ref core.ITypeRef, t core.IType) {
   self.table[ref] = &t
 }
 
-func (self TypeTable) GetType(ref duck.ITypeRef) *duck.IType {
+func (self TypeTable) GetType(ref core.ITypeRef) *core.IType {
   return self.table[ref]
 }
 
@@ -98,7 +98,7 @@ func (self TypeTable) String() string {
   return fmt.Sprintf("(let typetable ((charSize %d) (shortSize %d) (intSize %d) (longSize %d) (ptrSize %d)) '())", self.charSize, self.shortSize, self.intSize, self.longSize, self.ptrSize)
 }
 
-func (self TypeTable) IsDefined(ref duck.ITypeRef) bool {
+func (self TypeTable) IsDefined(ref core.ITypeRef) bool {
   _, ok := self.table[ref]
   return ok
 }

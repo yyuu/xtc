@@ -2,21 +2,21 @@ package entity
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 type VariableScope struct {
   Parent *VariableScope
   Children []*VariableScope
-  Variables map[string]*duck.IEntity
+  Variables map[string]*core.IEntity
 }
 
 func NewToplevelScope() *VariableScope {
-  return &VariableScope { nil, []*VariableScope { }, make(map[string]*duck.IEntity) }
+  return &VariableScope { nil, []*VariableScope { }, make(map[string]*core.IEntity) }
 }
 
 func NewLocalScope(parent *VariableScope) *VariableScope {
-  return &VariableScope { parent, []*VariableScope { }, make(map[string]*duck.IEntity) }
+  return &VariableScope { parent, []*VariableScope { }, make(map[string]*core.IEntity) }
 }
 
 func (self *VariableScope) IsVariableScope() bool {
@@ -27,7 +27,7 @@ func (self *VariableScope) IsToplevel() bool {
   return self.Parent == nil
 }
 
-func (self *VariableScope) GetParent() duck.IVariableScope {
+func (self *VariableScope) GetParent() core.IVariableScope {
   return self.Parent
 }
 
@@ -35,11 +35,11 @@ func (self *VariableScope) AddChild(scope *VariableScope) {
   self.Children = append(self.Children, scope)
 }
 
-func (self *VariableScope) GetByName(name string) *duck.IEntity {
+func (self *VariableScope) GetByName(name string) *core.IEntity {
   return self.Variables[name]
 }
 
-func (self *VariableScope) DeclareEntity(entity duck.IEntity) {
+func (self *VariableScope) DeclareEntity(entity core.IEntity) {
   name := entity.GetName()
   e := self.GetByName(name)
   if e != nil {
@@ -49,7 +49,7 @@ func (self *VariableScope) DeclareEntity(entity duck.IEntity) {
   }
 }
 
-func (self *VariableScope) DefineEntity(entity duck.IEntity) {
+func (self *VariableScope) DefineEntity(entity core.IEntity) {
   name := entity.GetName()
   e := self.GetByName(name)
   if e != nil && (*e).IsDefined() {
@@ -59,16 +59,16 @@ func (self *VariableScope) DefineEntity(entity duck.IEntity) {
   }
 }
 
-func (self *VariableScope) DefineVariable(v duck.IDefinedVariable) {
+func (self *VariableScope) DefineVariable(v core.IDefinedVariable) {
   name := v.GetName()
   if self.IsDefinedLocally(name) {
     panic(fmt.Errorf("duplicated variable: %s", name))
   }
-  entity := v.(duck.IEntity)
+  entity := v.(core.IEntity)
   self.Variables[name] = &entity
 }
 
-func (self *VariableScope) GetToplevel() duck.IVariableScope {
+func (self *VariableScope) GetToplevel() core.IVariableScope {
   if self.Parent == nil {
     return self
   } else {
@@ -112,11 +112,11 @@ func (self *VariableScope) CheckReferences() {
 }
 
 type ConstantTable struct {
-  Constants map[string]*duck.IEntity
+  Constants map[string]*core.IEntity
 }
 
 func NewConstantTable() *ConstantTable {
-  return &ConstantTable { make(map[string]*duck.IEntity) }
+  return &ConstantTable { make(map[string]*core.IEntity) }
 }
 
 func (self *ConstantTable) IsConstantTable() bool {

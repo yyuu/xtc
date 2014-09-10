@@ -2,19 +2,19 @@ package ast
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // BinaryOpNode
 type BinaryOpNode struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Operator string
-  Left duck.IExprNode
-  Right duck.IExprNode
+  Left core.IExprNode
+  Right core.IExprNode
 }
 
-func NewBinaryOpNode(loc duck.Location, operator string, left duck.IExprNode, right duck.IExprNode) BinaryOpNode {
+func NewBinaryOpNode(loc core.Location, operator string, left core.IExprNode, right core.IExprNode) BinaryOpNode {
   if left == nil { panic("left is nil") }
   if right == nil { panic("right is nil") }
   return BinaryOpNode { "ast.BinaryOpNode", loc, operator, left, right }
@@ -37,19 +37,19 @@ func (self BinaryOpNode) IsExprNode() bool {
   return true
 }
 
-func (self BinaryOpNode) GetLocation() duck.Location {
+func (self BinaryOpNode) GetLocation() core.Location {
   return self.Location
 }
 
 // LogicalAndNode
 type LogicalAndNode struct {
   ClassName string
-  Location duck.Location
-  Left duck.IExprNode
-  Right duck.IExprNode
+  Location core.Location
+  Left core.IExprNode
+  Right core.IExprNode
 }
 
-func NewLogicalAndNode(loc duck.Location, left duck.IExprNode, right duck.IExprNode) LogicalAndNode {
+func NewLogicalAndNode(loc core.Location, left core.IExprNode, right core.IExprNode) LogicalAndNode {
   if left == nil { panic("left is nil") }
   if right == nil { panic("right is nil") }
   return LogicalAndNode { "ast.LogicalAndNode", loc, left, right }
@@ -63,19 +63,19 @@ func (self LogicalAndNode) IsExprNode() bool {
   return true
 }
 
-func (self LogicalAndNode) GetLocation() duck.Location {
+func (self LogicalAndNode) GetLocation() core.Location {
   return self.Location
 }
 
 // LogicalOrNode
 type LogicalOrNode struct {
   ClassName string
-  Location duck.Location
-  Left duck.IExprNode
-  Right duck.IExprNode
+  Location core.Location
+  Left core.IExprNode
+  Right core.IExprNode
 }
 
-func NewLogicalOrNode(loc duck.Location, left duck.IExprNode, right duck.IExprNode) LogicalOrNode {
+func NewLogicalOrNode(loc core.Location, left core.IExprNode, right core.IExprNode) LogicalOrNode {
   if left == nil { panic("left is nil") }
   if right == nil { panic("right is nil") }
   return LogicalOrNode { "ast.LogicalOrNode", loc, left, right }
@@ -89,19 +89,19 @@ func (self LogicalOrNode) IsExprNode() bool {
   return true
 }
 
-func (self LogicalOrNode) GetLocation() duck.Location {
+func (self LogicalOrNode) GetLocation() core.Location {
   return self.Location
 }
 
 // PrefixOpNode
 type PrefixOpNode struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Operator string
-  Expr duck.IExprNode
+  Expr core.IExprNode
 }
 
-func NewPrefixOpNode(loc duck.Location, operator string, expr duck.IExprNode) PrefixOpNode {
+func NewPrefixOpNode(loc core.Location, operator string, expr core.IExprNode) PrefixOpNode {
   if expr == nil { panic("expr is nil") }
   return PrefixOpNode { "ast.PrefixOpNode", loc, operator, expr }
 }
@@ -118,19 +118,19 @@ func (self PrefixOpNode) IsExprNode() bool {
   return true
 }
 
-func (self PrefixOpNode) GetLocation() duck.Location {
+func (self PrefixOpNode) GetLocation() core.Location {
   return self.Location
 }
 
 // SuffixOpNode
 type SuffixOpNode struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Operator string
-  Expr duck.IExprNode
+  Expr core.IExprNode
 }
 
-func NewSuffixOpNode(loc duck.Location, operator string, expr duck.IExprNode) SuffixOpNode {
+func NewSuffixOpNode(loc core.Location, operator string, expr core.IExprNode) SuffixOpNode {
   if expr == nil { panic("expr is nil") }
   return SuffixOpNode { "ast.SuffixOpNode", loc, operator, expr }
 }
@@ -147,19 +147,19 @@ func (self SuffixOpNode) IsExprNode() bool {
   return true
 }
 
-func (self SuffixOpNode) GetLocation() duck.Location {
+func (self SuffixOpNode) GetLocation() core.Location {
   return self.Location
 }
 
 // UnaryOpNode
 type UnaryOpNode struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Operator string
-  Expr duck.IExprNode
+  Expr core.IExprNode
 }
 
-func NewUnaryOpNode(loc duck.Location, operator string, expr duck.IExprNode) UnaryOpNode {
+func NewUnaryOpNode(loc core.Location, operator string, expr core.IExprNode) UnaryOpNode {
   if expr == nil { panic("expr is nil") }
   return UnaryOpNode { "ast.UnaryOpNode", loc, operator, expr }
 }
@@ -175,6 +175,6 @@ func (self UnaryOpNode) IsExprNode() bool {
   return true
 }
 
-func (self UnaryOpNode) GetLocation() duck.Location {
+func (self UnaryOpNode) GetLocation() core.Location {
   return self.Location
 }

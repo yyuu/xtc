@@ -2,22 +2,22 @@ package ast
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 type Declarations struct {
   ClassName string
-  Defvars []duck.IDefinedVariable
-  Vardecls []duck.IUndefinedVariable
-  Defuns []duck.IDefinedFunction
-  Funcdecls []duck.IUndefinedFunction
-  Constants []duck.IConstant
+  Defvars []core.IDefinedVariable
+  Vardecls []core.IUndefinedVariable
+  Defuns []core.IDefinedFunction
+  Funcdecls []core.IUndefinedFunction
+  Constants []core.IConstant
   Defstructs []StructNode
   Defunions []UnionNode
   Typedefs []TypedefNode
 }
 
-func NewDeclarations(defvars []duck.IDefinedVariable, vardecls []duck.IUndefinedVariable, defuns []duck.IDefinedFunction, funcdecls []duck.IUndefinedFunction, constants []duck.IConstant, defstructs []StructNode, defunions []UnionNode, typedefs []TypedefNode) Declarations {
+func NewDeclarations(defvars []core.IDefinedVariable, vardecls []core.IUndefinedVariable, defuns []core.IDefinedFunction, funcdecls []core.IUndefinedFunction, constants []core.IConstant, defstructs []StructNode, defunions []UnionNode, typedefs []TypedefNode) Declarations {
   return Declarations { "ast.Declarations", defvars, vardecls, defuns, funcdecls, constants, defstructs, defunions, typedefs }
 }
 
@@ -32,27 +32,27 @@ func (self Declarations) String() string {
                      "       (define typedefs %s))", self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
-func (self Declarations) GetLocation() duck.Location {
+func (self Declarations) GetLocation() core.Location {
   panic("Declarations#GetLocation called")
 }
 
-func (self Declarations) AddDefvar(v duck.IDefinedVariable) Declarations {
+func (self Declarations) AddDefvar(v core.IDefinedVariable) Declarations {
   return NewDeclarations(append(self.Defvars, v), self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
-func (self Declarations) AddVardecl(v duck.IUndefinedVariable) Declarations {
+func (self Declarations) AddVardecl(v core.IUndefinedVariable) Declarations {
   return NewDeclarations(self.Defvars, append(self.Vardecls, v), self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
-func (self Declarations) AddDefun(f duck.IDefinedFunction) Declarations {
+func (self Declarations) AddDefun(f core.IDefinedFunction) Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, append(self.Defuns, f), self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
-func (self Declarations) AddFuncdecl(f duck.IUndefinedFunction) Declarations {
+func (self Declarations) AddFuncdecl(f core.IUndefinedFunction) Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, self.Defuns, append(self.Funcdecls, f), self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
-func (self Declarations) AddDefconst(c duck.IConstant) Declarations {
+func (self Declarations) AddDefconst(c core.IConstant) Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, append(self.Constants, c), self.Defstructs, self.Defunions, self.Typedefs)
 }
 
@@ -68,23 +68,23 @@ func (self Declarations) AddTypedef(t TypedefNode) Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, append(self.Typedefs, t))
 }
 
-func (self Declarations) GetDefvars() []duck.IDefinedVariable {
+func (self Declarations) GetDefvars() []core.IDefinedVariable {
   return self.Defvars
 }
 
-func (self Declarations) GetVardecls() []duck.IUndefinedVariable {
+func (self Declarations) GetVardecls() []core.IUndefinedVariable {
   return self.Vardecls
 }
 
-func (self Declarations) GetDefuns() []duck.IDefinedFunction {
+func (self Declarations) GetDefuns() []core.IDefinedFunction {
   return self.Defuns
 }
 
-func (self Declarations) GetFuncdecls() []duck.IUndefinedFunction {
+func (self Declarations) GetFuncdecls() []core.IUndefinedFunction {
   return self.Funcdecls
 }
 
-func (self Declarations) GetConstants() []duck.IConstant {
+func (self Declarations) GetConstants() []core.IConstant {
   return self.Constants
 }
 

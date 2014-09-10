@@ -3,7 +3,7 @@ package compiler
 import (
   "fmt"
   "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/entity"
 )
 
@@ -41,7 +41,7 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
 
 func (self *LocalResolver) resolveGvarInitializers(a *ast.AST) {
   xs := a.GetDefinedVariables()
-  ys := make([]duck.IDefinedVariable, len(xs))
+  ys := make([]core.IDefinedVariable, len(xs))
   for i := range xs {
     gvar := xs[i]
     if gvar.HasInitializer() {
@@ -56,7 +56,7 @@ func (self *LocalResolver) resolveGvarInitializers(a *ast.AST) {
 
 func (self *LocalResolver) resolveConstantValues(a *ast.AST) {
   xs := a.GetConstants()
-  ys := make([]duck.IConstant, len(xs))
+  ys := make([]core.IConstant, len(xs))
   for i := range xs {
     constant := xs[i]
     value := constant.GetValue()
@@ -69,7 +69,7 @@ func (self *LocalResolver) resolveConstantValues(a *ast.AST) {
 
 func (self *LocalResolver) resolveFunctions(a *ast.AST) {
   xs := a.GetDefinedFunctions()
-  ys := make([]duck.IDefinedFunction, len(xs))
+  ys := make([]core.IDefinedFunction, len(xs))
   for i := range xs {
     function := xs[i]
     self.pushScope(function.ListParameters())
@@ -89,7 +89,7 @@ func (self *LocalResolver) currentScope() *entity.VariableScope {
   return self.scopeStack[len(self.scopeStack)-1]
 }
 
-func (self *LocalResolver) pushScope(vars []duck.IDefinedVariable) {
+func (self *LocalResolver) pushScope(vars []core.IDefinedVariable) {
   scope := entity.NewLocalScope(self.currentScope())
   for i := range vars {
     v := vars[i]
@@ -124,7 +124,7 @@ func (self *LocalResolver) debugVisit(key string, unknown interface{}) {
   fmt.Println("-----", key, "-----")
 
   switch a := unknown.(type) {
-    case *duck.IExprNode: {
+    case *core.IExprNode: {
       switch b := (*a).(type) {
         case ast.IntegerLiteralNode: {
           fmt.Println("int:", b)
@@ -140,7 +140,7 @@ func (self *LocalResolver) debugVisit(key string, unknown interface{}) {
 func (self *LocalResolver) Visit(unknown interface{}) {
   self.debugVisit("BEGIN VISIT", unknown) // TODO: remove this
   switch typed := unknown.(type) {
-    case *duck.IStmtNode: {
+    case *core.IStmtNode: {
       switch stmt := (*typed).(type) {
         case ast.BlockNode: {
           self.pushScope(stmt.GetVariables())
@@ -149,7 +149,7 @@ func (self *LocalResolver) Visit(unknown interface{}) {
         }
       }
     }
-    case *duck.IExprNode: {
+    case *core.IExprNode: {
       switch expr := (*typed).(type) {
         case ast.VariableNode: {
           e := self.currentScope().GetByName(expr.GetName())

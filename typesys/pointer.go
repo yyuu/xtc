@@ -2,17 +2,17 @@ package typesys
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // PointerType
 type PointerType struct {
   ClassName string
   PointerSize int
-  BaseType duck.IType
+  BaseType core.IType
 }
 
-func NewPointerType(size int, baseType duck.IType) *PointerType {
+func NewPointerType(size int, baseType core.IType) *PointerType {
   return &PointerType { "typesys.PointerType", size, baseType }
 }
 
@@ -75,11 +75,11 @@ func (self PointerType) IsFunction() bool {
 // PointerTypeRef
 type PointerTypeRef struct {
   ClassName string
-  Location duck.Location
-  BaseType duck.ITypeRef
+  Location core.Location
+  BaseType core.ITypeRef
 }
 
-func NewPointerTypeRef(baseType duck.ITypeRef) PointerTypeRef {
+func NewPointerTypeRef(baseType core.ITypeRef) PointerTypeRef {
   return PointerTypeRef { "typesys.PointerTypeRef", baseType.GetLocation(), baseType }
 }
 
@@ -87,7 +87,7 @@ func (self PointerTypeRef) String() string {
   return fmt.Sprintf("<typesys.PointerTypeRef Location=%s BaseType=%s>", self.Location, self.BaseType)
 }
 
-func (self PointerTypeRef) GetLocation() duck.Location {
+func (self PointerTypeRef) GetLocation() core.Location {
   return self.Location
 }
 

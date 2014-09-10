@@ -6,7 +6,7 @@ import (
   "fmt"
   "strconv"
   "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/entity"
   "bitbucket.org/yyuu/bs/typesys"
 )
@@ -15,14 +15,14 @@ import (
 %union {
   _token token
 
-  _node duck.INode
-  _nodes []duck.INode
+  _node core.INode
+  _nodes []core.INode
 
-  _entity duck.IEntity
-  _entities []duck.IEntity
+  _entity core.IEntity
+  _entities []core.IEntity
 
-  _typeref duck.ITypeRef
-  _typerefs []duck.ITypeRef
+  _typeref core.ITypeRef
+  _typerefs []core.ITypeRef
 }
 
 %token EOF
@@ -94,7 +94,7 @@ compilation_unit: EOF
                 | import_stmts top_defs EOF
                 {
                   if lex, ok := yylex.(*lex); ok {
-                    var loc duck.Location
+                    var loc core.Location
                     if lex.firstToken != nil {
                       loc = lex.firstToken.location
                     }
@@ -241,7 +241,7 @@ defconst: CONST typeref_name '=' expr ';'
 
 defun: typeref_name '(' ')' block
      {
-       ps := entity.NewParams($2._token.location, []duck.IParameter { })
+       ps := entity.NewParams($2._token.location, []core.IParameter { })
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
        $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, asStmtNode($4._node))
      }
@@ -253,7 +253,7 @@ defun: typeref_name '(' ')' block
      }
      | static_typeref_name '(' ')' block
      {
-       ps := entity.NewParams($2._token.location, []duck.IParameter { })
+       ps := entity.NewParams($2._token.location, []core.IParameter { })
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
        $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, asStmtNode($4._node))
      }
@@ -284,7 +284,7 @@ params: fixedparams
 
 fixedparams: param
            {
-             $$._entity = entity.NewParams($1._token.location, []duck.IParameter { asParameter($1._entity) })
+             $$._entity = entity.NewParams($1._token.location, []core.IParameter { asParameter($1._entity) })
            }
            | fixedparams ',' param
            {
@@ -331,7 +331,7 @@ member_list: '{' member_list_body '}'
 
 member_list_body: slot ';'
                 {
-                  $$._nodes = []duck.INode { $1._node }
+                  $$._nodes = []core.INode { $1._node }
                 }
                 | member_list_body slot ';'
                 {
@@ -354,7 +354,7 @@ extern_typeref_name: EXTERN typeref_name
 
 funcdecl: extern_typeref_name '(' ')' ';'
         {
-          ps := entity.NewParams($1._typeref.GetLocation(), []duck.IParameter { })
+          ps := entity.NewParams($1._typeref.GetLocation(), []core.IParameter { })
           ref := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
           $$._entity = entity.NewUndefinedFunction(ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ps)
         }
@@ -438,7 +438,7 @@ typeref: VOID
        }
        | typeref '(' ')'
        {
-         $$._typeref = typesys.NewFunctionTypeRef($1._typeref, typesys.NewParamTypeRefs($2._token.location, []duck.ITypeRef { }, false))
+         $$._typeref = typesys.NewFunctionTypeRef($1._typeref, typesys.NewParamTypeRefs($2._token.location, []core.ITypeRef { }, false))
        }
        | typeref '(' param_typerefs ')'
        {
@@ -448,7 +448,7 @@ typeref: VOID
 
 param_typerefs: typeref
                {
-                 $$._typerefs = []duck.ITypeRef { $1._typeref }
+                 $$._typerefs = []core.ITypeRef { $1._typeref }
                }
                | param_typerefs ',' typeref
                {
@@ -549,7 +549,7 @@ cases:
 
 default_clause: DEFAULT ':' case_body
               {
-                $$._node = ast.NewCaseNode($1._token.location, []duck.IExprNode { }, asStmtNode($3._node))
+                $$._node = ast.NewCaseNode($1._token.location, []core.IExprNode { }, asStmtNode($3._node))
               }
               ;
 
@@ -782,7 +782,7 @@ postfix: primary
        }
        | primary '(' ')'
        {
-         $$._node = ast.NewFuncallNode($1._token.location, asExprNode($1._node), []duck.IExprNode { })
+         $$._node = ast.NewFuncallNode($1._token.location, asExprNode($1._node), []core.IExprNode { })
        }
        | primary '(' args ')'
        {

@@ -2,7 +2,7 @@ package typesys
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // VoidType
@@ -73,10 +73,10 @@ func (self VoidType) IsFunction() bool {
 // VoidTypeRef
 type VoidTypeRef struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
 }
 
-func NewVoidTypeRef(loc duck.Location) VoidTypeRef {
+func NewVoidTypeRef(loc core.Location) VoidTypeRef {
   return VoidTypeRef { "typesys.VoidTypeRef", loc }
 }
 
@@ -84,7 +84,7 @@ func (self VoidTypeRef) String() string {
   return fmt.Sprintf("<typesys.VoidTypeRef Location=%s>", self.Location)
 }
 
-func (self VoidTypeRef) GetLocation() duck.Location {
+func (self VoidTypeRef) GetLocation() core.Location {
   return self.Location
 }
 

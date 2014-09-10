@@ -1,4 +1,4 @@
-package duck
+package core
 
 type IEntity interface {
   String() string

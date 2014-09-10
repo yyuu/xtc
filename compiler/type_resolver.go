@@ -3,14 +3,14 @@ package compiler
 import (
   "fmt"
   "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 type TypeResolver struct {
-  typeTable duck.ITypeTable
+  typeTable core.ITypeTable
 }
 
-func NewTypeResolver(table duck.ITypeTable) *TypeResolver {
+func NewTypeResolver(table core.ITypeTable) *TypeResolver {
   return &TypeResolver { table }
 }
 
@@ -27,7 +27,7 @@ func (self *TypeResolver) Resolve(a *ast.AST) {
   }
 }
 
-func (self *TypeResolver) defineTypes(deftypes []duck.ITypeDefinition) {
+func (self *TypeResolver) defineTypes(deftypes []core.ITypeDefinition) {
   for i := range deftypes {
     def := deftypes[i]
     if self.typeTable.IsDefined(def.GetTypeRef()) {
@@ -71,6 +71,6 @@ func (self *TypeResolver) Visit(unknown interface{}) {
 //}
 }
 
-func (self *TypeResolver) bindType(x duck.ITypeNode) {
+func (self *TypeResolver) bindType(x core.ITypeNode) {
   fmt.Println("FIXME: TypeResolver#bindType called:", x)
 }

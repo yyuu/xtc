@@ -3,19 +3,19 @@ package ast
 import (
   "fmt"
   "strings"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // CondExprNode
 type CondExprNode struct {
   ClassName string
-  Location duck.Location
-  Cond duck.IExprNode
-  ThenExpr duck.IExprNode
-  ElseExpr duck.IExprNode
+  Location core.Location
+  Cond core.IExprNode
+  ThenExpr core.IExprNode
+  ElseExpr core.IExprNode
 }
 
-func NewCondExprNode(loc duck.Location, cond duck.IExprNode, thenExpr duck.IExprNode, elseExpr duck.IExprNode) CondExprNode {
+func NewCondExprNode(loc core.Location, cond core.IExprNode, thenExpr core.IExprNode, elseExpr core.IExprNode) CondExprNode {
   if cond == nil { panic("cond is nil") }
   if thenExpr == nil { panic("thenExpr is nil") }
   if elseExpr == nil { panic("elseExpr is nil") }
@@ -30,19 +30,19 @@ func (self CondExprNode) IsExprNode() bool {
   return true
 }
 
-func (self CondExprNode) GetLocation() duck.Location {
+func (self CondExprNode) GetLocation() core.Location {
   return self.Location
 }
 
 // CaseNode
 type CaseNode struct {
   ClassName string
-  Location duck.Location
-  Values []duck.IExprNode
-  Body duck.IStmtNode
+  Location core.Location
+  Values []core.IExprNode
+  Body core.IStmtNode
 }
 
-func NewCaseNode(loc duck.Location, values []duck.IExprNode, body duck.IStmtNode) CaseNode {
+func NewCaseNode(loc core.Location, values []core.IExprNode, body core.IStmtNode) CaseNode {
   if body == nil { panic("body is nil") }
   return CaseNode { "ast.CaseNode", loc, values, body }
 }
@@ -63,20 +63,20 @@ func (self CaseNode) IsStmtNode() bool {
   return true
 }
 
-func (self CaseNode) GetLocation() duck.Location {
+func (self CaseNode) GetLocation() core.Location {
   return self.Location
 }
 
 // IfNode
 type IfNode struct {
   ClassName string
-  Location duck.Location
-  Cond duck.IExprNode
-  ThenBody duck.IStmtNode
-  ElseBody duck.IStmtNode
+  Location core.Location
+  Cond core.IExprNode
+  ThenBody core.IStmtNode
+  ElseBody core.IStmtNode
 }
 
-func NewIfNode(loc duck.Location, cond duck.IExprNode, thenBody duck.IStmtNode, elseBody duck.IStmtNode) IfNode {
+func NewIfNode(loc core.Location, cond core.IExprNode, thenBody core.IStmtNode, elseBody core.IStmtNode) IfNode {
   if cond == nil { panic("cond is nil") }
   if thenBody == nil { panic("thenBody is nil") }
   return IfNode { "ast.IfNode", loc, cond, thenBody, elseBody }
@@ -90,19 +90,19 @@ func (self IfNode) IsStmtNode() bool {
   return true
 }
 
-func (self IfNode) GetLocation() duck.Location {
+func (self IfNode) GetLocation() core.Location {
   return self.Location
 }
 
 // SwitchNode
 type SwitchNode struct {
   ClassName string
-  Location duck.Location
-  Cond duck.IExprNode
+  Location core.Location
+  Cond core.IExprNode
   Cases []CaseNode
 }
 
-func NewSwitchNode(loc duck.Location, cond duck.IExprNode, _cases []duck.IStmtNode) SwitchNode {
+func NewSwitchNode(loc core.Location, cond core.IExprNode, _cases []core.IStmtNode) SwitchNode {
   if cond == nil { panic("cond is nil") }
   cases := make([]CaseNode, len(_cases))
   for i := range _cases {
@@ -127,6 +127,6 @@ func (self SwitchNode) IsStmtNode() bool {
   return true
 }
 
-func (self SwitchNode) GetLocation() duck.Location {
+func (self SwitchNode) GetLocation() core.Location {
   return self.Location
 }

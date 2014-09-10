@@ -2,19 +2,19 @@ package entity
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 type DefinedVariable struct {
   ClassName string
   Private bool
   Name string
-  TypeNode duck.ITypeNode
+  TypeNode core.ITypeNode
   NumRefered int
-  Initializer duck.IExprNode
+  Initializer core.IExprNode
 }
 
-func NewDefinedVariable(isPrivate bool, t duck.ITypeNode, name string, init duck.IExprNode) DefinedVariable {
+func NewDefinedVariable(isPrivate bool, t core.ITypeNode, name string, init core.IExprNode) DefinedVariable {
   return DefinedVariable { "entity.DefinedVariable", isPrivate, name, t, 0, init }
 }
 
@@ -54,7 +54,7 @@ func (self DefinedVariable) GetName() string {
   return self.Name
 }
 
-func (self DefinedVariable) GetTypeNode() duck.ITypeNode {
+func (self DefinedVariable) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
@@ -70,11 +70,11 @@ func (self *DefinedVariable) Refered() {
   self.NumRefered++
 }
 
-func (self DefinedVariable) GetInitializer() duck.IExprNode {
+func (self DefinedVariable) GetInitializer() core.IExprNode {
   return self.Initializer
 }
 
-func (self DefinedVariable) SetInitializer(init duck.IExprNode) duck.IDefinedVariable {
+func (self DefinedVariable) SetInitializer(init core.IExprNode) core.IDefinedVariable {
   self.Initializer = init
   return self
 }
@@ -83,10 +83,10 @@ type UndefinedVariable struct {
   ClassName string
   Private bool
   Name string
-  TypeNode duck.ITypeNode
+  TypeNode core.ITypeNode
 }
 
-func NewUndefinedVariable(t duck.ITypeNode, name string) UndefinedVariable {
+func NewUndefinedVariable(t core.ITypeNode, name string) UndefinedVariable {
   return UndefinedVariable { "entity.UndefinedVariable", false, name, t }
 }
 

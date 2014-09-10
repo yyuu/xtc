@@ -3,17 +3,17 @@ package ast
 import (
   "fmt"
   "strings"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // IntegerLiteralNode
 type IntegerLiteralNode struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Value int
 }
 
-func NewIntegerLiteralNode(loc duck.Location, literal string) IntegerLiteralNode {
+func NewIntegerLiteralNode(loc core.Location, literal string) IntegerLiteralNode {
   var value int
   var err error
   if ( strings.Index(literal, "'") == 0 && strings.LastIndex(literal, "'") == len(literal)-1 ) && 2 < len(literal) {
@@ -46,19 +46,19 @@ func (self IntegerLiteralNode) IsExprNode() bool {
   return true
 }
 
-func (self IntegerLiteralNode) GetLocation() duck.Location {
+func (self IntegerLiteralNode) GetLocation() core.Location {
   return self.Location
 }
 
 // StringLiteralNode
 type StringLiteralNode struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Value string
-  entry duck.IConstantEntry
+  entry core.IConstantEntry
 }
 
-func NewStringLiteralNode(loc duck.Location, literal string) StringLiteralNode {
+func NewStringLiteralNode(loc core.Location, literal string) StringLiteralNode {
   return StringLiteralNode { "ast.StringLiteralNode", loc, literal, nil }
 }
 
@@ -70,7 +70,7 @@ func (self StringLiteralNode) IsExprNode() bool {
   return true
 }
 
-func (self StringLiteralNode) GetLocation() duck.Location {
+func (self StringLiteralNode) GetLocation() core.Location {
   return self.Location
 }
 
@@ -78,10 +78,10 @@ func (self StringLiteralNode) GetValue() string {
   return self.Value
 }
 
-func (self StringLiteralNode) GetEntry() duck.IConstantEntry {
+func (self StringLiteralNode) GetEntry() core.IConstantEntry {
   return self.entry
 }
 
-func (self *StringLiteralNode) SetEntry(e duck.IConstantEntry) {
+func (self *StringLiteralNode) SetEntry(e core.IConstantEntry) {
   self.entry = e
 }

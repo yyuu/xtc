@@ -3,17 +3,17 @@ package ast
 import (
   "fmt"
   "strings"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // AddressNode
 type AddressNode struct {
   ClassName string
-  Location duck.Location
-  Expr duck.IExprNode
+  Location core.Location
+  Expr core.IExprNode
 }
 
-func NewAddressNode(loc duck.Location, expr duck.IExprNode) AddressNode {
+func NewAddressNode(loc core.Location, expr core.IExprNode) AddressNode {
   if expr == nil { panic("expr is nil") }
   return AddressNode { "ast.AddressNode", loc, expr }
 }
@@ -26,19 +26,19 @@ func (self AddressNode) IsExprNode() bool {
   return true
 }
 
-func (self AddressNode) GetLocation() duck.Location {
+func (self AddressNode) GetLocation() core.Location {
   return self.Location
 }
 
 // ArefNode
 type ArefNode struct {
   ClassName string
-  Location duck.Location
-  Expr duck.IExprNode
-  Index duck.IExprNode
+  Location core.Location
+  Expr core.IExprNode
+  Index core.IExprNode
 }
 
-func NewArefNode(loc duck.Location, expr duck.IExprNode, index duck.IExprNode) ArefNode {
+func NewArefNode(loc core.Location, expr core.IExprNode, index core.IExprNode) ArefNode {
   if expr == nil { panic("expr is nil") }
   if index == nil { panic("index is nil") }
   return ArefNode { "ast.ArefNode", loc, expr, index }
@@ -52,18 +52,18 @@ func (self ArefNode) IsExprNode() bool {
   return true
 }
 
-func (self ArefNode) GetLocation() duck.Location {
+func (self ArefNode) GetLocation() core.Location {
   return self.Location
 }
 
 // DereferenceNode
 type DereferenceNode struct {
   ClassName string
-  Location duck.Location
-  Expr duck.IExprNode
+  Location core.Location
+  Expr core.IExprNode
 }
 
-func NewDereferenceNode(loc duck.Location, expr duck.IExprNode) DereferenceNode {
+func NewDereferenceNode(loc core.Location, expr core.IExprNode) DereferenceNode {
   if expr == nil { panic("expr is nil") }
   return DereferenceNode { "ast.DereferenceNode", loc, expr }
 }
@@ -76,19 +76,19 @@ func (self DereferenceNode) IsExprNode() bool {
   return true
 }
 
-func (self DereferenceNode) GetLocation() duck.Location {
+func (self DereferenceNode) GetLocation() core.Location {
   return self.Location
 }
 
 // FuncallNode
 type FuncallNode struct {
   ClassName string
-  Location duck.Location
-  Expr duck.IExprNode
-  Args []duck.IExprNode
+  Location core.Location
+  Expr core.IExprNode
+  Args []core.IExprNode
 }
 
-func NewFuncallNode(loc duck.Location, expr duck.IExprNode, args []duck.IExprNode) FuncallNode {
+func NewFuncallNode(loc core.Location, expr core.IExprNode, args []core.IExprNode) FuncallNode {
   if expr == nil { panic("expr is nil") }
   return FuncallNode { "ast.FuncallNode", loc, expr, args }
 }
@@ -109,19 +109,19 @@ func (self FuncallNode) IsExprNode() bool {
   return true
 }
 
-func (self FuncallNode) GetLocation() duck.Location {
+func (self FuncallNode) GetLocation() core.Location {
   return self.Location
 }
 
 // MemberNode
 type MemberNode struct {
   ClassName string
-  Location duck.Location
-  Expr duck.IExprNode
+  Location core.Location
+  Expr core.IExprNode
   Member string
 }
 
-func NewMemberNode(loc duck.Location, expr duck.IExprNode, member string) MemberNode {
+func NewMemberNode(loc core.Location, expr core.IExprNode, member string) MemberNode {
   if expr == nil { panic("expr is nil") }
   return MemberNode { "ast.MemberNode", loc, expr, member }
 }
@@ -134,19 +134,19 @@ func (self MemberNode) IsExprNode() bool {
   return true
 }
 
-func (self MemberNode) GetLocation() duck.Location {
+func (self MemberNode) GetLocation() core.Location {
   return self.Location
 }
 
 // PtrMemberNode
 type PtrMemberNode struct {
   ClassName string
-  Location duck.Location
-  Expr duck.IExprNode
+  Location core.Location
+  Expr core.IExprNode
   Member string
 }
 
-func NewPtrMemberNode(loc duck.Location, expr duck.IExprNode, member string) PtrMemberNode {
+func NewPtrMemberNode(loc core.Location, expr core.IExprNode, member string) PtrMemberNode {
   if expr == nil { panic("expr is nil") }
   return PtrMemberNode { "ast.PtrMemberNode", loc, expr, member }
 }
@@ -159,19 +159,19 @@ func (self PtrMemberNode) IsExprNode() bool {
   return true
 }
 
-func (self PtrMemberNode) GetLocation() duck.Location {
+func (self PtrMemberNode) GetLocation() core.Location {
   return self.Location
 }
 
 // VariableNode
 type VariableNode struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Name string
-  entity duck.IEntity
+  entity core.IEntity
 }
 
-func NewVariableNode(loc duck.Location, name string) VariableNode {
+func NewVariableNode(loc core.Location, name string) VariableNode {
   return VariableNode { "ast.VariableNode", loc, name, nil }
 }
 
@@ -183,7 +183,7 @@ func (self VariableNode) IsExprNode() bool {
   return true
 }
 
-func (self VariableNode) GetLocation() duck.Location {
+func (self VariableNode) GetLocation() core.Location {
   return self.Location
 }
 
@@ -191,10 +191,10 @@ func (self VariableNode) GetName() string {
   return self.Name
 }
 
-func (self *VariableNode) SetEntity(ent duck.IEntity) {
+func (self *VariableNode) SetEntity(ent core.IEntity) {
   self.entity = ent
 }
 
-func (self VariableNode) GetEntity() duck.IEntity {
+func (self VariableNode) GetEntity() core.IEntity {
   return self.entity
 }

@@ -3,7 +3,7 @@ package parser
 import (
   "testing"
   "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/entity"
   "bitbucket.org/yyuu/bs/typesys"
   "bitbucket.org/yyuu/bs/xt"
@@ -31,24 +31,24 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
             typesys.NewFunctionTypeRef(
               typesys.NewIntegerTypeRef(loc(1,5), "int"),
               typesys.NewParamTypeRefs(loc(1,10),
-                []duck.ITypeRef { },
+                []core.ITypeRef { },
                 false,
               ),
             ),
           ),
           "f",
           entity.NewParams(loc(1,10),
-            []duck.IParameter { },
+            []core.IParameter { },
           ),
           ast.NewBlockNode(loc(1,13),
-            []duck.IDefinedVariable { },
-            []duck.IStmtNode {
+            []core.IDefinedVariable { },
+            []core.IStmtNode {
               ast.NewReturnNode(loc(2,7),
                 ast.NewFuncallNode(loc(2,14),
                   ast.NewVariableNode(loc(2,14),
                     "getc",
                   ),
-                  []duck.IExprNode { },
+                  []core.IExprNode { },
                 ),
               ),
             },
@@ -85,7 +85,7 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
             typesys.NewFunctionTypeRef(
               typesys.NewVoidTypeRef(loc(1,5)),
               typesys.NewParamTypeRefs(loc(1,12),
-                []duck.ITypeRef {
+                []core.ITypeRef {
                   typesys.NewIntegerTypeRef(loc(1,12), "int"),
                 },
                 false,
@@ -94,7 +94,7 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
           ),
           "f",
           entity.NewParams(loc(1,12),
-            []duck.IParameter {
+            []core.IParameter {
               entity.NewParameter(
                 ast.NewTypeNode(loc(1,12),
                   typesys.NewIntegerTypeRef(loc(1,12), "int"),
@@ -104,12 +104,12 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
             },
           ),
           ast.NewBlockNode(loc(1,19),
-            []duck.IDefinedVariable { },
-            []duck.IStmtNode {
+            []core.IDefinedVariable { },
+            []core.IStmtNode {
               ast.NewExprStmtNode(loc(2,7),
                 ast.NewFuncallNode(loc(2,7),
                   ast.NewVariableNode(loc(2,7), "println"),
-                  []duck.IExprNode {
+                  []core.IExprNode {
                     ast.NewStringLiteralNode(loc(2,15), "\"hello, %d\""),
                     ast.NewVariableNode(loc(2,28), "n"),
                   },
@@ -151,7 +151,7 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
             typesys.NewFunctionTypeRef(
               typesys.NewIntegerTypeRef(loc(2,5), "int"),
               typesys.NewParamTypeRefs(loc(2,11),
-                []duck.ITypeRef {
+                []core.ITypeRef {
                   typesys.NewIntegerTypeRef(loc(2,11), "int"),
                   typesys.NewIntegerTypeRef(loc(2,18), "int"),
                 },
@@ -161,7 +161,7 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
           ),
           "g",
           entity.NewParams(loc(2,11),
-            []duck.IParameter {
+            []core.IParameter {
               entity.NewParameter(
                 ast.NewTypeNode(loc(2,11),
                   typesys.NewIntegerTypeRef(loc(2,11), "int"),
@@ -177,7 +177,7 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
             },
           ),
           ast.NewBlockNode(loc(2,25),
-            []duck.IDefinedVariable {
+            []core.IDefinedVariable {
               entity.NewDefinedVariable(
                 true,
                 ast.NewTypeNode(loc(3,7),
@@ -191,7 +191,7 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
                 ),
               ),
             },
-            []duck.IStmtNode {
+            []core.IStmtNode {
               ast.NewReturnNode(loc(4,7),
                 ast.NewVariableNode(loc(4,14), "n"),
               ),
@@ -232,7 +232,7 @@ func TestFor1(t *testing.T) {
             typesys.NewFunctionTypeRef(
               typesys.NewVoidTypeRef(loc(1,5)),
               typesys.NewParamTypeRefs(loc(1,12),
-                []duck.ITypeRef {
+                []core.ITypeRef {
                   typesys.NewIntegerTypeRef(loc(1,12), "int"),
                 },
                 false,
@@ -241,7 +241,7 @@ func TestFor1(t *testing.T) {
           ),
           "f",
           entity.NewParams(loc(1,12),
-            []duck.IParameter {
+            []core.IParameter {
               entity.NewParameter(
                 ast.NewTypeNode(loc(1,12),
                   typesys.NewIntegerTypeRef(loc(1,12), "int"),
@@ -251,8 +251,8 @@ func TestFor1(t *testing.T) {
             },
           ),
           ast.NewBlockNode(loc(1,19),
-            []duck.IDefinedVariable { },
-            []duck.IStmtNode {
+            []core.IDefinedVariable { },
+            []core.IStmtNode {
               ast.NewForNode(loc(2,7),
                 ast.NewAssignNode(loc(2,12),
                   ast.NewVariableNode(loc(2,12), "i"),
@@ -268,14 +268,14 @@ func TestFor1(t *testing.T) {
                   ast.NewVariableNode(loc(2,22), "i"),
                 ),
                 ast.NewBlockNode(loc(2,27),
-                  []duck.IDefinedVariable { },
-                  []duck.IStmtNode {
+                  []core.IDefinedVariable { },
+                  []core.IStmtNode {
                     ast.NewExprStmtNode(loc(3,9),
                       ast.NewAssignNode(loc(3,9),
                         ast.NewVariableNode(loc(3,9), "s"),
                         ast.NewFuncallNode(loc(3,13),
                           ast.NewVariableNode(loc(3,13), "sprintf"),
-                          []duck.IExprNode {
+                          []core.IExprNode {
                             ast.NewStringLiteralNode(loc(3,21), "\"%d\""),
                             ast.NewVariableNode(loc(3,27), "i"),
                           },
@@ -285,7 +285,7 @@ func TestFor1(t *testing.T) {
                     ast.NewExprStmtNode(loc(4,9),
                       ast.NewFuncallNode(loc(4,9),
                         ast.NewVariableNode(loc(4,9), "println"),
-                        []duck.IExprNode {
+                        []core.IExprNode {
                           ast.NewVariableNode(loc(4,17), "s"),
                         },
                       ),

@@ -2,18 +2,18 @@ package typesys
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // UnionType
 type UnionType struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Name string
-  Members []duck.ISlot
+  Members []core.ISlot
 }
 
-func NewUnionType(name string, membs []duck.ISlot, loc duck.Location) *UnionType {
+func NewUnionType(name string, membs []core.ISlot, loc core.Location) *UnionType {
   return &UnionType { "typesys.UnionType", loc, name, membs }
 }
 
@@ -76,11 +76,11 @@ func (self UnionType) IsFunction() bool {
 // UnionTypeRef
 type UnionTypeRef struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Name string
 }
 
-func NewUnionTypeRef(loc duck.Location, name string) UnionTypeRef {
+func NewUnionTypeRef(loc core.Location, name string) UnionTypeRef {
   return UnionTypeRef { "typesys.UnionTypeRef", loc, name }
 }
 
@@ -88,7 +88,7 @@ func (self UnionTypeRef) String() string {
   return fmt.Sprintf("<typesys.UnionTypeRef Name=%s Location=%s>", self.Name, self.Location)
 }
 
-func (self UnionTypeRef) GetLocation() duck.Location {
+func (self UnionTypeRef) GetLocation() core.Location {
   return self.Location
 }
 

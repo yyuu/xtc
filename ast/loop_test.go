@@ -2,7 +2,7 @@ package ast
 
 import (
   "testing"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/xt"
 )
 
@@ -14,7 +14,7 @@ func TestDoWhile(t *testing.T) {
  */
   x := NewDoWhileNode(
     loc(0,0),
-    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "b"), []duck.IExprNode { NewVariableNode(loc(0,0), "a") })),
+    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "b"), []core.IExprNode { NewVariableNode(loc(0,0), "a") })),
     NewBinaryOpNode(loc(0,0), "<", NewVariableNode(loc(0,0), "a"), NewIntegerLiteralNode(loc(0,0), "100")),
   )
   s := `{
@@ -70,7 +70,7 @@ func TestFor(t *testing.T) {
     NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "i"), NewIntegerLiteralNode(loc(0,0), "0")),
     NewBinaryOpNode(loc(0,0), "<", NewVariableNode(loc(0,0), "i"), NewIntegerLiteralNode(loc(0,0), "100")),
     NewSuffixOpNode(loc(0,0), "++", NewVariableNode(loc(0,0), "i")),
-    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "f"), []duck.IExprNode { NewVariableNode(loc(0,0), "i") })),
+    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "f"), []core.IExprNode { NewVariableNode(loc(0,0), "i") })),
   )
   s := `{
   "ClassName": "ast.ForNode",
@@ -147,7 +147,7 @@ func TestWhile(t *testing.T) {
   x := NewWhileNode(
     loc(0,0),
     NewUnaryOpNode(loc(0,0), "!", NewVariableNode(loc(0,0), "eof")),
-    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "gets"), []duck.IExprNode { })),
+    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "gets"), []core.IExprNode { })),
   )
   s := `{
   "ClassName": "ast.WhileNode",

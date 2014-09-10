@@ -2,18 +2,18 @@ package typesys
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // UserType
 type UserType struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Name string
-  Real duck.ITypeNode
+  Real core.ITypeNode
 }
 
-func NewUserType(name string, real duck.ITypeNode, loc duck.Location) *UserType {
+func NewUserType(name string, real core.ITypeNode, loc core.Location) *UserType {
   return &UserType { "typesys.UserType", loc, name, real }
 }
 
@@ -76,11 +76,11 @@ func (self UserType) IsFunction() bool {
 // UserTypeRef
 type UserTypeRef struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Name string
 }
 
-func NewUserTypeRef(loc duck.Location, name string) UserTypeRef {
+func NewUserTypeRef(loc core.Location, name string) UserTypeRef {
   return UserTypeRef { "typesys.UserTypeRef", loc, name }
 }
 
@@ -88,7 +88,7 @@ func (self UserTypeRef) String() string {
   return fmt.Sprintf("<typesys.UserTypeRef Name=%s Location=%s>", self.Name, self.Location)
 }
 
-func (self UserTypeRef) GetLocation() duck.Location {
+func (self UserTypeRef) GetLocation() core.Location {
   return self.Location
 }
 

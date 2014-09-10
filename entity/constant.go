@@ -2,17 +2,17 @@ package entity
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 type Constant struct {
   ClassName string
   Name string
-  TypeNode duck.ITypeNode
-  Value duck.IExprNode
+  TypeNode core.ITypeNode
+  Value core.IExprNode
 }
 
-func NewConstant(t duck.ITypeNode, name string, value duck.IExprNode) Constant {
+func NewConstant(t core.ITypeNode, name string, value core.IExprNode) Constant {
   return Constant { "entity.Constant", name, t, value }
 }
 
@@ -44,15 +44,15 @@ func (self Constant) GetName() string {
   return self.Name
 }
 
-func (self Constant) GetTypeNode() duck.ITypeNode {
+func (self Constant) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
-func (self Constant) GetValue() duck.IExprNode {
+func (self Constant) GetValue() core.IExprNode {
   return self.Value
 }
 
-func (self Constant) SetValue(val duck.IExprNode) duck.IConstant {
+func (self Constant) SetValue(val core.IExprNode) core.IConstant {
   self.Value = val
   return self
 }

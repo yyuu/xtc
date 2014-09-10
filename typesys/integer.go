@@ -2,7 +2,7 @@ package typesys
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 // IntegerType
@@ -76,11 +76,11 @@ func (self IntegerType) IsFunction() bool {
 // IntegerTypeRef
 type IntegerTypeRef struct {
   ClassName string
-  Location duck.Location
+  Location core.Location
   Name string
 }
 
-func NewIntegerTypeRef(loc duck.Location, name string) IntegerTypeRef {
+func NewIntegerTypeRef(loc core.Location, name string) IntegerTypeRef {
   return IntegerTypeRef { "typesys.IntegerTypeRef", loc, name }
 }
 
@@ -88,7 +88,7 @@ func (self IntegerTypeRef) String() string {
   return fmt.Sprintf("<typesys.IntegerTypeRef Name=%s Location=%s>", self.Name, self.Location)
 }
 
-func (self IntegerTypeRef) GetLocation() duck.Location {
+func (self IntegerTypeRef) GetLocation() core.Location {
   return self.Location
 }
 

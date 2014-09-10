@@ -2,16 +2,16 @@ package entity
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 type Params struct {
   ClassName string
-  Location duck.Location
-  ParamDescs []duck.IParameter
+  Location core.Location
+  ParamDescs []core.IParameter
 }
 
-func NewParams(loc duck.Location, paramDescs []duck.IParameter) Params {
+func NewParams(loc core.Location, paramDescs []core.IParameter) Params {
   return Params { "entity.Params", loc, paramDescs }
 }
 
@@ -39,11 +39,11 @@ func (self Params) IsRefered() bool {
   return true // FIXME: count up references
 }
 
-func (self Params) GetLocation() duck.Location {
+func (self Params) GetLocation() core.Location {
   return self.Location
 }
 
-func (self Params) GetParamDescs() []duck.IParameter {
+func (self Params) GetParamDescs() []core.IParameter {
   return self.ParamDescs
 }
 
@@ -53,11 +53,11 @@ func (self Params) GetName() string {
 
 type Parameter struct {
   ClassName string
-  TypeNode duck.ITypeNode
+  TypeNode core.ITypeNode
   Name string
 }
 
-func NewParameter(t duck.ITypeNode, name string) Parameter {
+func NewParameter(t core.ITypeNode, name string) Parameter {
   return Parameter { "entity.Parameter", t, name }
 }
 
@@ -85,11 +85,11 @@ func (self Parameter) IsConstant() bool {
   return false
 }
 
-func (self Parameter) GetInitializer() duck.IExprNode {
+func (self Parameter) GetInitializer() core.IExprNode {
   return nil
 }
 
-func (self Parameter) SetInitializer(e duck.IExprNode) duck.IDefinedVariable {
+func (self Parameter) SetInitializer(e core.IExprNode) core.IDefinedVariable {
   return self
 }
 
@@ -109,7 +109,7 @@ func (self Parameter) IsDefined() bool {
   return true
 }
 
-func (self Parameter) GetTypeNode() duck.ITypeNode {
+func (self Parameter) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 

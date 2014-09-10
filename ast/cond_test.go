@@ -2,7 +2,7 @@ package ast
 
 import (
   "testing"
-  "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/xt"
 )
 
@@ -15,8 +15,8 @@ func TestCondExpr(t *testing.T) {
     NewBinaryOpNode(loc(0,0), "<", NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "2")),
     NewIntegerLiteralNode(loc(0,0), "1"),
     NewBinaryOpNode(loc(0,0), "+",
-                 NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "f"), []duck.IExprNode { NewBinaryOpNode(loc(0,0), "-", NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "1")) }),
-                 NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "f"), []duck.IExprNode { NewBinaryOpNode(loc(0,0), "-", NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "2")) })))
+                 NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "f"), []core.IExprNode { NewBinaryOpNode(loc(0,0), "-", NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "1")) }),
+                 NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "f"), []core.IExprNode { NewBinaryOpNode(loc(0,0), "-", NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "2")) })))
   s := `{
   "ClassName": "ast.CondExprNode",
   "Location": "[:0,0]",
@@ -112,8 +112,8 @@ func TestIf(t *testing.T) {
   x := NewIfNode(
     loc(0,0),
     NewBinaryOpNode(loc(0,0), "==", NewBinaryOpNode(loc(0,0), "%", NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "2")), NewIntegerLiteralNode(loc(0,0), "0")),
-    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []duck.IExprNode { NewStringLiteralNode(loc(0,0), "\"even\"") })),
-    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []duck.IExprNode { NewStringLiteralNode(loc(0,0), "\"odd\"") })),
+    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"even\"") })),
+    NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"odd\"") })),
   )
   s := `{
   "ClassName": "ast.IfNode",
@@ -198,21 +198,21 @@ func TestSwitch(t *testing.T) {
   x := NewSwitchNode(
     loc(0,0),
     NewVariableNode(loc(0,0), "n"),
-    []duck.IStmtNode {
+    []core.IStmtNode {
       NewCaseNode(
         loc(0,0),
-        []duck.IExprNode { NewIntegerLiteralNode(loc(0,0), "1") },
-        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []duck.IExprNode { NewStringLiteralNode(loc(0,0), "\"one\"") })),
+        []core.IExprNode { NewIntegerLiteralNode(loc(0,0), "1") },
+        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"one\"") })),
       ),
       NewCaseNode(
         loc(0,0), 
-        []duck.IExprNode { NewIntegerLiteralNode(loc(0,0), "2") },
-        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []duck.IExprNode { NewStringLiteralNode(loc(0,0), "\"two\"") })),
+        []core.IExprNode { NewIntegerLiteralNode(loc(0,0), "2") },
+        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"two\"") })),
       ),
       NewCaseNode(
         loc(0,0),
-        []duck.IExprNode { },
-        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []duck.IExprNode { NewStringLiteralNode(loc(0,0), "\"plentiful\"") })),
+        []core.IExprNode { },
+        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"plentiful\"") })),
       ),
     },
   )
