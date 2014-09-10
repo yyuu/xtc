@@ -67,8 +67,8 @@ func asTypeDefinitions(xs []core.INode) []core.ITypeDefinition {
   return ys
 }
 
-func asDeclarations(x core.INode) ast.Declarations {
-  return x.(ast.Declarations)
+func asDeclarations(x core.INode) *ast.Declarations {
+  return x.(*ast.Declarations)
 }
 
 func asDefinedFunction(x core.IEntity) core.IDefinedFunction {

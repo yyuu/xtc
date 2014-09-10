@@ -8,12 +8,12 @@ import (
 type AST struct {
   ClassName string
   Location core.Location
-  Declarations Declarations
+  Declarations *Declarations
   scope core.IVariableScope
   constantTable core.IConstantTable
 }
 
-func NewAST(loc core.Location, declarations Declarations) *AST {
+func NewAST(loc core.Location, declarations *Declarations) *AST {
   return &AST { "ast.AST", loc, declarations, nil, nil }
 }
 
@@ -25,7 +25,7 @@ func (self AST) GetLocation() core.Location {
   return self.Location
 }
 
-func (self AST) GetDeclarations() Declarations {
+func (self AST) GetDeclarations() *Declarations {
   return self.Declarations
 }
 

@@ -17,8 +17,8 @@ type Declarations struct {
   Typedefs []TypedefNode
 }
 
-func NewDeclarations(defvars []core.IDefinedVariable, vardecls []core.IUndefinedVariable, defuns []core.IDefinedFunction, funcdecls []core.IUndefinedFunction, constants []core.IConstant, defstructs []StructNode, defunions []UnionNode, typedefs []TypedefNode) Declarations {
-  return Declarations { "ast.Declarations", defvars, vardecls, defuns, funcdecls, constants, defstructs, defunions, typedefs }
+func NewDeclarations(defvars []core.IDefinedVariable, vardecls []core.IUndefinedVariable, defuns []core.IDefinedFunction, funcdecls []core.IUndefinedFunction, constants []core.IConstant, defstructs []StructNode, defunions []UnionNode, typedefs []TypedefNode) *Declarations {
+  return &Declarations { "ast.Declarations", defvars, vardecls, defuns, funcdecls, constants, defstructs, defunions, typedefs }
 }
 
 func (self Declarations) String() string {
@@ -36,35 +36,35 @@ func (self Declarations) GetLocation() core.Location {
   panic("Declarations#GetLocation called")
 }
 
-func (self Declarations) AddDefvar(v core.IDefinedVariable) Declarations {
+func (self Declarations) AddDefvar(v core.IDefinedVariable) *Declarations {
   return NewDeclarations(append(self.Defvars, v), self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
-func (self Declarations) AddVardecl(v core.IUndefinedVariable) Declarations {
+func (self Declarations) AddVardecl(v core.IUndefinedVariable) *Declarations {
   return NewDeclarations(self.Defvars, append(self.Vardecls, v), self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
-func (self Declarations) AddDefun(f core.IDefinedFunction) Declarations {
+func (self Declarations) AddDefun(f core.IDefinedFunction) *Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, append(self.Defuns, f), self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
-func (self Declarations) AddFuncdecl(f core.IUndefinedFunction) Declarations {
+func (self Declarations) AddFuncdecl(f core.IUndefinedFunction) *Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, self.Defuns, append(self.Funcdecls, f), self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
-func (self Declarations) AddDefconst(c core.IConstant) Declarations {
+func (self Declarations) AddDefconst(c core.IConstant) *Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, append(self.Constants, c), self.Defstructs, self.Defunions, self.Typedefs)
 }
 
-func (self Declarations) AddDefstruct(s StructNode) Declarations {
+func (self Declarations) AddDefstruct(s StructNode) *Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, append(self.Defstructs, s), self.Defunions, self.Typedefs)
 }
 
-func (self Declarations) AddDefunion(u UnionNode) Declarations {
+func (self Declarations) AddDefunion(u UnionNode) *Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, append(self.Defunions, u), self.Typedefs)
 }
 
-func (self Declarations) AddTypedef(t TypedefNode) Declarations {
+func (self Declarations) AddTypedef(t TypedefNode) *Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, append(self.Typedefs, t))
 }
 
