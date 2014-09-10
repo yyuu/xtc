@@ -19,3 +19,7 @@ func (self *ConstantTable) IsConstantTable() bool {
 func (self *ConstantTable) Intern(s string) *ConstantEntry {
   return NewConstantEntry(s)
 }
+
+func (self *ConstantTable) IsEmpty() bool {
+  return len(self.Constants) < 1
+}
