@@ -10,14 +10,10 @@ type IEntity interface {
   IsRefered() bool
 }
 
-type IVariable interface {
+type IDefinedVariable interface {
   IEntity
   IsVariable() bool
   GetTypeNode() ITypeNode
-}
-
-type IDefinedVariable interface {
-  IVariable
   IsDefinedVariable() bool
   GetInitializer() IExprNode
   SetInitializer(IExprNode) IDefinedVariable
@@ -26,15 +22,11 @@ type IDefinedVariable interface {
 //Refered()
 }
 
-type IFunction interface {
+type IDefinedFunction interface {
   IEntity
   IsFunction() bool
   GetTypeNode() ITypeNode
   GetParams() IParams
-}
-
-type IDefinedFunction interface {
-  IFunction
   IsDefinedFunction() bool
   GetBody() IStmtNode
   SetBody(IStmtNode) IDefinedFunction

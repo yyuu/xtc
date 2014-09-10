@@ -79,18 +79,6 @@ func asUndefinedFunction(x core.IEntity) *entity.UndefinedFunction {
   return x.(*entity.UndefinedFunction)
 }
 
-func asVariable(x core.IEntity) core.IVariable {
-  return x.(core.IVariable)
-}
-
-func asVariables(xs []core.IEntity) []core.IVariable {
-  ys := make([]core.IVariable, len(xs))
-  for i := range xs {
-    ys[i] = asVariable(xs[i])
-  }
-  return ys
-}
-
 func asDefinedVariable(x core.IEntity) core.IDefinedVariable {
   return x.(core.IDefinedVariable)
 }
