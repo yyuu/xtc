@@ -14,10 +14,10 @@ type IfNode struct {
   ElseBody core.IStmtNode
 }
 
-func NewIfNode(loc core.Location, cond core.IExprNode, thenBody core.IStmtNode, elseBody core.IStmtNode) IfNode {
+func NewIfNode(loc core.Location, cond core.IExprNode, thenBody core.IStmtNode, elseBody core.IStmtNode) *IfNode {
   if cond == nil { panic("cond is nil") }
   if thenBody == nil { panic("thenBody is nil") }
-  return IfNode { "ast.IfNode", loc, cond, thenBody, elseBody }
+  return &IfNode { "ast.IfNode", loc, cond, thenBody, elseBody }
 }
 
 func (self IfNode) String() string {

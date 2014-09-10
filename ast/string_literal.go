@@ -12,8 +12,8 @@ type StringLiteralNode struct {
   entry core.IConstantEntry
 }
 
-func NewStringLiteralNode(loc core.Location, literal string) StringLiteralNode {
-  return StringLiteralNode { "ast.StringLiteralNode", loc, literal, nil }
+func NewStringLiteralNode(loc core.Location, literal string) *StringLiteralNode {
+  return &StringLiteralNode { "ast.StringLiteralNode", loc, literal, nil }
 }
 
 func (self StringLiteralNode) String() string {

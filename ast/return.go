@@ -12,9 +12,9 @@ type ReturnNode struct {
   Expr core.IExprNode
 }
 
-func NewReturnNode(loc core.Location, expr core.IExprNode) ReturnNode {
+func NewReturnNode(loc core.Location, expr core.IExprNode) *ReturnNode {
   if expr == nil { panic("expr is nil") }
-  return ReturnNode { "ast.ReturnNode", loc, expr }
+  return &ReturnNode { "ast.ReturnNode", loc, expr }
 }
 
 func (self ReturnNode) String() string {

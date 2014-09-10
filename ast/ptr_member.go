@@ -13,9 +13,9 @@ type PtrMemberNode struct {
   Member string
 }
 
-func NewPtrMemberNode(loc core.Location, expr core.IExprNode, member string) PtrMemberNode {
+func NewPtrMemberNode(loc core.Location, expr core.IExprNode, member string) *PtrMemberNode {
   if expr == nil { panic("expr is nil") }
-  return PtrMemberNode { "ast.PtrMemberNode", loc, expr, member }
+  return &PtrMemberNode { "ast.PtrMemberNode", loc, expr, member }
 }
 
 func (self PtrMemberNode) String() string {

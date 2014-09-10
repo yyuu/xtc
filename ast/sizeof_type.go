@@ -13,10 +13,10 @@ type SizeofTypeNode struct {
   Operand core.ITypeNode
 }
 
-func NewSizeofTypeNode(loc core.Location, operand core.ITypeNode, t core.ITypeRef) SizeofTypeNode {
+func NewSizeofTypeNode(loc core.Location, operand core.ITypeNode, t core.ITypeRef) *SizeofTypeNode {
   if operand == nil { panic("operand is nil") }
   if t == nil { panic("t is nil") }
-  return SizeofTypeNode { "ast.SizeofTypeNode", loc, operand, NewTypeNode(loc, t) }
+  return &SizeofTypeNode { "ast.SizeofTypeNode", loc, operand, NewTypeNode(loc, t) }
 }
 
 func (self SizeofTypeNode) String() string {

@@ -13,10 +13,10 @@ type SizeofExprNode struct {
   TypeNode core.ITypeNode
 }
 
-func NewSizeofExprNode(loc core.Location, expr core.IExprNode, t core.ITypeRef) SizeofExprNode {
+func NewSizeofExprNode(loc core.Location, expr core.IExprNode, t core.ITypeRef) *SizeofExprNode {
   if expr == nil { panic("expr is nil") }
   if t == nil { panic("t is nil") }
-  return SizeofExprNode { "ast.SizeofExprNode", loc, expr, NewTypeNode(loc, t) }
+  return &SizeofExprNode { "ast.SizeofExprNode", loc, expr, NewTypeNode(loc, t) }
 }
 
 func (self SizeofExprNode) String() string {

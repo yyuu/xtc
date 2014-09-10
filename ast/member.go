@@ -13,9 +13,9 @@ type MemberNode struct {
   Member string
 }
 
-func NewMemberNode(loc core.Location, expr core.IExprNode, member string) MemberNode {
+func NewMemberNode(loc core.Location, expr core.IExprNode, member string) *MemberNode {
   if expr == nil { panic("expr is nil") }
-  return MemberNode { "ast.MemberNode", loc, expr, member }
+  return &MemberNode { "ast.MemberNode", loc, expr, member }
 }
 
 func (self MemberNode) String() string {

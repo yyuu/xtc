@@ -12,9 +12,9 @@ type LabelNode struct {
   Stmt core.IStmtNode
 }
 
-func NewLabelNode(loc core.Location, name string, stmt core.IStmtNode) LabelNode {
+func NewLabelNode(loc core.Location, name string, stmt core.IStmtNode) *LabelNode {
   if stmt == nil { panic("stmt is nil") }
-  return LabelNode { "ast.LabelNode", loc, name, stmt }
+  return &LabelNode { "ast.LabelNode", loc, name, stmt }
 }
 
 func (self LabelNode) String() string {

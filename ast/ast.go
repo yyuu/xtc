@@ -13,8 +13,8 @@ type AST struct {
   constantTable core.IConstantTable
 }
 
-func NewAST(loc core.Location, declarations Declarations) AST {
-  return AST { "ast.AST", loc, declarations, nil, nil }
+func NewAST(loc core.Location, declarations Declarations) *AST {
+  return &AST { "ast.AST", loc, declarations, nil, nil }
 }
 
 func (self AST) String() string {

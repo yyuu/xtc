@@ -13,10 +13,10 @@ type WhileNode struct {
   Body core.IStmtNode
 }
 
-func NewWhileNode(loc core.Location, cond core.IExprNode, body core.IStmtNode) WhileNode {
+func NewWhileNode(loc core.Location, cond core.IExprNode, body core.IStmtNode) *WhileNode {
   if cond == nil { panic("cond is nil") }
   if body == nil { panic("body is nil") }
-  return WhileNode { "ast.WhileNode", loc, cond, body }
+  return &WhileNode { "ast.WhileNode", loc, cond, body }
 }
 
 func (self WhileNode) String() string {

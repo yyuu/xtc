@@ -12,8 +12,8 @@ type VariableNode struct {
   entity core.IEntity
 }
 
-func NewVariableNode(loc core.Location, name string) VariableNode {
-  return VariableNode { "ast.VariableNode", loc, name, nil }
+func NewVariableNode(loc core.Location, name string) *VariableNode {
+  return &VariableNode { "ast.VariableNode", loc, name, nil }
 }
 
 func (self VariableNode) String() string {

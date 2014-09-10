@@ -13,9 +13,9 @@ type SuffixOpNode struct {
   Expr core.IExprNode
 }
 
-func NewSuffixOpNode(loc core.Location, operator string, expr core.IExprNode) SuffixOpNode {
+func NewSuffixOpNode(loc core.Location, operator string, expr core.IExprNode) *SuffixOpNode {
   if expr == nil { panic("expr is nil") }
-  return SuffixOpNode { "ast.SuffixOpNode", loc, operator, expr }
+  return &SuffixOpNode { "ast.SuffixOpNode", loc, operator, expr }
 }
 
 func (self SuffixOpNode) String() string {

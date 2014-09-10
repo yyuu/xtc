@@ -98,8 +98,7 @@ compilation_unit: EOF
                     if lex.firstToken != nil {
                       loc = lex.firstToken.location
                     }
-                    ast := ast.NewAST(loc, asDeclarations($2._node))
-                    lex.ast = &ast
+                    lex.ast = ast.NewAST(loc, asDeclarations($2._node))
                   } else {
                     panic("parser is broken")
                   }

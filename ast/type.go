@@ -12,9 +12,9 @@ type TypeNode struct {
   TypeRef core.ITypeRef
 }
 
-func NewTypeNode(loc core.Location, t core.ITypeRef) TypeNode {
+func NewTypeNode(loc core.Location, t core.ITypeRef) *TypeNode {
   if t == nil { panic("t is nil") }
-  return TypeNode { "ast.TypeNode", loc, t }
+  return &TypeNode { "ast.TypeNode", loc, t }
 }
 
 func (self TypeNode) String() string {

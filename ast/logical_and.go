@@ -13,10 +13,10 @@ type LogicalAndNode struct {
   Right core.IExprNode
 }
 
-func NewLogicalAndNode(loc core.Location, left core.IExprNode, right core.IExprNode) LogicalAndNode {
+func NewLogicalAndNode(loc core.Location, left core.IExprNode, right core.IExprNode) *LogicalAndNode {
   if left == nil { panic("left is nil") }
   if right == nil { panic("right is nil") }
-  return LogicalAndNode { "ast.LogicalAndNode", loc, left, right }
+  return &LogicalAndNode { "ast.LogicalAndNode", loc, left, right }
 }
 
 func (self LogicalAndNode) String() string {

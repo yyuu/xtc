@@ -13,9 +13,9 @@ type PrefixOpNode struct {
   Expr core.IExprNode
 }
 
-func NewPrefixOpNode(loc core.Location, operator string, expr core.IExprNode) PrefixOpNode {
+func NewPrefixOpNode(loc core.Location, operator string, expr core.IExprNode) *PrefixOpNode {
   if expr == nil { panic("expr is nil") }
-  return PrefixOpNode { "ast.PrefixOpNode", loc, operator, expr }
+  return &PrefixOpNode { "ast.PrefixOpNode", loc, operator, expr }
 }
 
 func (self PrefixOpNode) String() string {
