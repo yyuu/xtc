@@ -10,12 +10,12 @@ type DefinedFunction struct {
   Private bool
   TypeNode core.ITypeNode
   Name string
-  Params core.IParams
+  Params *Params
   Body core.IStmtNode
   scope *VariableScope
 }
 
-func NewDefinedFunction(priv bool, t core.ITypeNode, name string, params core.IParams, body core.IStmtNode) *DefinedFunction {
+func NewDefinedFunction(priv bool, t core.ITypeNode, name string, params *Params, body core.IStmtNode) *DefinedFunction {
   return &DefinedFunction { "entity.DefinedFunction", priv, t, name, params, body, nil }
 }
 
@@ -59,7 +59,7 @@ func (self DefinedFunction) IsRefered() bool {
   return true // FIXME: count up references
 }
 
-func (self DefinedFunction) GetParams() core.IParams {
+func (self DefinedFunction) GetParams() *Params {
   return self.Params
 }
 
@@ -67,7 +67,7 @@ func (self DefinedFunction) ListParameters() []core.IDefinedVariable {
   xs := self.Params.GetParamDescs()
   ys := make([]core.IDefinedVariable, len(xs))
   for i := range xs {
-    ys[i] = xs[i].(core.IDefinedVariable)
+    ys[i] = xs[i]
   }
   return ys
 }

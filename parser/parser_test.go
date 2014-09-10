@@ -38,7 +38,7 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
           ),
           "f",
           entity.NewParams(loc(1,10),
-            []core.IParameter { },
+            []*entity.Parameter { },
           ),
           ast.NewBlockNode(loc(1,13),
             []core.IDefinedVariable { },
@@ -94,7 +94,7 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
           ),
           "f",
           entity.NewParams(loc(1,12),
-            []core.IParameter {
+            []*entity.Parameter {
               entity.NewParameter(
                 ast.NewTypeNode(loc(1,12),
                   typesys.NewIntegerTypeRef(loc(1,12), "int"),
@@ -161,7 +161,7 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
           ),
           "g",
           entity.NewParams(loc(2,11),
-            []core.IParameter {
+            []*entity.Parameter {
               entity.NewParameter(
                 ast.NewTypeNode(loc(2,11),
                   typesys.NewIntegerTypeRef(loc(2,11), "int"),
@@ -241,7 +241,7 @@ func TestFor1(t *testing.T) {
           ),
           "f",
           entity.NewParams(loc(1,12),
-            []core.IParameter {
+            []*entity.Parameter {
               entity.NewParameter(
                 ast.NewTypeNode(loc(1,12),
                   typesys.NewIntegerTypeRef(loc(1,12), "int"),

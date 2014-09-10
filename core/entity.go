@@ -26,22 +26,11 @@ type IDefinedFunction interface {
   IEntity
   IsFunction() bool
   GetTypeNode() ITypeNode
-  GetParams() IParams
+//GetParams() IParams
   IsDefinedFunction() bool
   GetBody() IStmtNode
 //SetBody(IStmtNode) IDefinedFunction
 //GetScope() IVariableScope
 //SetScope(IVariableScope) IDefinedFunction
   ListParameters() []IDefinedVariable
-}
-
-type IParams interface {
-  IEntity
-  GetLocation() Location
-  GetParamDescs() []IParameter
-}
-
-type IParameter interface {
-  IEntity
-  GetTypeNode() ITypeNode
 }
