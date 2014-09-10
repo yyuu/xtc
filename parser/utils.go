@@ -103,8 +103,8 @@ func asStructNode(x core.INode) core.IStructNode {
   return x.(core.IStructNode)
 }
 
-func asUnionNode(x core.INode) core.IUnionNode {
-  return x.(core.IUnionNode)
+func asUnionNode(x core.INode) *ast.UnionNode {
+  return x.(*ast.UnionNode)
 }
 
 func asTypedefNode(x core.INode) *ast.TypedefNode {
@@ -176,11 +176,11 @@ func defstructs(xs...core.IStructNode) []core.IStructNode {
   }
 }
 
-func defunions(xs...core.IUnionNode) []core.IUnionNode {
+func defunions(xs...*ast.UnionNode) []*ast.UnionNode {
   if 0 < len(xs) {
     return xs
   } else {
-    return []core.IUnionNode { }
+    return []*ast.UnionNode { }
   }
 }
 
