@@ -3,6 +3,7 @@ package ast
 import (
   "fmt"
   "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/bs/entity"
 )
 
 type AST struct {
@@ -108,11 +109,11 @@ func (self *AST) SetDefinedFunctions(xs []core.IDefinedFunction) {
   self.Declarations.Defuns = xs
 }
 
-func (self AST) GetConstants() []core.IConstant {
+func (self AST) GetConstants() []*entity.Constant {
   return self.Declarations.Constants
 }
 
-func (self *AST) SetConstants(xs []core.IConstant) {
+func (self *AST) SetConstants(xs []*entity.Constant) {
   self.Declarations.Constants = xs
 }
 

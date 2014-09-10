@@ -64,13 +64,6 @@ type IParameter interface {
   GetTypeNode() ITypeNode
 }
 
-type IConstant interface {
-  IEntity
-  GetTypeNode() ITypeNode
-  GetValue() IExprNode
-  SetValue(IExprNode) IConstant
-}
-
 type IVariableScope interface {
   IsToplevel() bool
   GetToplevel() IVariableScope

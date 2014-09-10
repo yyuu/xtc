@@ -52,7 +52,6 @@ func (self Constant) GetValue() core.IExprNode {
   return self.Value
 }
 
-func (self Constant) SetValue(val core.IExprNode) core.IConstant {
+func (self *Constant) SetValue(val core.IExprNode) {
   self.Value = val
-  return self
 }

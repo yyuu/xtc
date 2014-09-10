@@ -107,8 +107,8 @@ func asUndefinedVariable(x core.IEntity) core.IUndefinedVariable {
   return x.(core.IUndefinedVariable)
 }
 
-func asConstant(x core.IEntity) core.IConstant {
-  return x.(core.IConstant)
+func asConstant(x core.IEntity) *entity.Constant {
+  return x.(*entity.Constant)
 }
 
 func asStructNode(x core.INode) core.IStructNode {
@@ -172,11 +172,11 @@ func funcdecls(xs...core.IUndefinedFunction) []core.IUndefinedFunction {
   }
 }
 
-func defconsts(xs...core.IConstant) []core.IConstant {
+func defconsts(xs...*entity.Constant) []*entity.Constant {
   if 0 < len(xs) {
     return xs
   } else {
-    return []core.IConstant { }
+    return []*entity.Constant { }
   }
 }
 

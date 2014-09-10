@@ -56,12 +56,12 @@ func (self *LocalResolver) resolveGvarInitializers(a *ast.AST) {
 
 func (self *LocalResolver) resolveConstantValues(a *ast.AST) {
   xs := a.GetConstants()
-  ys := make([]core.IConstant, len(xs))
+  ys := make([]*entity.Constant, len(xs))
   for i := range xs {
     constant := xs[i]
     value := constant.GetValue()
     ast.Visit(self, &value)
-    constant = constant.SetValue(value)
+    constant.SetValue(value)
     ys[i] = constant
   }
   a.SetConstants(ys)

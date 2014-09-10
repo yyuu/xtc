@@ -3,6 +3,7 @@ package ast
 import (
   "fmt"
   "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/bs/entity"
 )
 
 type Declarations struct {
@@ -11,13 +12,13 @@ type Declarations struct {
   Vardecls []core.IUndefinedVariable
   Defuns []core.IDefinedFunction
   Funcdecls []core.IUndefinedFunction
-  Constants []core.IConstant
+  Constants []*entity.Constant
   Defstructs []core.IStructNode
   Defunions []core.IUnionNode
   Typedefs []core.ITypedefNode
 }
 
-func NewDeclarations(defvars []core.IDefinedVariable, vardecls []core.IUndefinedVariable, defuns []core.IDefinedFunction, funcdecls []core.IUndefinedFunction, constants []core.IConstant, defstructs []core.IStructNode, defunions []core.IUnionNode, typedefs []core.ITypedefNode) *Declarations {
+func NewDeclarations(defvars []core.IDefinedVariable, vardecls []core.IUndefinedVariable, defuns []core.IDefinedFunction, funcdecls []core.IUndefinedFunction, constants []*entity.Constant, defstructs []core.IStructNode, defunions []core.IUnionNode, typedefs []core.ITypedefNode) *Declarations {
   return &Declarations { "ast.Declarations", defvars, vardecls, defuns, funcdecls, constants, defstructs, defunions, typedefs }
 }
 
@@ -52,7 +53,7 @@ func (self Declarations) AddFuncdecl(f core.IUndefinedFunction) *Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, self.Defuns, append(self.Funcdecls, f), self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
-func (self Declarations) AddDefconst(c core.IConstant) *Declarations {
+func (self Declarations) AddDefconst(c *entity.Constant) *Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, append(self.Constants, c), self.Defstructs, self.Defunions, self.Typedefs)
 }
 
@@ -84,7 +85,7 @@ func (self Declarations) GetFuncdecls() []core.IUndefinedFunction {
   return self.Funcdecls
 }
 
-func (self Declarations) GetConstants() []core.IConstant {
+func (self Declarations) GetConstants() []*entity.Constant {
   return self.Constants
 }
 
