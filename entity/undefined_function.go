@@ -9,11 +9,11 @@ type UndefinedFunction struct {
   ClassName string
   TypeNode core.ITypeNode
   Name string
-  Params Params
+  Params *Params
 }
 
-func NewUndefinedFunction(t core.ITypeNode, name string, params Params) UndefinedFunction {
-  return UndefinedFunction { "entity.UndefinedFunction", t, name, params }
+func NewUndefinedFunction(t core.ITypeNode, name string, params *Params) *UndefinedFunction {
+  return &UndefinedFunction { "entity.UndefinedFunction", t, name, params }
 }
 
 func (self UndefinedFunction) String() string {
@@ -56,6 +56,6 @@ func (self UndefinedFunction) GetName() string {
   return self.Name
 }
 
-func (self UndefinedFunction) GetParams() Params {
+func (self UndefinedFunction) GetParams() *Params {
   return self.Params
 }

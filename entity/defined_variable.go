@@ -14,8 +14,8 @@ type DefinedVariable struct {
   Initializer core.IExprNode
 }
 
-func NewDefinedVariable(isPrivate bool, t core.ITypeNode, name string, init core.IExprNode) DefinedVariable {
-  return DefinedVariable { "entity.DefinedVariable", isPrivate, name, t, 0, init }
+func NewDefinedVariable(isPrivate bool, t core.ITypeNode, name string, init core.IExprNode) *DefinedVariable {
+  return &DefinedVariable { "entity.DefinedVariable", isPrivate, name, t, 0, init }
 }
 
 func (self DefinedVariable) String() string {
@@ -74,7 +74,6 @@ func (self DefinedVariable) GetInitializer() core.IExprNode {
   return self.Initializer
 }
 
-func (self DefinedVariable) SetInitializer(init core.IExprNode) core.IDefinedVariable {
+func (self *DefinedVariable) SetInitializer(init core.IExprNode) {
   self.Initializer = init
-  return self
 }

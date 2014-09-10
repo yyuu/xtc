@@ -12,8 +12,8 @@ type Constant struct {
   Value core.IExprNode
 }
 
-func NewConstant(t core.ITypeNode, name string, value core.IExprNode) Constant {
-  return Constant { "entity.Constant", name, t, value }
+func NewConstant(t core.ITypeNode, name string, value core.IExprNode) *Constant {
+  return &Constant { "entity.Constant", name, t, value }
 }
 
 func (self Constant) String() string {
@@ -52,7 +52,6 @@ func (self Constant) GetValue() core.IExprNode {
   return self.Value
 }
 
-func (self Constant) SetValue(val core.IExprNode) core.IConstant {
+func (self *Constant) SetValue(val core.IExprNode) {
   self.Value = val
-  return self
 }

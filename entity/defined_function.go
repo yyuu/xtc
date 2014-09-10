@@ -10,13 +10,13 @@ type DefinedFunction struct {
   Private bool
   TypeNode core.ITypeNode
   Name string
-  Params Params
+  Params *Params
   Body core.IStmtNode
-  scope core.IVariableScope
+  scope *VariableScope
 }
 
-func NewDefinedFunction(priv bool, t core.ITypeNode, name string, params Params, body core.IStmtNode) DefinedFunction {
-  return DefinedFunction { "entity.DefinedFunction", priv, t, name, params, body, nil }
+func NewDefinedFunction(priv bool, t core.ITypeNode, name string, params *Params, body core.IStmtNode) *DefinedFunction {
+  return &DefinedFunction { "entity.DefinedFunction", priv, t, name, params, body, nil }
 }
 
 func (self DefinedFunction) String() string {
@@ -59,15 +59,15 @@ func (self DefinedFunction) IsRefered() bool {
   return true // FIXME: count up references
 }
 
-func (self DefinedFunction) GetParams() core.IParams {
+func (self DefinedFunction) GetParams() *Params {
   return self.Params
 }
 
-func (self DefinedFunction) ListParameters() []core.IDefinedVariable {
-  xs := self.Params.ParamDescs
-  ys := make([]core.IDefinedVariable, len(xs))
+func (self DefinedFunction) ListParameters() []*DefinedVariable {
+  xs := self.Params.GetParamDescs()
+  ys := make([]*DefinedVariable, len(xs))
   for i := range xs {
-    ys[i] = xs[i].(core.IDefinedVariable)
+    ys[i] = xs[i].DefinedVariable
   }
   return ys
 }
@@ -76,16 +76,14 @@ func (self DefinedFunction) GetBody() core.IStmtNode {
   return self.Body
 }
 
-func (self DefinedFunction) SetBody(body core.IStmtNode) core.IDefinedFunction {
+func (self *DefinedFunction) SetBody(body core.IStmtNode) {
   self.Body = body
-  return self
 }
 
-func (self DefinedFunction) GetScope() core.IVariableScope {
+func (self DefinedFunction) GetScope() *VariableScope {
   return self.scope
 }
 
-func (self DefinedFunction) SetScope(scope core.IVariableScope) core.IDefinedFunction {
+func (self *DefinedFunction) SetScope(scope *VariableScope) {
   self.scope = scope
-  return self
 }

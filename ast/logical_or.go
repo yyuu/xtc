@@ -13,10 +13,10 @@ type LogicalOrNode struct {
   Right core.IExprNode
 }
 
-func NewLogicalOrNode(loc core.Location, left core.IExprNode, right core.IExprNode) LogicalOrNode {
+func NewLogicalOrNode(loc core.Location, left core.IExprNode, right core.IExprNode) *LogicalOrNode {
   if left == nil { panic("left is nil") }
   if right == nil { panic("right is nil") }
-  return LogicalOrNode { "ast.LogicalOrNode", loc, left, right }
+  return &LogicalOrNode { "ast.LogicalOrNode", loc, left, right }
 }
 
 func (self LogicalOrNode) String() string {

@@ -12,8 +12,8 @@ type GotoNode struct {
   Target string
 }
 
-func NewGotoNode(loc core.Location, target string) GotoNode {
-  return GotoNode { "ast.GotoNode", loc, target }
+func NewGotoNode(loc core.Location, target string) *GotoNode {
+  return &GotoNode { "ast.GotoNode", loc, target }
 }
 
 func (self GotoNode) String() string {

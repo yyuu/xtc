@@ -13,9 +13,9 @@ type UnaryOpNode struct {
   Expr core.IExprNode
 }
 
-func NewUnaryOpNode(loc core.Location, operator string, expr core.IExprNode) UnaryOpNode {
+func NewUnaryOpNode(loc core.Location, operator string, expr core.IExprNode) *UnaryOpNode {
   if expr == nil { panic("expr is nil") }
-  return UnaryOpNode { "ast.UnaryOpNode", loc, operator, expr }
+  return &UnaryOpNode { "ast.UnaryOpNode", loc, operator, expr }
 }
 
 func (self UnaryOpNode) String() string {

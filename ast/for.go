@@ -15,12 +15,12 @@ type ForNode struct {
   Body core.IStmtNode
 }
 
-func NewForNode(loc core.Location, init core.IExprNode, cond core.IExprNode, incr core.IExprNode, body core.IStmtNode) ForNode {
+func NewForNode(loc core.Location, init core.IExprNode, cond core.IExprNode, incr core.IExprNode, body core.IStmtNode) *ForNode {
   if init == nil { panic("init is nil") }
   if cond == nil { panic("cond is nil") }
   if incr == nil { panic("incr is nil") }
   if body == nil { panic("body is nil") }
-  return ForNode { "ast.ForNode", loc, init, cond, incr, body }
+  return &ForNode { "ast.ForNode", loc, init, cond, incr, body }
 }
 
 func (self ForNode) String() string {

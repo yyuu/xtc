@@ -6,17 +6,15 @@ import (
 )
 
 type Parameter struct {
-  ClassName string
-  TypeNode core.ITypeNode
-  Name string
+  *DefinedVariable
 }
 
-func NewParameter(t core.ITypeNode, name string) Parameter {
-  return Parameter { "entity.Parameter", t, name }
+func NewParameter(t core.ITypeNode, name string) *Parameter {
+  return &Parameter { &DefinedVariable { "entity.Parameter", true, name, t, 0, nil } }
 }
 
 func (self Parameter) String() string {
-  return fmt.Sprintf("<entity.Parameter Name=%s TypeNode=%s>", self.Name, self.TypeNode)
+  return fmt.Sprintf("<entity.Parameter Name=%s TypeNode=%s>", self.DefinedVariable.Name, self.DefinedVariable.TypeNode)
 }
 
 func (self Parameter) IsEntity() bool {
@@ -43,8 +41,8 @@ func (self Parameter) GetInitializer() core.IExprNode {
   return nil
 }
 
-func (self Parameter) SetInitializer(e core.IExprNode) core.IDefinedVariable {
-  return self
+func (self *Parameter) SetInitializer(e core.IExprNode) {
+  // noop
 }
 
 func (self Parameter) HasInitializer() bool {
@@ -64,9 +62,9 @@ func (self Parameter) IsDefined() bool {
 }
 
 func (self Parameter) GetTypeNode() core.ITypeNode {
-  return self.TypeNode
+  return self.DefinedVariable.TypeNode
 }
 
 func (self Parameter) GetName() string {
-  return self.Name
+  return self.DefinedVariable.Name
 }

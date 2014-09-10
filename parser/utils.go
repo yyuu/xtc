@@ -43,12 +43,12 @@ func asTypeNodes(xs []core.INode) []core.ITypeNode {
   return ys
 }
 
-func asSlot(x core.INode) ast.Slot {
-  return x.(ast.Slot)
+func asSlot(x core.INode) core.ISlot {
+  return x.(core.ISlot)
 }
 
-func asSlots(xs []core.INode) []ast.Slot {
-  ys := make([]ast.Slot, len(xs))
+func asSlots(xs []core.INode) []core.ISlot {
+  ys := make([]core.ISlot, len(xs))
   for i := range xs {
     ys[i] = asSlot(xs[i])
   }
@@ -67,71 +67,59 @@ func asTypeDefinitions(xs []core.INode) []core.ITypeDefinition {
   return ys
 }
 
-func asDeclarations(x core.INode) ast.Declarations {
-  return x.(ast.Declarations)
+func asDeclarations(x core.INode) *ast.Declarations {
+  return x.(*ast.Declarations)
 }
 
-func asDefinedFunction(x core.IEntity) core.IDefinedFunction {
-  return x.(core.IDefinedFunction)
+func asDefinedFunction(x core.IEntity) *entity.DefinedFunction {
+  return x.(*entity.DefinedFunction)
 }
 
-func asUndefinedFunction(x core.IEntity) core.IUndefinedFunction {
-  return x.(core.IUndefinedFunction)
+func asUndefinedFunction(x core.IEntity) *entity.UndefinedFunction {
+  return x.(*entity.UndefinedFunction)
 }
 
-func asVariable(x core.IEntity) core.IVariable {
-  return x.(core.IVariable)
+func asDefinedVariable(x core.IEntity) *entity.DefinedVariable {
+  return x.(*entity.DefinedVariable)
 }
 
-func asVariables(xs []core.IEntity) []core.IVariable {
-  ys := make([]core.IVariable, len(xs))
-  for i := range xs {
-    ys[i] = asVariable(xs[i])
-  }
-  return ys
-}
-
-func asDefinedVariable(x core.IEntity) core.IDefinedVariable {
-  return x.(core.IDefinedVariable)
-}
-
-func asDefinedVariables(xs []core.IEntity) []core.IDefinedVariable {
-  ys := make([]core.IDefinedVariable, len(xs))
+func asDefinedVariables(xs []core.IEntity) []*entity.DefinedVariable {
+  ys := make([]*entity.DefinedVariable, len(xs))
   for i := range xs {
     ys[i] = asDefinedVariable(xs[i])
   }
   return ys
 }
 
-func asUndefinedVariable(x core.IEntity) core.IUndefinedVariable {
-  return x.(core.IUndefinedVariable)
+func asUndefinedVariable(x core.IEntity) *entity.UndefinedVariable {
+  return x.(*entity.UndefinedVariable)
 }
 
-func asConstant(x core.IEntity) core.IConstant {
-  return x.(core.IConstant)
+func asConstant(x core.IEntity) *entity.Constant {
+  return x.(*entity.Constant)
 }
 
-func asStructNode(x core.INode) ast.StructNode {
-  return x.(ast.StructNode)
+func asStructNode(x core.INode) core.IStructNode {
+  return x.(core.IStructNode)
 }
 
-func asUnionNode(x core.INode) ast.UnionNode {
-  return x.(ast.UnionNode)
+func asUnionNode(x core.INode) core.IUnionNode {
+  return x.(core.IUnionNode)
 }
 
-func asTypedefNode(x core.INode) ast.TypedefNode {
-  return x.(ast.TypedefNode)
+func asTypedefNode(x core.INode) core.ITypedefNode {
+  return x.(core.ITypedefNode)
 }
 
-func asParams(x core.IEntity) entity.Params {
-  return x.(entity.Params)
+func asParams(x core.IEntity) *entity.Params {
+  return x.(*entity.Params)
 }
 
-func asParameter(x core.IEntity) entity.Parameter {
-  return x.(entity.Parameter)
+func asParameter(x core.IEntity) *entity.Parameter {
+  return x.(*entity.Parameter)
 }
 
-func parametersTypeRef(params entity.Params) typesys.ParamTypeRefs {
+func parametersTypeRef(params *entity.Params) *typesys.ParamTypeRefs {
   paramDescs := params.GetParamDescs()
   ps := make([]core.ITypeRef, len(paramDescs))
   for i := range paramDescs {
@@ -140,66 +128,66 @@ func parametersTypeRef(params entity.Params) typesys.ParamTypeRefs {
   return typesys.NewParamTypeRefs(params.GetLocation(), ps, false)
 }
 
-func defvars(xs...core.IDefinedVariable) []core.IDefinedVariable {
+func defvars(xs...*entity.DefinedVariable) []*entity.DefinedVariable {
   if 0 < len(xs) {
     return xs
   } else {
-    return []core.IDefinedVariable { }
+    return []*entity.DefinedVariable { }
   }
 }
 
-func vardecls(xs...core.IUndefinedVariable) []core.IUndefinedVariable {
+func vardecls(xs...*entity.UndefinedVariable) []*entity.UndefinedVariable {
   if 0 < len(xs) {
     return xs
   } else {
-    return []core.IUndefinedVariable { }
+    return []*entity.UndefinedVariable { }
   }
 }
 
-func defuns(xs...core.IDefinedFunction) []core.IDefinedFunction {
+func defuns(xs...*entity.DefinedFunction) []*entity.DefinedFunction {
   if 0 < len(xs) {
     return xs
   } else {
-    return []core.IDefinedFunction { }
+    return []*entity.DefinedFunction { }
   }
 }
 
-func funcdecls(xs...core.IUndefinedFunction) []core.IUndefinedFunction {
+func funcdecls(xs...*entity.UndefinedFunction) []*entity.UndefinedFunction {
   if 0 < len(xs) {
     return xs
   } else {
-    return []core.IUndefinedFunction { }
+    return []*entity.UndefinedFunction { }
   }
 }
 
-func defconsts(xs...core.IConstant) []core.IConstant {
+func defconsts(xs...*entity.Constant) []*entity.Constant {
   if 0 < len(xs) {
     return xs
   } else {
-    return []core.IConstant { }
+    return []*entity.Constant { }
   }
 }
 
-func defstructs(xs...ast.StructNode) []ast.StructNode {
+func defstructs(xs...core.IStructNode) []core.IStructNode {
   if 0 < len(xs) {
     return xs
   } else {
-    return []ast.StructNode { }
+    return []core.IStructNode { }
   }
 }
 
-func defunions(xs...ast.UnionNode) []ast.UnionNode {
+func defunions(xs...core.IUnionNode) []core.IUnionNode {
   if 0 < len(xs) {
     return xs
   } else {
-    return []ast.UnionNode { }
+    return []core.IUnionNode { }
   }
 }
 
-func typedefs(xs...ast.TypedefNode) []ast.TypedefNode {
+func typedefs(xs...core.ITypedefNode) []core.ITypedefNode {
   if 0 < len(xs) {
     return xs
   } else {
-    return []ast.TypedefNode { }
+    return []core.ITypedefNode { }
   }
 }

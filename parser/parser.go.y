@@ -98,8 +98,7 @@ compilation_unit: EOF
                     if lex.firstToken != nil {
                       loc = lex.firstToken.location
                     }
-                    ast := ast.NewAST(loc, asDeclarations($2._node))
-                    lex.ast = &ast
+                    lex.ast = ast.NewAST(loc, asDeclarations($2._node))
                   } else {
                     panic("parser is broken")
                   }
@@ -241,9 +240,14 @@ defconst: CONST typeref_name '=' expr ';'
 
 defun: typeref_name '(' ')' block
      {
-       ps := entity.NewParams($2._token.location, []core.IParameter { })
+       ps := entity.NewParams($2._token.location, []*entity.Parameter { })
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, asStmtNode($4._node))
+       $$._entity = entity.NewDefinedFunction(true,
+         ast.NewTypeNode(t.GetLocation(), t),
+         $1._token.literal,
+         ps,
+         asStmtNode($4._node),
+       )
      }
      | typeref_name '(' params ')' block
      {
@@ -253,7 +257,7 @@ defun: typeref_name '(' ')' block
      }
      | static_typeref_name '(' ')' block
      {
-       ps := entity.NewParams($2._token.location, []core.IParameter { })
+       ps := entity.NewParams($2._token.location, []*entity.Parameter { })
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
        $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, asStmtNode($4._node))
      }
@@ -284,7 +288,7 @@ params: fixedparams
 
 fixedparams: param
            {
-             $$._entity = entity.NewParams($1._token.location, []core.IParameter { asParameter($1._entity) })
+             $$._entity = entity.NewParams($1._token.location, []*entity.Parameter { asParameter($1._entity) })
            }
            | fixedparams ',' param
            {
@@ -354,9 +358,13 @@ extern_typeref_name: EXTERN typeref_name
 
 funcdecl: extern_typeref_name '(' ')' ';'
         {
-          ps := entity.NewParams($1._typeref.GetLocation(), []core.IParameter { })
+          ps := entity.NewParams($1._typeref.GetLocation(), []*entity.Parameter { })
           ref := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-          $$._entity = entity.NewUndefinedFunction(ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ps)
+          $$._entity = entity.NewUndefinedFunction(
+            ast.NewTypeNode(ref.GetLocation(), ref),
+            $1._token.literal,
+            ps,
+          )
         }
         | extern_typeref_name '(' params ')' ';'
         {

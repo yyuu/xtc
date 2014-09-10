@@ -3,18 +3,19 @@ package ast
 import (
   "fmt"
   "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/bs/entity"
 )
 
 type AST struct {
   ClassName string
   Location core.Location
-  Declarations Declarations
-  scope core.IVariableScope
-  constantTable core.IConstantTable
+  Declarations *Declarations
+  scope *entity.VariableScope
+  constantTable *entity.ConstantTable
 }
 
-func NewAST(loc core.Location, declarations Declarations) AST {
-  return AST { "ast.AST", loc, declarations, nil, nil }
+func NewAST(loc core.Location, declarations *Declarations) *AST {
+  return &AST { "ast.AST", loc, declarations, nil, nil }
 }
 
 func (self AST) String() string {
@@ -25,7 +26,7 @@ func (self AST) GetLocation() core.Location {
   return self.Location
 }
 
-func (self AST) GetDeclarations() Declarations {
+func (self AST) GetDeclarations() *Declarations {
   return self.Declarations
 }
 
@@ -92,42 +93,42 @@ func (self AST) ListDefinition() []core.IEntity {
   return result
 }
 
-func (self AST) GetDefinedVariables() []core.IDefinedVariable {
+func (self AST) GetDefinedVariables() []*entity.DefinedVariable {
   return self.Declarations.Defvars
 }
 
-func (self *AST) SetDefinedVariables(xs []core.IDefinedVariable) {
+func (self *AST) SetDefinedVariables(xs []*entity.DefinedVariable) {
   self.Declarations.Defvars = xs
 }
 
-func (self AST) GetDefinedFunctions() []core.IDefinedFunction {
+func (self AST) GetDefinedFunctions() []*entity.DefinedFunction {
   return self.Declarations.Defuns
 }
 
-func (self *AST) SetDefinedFunctions(xs []core.IDefinedFunction) {
+func (self *AST) SetDefinedFunctions(xs []*entity.DefinedFunction) {
   self.Declarations.Defuns = xs
 }
 
-func (self AST) GetConstants() []core.IConstant {
+func (self AST) GetConstants() []*entity.Constant {
   return self.Declarations.Constants
 }
 
-func (self *AST) SetConstants(xs []core.IConstant) {
+func (self *AST) SetConstants(xs []*entity.Constant) {
   self.Declarations.Constants = xs
 }
 
-func (self AST) GetScope() core.IVariableScope {
+func (self AST) GetScope() *entity.VariableScope {
   return self.scope
 }
 
-func (self *AST) SetScope(scope core.IVariableScope) {
+func (self *AST) SetScope(scope *entity.VariableScope) {
   self.scope = scope
 }
 
-func (self AST) GetConstantTable() core.IConstantTable {
+func (self AST) GetConstantTable() *entity.ConstantTable {
   return self.constantTable
 }
 
-func (self *AST) SetConstantTable(table core.IConstantTable) {
+func (self *AST) SetConstantTable(table *entity.ConstantTable) {
   self.constantTable = table
 }

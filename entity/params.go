@@ -8,11 +8,11 @@ import (
 type Params struct {
   ClassName string
   Location core.Location
-  ParamDescs []core.IParameter
+  ParamDescs []*Parameter
 }
 
-func NewParams(loc core.Location, paramDescs []core.IParameter) Params {
-  return Params { "entity.Params", loc, paramDescs }
+func NewParams(loc core.Location, paramDescs []*Parameter) *Params {
+  return &Params { "entity.Params", loc, paramDescs }
 }
 
 func (self Params) String() string {
@@ -43,7 +43,7 @@ func (self Params) GetLocation() core.Location {
   return self.Location
 }
 
-func (self Params) GetParamDescs() []core.IParameter {
+func (self Params) GetParamDescs() []*Parameter {
   return self.ParamDescs
 }
 

@@ -12,12 +12,12 @@ type StructNode struct {
   Location core.Location
   TypeNode core.ITypeNode
   Name string
-  Members []Slot
+  Members []core.ISlot
 }
 
-func NewStructNode(loc core.Location, ref core.ITypeRef, name string, membs []Slot) StructNode {
+func NewStructNode(loc core.Location, ref core.ITypeRef, name string, membs []core.ISlot) *StructNode {
   if ref == nil { panic("ref is nil") }
-  return StructNode { "ast.StructNode", loc, NewTypeNode(loc, ref), name, membs }
+  return &StructNode { "ast.StructNode", loc, NewTypeNode(loc, ref), name, membs }
 }
 
 func (self StructNode) String() string {

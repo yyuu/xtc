@@ -15,10 +15,10 @@ type TypedefNode struct {
   Name string
 }
 
-func NewTypedefNode(loc core.Location, real core.ITypeRef, name string) TypedefNode {
+func NewTypedefNode(loc core.Location, real core.ITypeRef, name string) *TypedefNode {
   if real == nil { panic("real is nil") }
   newType := real
-  return TypedefNode { "ast.TypedefNode", loc, newType, real, name }
+  return &TypedefNode { "ast.TypedefNode", loc, newType, real, name }
 }
 
 func (self TypedefNode) String() string {

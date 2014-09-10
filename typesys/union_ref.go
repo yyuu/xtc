@@ -12,8 +12,8 @@ type UnionTypeRef struct {
   Name string
 }
 
-func NewUnionTypeRef(loc core.Location, name string) UnionTypeRef {
-  return UnionTypeRef { "typesys.UnionTypeRef", loc, name }
+func NewUnionTypeRef(loc core.Location, name string) *UnionTypeRef {
+  return &UnionTypeRef { "typesys.UnionTypeRef", loc, name }
 }
 
 func (self UnionTypeRef) String() string {

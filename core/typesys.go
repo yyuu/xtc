@@ -35,6 +35,10 @@ type ISlot interface {
   GetOffset() int
 }
 
+type IParamTypeRefs interface {
+  ITypeRef
+}
+
 
 type ITypeTable interface {
   String() string

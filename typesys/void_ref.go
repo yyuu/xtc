@@ -11,8 +11,8 @@ type VoidTypeRef struct {
   Location core.Location
 }
 
-func NewVoidTypeRef(loc core.Location) VoidTypeRef {
-  return VoidTypeRef { "typesys.VoidTypeRef", loc }
+func NewVoidTypeRef(loc core.Location) *VoidTypeRef {
+  return &VoidTypeRef { "typesys.VoidTypeRef", loc }
 }
 
 func (self VoidTypeRef) String() string {

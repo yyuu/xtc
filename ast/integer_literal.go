@@ -13,7 +13,7 @@ type IntegerLiteralNode struct {
   Value int
 }
 
-func NewIntegerLiteralNode(loc core.Location, literal string) IntegerLiteralNode {
+func NewIntegerLiteralNode(loc core.Location, literal string) *IntegerLiteralNode {
   var value int
   var err error
   if ( strings.Index(literal, "'") == 0 && strings.LastIndex(literal, "'") == len(literal)-1 ) && 2 < len(literal) {
@@ -35,7 +35,7 @@ func NewIntegerLiteralNode(loc core.Location, literal string) IntegerLiteralNode
   if err != nil {
     panic(err)
   }
-  return IntegerLiteralNode { "ast.IntegerLiteralNode", loc, value }
+  return &IntegerLiteralNode { "ast.IntegerLiteralNode", loc, value }
 }
 
 func (self IntegerLiteralNode) String() string {

@@ -12,8 +12,8 @@ type UserTypeRef struct {
   Name string
 }
 
-func NewUserTypeRef(loc core.Location, name string) UserTypeRef {
-  return UserTypeRef { "typesys.UserTypeRef", loc, name }
+func NewUserTypeRef(loc core.Location, name string) *UserTypeRef {
+  return &UserTypeRef { "typesys.UserTypeRef", loc, name }
 }
 
 func (self UserTypeRef) String() string {

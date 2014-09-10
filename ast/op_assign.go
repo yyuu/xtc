@@ -14,10 +14,10 @@ type OpAssignNode struct {
   Rhs core.IExprNode
 }
 
-func NewOpAssignNode(loc core.Location, operator string, lhs core.IExprNode, rhs core.IExprNode) OpAssignNode {
+func NewOpAssignNode(loc core.Location, operator string, lhs core.IExprNode, rhs core.IExprNode) *OpAssignNode {
   if lhs == nil { panic("lhs is nil") }
   if rhs == nil { panic("rhs is nil") }
-  return OpAssignNode { "ast.OpAssignNode", loc, operator, lhs, rhs }
+  return &OpAssignNode { "ast.OpAssignNode", loc, operator, lhs, rhs }
 }
 
 func (self OpAssignNode) String() string {

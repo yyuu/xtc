@@ -13,9 +13,9 @@ type Slot struct {
   Offset int
 }
 
-func NewSlot(t core.ITypeNode, n string) Slot {
+func NewSlot(t core.ITypeNode, n string) *Slot {
   if t == nil { panic("t is nil") }
-  return Slot { "ast.Slot", t, n, -1 }
+  return &Slot { "ast.Slot", t, n, -1 }
 }
 
 func (self Slot) String() string {

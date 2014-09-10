@@ -14,9 +14,9 @@ type FuncallNode struct {
   Args []core.IExprNode
 }
 
-func NewFuncallNode(loc core.Location, expr core.IExprNode, args []core.IExprNode) FuncallNode {
+func NewFuncallNode(loc core.Location, expr core.IExprNode, args []core.IExprNode) *FuncallNode {
   if expr == nil { panic("expr is nil") }
-  return FuncallNode { "ast.FuncallNode", loc, expr, args }
+  return &FuncallNode { "ast.FuncallNode", loc, expr, args }
 }
 
 func (self FuncallNode) String() string {

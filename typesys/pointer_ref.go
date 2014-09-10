@@ -12,8 +12,8 @@ type PointerTypeRef struct {
   BaseType core.ITypeRef
 }
 
-func NewPointerTypeRef(baseType core.ITypeRef) PointerTypeRef {
-  return PointerTypeRef { "typesys.PointerTypeRef", baseType.GetLocation(), baseType }
+func NewPointerTypeRef(baseType core.ITypeRef) *PointerTypeRef {
+  return &PointerTypeRef { "typesys.PointerTypeRef", baseType.GetLocation(), baseType }
 }
 
 func (self PointerTypeRef) String() string {

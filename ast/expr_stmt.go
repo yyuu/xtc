@@ -12,9 +12,9 @@ type ExprStmtNode struct {
   Expr core.IExprNode
 }
 
-func NewExprStmtNode(loc core.Location, expr core.IExprNode) ExprStmtNode {
+func NewExprStmtNode(loc core.Location, expr core.IExprNode) *ExprStmtNode {
   if expr == nil { panic("expr is nil") }
-  return ExprStmtNode { "ast.ExprStmtNode", loc, expr }
+  return &ExprStmtNode { "ast.ExprStmtNode", loc, expr }
 }
 
 func (self ExprStmtNode) String() string {

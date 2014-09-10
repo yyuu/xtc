@@ -27,7 +27,7 @@ func (self *VariableScope) IsToplevel() bool {
   return self.Parent == nil
 }
 
-func (self *VariableScope) GetParent() core.IVariableScope {
+func (self *VariableScope) GetParent() *VariableScope {
   return self.Parent
 }
 
@@ -59,16 +59,16 @@ func (self *VariableScope) DefineEntity(entity core.IEntity) {
   }
 }
 
-func (self *VariableScope) DefineVariable(v core.IDefinedVariable) {
+func (self *VariableScope) DefineVariable(v *DefinedVariable) {
   name := v.GetName()
   if self.IsDefinedLocally(name) {
     panic(fmt.Errorf("duplicated variable: %s", name))
   }
-  entity := v.(core.IEntity)
+  var entity core.IEntity = v
   self.Variables[name] = &entity
 }
 
-func (self *VariableScope) GetToplevel() core.IVariableScope {
+func (self *VariableScope) GetToplevel() *VariableScope {
   if self.Parent == nil {
     return self
   } else {

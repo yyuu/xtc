@@ -14,9 +14,9 @@ type CaseNode struct {
   Body core.IStmtNode
 }
 
-func NewCaseNode(loc core.Location, values []core.IExprNode, body core.IStmtNode) CaseNode {
+func NewCaseNode(loc core.Location, values []core.IExprNode, body core.IStmtNode) *CaseNode {
   if body == nil { panic("body is nil") }
-  return CaseNode { "ast.CaseNode", loc, values, body }
+  return &CaseNode { "ast.CaseNode", loc, values, body }
 }
 
 func (self CaseNode) String() string {
@@ -44,14 +44,18 @@ type SwitchNode struct {
   ClassName string
   Location core.Location
   Cond core.IExprNode
-  Cases []CaseNode
+  Cases []*CaseNode
 }
 
 func NewSwitchNode(loc core.Location, cond core.IExprNode, _cases []core.IStmtNode) SwitchNode {
   if cond == nil { panic("cond is nil") }
-  cases := make([]CaseNode, len(_cases))
+  cases := make([]*CaseNode, len(_cases))
   for i := range _cases {
-    cases[i] = _cases[i].(CaseNode)
+    c, ok := _cases[i].(*CaseNode)
+    if ! ok {
+      panic(fmt.Errorf("syntax error: not a case: %s", _cases[i]))
+    }
+    cases[i] = c
   }
   return SwitchNode { "ast.SwitchNode", loc, cond, cases }
 }
