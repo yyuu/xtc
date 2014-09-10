@@ -12,8 +12,8 @@ type LocalResolver struct {
   constantTable *entity.ConstantTable
 }
 
-func NewLocalResolver() LocalResolver {
-  return LocalResolver { []*entity.VariableScope { }, entity.NewConstantTable() }
+func NewLocalResolver() *LocalResolver {
+  return &LocalResolver { []*entity.VariableScope { }, entity.NewConstantTable() }
 }
 
 func (self *LocalResolver) Resolve(a *ast.AST) {
