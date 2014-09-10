@@ -70,7 +70,3 @@ type IVariableScope interface {
   GetParent() IVariableScope
   GetByName(string) *IEntity
 }
-
-type IConstantTable interface {
-  IsConstantTable() bool
-}

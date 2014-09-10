@@ -11,7 +11,7 @@ type AST struct {
   Location core.Location
   Declarations *Declarations
   scope core.IVariableScope
-  constantTable core.IConstantTable
+  constantTable *entity.ConstantTable
 }
 
 func NewAST(loc core.Location, declarations *Declarations) *AST {
@@ -125,10 +125,10 @@ func (self *AST) SetScope(scope core.IVariableScope) {
   self.scope = scope
 }
 
-func (self AST) GetConstantTable() core.IConstantTable {
+func (self AST) GetConstantTable() *entity.ConstantTable {
   return self.constantTable
 }
 
-func (self *AST) SetConstantTable(table core.IConstantTable) {
+func (self *AST) SetConstantTable(table *entity.ConstantTable) {
   self.constantTable = table
 }
