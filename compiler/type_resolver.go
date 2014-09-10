@@ -20,10 +20,10 @@ func (self *TypeResolver) Resolve(a *ast.AST) {
 
 //self.defineTypes(types)
 //for i := range types {
-//  ast.Visit(self, types[i])
+//  ast.VisitNode(self, types[i])
 //}
 //for i := range entities {
-//  entity.Visit(self, entities[i])
+//  entity.VisitNode(self, entities[i])
 //}
 }
 
@@ -37,7 +37,7 @@ func (self *TypeResolver) defineTypes(deftypes []core.ITypeDefinition) {
   }
 }
 
-func (self *TypeResolver) Visit(node core.INode) {
+func (self *TypeResolver) VisitNode(node core.INode) {
   fmt.Println("FIXME: TypeResolver#Visit called:", node)
 //switch typed := unknown.(type) {
 //  case ast.StructNode: {

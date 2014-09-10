@@ -45,7 +45,7 @@ func (self *LocalResolver) resolveGvarInitializers(a *ast.AST) {
   for i := range xs {
     gvar := xs[i]
     if gvar.HasInitializer() {
-      ast.Visit(self, gvar.GetInitializer())
+      ast.VisitNode(self, gvar.GetInitializer())
     }
     ys[i] = gvar
   }
@@ -57,7 +57,7 @@ func (self *LocalResolver) resolveConstantValues(a *ast.AST) {
   ys := make([]*entity.Constant, len(xs))
   for i := range xs {
     constant := xs[i]
-    ast.Visit(self, constant.GetValue())
+    ast.VisitNode(self, constant.GetValue())
     ys[i] = constant
   }
   a.SetConstants(ys)
@@ -69,7 +69,7 @@ func (self *LocalResolver) resolveFunctions(a *ast.AST) {
   for i := range xs {
     function := xs[i]
     self.pushScope(function.ListParameters())
-    ast.Visit(self, function.GetBody())
+    ast.VisitNode(self, function.GetBody())
     function.SetScope(self.popScope())
     ys[i] = function
   }
@@ -106,33 +106,7 @@ func (self *LocalResolver) popScope() *entity.VariableScope {
 
 var Verbose = 0
 
-func (self *LocalResolver) debugVisit(key string, unknown interface{}) {
-  if Verbose < 1 {
-    return
-  }
-  fmt.Println("-----", key, "-----")
-  variables := self.currentScope().Variables
-  for i := range variables {
-    fmt.Println(variables[i])
-  }
-  fmt.Println("-----", key, "-----")
-
-  switch a := unknown.(type) {
-    case *core.IExprNode: {
-      switch b := (*a).(type) {
-        case ast.IntegerLiteralNode: {
-          fmt.Println("int:", b)
-        }
-        case ast.VariableNode: {
-          fmt.Println("var:", b, ":", b.GetEntity())
-        }
-      }
-    }
-  }
-}
-
-func (self *LocalResolver) Visit(node core.INode) {
-  self.debugVisit("BEGIN VISIT", node) // TODO: remove this
+func (self *LocalResolver) VisitNode(node core.INode) {
   switch typed := node.(type) {
     case *ast.BlockNode: {
       self.pushScope(typed.GetVariables())
@@ -155,5 +129,4 @@ func (self *LocalResolver) Visit(node core.INode) {
       typed.SetEntity(variable)
     }
   }
-  self.debugVisit("END VISIT", node) // TODO: remove this
 }

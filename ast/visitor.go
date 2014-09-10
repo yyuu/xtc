@@ -4,10 +4,10 @@ import (
   "bitbucket.org/yyuu/bs/core"
 )
 
-type IVisitor interface {
-  Visit(core.INode)
+type INodeVisitor interface {
+  VisitNode(core.INode)
 }
 
-func Visit(v IVisitor, node core.INode) {
-  v.Visit(node)
+func VisitNode(v INodeVisitor, node core.INode) {
+  v.VisitNode(node)
 }
