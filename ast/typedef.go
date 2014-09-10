@@ -21,6 +21,14 @@ func NewTypedefNode(loc core.Location, real core.ITypeRef, name string) *Typedef
   return &TypedefNode { "ast.TypedefNode", loc, newType, real, name }
 }
 
+func NewTypedefNodes(xs...*TypedefNode) []*TypedefNode {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []*TypedefNode { }
+  }
+}
+
 func (self TypedefNode) String() string {
   return fmt.Sprintf("(typedef %s %s)", self.Name, self.Real)
 }

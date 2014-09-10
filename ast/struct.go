@@ -20,6 +20,14 @@ func NewStructNode(loc core.Location, ref core.ITypeRef, name string, membs []co
   return &StructNode { "ast.StructNode", loc, NewTypeNode(loc, ref), name, membs }
 }
 
+func NewStructNodes(xs...*StructNode) []*StructNode {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []*StructNode { }
+  }
+}
+
 func (self StructNode) String() string {
   return fmt.Sprintf("<ast.StructNode Name=%s location=%s typeNode=%s members=%s>", self.Name, self.Location, self.TypeNode, self.Members)
 }

@@ -20,6 +20,14 @@ func NewUnionNode(loc core.Location, ref core.ITypeRef, name string, membs []cor
   return &UnionNode { "ast.UnionNode", loc, NewTypeNode(loc, ref), name, membs }
 }
 
+func NewUnionNodes(xs...*UnionNode) []*UnionNode {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []*UnionNode { }
+  }
+}
+
 func (self UnionNode) String() string {
   return fmt.Sprintf("<ast.UnionNode name=%s location=%s typeNode=%s members=%s>", self.Name, self.Location, self.TypeNode, self.Members)
 }

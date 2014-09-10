@@ -157,27 +157,81 @@ import_name: name
 
 top_defs: defun
         {
-          $$._node = ast.NewDeclarations(defvars(), vardecls(), defuns(asDefinedFunction($1._entity)), funcdecls(), defconsts(), defstructs(), defunions(), typedefs())
+          $$._node = ast.NewDeclarations(
+            entity.NewDefinedVariables(),
+            entity.NewUndefinedVariables(),
+            entity.NewDefinedFunctions(asDefinedFunction($1._entity)),
+            entity.NewUndefinedFunctions(),
+            entity.NewConstants(),
+            ast.NewStructNodes(),
+            ast.NewUnionNodes(),
+            ast.NewTypedefNodes(),
+          )
         }
         | defvars
         {
-          $$._node = ast.NewDeclarations(defvars(asDefinedVariable($1._entity)), vardecls(), defuns(), funcdecls(), defconsts(), defstructs(), defunions(), typedefs())
+          $$._node = ast.NewDeclarations(
+            entity.NewDefinedVariables(asDefinedVariable($1._entity)),
+            entity.NewUndefinedVariables(),
+            entity.NewDefinedFunctions(),
+            entity.NewUndefinedFunctions(),
+            entity.NewConstants(),
+            ast.NewStructNodes(),
+            ast.NewUnionNodes(),
+            ast.NewTypedefNodes(),
+          )
         }
         | defconst
         {
-          $$._node = ast.NewDeclarations(defvars(), vardecls(), defuns(), funcdecls(), defconsts(asConstant($1._entity)), defstructs(), defunions(), typedefs())
+          $$._node = ast.NewDeclarations(
+            entity.NewDefinedVariables(),
+            entity.NewUndefinedVariables(),
+            entity.NewDefinedFunctions(),
+            entity.NewUndefinedFunctions(),
+            entity.NewConstants(asConstant($1._entity)),
+            ast.NewStructNodes(),
+            ast.NewUnionNodes(),
+            ast.NewTypedefNodes(),
+          )
         }
         | defstruct
         {
-          $$._node = ast.NewDeclarations(defvars(), vardecls(), defuns(), funcdecls(), defconsts(), defstructs(asStructNode($1._node)), defunions(), typedefs())
+          $$._node = ast.NewDeclarations(
+            entity.NewDefinedVariables(),
+            entity.NewUndefinedVariables(),
+            entity.NewDefinedFunctions(),
+            entity.NewUndefinedFunctions(),
+            entity.NewConstants(),
+            ast.NewStructNodes(asStructNode($1._node)),
+            ast.NewUnionNodes(),
+            ast.NewTypedefNodes(),
+          )
         }
         | defunion
         {
-          $$._node = ast.NewDeclarations(defvars(), vardecls(), defuns(), funcdecls(), defconsts(), defstructs(), defunions(asUnionNode($1._node)), typedefs())
+          $$._node = ast.NewDeclarations(
+            entity.NewDefinedVariables(),
+            entity.NewUndefinedVariables(),
+            entity.NewDefinedFunctions(),
+            entity.NewUndefinedFunctions(),
+            entity.NewConstants(),
+            ast.NewStructNodes(),
+            ast.NewUnionNodes(asUnionNode($1._node)),
+            ast.NewTypedefNodes(),
+          )
         }
         | typedef
         {
-          $$._node = ast.NewDeclarations(defvars(), vardecls(), defuns(), funcdecls(), defconsts(), defstructs(), defunions(), typedefs(asTypedefNode($1._node)))
+          $$._node = ast.NewDeclarations(
+            entity.NewDefinedVariables(),
+            entity.NewUndefinedVariables(),
+            entity.NewDefinedFunctions(),
+            entity.NewUndefinedFunctions(),
+            entity.NewConstants(),
+            ast.NewStructNodes(),
+            ast.NewUnionNodes(),
+            ast.NewTypedefNodes(asTypedefNode($1._node)),
+          )
         }
         | top_defs defun
         {

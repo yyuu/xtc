@@ -22,9 +22,9 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
   `
   x := ast.NewAST(loc(0,0),
     ast.NewDeclarations(
-      defvars(),
-      vardecls(),
-      defuns(
+      entity.NewDefinedVariables(),
+      entity.NewUndefinedVariables(),
+      entity.NewDefinedFunctions(
         entity.NewDefinedFunction(
           true,
           ast.NewTypeNode(loc(1,5),
@@ -55,11 +55,11 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
           ),
         ),
       ),
-      funcdecls(),
-      defconsts(),
-      defstructs(),
-      defunions(),
-      typedefs(),
+      entity.NewUndefinedFunctions(),
+      entity.NewConstants(),
+      ast.NewStructNodes(),
+      ast.NewUnionNodes(),
+      ast.NewTypedefNodes(),
     ),
   )
   y, err := ParseExpr(s)
@@ -76,9 +76,9 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
   `
   x := ast.NewAST(loc(0,0),
     ast.NewDeclarations(
-      defvars(),
-      vardecls(),
-      defuns(
+      entity.NewDefinedVariables(),
+      entity.NewUndefinedVariables(),
+      entity.NewDefinedFunctions(
         entity.NewDefinedFunction(
           true,
           ast.NewTypeNode(loc(1,5),
@@ -119,11 +119,11 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
           ),
         ),
       ),
-      funcdecls(),
-      defconsts(),
-      defstructs(),
-      defunions(),
-      typedefs(),
+      entity.NewUndefinedFunctions(),
+      entity.NewConstants(),
+      ast.NewStructNodes(),
+      ast.NewUnionNodes(),
+      ast.NewTypedefNodes(),
     ),
   )
   y, err := ParseExpr(s)
@@ -142,9 +142,9 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
   `
   x := ast.NewAST(loc(0,0),
     ast.NewDeclarations(
-      defvars(),
-      vardecls(),
-      defuns(
+      entity.NewDefinedVariables(),
+      entity.NewUndefinedVariables(),
+      entity.NewDefinedFunctions(
         entity.NewDefinedFunction(
           true,
           ast.NewTypeNode(loc(2,5),
@@ -199,11 +199,11 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
           ),
         ),
       ),
-      funcdecls(),
-      defconsts(),
-      defstructs(),
-      defunions(),
-      typedefs(),
+      entity.NewUndefinedFunctions(),
+      entity.NewConstants(),
+      ast.NewStructNodes(),
+      ast.NewUnionNodes(),
+      ast.NewTypedefNodes(),
     ),
   )
   y, err := ParseExpr(s)
@@ -223,9 +223,9 @@ func TestFor1(t *testing.T) {
 `
   x := ast.NewAST(loc(0,0),
     ast.NewDeclarations(
-      defvars(),
-      vardecls(),
-      defuns(
+      entity.NewDefinedVariables(),
+      entity.NewUndefinedVariables(),
+      entity.NewDefinedFunctions(
         entity.NewDefinedFunction(
           true,
           ast.NewTypeNode(loc(1,5),
@@ -297,11 +297,11 @@ func TestFor1(t *testing.T) {
           ),
         ),
       ),
-      funcdecls(),
-      defconsts(),
-      defstructs(),
-      defunions(),
-      typedefs(),
+      entity.NewUndefinedFunctions(),
+      entity.NewConstants(),
+      ast.NewStructNodes(),
+      ast.NewUnionNodes(),
+      ast.NewTypedefNodes(),
     ),
   )
   y, err := ParseExpr(s)
