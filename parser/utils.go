@@ -131,7 +131,7 @@ func asParameter(x core.IEntity) *entity.Parameter {
   return x.(*entity.Parameter)
 }
 
-func parametersTypeRef(params *entity.Params) typesys.ParamTypeRefs {
+func parametersTypeRef(params *entity.Params) *typesys.ParamTypeRefs {
   paramDescs := params.GetParamDescs()
   ps := make([]core.ITypeRef, len(paramDescs))
   for i := range paramDescs {

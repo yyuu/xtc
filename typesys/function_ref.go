@@ -10,11 +10,11 @@ type FunctionTypeRef struct {
   ClassName string
   Location core.Location
   ReturnType core.ITypeRef
-  Params ParamTypeRefs
+  Params core.IParamTypeRefs
 }
 
-func NewFunctionTypeRef(returnType core.ITypeRef, params core.ITypeRef) FunctionTypeRef {
-  return FunctionTypeRef { "typesys.FunctionTypeRef", returnType.GetLocation(), returnType, params.(ParamTypeRefs) }
+func NewFunctionTypeRef(returnType core.ITypeRef, params core.ITypeRef) *FunctionTypeRef {
+  return &FunctionTypeRef { "typesys.FunctionTypeRef", returnType.GetLocation(), returnType, params.(core.IParamTypeRefs) }
 }
 
 func (self FunctionTypeRef) String() string {

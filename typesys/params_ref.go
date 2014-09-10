@@ -13,8 +13,8 @@ type ParamTypeRefs struct {
   Vararg bool
 }
 
-func NewParamTypeRefs(loc core.Location, paramDescs []core.ITypeRef, vararg bool) ParamTypeRefs {
-  return ParamTypeRefs { "typesys.ParamTypeRefs", loc, paramDescs, vararg }
+func NewParamTypeRefs(loc core.Location, paramDescs []core.ITypeRef, vararg bool) *ParamTypeRefs {
+  return &ParamTypeRefs { "typesys.ParamTypeRefs", loc, paramDescs, vararg }
 }
 
 func (self ParamTypeRefs) String() string {

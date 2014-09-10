@@ -12,8 +12,8 @@ type StructTypeRef struct {
   Name string
 }
 
-func NewStructTypeRef(loc core.Location, name string) StructTypeRef {
-  return StructTypeRef { "typesys.StructTypeRef", loc, name }
+func NewStructTypeRef(loc core.Location, name string) *StructTypeRef {
+  return &StructTypeRef { "typesys.StructTypeRef", loc, name }
 }
 
 func (self StructTypeRef) String() string {

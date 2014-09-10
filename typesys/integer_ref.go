@@ -12,8 +12,8 @@ type IntegerTypeRef struct {
   Name string
 }
 
-func NewIntegerTypeRef(loc core.Location, name string) IntegerTypeRef {
-  return IntegerTypeRef { "typesys.IntegerTypeRef", loc, name }
+func NewIntegerTypeRef(loc core.Location, name string) *IntegerTypeRef {
+  return &IntegerTypeRef { "typesys.IntegerTypeRef", loc, name }
 }
 
 func (self IntegerTypeRef) String() string {

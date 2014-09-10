@@ -13,8 +13,8 @@ type ArrayTypeRef struct {
   Length int
 }
 
-func NewArrayTypeRef(baseType core.ITypeRef, length int) ArrayTypeRef {
-  return ArrayTypeRef { "typesys.ArrayTypeRef", baseType.GetLocation(), baseType, length }
+func NewArrayTypeRef(baseType core.ITypeRef, length int) *ArrayTypeRef {
+  return &ArrayTypeRef { "typesys.ArrayTypeRef", baseType.GetLocation(), baseType, length }
 }
 
 func (self ArrayTypeRef) String() string {
