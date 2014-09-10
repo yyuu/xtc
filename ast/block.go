@@ -9,14 +9,13 @@ import (
 // BlockNode
 type BlockNode struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Variables []duck.IDefinedVariable
   Stmts []duck.IStmtNode
   scope duck.IVariableScope
 }
 
-func NewBlockNode(loc duck.ILocation, variables []duck.IDefinedVariable, stmts []duck.IStmtNode) BlockNode {
-  if loc == nil { panic("location is nil") }
+func NewBlockNode(loc duck.Location, variables []duck.IDefinedVariable, stmts []duck.IStmtNode) BlockNode {
   return BlockNode { "ast.BlockNode", loc, variables, stmts, nil }
 }
 
@@ -48,7 +47,7 @@ func (self BlockNode) IsStmtNode() bool {
   return true
 }
 
-func (self BlockNode) GetLocation() duck.ILocation {
+func (self BlockNode) GetLocation() duck.Location {
   return self.Location
 }
 

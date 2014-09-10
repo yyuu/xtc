@@ -30,6 +30,6 @@ func (self Slot) GetOffset() int {
   return self.Offset
 }
 
-func (self Slot) GetLocation() duck.ILocation {
+func (self Slot) GetLocation() duck.Location {
   panic("Slot#GetLocation called")
 }

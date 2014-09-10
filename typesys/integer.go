@@ -76,11 +76,11 @@ func (self IntegerType) IsFunction() bool {
 // IntegerTypeRef
 type IntegerTypeRef struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Name string
 }
 
-func NewIntegerTypeRef(loc duck.ILocation, name string) IntegerTypeRef {
+func NewIntegerTypeRef(loc duck.Location, name string) IntegerTypeRef {
   return IntegerTypeRef { "typesys.IntegerTypeRef", loc, name }
 }
 
@@ -88,7 +88,7 @@ func (self IntegerTypeRef) String() string {
   return fmt.Sprintf("<typesys.IntegerTypeRef Name=%s Location=%s>", self.Name, self.Location)
 }
 
-func (self IntegerTypeRef) GetLocation() duck.ILocation {
+func (self IntegerTypeRef) GetLocation() duck.Location {
   return self.Location
 }
 

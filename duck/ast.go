@@ -2,7 +2,7 @@ package duck
 
 type INode interface {
   String() string
-  GetLocation() ILocation
+  GetLocation() Location
 }
 
 type IExprNode interface {
@@ -26,11 +26,4 @@ type ITypeDefinition interface {
   IsTypeDefinition() bool
   GetTypeRef() ITypeRef
   DefiningType() IType
-}
-
-type ILocation interface {
-  String() string
-  GetSourceName() string
-  GetLineNumber() int
-  GetLineOffset() int
 }

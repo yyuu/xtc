@@ -8,13 +8,12 @@ import (
 // DoWhileNode
 type DoWhileNode struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Body duck.IStmtNode
   Cond duck.IExprNode
 }
 
-func NewDoWhileNode(loc duck.ILocation, body duck.IStmtNode, cond duck.IExprNode) DoWhileNode {
-  if loc == nil { panic("location is nil") }
+func NewDoWhileNode(loc duck.Location, body duck.IStmtNode, cond duck.IExprNode) DoWhileNode {
   if body == nil { panic("body is nil") }
   if cond == nil { panic("cond is nil") }
   return DoWhileNode { "ast.DoWhileNode", loc, body, cond }
@@ -28,22 +27,21 @@ func (self DoWhileNode) IsStmtNode() bool {
   return true
 }
 
-func (self DoWhileNode) GetLocation() duck.ILocation {
+func (self DoWhileNode) GetLocation() duck.Location {
   return self.Location
 }
 
 // ForNode
 type ForNode struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Init duck.IExprNode
   Cond duck.IExprNode
   Incr duck.IExprNode
   Body duck.IStmtNode
 }
 
-func NewForNode(loc duck.ILocation, init duck.IExprNode, cond duck.IExprNode, incr duck.IExprNode, body duck.IStmtNode) ForNode {
-  if loc == nil { panic("location is nil") }
+func NewForNode(loc duck.Location, init duck.IExprNode, cond duck.IExprNode, incr duck.IExprNode, body duck.IStmtNode) ForNode {
   if init == nil { panic("init is nil") }
   if cond == nil { panic("cond is nil") }
   if incr == nil { panic("incr is nil") }
@@ -59,20 +57,19 @@ func (self ForNode) IsStmtNode() bool {
   return true
 }
 
-func (self ForNode) GetLocation() duck.ILocation {
+func (self ForNode) GetLocation() duck.Location {
   return self.Location
 }
 
 // WhileNode
 type WhileNode struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Cond duck.IExprNode
   Body duck.IStmtNode
 }
 
-func NewWhileNode(loc duck.ILocation, cond duck.IExprNode, body duck.IStmtNode) WhileNode {
-  if loc == nil { panic("location is nil") }
+func NewWhileNode(loc duck.Location, cond duck.IExprNode, body duck.IStmtNode) WhileNode {
   if cond == nil { panic("cond is nil") }
   if body == nil { panic("body is nil") }
   return WhileNode { "ast.WhileNode", loc, cond, body }
@@ -86,6 +83,6 @@ func (self WhileNode) IsStmtNode() bool {
   return true
 }
 
-func (self WhileNode) GetLocation() duck.ILocation {
+func (self WhileNode) GetLocation() duck.Location {
   return self.Location
 }

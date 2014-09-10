@@ -15,7 +15,7 @@ type TypeTable struct {
 }
 
 func NewTypeTable(charSize, shortSize, intSize, longSize, ptrSize int) *TypeTable {
-  loc := NewLocation("[builtin:typesys]", 0, 0)
+  loc := duck.NewLocation("[builtin:typesys]", 0, 0)
   tt := TypeTable { charSize, shortSize, intSize, longSize, ptrSize, make(map[duck.ITypeRef]*duck.IType) }
   tt.PutType(NewVoidTypeRef(loc),
              NewVoidType())

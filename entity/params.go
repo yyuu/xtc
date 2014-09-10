@@ -7,11 +7,11 @@ import (
 
 type Params struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   ParamDescs []duck.IParameter
 }
 
-func NewParams(loc duck.ILocation, paramDescs []duck.IParameter) Params {
+func NewParams(loc duck.Location, paramDescs []duck.IParameter) Params {
   return Params { "entity.Params", loc, paramDescs }
 }
 
@@ -39,7 +39,7 @@ func (self Params) IsRefered() bool {
   return true // FIXME: count up references
 }
 
-func (self Params) GetLocation() duck.ILocation {
+func (self Params) GetLocation() duck.Location {
   return self.Location
 }
 

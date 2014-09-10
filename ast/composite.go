@@ -9,14 +9,13 @@ import (
 // StructNode
 type StructNode struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   TypeNode duck.ITypeNode
   Name string
   Members []Slot
 }
 
-func NewStructNode(loc duck.ILocation, ref duck.ITypeRef, name string, membs []Slot) StructNode {
-  if loc == nil { panic("location is nil") }
+func NewStructNode(loc duck.Location, ref duck.ITypeRef, name string, membs []Slot) StructNode {
   if ref == nil { panic("ref is nil") }
   return StructNode { "ast.StructNode", loc, NewTypeNode(loc, ref), name, membs }
 }
@@ -29,7 +28,7 @@ func (self StructNode) IsTypeDefinition() bool {
   return true
 }
 
-func (self StructNode) GetLocation() duck.ILocation {
+func (self StructNode) GetLocation() duck.Location {
   return self.Location
 }
 
@@ -48,14 +47,13 @@ func (self StructNode) DefiningType() duck.IType {
 // UnionNode
 type UnionNode struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   TypeNode duck.ITypeNode
   Name string
   Members []Slot
 }
 
-func NewUnionNode(loc duck.ILocation, ref duck.ITypeRef, name string, membs []Slot) UnionNode {
-  if loc == nil { panic("location is nil") }
+func NewUnionNode(loc duck.Location, ref duck.ITypeRef, name string, membs []Slot) UnionNode {
   if ref == nil { panic("ref is nil") }
   return UnionNode { "ast.UnionNode", loc, NewTypeNode(loc, ref), name, membs }
 }
@@ -68,7 +66,7 @@ func (self UnionNode) IsTypeDefinition() bool {
   return true
 }
 
-func (self UnionNode) GetLocation() duck.ILocation {
+func (self UnionNode) GetLocation() duck.Location {
   return self.Location
 }
 

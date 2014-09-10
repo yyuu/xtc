@@ -24,7 +24,7 @@ type lex struct {
 }
 
 func (self lex) String() string {
-  location := ast.NewLocation(self.sourceName, self.lineNumber, self.lineOffset)
+  location := duck.NewLocation(self.sourceName, self.lineNumber, self.lineOffset)
   source := fmt.Sprintf("%s", self.scanner.Peek(16))
   return fmt.Sprintf("%s: %q", location, source)
 }
@@ -32,7 +32,7 @@ func (self lex) String() string {
 type token struct {
   id int
   literal string
-  location duck.ILocation
+  location duck.Location
 }
 
 func (self token) String() string {
@@ -187,7 +187,7 @@ func (self *lex) consume(id int, literal string) (t *token) {
   t = &token {
     id: id,
     literal: literal,
-    location: ast.NewLocation(self.sourceName, self.lineNumber, self.lineOffset),
+    location: duck.NewLocation(self.sourceName, self.lineNumber, self.lineOffset),
   }
 
   if self.firstToken == nil {

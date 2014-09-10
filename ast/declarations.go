@@ -32,7 +32,7 @@ func (self Declarations) String() string {
                      "       (define typedefs %s))", self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
-func (self Declarations) GetLocation() duck.ILocation {
+func (self Declarations) GetLocation() duck.Location {
   panic("Declarations#GetLocation called")
 }
 

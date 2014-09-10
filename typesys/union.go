@@ -8,12 +8,12 @@ import (
 // UnionType
 type UnionType struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Name string
   Members []duck.ISlot
 }
 
-func NewUnionType(name string, membs []duck.ISlot, loc duck.ILocation) *UnionType {
+func NewUnionType(name string, membs []duck.ISlot, loc duck.Location) *UnionType {
   return &UnionType { "typesys.UnionType", loc, name, membs }
 }
 
@@ -76,11 +76,11 @@ func (self UnionType) IsFunction() bool {
 // UnionTypeRef
 type UnionTypeRef struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Name string
 }
 
-func NewUnionTypeRef(loc duck.ILocation, name string) UnionTypeRef {
+func NewUnionTypeRef(loc duck.Location, name string) UnionTypeRef {
   return UnionTypeRef { "typesys.UnionTypeRef", loc, name }
 }
 
@@ -88,7 +88,7 @@ func (self UnionTypeRef) String() string {
   return fmt.Sprintf("<typesys.UnionTypeRef Name=%s Location=%s>", self.Name, self.Location)
 }
 
-func (self UnionTypeRef) GetLocation() duck.ILocation {
+func (self UnionTypeRef) GetLocation() duck.Location {
   return self.Location
 }
 

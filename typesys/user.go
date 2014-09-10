@@ -8,12 +8,12 @@ import (
 // UserType
 type UserType struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Name string
   Real duck.ITypeNode
 }
 
-func NewUserType(name string, real duck.ITypeNode, loc duck.ILocation) *UserType {
+func NewUserType(name string, real duck.ITypeNode, loc duck.Location) *UserType {
   return &UserType { "typesys.UserType", loc, name, real }
 }
 
@@ -76,11 +76,11 @@ func (self UserType) IsFunction() bool {
 // UserTypeRef
 type UserTypeRef struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Name string
 }
 
-func NewUserTypeRef(loc duck.ILocation, name string) UserTypeRef {
+func NewUserTypeRef(loc duck.Location, name string) UserTypeRef {
   return UserTypeRef { "typesys.UserTypeRef", loc, name }
 }
 
@@ -88,7 +88,7 @@ func (self UserTypeRef) String() string {
   return fmt.Sprintf("<typesys.UserTypeRef Name=%s Location=%s>", self.Name, self.Location)
 }
 
-func (self UserTypeRef) GetLocation() duck.ILocation {
+func (self UserTypeRef) GetLocation() duck.Location {
   return self.Location
 }
 

@@ -76,7 +76,7 @@ func (self ArrayType) IsFunction() bool {
 // ArrayTypeRef
 type ArrayTypeRef struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   BaseType duck.ITypeRef
   Length int
 }
@@ -89,7 +89,7 @@ func (self ArrayTypeRef) String() string {
   return fmt.Sprintf("<typesys.ArrayTypeRef Location=%s BaseType=%s Length=%d>", self.Location, self.BaseType, self.Length)
 }
 
-func (self ArrayTypeRef) GetLocation() duck.ILocation {
+func (self ArrayTypeRef) GetLocation() duck.Location {
   return self.Location
 }
 

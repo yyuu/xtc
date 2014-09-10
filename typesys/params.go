@@ -8,12 +8,12 @@ import (
 // ParamTypes
 type ParamTypes struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   ParamDescs []duck.IType
   Vararg bool
 }
 
-func NewParamTypes(loc duck.ILocation, paramDescs []duck.IType, vararg bool) *ParamTypes {
+func NewParamTypes(loc duck.Location, paramDescs []duck.IType, vararg bool) *ParamTypes {
   return &ParamTypes { "typesys.ParamTypes", loc, paramDescs, vararg }
 }
 
@@ -76,12 +76,12 @@ func (self ParamTypes) IsFunction() bool {
 // ParamTypeRefs
 type ParamTypeRefs struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   ParamDescs []duck.ITypeRef
   Vararg bool
 }
 
-func NewParamTypeRefs(loc duck.ILocation, paramDescs []duck.ITypeRef, vararg bool) ParamTypeRefs {
+func NewParamTypeRefs(loc duck.Location, paramDescs []duck.ITypeRef, vararg bool) ParamTypeRefs {
   return ParamTypeRefs { "typesys.ParamTypeRefs", loc, paramDescs, vararg }
 }
 
@@ -89,7 +89,7 @@ func (self ParamTypeRefs) String() string {
   return fmt.Sprintf("<typesys.ParamTypeRefs Location=%s ParamDescs=%s Vararg=%v>", self.Location, self.ParamDescs, self.Vararg)
 }
 
-func (self ParamTypeRefs) GetLocation() duck.ILocation {
+func (self ParamTypeRefs) GetLocation() duck.Location {
   return self.Location
 }
 

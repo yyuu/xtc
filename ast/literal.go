@@ -9,12 +9,11 @@ import (
 // IntegerLiteralNode
 type IntegerLiteralNode struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Value int
 }
 
-func NewIntegerLiteralNode(loc duck.ILocation, literal string) IntegerLiteralNode {
-  if loc == nil { panic("location is nil") }
+func NewIntegerLiteralNode(loc duck.Location, literal string) IntegerLiteralNode {
   var value int
   var err error
   if ( strings.Index(literal, "'") == 0 && strings.LastIndex(literal, "'") == len(literal)-1 ) && 2 < len(literal) {
@@ -47,20 +46,19 @@ func (self IntegerLiteralNode) IsExprNode() bool {
   return true
 }
 
-func (self IntegerLiteralNode) GetLocation() duck.ILocation {
+func (self IntegerLiteralNode) GetLocation() duck.Location {
   return self.Location
 }
 
 // StringLiteralNode
 type StringLiteralNode struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Value string
   entry duck.IConstantEntry
 }
 
-func NewStringLiteralNode(loc duck.ILocation, literal string) StringLiteralNode {
-  if loc == nil { panic("location is nil") }
+func NewStringLiteralNode(loc duck.Location, literal string) StringLiteralNode {
   return StringLiteralNode { "ast.StringLiteralNode", loc, literal, nil }
 }
 
@@ -72,7 +70,7 @@ func (self StringLiteralNode) IsExprNode() bool {
   return true
 }
 
-func (self StringLiteralNode) GetLocation() duck.ILocation {
+func (self StringLiteralNode) GetLocation() duck.Location {
   return self.Location
 }
 

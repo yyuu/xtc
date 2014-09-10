@@ -94,7 +94,7 @@ compilation_unit: EOF
                 | import_stmts top_defs EOF
                 {
                   if lex, ok := yylex.(*lex); ok {
-                    var loc duck.ILocation
+                    var loc duck.Location
                     if lex.firstToken != nil {
                       loc = lex.firstToken.location
                     }

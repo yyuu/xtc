@@ -55,7 +55,7 @@ type IUndefinedFunction interface {
 
 type IParams interface {
   IEntity
-  GetLocation() ILocation
+  GetLocation() Location
   GetParamDescs() []IParameter
 }
 

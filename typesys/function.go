@@ -75,7 +75,7 @@ func (self FunctionType) IsFunction() bool {
 // FunctionTypeRef
 type FunctionTypeRef struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   ReturnType duck.ITypeRef
   Params ParamTypeRefs
 }
@@ -88,7 +88,7 @@ func (self FunctionTypeRef) String() string {
   return fmt.Sprintf("<typesys.FunctionTypeRef Location=%s ReturnType=%s Params=%s>", self.Location, self.ReturnType, self.Params)
 }
 
-func (self FunctionTypeRef) GetLocation() duck.ILocation {
+func (self FunctionTypeRef) GetLocation() duck.Location {
   return self.Location
 }
 

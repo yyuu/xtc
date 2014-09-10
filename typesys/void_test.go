@@ -2,6 +2,7 @@ package typesys
 
 import (
   "testing"
+  "bitbucket.org/yyuu/bs/duck"
   "bitbucket.org/yyuu/bs/xt"
 )
 
@@ -14,7 +15,7 @@ func TestVoid1(t *testing.T) {
 }
 
 func TestVoidRef1(t *testing.T) {
-  location := location { "", 1, 2 }
-  x := NewVoidTypeRef(location)
-  xt.AssertEquals(t, "void ref has location", x.GetLocation(), location)
+  loc := duck.NewLocation("", 1, 2)
+  x := NewVoidTypeRef(loc)
+  xt.AssertEquals(t, "void ref has location", x.GetLocation(), loc)
 }

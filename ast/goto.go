@@ -8,11 +8,10 @@ import (
 // BreakNode
 type BreakNode struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
 }
 
-func NewBreakNode(loc duck.ILocation) BreakNode {
-  if loc == nil { panic("location is nil") }
+func NewBreakNode(loc duck.Location) BreakNode {
   return BreakNode { "ast.BreakNode", loc }
 }
 
@@ -24,18 +23,17 @@ func (self BreakNode) IsStmtNode() bool {
   return true
 }
 
-func (self BreakNode) GetLocation() duck.ILocation {
+func (self BreakNode) GetLocation() duck.Location {
   return self.Location
 }
 
 // ContinueNode
 type ContinueNode struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
 }
 
-func NewContinueNode(loc duck.ILocation) ContinueNode {
-  if loc == nil { panic("location is nil") }
+func NewContinueNode(loc duck.Location) ContinueNode {
   return ContinueNode { "ast.ContinueNode", loc }
 }
 
@@ -47,19 +45,18 @@ func (self ContinueNode) IsStmtNode() bool {
   return true
 }
 
-func (self ContinueNode) GetLocation() duck.ILocation {
+func (self ContinueNode) GetLocation() duck.Location {
   return self.Location
 }
 
 // ExprStmtNode
 type ExprStmtNode struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Expr duck.IExprNode
 }
 
-func NewExprStmtNode(loc duck.ILocation, expr duck.IExprNode) ExprStmtNode {
-  if loc == nil { panic("location is nil") }
+func NewExprStmtNode(loc duck.Location, expr duck.IExprNode) ExprStmtNode {
   if expr == nil { panic("expr is nil") }
   return ExprStmtNode { "ast.ExprStmtNode", loc, expr }
 }
@@ -72,19 +69,18 @@ func (self ExprStmtNode) IsStmtNode() bool {
   return true
 }
 
-func (self ExprStmtNode) GetLocation() duck.ILocation {
+func (self ExprStmtNode) GetLocation() duck.Location {
   return self.Location
 }
 
 // GotoNode
 type GotoNode struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Target string
 }
 
-func NewGotoNode(loc duck.ILocation, target string) GotoNode {
-  if loc == nil { panic("location is nil") }
+func NewGotoNode(loc duck.Location, target string) GotoNode {
   return GotoNode { "ast.GotoNode", loc, target }
 }
 
@@ -96,20 +92,19 @@ func (self GotoNode) IsStmtNode() bool {
   return true
 }
 
-func (self GotoNode) GetLocation() duck.ILocation {
+func (self GotoNode) GetLocation() duck.Location {
   return self.Location
 }
 
 // LabelNode
 type LabelNode struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Name string
   Stmt duck.IStmtNode
 }
 
-func NewLabelNode(loc duck.ILocation, name string, stmt duck.IStmtNode) LabelNode {
-  if loc == nil { panic("location is nil") }
+func NewLabelNode(loc duck.Location, name string, stmt duck.IStmtNode) LabelNode {
   if stmt == nil { panic("stmt is nil") }
   return LabelNode { "ast.LabelNode", loc, name, stmt }
 }
@@ -122,19 +117,18 @@ func (self LabelNode) IsStmtNode() bool {
   return true
 }
 
-func (self LabelNode) GetLocation() duck.ILocation {
+func (self LabelNode) GetLocation() duck.Location {
   return self.Location
 }
 
 // ReturnNode
 type ReturnNode struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Expr duck.IExprNode
 }
 
-func NewReturnNode(loc duck.ILocation, expr duck.IExprNode) ReturnNode {
-  if loc == nil { panic("location is nil") }
+func NewReturnNode(loc duck.Location, expr duck.IExprNode) ReturnNode {
   if expr == nil { panic("expr is nil") }
   return ReturnNode { "ast.ReturnNode", loc, expr }
 }
@@ -147,7 +141,7 @@ func (self ReturnNode) IsStmtNode() bool {
   return true
 }
 
-func (self ReturnNode) GetLocation() duck.ILocation {
+func (self ReturnNode) GetLocation() duck.Location {
   return self.Location
 }
 

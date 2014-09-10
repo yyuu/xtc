@@ -8,12 +8,12 @@ import (
 // StructType
 type StructType struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Name string
   Members []duck.ISlot
 }
 
-func NewStructType(name string, membs []duck.ISlot, loc duck.ILocation) *StructType {
+func NewStructType(name string, membs []duck.ISlot, loc duck.Location) *StructType {
   return &StructType { "typesys.StructType", loc, name, membs }
 }
 
@@ -76,11 +76,11 @@ func (self StructType) IsFunction() bool {
 // StructTypeRef
 type StructTypeRef struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   Name string
 }
 
-func NewStructTypeRef(loc duck.ILocation, name string) StructTypeRef {
+func NewStructTypeRef(loc duck.Location, name string) StructTypeRef {
   return StructTypeRef { "typesys.StructTypeRef", loc, name }
 }
 
@@ -88,7 +88,7 @@ func (self StructTypeRef) String() string {
   return fmt.Sprintf("<typesys.StructTypeRef Name=%s Location=%s>", self.Name, self.Location)
 }
 
-func (self StructTypeRef) GetLocation() duck.ILocation {
+func (self StructTypeRef) GetLocation() duck.Location {
   return self.Location
 }
 

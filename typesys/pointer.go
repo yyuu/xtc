@@ -75,7 +75,7 @@ func (self PointerType) IsFunction() bool {
 // PointerTypeRef
 type PointerTypeRef struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
   BaseType duck.ITypeRef
 }
 
@@ -87,7 +87,7 @@ func (self PointerTypeRef) String() string {
   return fmt.Sprintf("<typesys.PointerTypeRef Location=%s BaseType=%s>", self.Location, self.BaseType)
 }
 
-func (self PointerTypeRef) GetLocation() duck.ILocation {
+func (self PointerTypeRef) GetLocation() duck.Location {
   return self.Location
 }
 

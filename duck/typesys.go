@@ -24,7 +24,7 @@ type IType interface {
 type ITypeRef interface {
   String() string
 
-  GetLocation() ILocation
+  GetLocation() Location
   IsTypeRef() bool
 }
 

@@ -73,10 +73,10 @@ func (self VoidType) IsFunction() bool {
 // VoidTypeRef
 type VoidTypeRef struct {
   ClassName string
-  Location duck.ILocation
+  Location duck.Location
 }
 
-func NewVoidTypeRef(loc duck.ILocation) VoidTypeRef {
+func NewVoidTypeRef(loc duck.Location) VoidTypeRef {
   return VoidTypeRef { "typesys.VoidTypeRef", loc }
 }
 
@@ -84,7 +84,7 @@ func (self VoidTypeRef) String() string {
   return fmt.Sprintf("<typesys.VoidTypeRef Location=%s>", self.Location)
 }
 
-func (self VoidTypeRef) GetLocation() duck.ILocation {
+func (self VoidTypeRef) GetLocation() duck.Location {
   return self.Location
 }
 

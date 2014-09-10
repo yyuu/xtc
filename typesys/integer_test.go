@@ -2,6 +2,7 @@ package typesys
 
 import (
   "testing"
+  "bitbucket.org/yyuu/bs/duck"
   "bitbucket.org/yyuu/bs/xt"
 )
 
@@ -36,8 +37,8 @@ func TestCharType(t *testing.T) {
 }
 
 func TestSignedInt32TypeRef(t *testing.T) {
-  location := location { "", 1, 2 }
-  x := NewIntegerTypeRef(location, "int32")
-  xt.AssertEquals(t, "int32 ref has location", x.GetLocation(), location)
+  loc := duck.NewLocation("", 1, 2)
+  x := NewIntegerTypeRef(loc, "int32")
+  xt.AssertEquals(t, "int32 ref has location", x.GetLocation(), loc)
   xt.AssertEquals(t, "int32 is int32", x.Name, "int32")
 }
