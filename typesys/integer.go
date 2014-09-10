@@ -13,8 +13,8 @@ type IntegerType struct {
   Name string
 }
 
-func NewIntegerType(size int, isSigned bool, name string) IntegerType {
-  return IntegerType { "typesys.IntegerType", size, isSigned, name }
+func NewIntegerType(size int, isSigned bool, name string) *IntegerType {
+  return &IntegerType { "typesys.IntegerType", size, isSigned, name }
 }
 
 func (self IntegerType) String() string {

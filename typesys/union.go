@@ -13,8 +13,8 @@ type UnionType struct {
   Members []duck.ISlot
 }
 
-func NewUnionType(name string, membs []duck.ISlot, loc duck.ILocation) UnionType {
-  return UnionType { "typesys.UnionType", loc, name, membs }
+func NewUnionType(name string, membs []duck.ISlot, loc duck.ILocation) *UnionType {
+  return &UnionType { "typesys.UnionType", loc, name, membs }
 }
 
 func (self UnionType) String() string {

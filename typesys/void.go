@@ -10,8 +10,8 @@ type VoidType struct {
   ClassName string
 }
 
-func NewVoidType() VoidType {
-  return VoidType { "typesys.VoidType" }
+func NewVoidType() *VoidType {
+  return &VoidType { "typesys.VoidType" }
 }
 
 func (self VoidType) String() string {

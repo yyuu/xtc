@@ -24,6 +24,8 @@ type ITypeNode interface {
 type ITypeDefinition interface {
   INode
   IsTypeDefinition() bool
+  GetTypeRef() ITypeRef
+  DefiningType() IType
 }
 
 type ILocation interface {

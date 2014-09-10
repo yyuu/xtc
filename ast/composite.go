@@ -3,6 +3,7 @@ package ast
 import (
   "fmt"
   "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/typesys"
 )
 
 // StructNode
@@ -32,6 +33,18 @@ func (self StructNode) GetLocation() duck.ILocation {
   return self.Location
 }
 
+func (self StructNode) GetTypeRef() duck.ITypeRef {
+  return self.TypeNode.GetTypeRef()
+}
+
+func (self StructNode) DefiningType() duck.IType {
+  var membs []duck.ISlot
+  for i := range self.Members {
+    membs[i] = self.Members[i]
+  }
+  return typesys.NewStructType(self.Name, membs, self.Location)
+}
+
 // UnionNode
 type UnionNode struct {
   ClassName string
@@ -57,4 +70,16 @@ func (self UnionNode) IsTypeDefinition() bool {
 
 func (self UnionNode) GetLocation() duck.ILocation {
   return self.Location
+}
+
+func (self UnionNode) GetTypeRef() duck.ITypeRef {
+  return self.TypeNode.GetTypeRef()
+}
+
+func (self UnionNode) DefiningType() duck.IType {
+  var membs []duck.ISlot
+  for i := range self.Members {
+    membs[i] = self.Members[i]
+  }
+  return typesys.NewUnionType(self.Name, membs, self.Location)
 }

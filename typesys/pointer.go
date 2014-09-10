@@ -12,8 +12,8 @@ type PointerType struct {
   BaseType duck.IType
 }
 
-func NewPointerType(size int, baseType duck.IType) PointerType {
-  return PointerType { "typesys.PointerType", size, baseType }
+func NewPointerType(size int, baseType duck.IType) *PointerType {
+  return &PointerType { "typesys.PointerType", size, baseType }
 }
 
 func (self PointerType) String() string {
