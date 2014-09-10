@@ -12,8 +12,8 @@ type FunctionType struct {
   ParamTypes ParamTypes
 }
 
-func NewFunctionType(ret duck.IType, paramTypes ParamTypes) FunctionType {
-  return FunctionType { "typesys.FunctionType", ret, paramTypes }
+func NewFunctionType(ret duck.IType, paramTypes ParamTypes) *FunctionType {
+  return &FunctionType { "typesys.FunctionType", ret, paramTypes }
 }
 
 func (self FunctionType) String() string {

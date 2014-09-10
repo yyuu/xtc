@@ -13,8 +13,8 @@ type StructType struct {
   Members []duck.ISlot
 }
 
-func NewStructType(name string, membs []duck.ISlot, loc duck.ILocation) StructType {
-  return StructType { "typesys.StructType", loc, name, membs }
+func NewStructType(name string, membs []duck.ISlot, loc duck.ILocation) *StructType {
+  return &StructType { "typesys.StructType", loc, name, membs }
 }
 
 func (self StructType) String() string {

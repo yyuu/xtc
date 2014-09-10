@@ -13,8 +13,8 @@ type ArrayType struct {
   PointerSize int
 }
 
-func NewArrayType(baseType duck.IType, length int, pointerSize int) ArrayType {
-  return ArrayType { "typesys.ArrayType", baseType, length, pointerSize }
+func NewArrayType(baseType duck.IType, length int, pointerSize int) *ArrayType {
+  return &ArrayType { "typesys.ArrayType", baseType, length, pointerSize }
 }
 
 func (self ArrayType) String() string {

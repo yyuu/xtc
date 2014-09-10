@@ -13,8 +13,8 @@ type ParamTypes struct {
   Vararg bool
 }
 
-func NewParamTypes(loc duck.ILocation, paramDescs []duck.IType, vararg bool) ParamTypes {
-  return ParamTypes { "typesys.ParamTypes", loc, paramDescs, vararg }
+func NewParamTypes(loc duck.ILocation, paramDescs []duck.IType, vararg bool) *ParamTypes {
+  return &ParamTypes { "typesys.ParamTypes", loc, paramDescs, vararg }
 }
 
 func (self ParamTypes) String() string {

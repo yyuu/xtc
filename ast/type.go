@@ -3,6 +3,7 @@ package ast
 import (
   "fmt"
   "bitbucket.org/yyuu/bs/duck"
+  "bitbucket.org/yyuu/bs/typesys"
 )
 
 // CastNode
@@ -119,6 +120,7 @@ func (self TypeNode) GetLocation() duck.ILocation {
 type TypedefNode struct {
   ClassName string
   Location duck.ILocation
+  NewType duck.ITypeRef
   Real duck.ITypeRef
   Name string
 }
@@ -126,7 +128,8 @@ type TypedefNode struct {
 func NewTypedefNode(loc duck.ILocation, real duck.ITypeRef, name string) TypedefNode {
   if loc == nil { panic("location is nil") }
   if real == nil { panic("real is nil") }
-  return TypedefNode { "ast.TypedefNode", loc, real, name }
+  newType := real
+  return TypedefNode { "ast.TypedefNode", loc, newType, real, name }
 }
 
 func (self TypedefNode) String() string {
@@ -139,6 +142,15 @@ func (self TypedefNode) IsTypeDefinition() bool {
 
 func (self TypedefNode) GetLocation() duck.ILocation {
   return self.Location
+}
+
+func (self TypedefNode) GetTypeRef() duck.ITypeRef {
+  return self.NewType
+}
+
+func (self TypedefNode) DefiningType() duck.IType {
+  realTypeNode := NewTypeNode(self.Location, self.Real)
+  return typesys.NewUserType(self.Name, realTypeNode, self.Location)
 }
 
 // TypeDefinition

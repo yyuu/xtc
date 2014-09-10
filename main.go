@@ -11,6 +11,7 @@ import (
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/compiler"
   "bitbucket.org/yyuu/bs/parser"
+  "bitbucket.org/yyuu/bs/typesys"
 )
 
 var flagSet = flag.NewFlagSet(os.Args[0], 1)
@@ -73,8 +74,10 @@ func ep(a *ast.AST, err error) *ast.AST {
     d(a)
   }
 
+  types := typesys.NewTypeTableFor("x86-linux")
+
   compiler.NewLocalResolver().Resolve(a)
-//compiler.NewTypeResolver(types).Resolve(a)
+  compiler.NewTypeResolver(types).Resolve(a)
 //types.SemanticCheck()
 //compiler.NewDereferenceChecker(types).Check(a)
 //compiler.NewTypeChecker(types).Check(a)
