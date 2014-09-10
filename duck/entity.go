@@ -3,21 +3,27 @@ package duck
 type IEntity interface {
   String() string
   IsEntity() bool
+  GetName() string
+  IsDefined() bool
+  IsPrivate() bool
+  IsConstant() bool
+  IsRefered() bool
 }
 
 type IVariable interface {
   IEntity
   IsVariable() bool
-  IsPrivate() bool
-  GetName() string
   GetTypeNode() ITypeNode
 }
 
 type IDefinedVariable interface {
   IVariable
   IsDefinedVariable() bool
-  GetNumRefered() int
   GetInitializer() IExprNode
+  SetInitializer(IExprNode) IDefinedVariable
+  HasInitializer() bool
+  GetNumRefered() int
+//Refered()
 }
 
 type IUndefinedVariable interface {
@@ -35,14 +41,16 @@ type IFunction interface {
 type IDefinedFunction interface {
   IFunction
   IsDefinedFunction() bool
-  IsPrivate() bool
   GetBody() IStmtNode
+  SetBody(IStmtNode) IDefinedFunction
+  GetScope() IVariableScope
+  SetScope(IVariableScope) IDefinedFunction
+  ListParameters() []IDefinedVariable
 }
 
 type IUndefinedFunction interface {
   IFunction
   IsUndefinedFunction() bool
-  GetName() string
 }
 
 type IParams interface {
@@ -54,13 +62,26 @@ type IParams interface {
 type IParameter interface {
   IEntity
   GetTypeNode() ITypeNode
-  GetName() string
 }
 
 type IConstant interface {
   IEntity
-  IsConstant() bool
-  GetName() string
   GetTypeNode() ITypeNode
   GetValue() IExprNode
+  SetValue(IExprNode) IConstant
+}
+
+type IVariableScope interface {
+  IsToplevel() bool
+  GetToplevel() IVariableScope
+  GetParent() IVariableScope
+  GetByName(string) *IEntity
+}
+
+type IConstantTable interface {
+  IsConstantTable() bool
+}
+
+type IConstantEntry interface {
+  IsConstantEntry() bool
 }

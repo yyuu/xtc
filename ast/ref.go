@@ -174,11 +174,12 @@ type VariableNode struct {
   ClassName string
   Location duck.ILocation
   Name string
+  entity duck.IEntity
 }
 
 func NewVariableNode(loc duck.ILocation, name string) VariableNode {
   if loc == nil { panic("location is nil") }
-  return VariableNode { "ast.VariableNode", loc, name }
+  return VariableNode { "ast.VariableNode", loc, name, nil }
 }
 
 func (self VariableNode) String() string {
@@ -191,4 +192,16 @@ func (self VariableNode) IsExprNode() bool {
 
 func (self VariableNode) GetLocation() duck.ILocation {
   return self.Location
+}
+
+func (self VariableNode) GetName() string {
+  return self.Name
+}
+
+func (self *VariableNode) SetEntity(ent duck.IEntity) {
+  self.entity = ent
+}
+
+func (self VariableNode) GetEntity() duck.IEntity {
+  return self.entity
 }

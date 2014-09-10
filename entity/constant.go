@@ -28,6 +28,18 @@ func (self Constant) IsConstant() bool {
   return true
 }
 
+func (self Constant) IsDefined() bool {
+  return true
+}
+
+func (self Constant) IsPrivate() bool {
+  return false
+}
+
+func (self Constant) IsRefered() bool {
+  return true // FIXME: count references
+}
+
 func (self Constant) GetName() string {
   return self.Name
 }
@@ -38,4 +50,9 @@ func (self Constant) GetTypeNode() duck.ITypeNode {
 
 func (self Constant) GetValue() duck.IExprNode {
   return self.Value
+}
+
+func (self Constant) SetValue(val duck.IExprNode) duck.IConstant {
+  self.Value = val
+  return self
 }

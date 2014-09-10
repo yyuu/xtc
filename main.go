@@ -9,6 +9,7 @@ import (
   "os"
   "strings"
   "bitbucket.org/yyuu/bs/ast"
+  "bitbucket.org/yyuu/bs/compiler"
   "bitbucket.org/yyuu/bs/parser"
 )
 
@@ -19,6 +20,7 @@ var verbose = flagSet.Int("v", 0, "verbose mode")
 func main() {
   flagSet.Parse(os.Args[1:])
   parser.Verbose = *verbose
+  compiler.Verbose = *verbose
 
   files := flagSet.Args()
   if 0 < len(files) {
@@ -45,35 +47,45 @@ func repl() {
   in  := bufio.NewReader(os.Stdin)
   out := bufio.NewWriter(os.Stdout)
   for {
-    out.WriteString("> ")
-    out.Flush()
-    s, err := in.ReadString('\n')
-    if err != nil {
-      break
-    }
-    if strings.TrimSpace(s) != "" {
+    s := r(in, out)
+    if s != "" {
       ep(parser.ParseExpr(s))
     }
   }
 }
 
-func ep(ast *ast.AST, err error) *ast.AST {
+func r(in *bufio.Reader, out *bufio.Writer) string {
+  out.WriteString("> ")
+  out.Flush()
+  s, err := in.ReadString('\n')
+  if err != nil {
+    os.Exit(1)
+  }
+  return strings.TrimSpace(s)
+}
+
+func ep(a *ast.AST, err error) *ast.AST {
   if err != nil {
     panic(err)
   }
+
   if *dump == true {
-    d(ast)
+    d(a)
   }
+
+  local_resolver := compiler.NewLocalResolver()
+  (&local_resolver).Resolve(a)
+
   // TODO: evaluate AST
-  fmt.Fprintln(os.Stdout, ast)
-  return ast
+  fmt.Fprintln(os.Stdout, a)
+  return a
 }
 
-func d(ast *ast.AST) *ast.AST {
-  cs, err := json.MarshalIndent(ast, "", "  ")
+func d(a *ast.AST) *ast.AST {
+  cs, err := json.MarshalIndent(a, "", "  ")
   if err != nil {
     panic(err)
   }
   fmt.Fprintln(os.Stderr, string(cs))
-  return ast
+  return a
 }

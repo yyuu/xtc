@@ -12,11 +12,12 @@ type BlockNode struct {
   Location duck.ILocation
   Variables []duck.IDefinedVariable
   Stmts []duck.IStmtNode
+  scope duck.IVariableScope
 }
 
 func NewBlockNode(loc duck.ILocation, variables []duck.IDefinedVariable, stmts []duck.IStmtNode) BlockNode {
   if loc == nil { panic("location is nil") }
-  return BlockNode { "ast.BlockNode", loc, variables, stmts }
+  return BlockNode { "ast.BlockNode", loc, variables, stmts, nil }
 }
 
 func (self BlockNode) String() string {
@@ -57,4 +58,12 @@ func (self BlockNode) GetVariables() []duck.IDefinedVariable {
 
 func (self BlockNode) GetStmts() []duck.IStmtNode {
   return self.Stmts
+}
+
+func (self BlockNode) GetScope() duck.IVariableScope {
+  return self.scope
+}
+
+func (self *BlockNode) SetScope(scope duck.IVariableScope) {
+  self.scope = scope
 }

@@ -34,12 +34,20 @@ func (self DefinedVariable) IsDefinedVariable() bool {
   return true
 }
 
+func (self DefinedVariable) IsDefined() bool {
+  return true
+}
+
 func (self DefinedVariable) HasInitializer() bool {
   return self.Initializer != nil
 }
 
 func (self DefinedVariable) IsPrivate() bool {
   return self.Private
+}
+
+func (self DefinedVariable) IsConstant() bool {
+  return false
 }
 
 func (self DefinedVariable) GetName() string {
@@ -54,8 +62,21 @@ func (self DefinedVariable) GetNumRefered() int {
   return self.NumRefered
 }
 
+func (self DefinedVariable) IsRefered() bool {
+  return 0 < self.NumRefered
+}
+
+func (self *DefinedVariable) Refered() {
+  self.NumRefered++
+}
+
 func (self DefinedVariable) GetInitializer() duck.IExprNode {
   return self.Initializer
+}
+
+func (self DefinedVariable) SetInitializer(init duck.IExprNode) duck.IDefinedVariable {
+  self.Initializer = init
+  return self
 }
 
 type UndefinedVariable struct {
@@ -83,4 +104,24 @@ func (self UndefinedVariable) IsVariable() bool {
 
 func (self UndefinedVariable) IsUndefinedVariable() bool {
   return true
+}
+
+func (self UndefinedVariable) IsDefined() bool {
+  return false
+}
+
+func (self UndefinedVariable) IsConstant() bool {
+  return false
+}
+
+func (self UndefinedVariable) IsPrivate() bool {
+  return true
+}
+
+func (self UndefinedVariable) IsRefered() bool {
+  return true // FIXME: count up references
+}
+
+func (self UndefinedVariable) GetName() string {
+  return self.Name
 }
