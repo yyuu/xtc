@@ -82,24 +82,34 @@ func (self *VariableScope) IsDefinedLocally(name string) bool {
 }
 
 /*
-func (self ToplevelScope) AllGlobalVariables() {
+func (self *VariableScope) AllGlobalVariables() {
 }
  */
 
 /*
-func (self ToplevelScope) DefinedGlobalScopeVariables() {
+func (self *VariableScope) DefinedGlobalScopeVariables() {
 }
  */
 
 /*
-func (self ToplevelScope) StaticLocalVariables() {
+func (self *VariableScope) StaticLocalVariables() {
 }
  */
 
-/*
-func (self ToplevelScope) CheckReferences() {
+func (self *VariableScope) CheckReferences() {
+  for _, ent := range self.Variables {
+    if (*ent).IsDefined() && (*ent).IsPrivate() && !(*ent).IsConstant() && !(*ent).IsRefered() {
+      panic(fmt.Errorf("unused variable: %s", (*ent).GetName()))
+    }
+  }
+  for i := range self.Children {
+    a := self.Children[i]
+    for j := range a.Children {
+      b := a.Children[j]
+      b.CheckReferences()
+    }
+  }
 }
- */
 
 type ConstantTable struct {
   Constants map[string]*duck.IEntity

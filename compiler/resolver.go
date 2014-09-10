@@ -33,7 +33,7 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
   self.resolveConstantValues(a)
   self.resolveFunctions(a)
 
-//toplevel.checkReferences()
+  toplevel.CheckReferences()
 
 //a.SetScope(toplevel)
 //a.SetConstantTable(constantTable)

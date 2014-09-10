@@ -51,6 +51,14 @@ func (self DefinedFunction) IsDefined() bool {
   return true
 }
 
+func (self DefinedFunction) IsConstant() bool {
+  return false
+}
+
+func (self DefinedFunction) IsRefered() bool {
+  return true // FIXME: count up references
+}
+
 func (self DefinedFunction) GetParams() duck.IParams {
   return self.Params
 }
@@ -111,6 +119,18 @@ func (self UndefinedFunction) IsUndefinedFunction() bool {
 
 func (self UndefinedFunction) IsDefined() bool {
   return false
+}
+
+func (self UndefinedFunction) IsConstant() bool {
+  return false
+}
+
+func (self UndefinedFunction) IsPrivate() bool {
+  return true
+}
+
+func (self UndefinedFunction) IsRefered() bool {
+  return true // FIXME: count up references
 }
 
 func (self UndefinedFunction) GetTypeNode() duck.ITypeNode {

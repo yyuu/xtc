@@ -5,12 +5,14 @@ type IEntity interface {
   IsEntity() bool
   GetName() string
   IsDefined() bool
+  IsPrivate() bool
+  IsConstant() bool
+  IsRefered() bool
 }
 
 type IVariable interface {
   IEntity
   IsVariable() bool
-  IsPrivate() bool
   GetTypeNode() ITypeNode
 }
 
@@ -22,7 +24,6 @@ type IDefinedVariable interface {
   HasInitializer() bool
   GetNumRefered() int
 //Refered()
-  IsRefered() bool
 }
 
 type IUndefinedVariable interface {
@@ -40,7 +41,6 @@ type IFunction interface {
 type IDefinedFunction interface {
   IFunction
   IsDefinedFunction() bool
-  IsPrivate() bool
   GetBody() IStmtNode
   SetBody(IStmtNode) IDefinedFunction
   GetScope() IVariableScope
@@ -66,7 +66,6 @@ type IParameter interface {
 
 type IConstant interface {
   IEntity
-  IsConstant() bool
   GetTypeNode() ITypeNode
   GetValue() IExprNode
   SetValue(IExprNode) IConstant

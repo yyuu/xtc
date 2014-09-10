@@ -27,6 +27,18 @@ func (self Params) IsDefined() bool {
   return false
 }
 
+func (self Params) IsConstant() bool {
+  return false
+}
+
+func (self Params) IsPrivate() bool {
+  return true
+}
+
+func (self Params) IsRefered() bool {
+  return true // FIXME: count up references
+}
+
 func (self Params) GetLocation() duck.ILocation {
   return self.Location
 }
@@ -67,6 +79,10 @@ func (self Parameter) IsVariable() bool {
 
 func (self Parameter) IsDefinedVariable() bool {
   return true
+}
+
+func (self Parameter) IsConstant() bool {
+  return false
 }
 
 func (self Parameter) GetInitializer() duck.IExprNode {

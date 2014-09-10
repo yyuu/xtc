@@ -46,6 +46,10 @@ func (self DefinedVariable) IsPrivate() bool {
   return self.Private
 }
 
+func (self DefinedVariable) IsConstant() bool {
+  return false
+}
+
 func (self DefinedVariable) GetName() string {
   return self.Name
 }
@@ -104,6 +108,18 @@ func (self UndefinedVariable) IsUndefinedVariable() bool {
 
 func (self UndefinedVariable) IsDefined() bool {
   return false
+}
+
+func (self UndefinedVariable) IsConstant() bool {
+  return false
+}
+
+func (self UndefinedVariable) IsPrivate() bool {
+  return true
+}
+
+func (self UndefinedVariable) IsRefered() bool {
+  return true // FIXME: count up references
 }
 
 func (self UndefinedVariable) GetName() string {

@@ -32,6 +32,14 @@ func (self Constant) IsDefined() bool {
   return true
 }
 
+func (self Constant) IsPrivate() bool {
+  return false
+}
+
+func (self Constant) IsRefered() bool {
+  return true // FIXME: count references
+}
+
 func (self Constant) GetName() string {
   return self.Name
 }
