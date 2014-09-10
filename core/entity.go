@@ -74,7 +74,3 @@ type IVariableScope interface {
 type IConstantTable interface {
   IsConstantTable() bool
 }
-
-type IConstantEntry interface {
-  IsConstantEntry() bool
-}

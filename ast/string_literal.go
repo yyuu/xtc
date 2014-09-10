@@ -2,6 +2,7 @@ package ast
 
 import (
   "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/bs/entity"
 )
 
 // StringLiteralNode
@@ -9,7 +10,7 @@ type StringLiteralNode struct {
   ClassName string
   Location core.Location
   Value string
-  entry core.IConstantEntry
+  entry *entity.ConstantEntry
 }
 
 func NewStringLiteralNode(loc core.Location, literal string) *StringLiteralNode {
@@ -32,10 +33,10 @@ func (self StringLiteralNode) GetValue() string {
   return self.Value
 }
 
-func (self StringLiteralNode) GetEntry() core.IConstantEntry {
+func (self StringLiteralNode) GetEntry() *entity.ConstantEntry {
   return self.entry
 }
 
-func (self *StringLiteralNode) SetEntry(e core.IConstantEntry) {
+func (self *StringLiteralNode) SetEntry(e *entity.ConstantEntry) {
   self.entry = e
 }
