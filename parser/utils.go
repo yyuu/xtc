@@ -111,16 +111,16 @@ func asConstant(x core.IEntity) core.IConstant {
   return x.(core.IConstant)
 }
 
-func asStructNode(x core.INode) ast.StructNode {
-  return x.(ast.StructNode)
+func asStructNode(x core.INode) core.IStructNode {
+  return x.(core.IStructNode)
 }
 
-func asUnionNode(x core.INode) ast.UnionNode {
-  return x.(ast.UnionNode)
+func asUnionNode(x core.INode) core.IUnionNode {
+  return x.(core.IUnionNode)
 }
 
-func asTypedefNode(x core.INode) ast.TypedefNode {
-  return x.(ast.TypedefNode)
+func asTypedefNode(x core.INode) core.ITypedefNode {
+  return x.(core.ITypedefNode)
 }
 
 func asParams(x core.IEntity) *entity.Params {
@@ -180,26 +180,26 @@ func defconsts(xs...core.IConstant) []core.IConstant {
   }
 }
 
-func defstructs(xs...ast.StructNode) []ast.StructNode {
+func defstructs(xs...core.IStructNode) []core.IStructNode {
   if 0 < len(xs) {
     return xs
   } else {
-    return []ast.StructNode { }
+    return []core.IStructNode { }
   }
 }
 
-func defunions(xs...ast.UnionNode) []ast.UnionNode {
+func defunions(xs...core.IUnionNode) []core.IUnionNode {
   if 0 < len(xs) {
     return xs
   } else {
-    return []ast.UnionNode { }
+    return []core.IUnionNode { }
   }
 }
 
-func typedefs(xs...ast.TypedefNode) []ast.TypedefNode {
+func typedefs(xs...core.ITypedefNode) []core.ITypedefNode {
   if 0 < len(xs) {
     return xs
   } else {
-    return []ast.TypedefNode { }
+    return []core.ITypedefNode { }
   }
 }
