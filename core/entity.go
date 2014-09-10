@@ -26,11 +26,6 @@ type IDefinedVariable interface {
 //Refered()
 }
 
-type IUndefinedVariable interface {
-  IVariable
-  IsUndefinedVariable() bool
-}
-
 type IFunction interface {
   IEntity
   IsFunction() bool

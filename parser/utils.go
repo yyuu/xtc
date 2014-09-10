@@ -103,8 +103,8 @@ func asDefinedVariables(xs []core.IEntity) []core.IDefinedVariable {
   return ys
 }
 
-func asUndefinedVariable(x core.IEntity) core.IUndefinedVariable {
-  return x.(core.IUndefinedVariable)
+func asUndefinedVariable(x core.IEntity) *entity.UndefinedVariable {
+  return x.(*entity.UndefinedVariable)
 }
 
 func asConstant(x core.IEntity) *entity.Constant {
@@ -148,11 +148,11 @@ func defvars(xs...core.IDefinedVariable) []core.IDefinedVariable {
   }
 }
 
-func vardecls(xs...core.IUndefinedVariable) []core.IUndefinedVariable {
+func vardecls(xs...*entity.UndefinedVariable) []*entity.UndefinedVariable {
   if 0 < len(xs) {
     return xs
   } else {
-    return []core.IUndefinedVariable { }
+    return []*entity.UndefinedVariable { }
   }
 }
 
