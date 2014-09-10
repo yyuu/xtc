@@ -119,7 +119,7 @@ func (self *LocalResolver) debugVisit(key string, unknown interface{}) {
   fmt.Println("-----", key, "-----")
   variables := self.currentScope().Variables
   for i := range variables {
-    fmt.Println(*variables[i])
+    fmt.Println(variables[i])
   }
   fmt.Println("-----", key, "-----")
 
@@ -156,13 +156,12 @@ func (self *LocalResolver) Visit(unknown interface{}) {
           if e == nil {
             panic(fmt.Errorf("undefined: %s", expr.GetName()))
           }
-          variable, ok := (*e).(entity.DefinedVariable)
+          variable, ok := e.(entity.DefinedVariable)
           if ! ok {
             panic(fmt.Errorf("not a variable: %s", expr.GetName()))
           }
           p := &variable
           p.Refered()
-          *e = p
           expr.SetEntity(p)
           *typed = expr
         }

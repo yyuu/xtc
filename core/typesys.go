@@ -45,6 +45,6 @@ type ITypeTable interface {
 
   IsTypeTable() bool
   IsDefined(ITypeRef) bool
-  GetType(ITypeRef) *IType
+  GetType(ITypeRef) IType
   PutType(ITypeRef, IType)
 }

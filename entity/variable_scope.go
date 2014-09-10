@@ -8,15 +8,15 @@ import (
 type VariableScope struct {
   Parent *VariableScope
   Children []*VariableScope
-  Variables map[string]*core.IEntity
+  Variables map[string]core.IEntity
 }
 
 func NewToplevelScope() *VariableScope {
-  return &VariableScope { nil, []*VariableScope { }, make(map[string]*core.IEntity) }
+  return &VariableScope { nil, []*VariableScope { }, make(map[string]core.IEntity) }
 }
 
 func NewLocalScope(parent *VariableScope) *VariableScope {
-  return &VariableScope { parent, []*VariableScope { }, make(map[string]*core.IEntity) }
+  return &VariableScope { parent, []*VariableScope { }, make(map[string]core.IEntity) }
 }
 
 func (self *VariableScope) IsVariableScope() bool {
@@ -35,7 +35,7 @@ func (self *VariableScope) AddChild(scope *VariableScope) {
   self.Children = append(self.Children, scope)
 }
 
-func (self *VariableScope) GetByName(name string) *core.IEntity {
+func (self *VariableScope) GetByName(name string) core.IEntity {
   return self.Variables[name]
 }
 
@@ -45,17 +45,17 @@ func (self *VariableScope) DeclareEntity(entity core.IEntity) {
   if e != nil {
     panic(fmt.Errorf("duplicated declaration: %s", name))
   } else {
-    self.Variables[name] = &entity
+    self.Variables[name] = entity
   }
 }
 
 func (self *VariableScope) DefineEntity(entity core.IEntity) {
   name := entity.GetName()
   e := self.GetByName(name)
-  if e != nil && (*e).IsDefined() {
+  if e != nil && e.IsDefined() {
     panic(fmt.Errorf("duplicated definition: %s", name))
   } else {
-    self.Variables[name] = &entity
+    self.Variables[name] = entity
   }
 }
 
@@ -65,7 +65,7 @@ func (self *VariableScope) DefineVariable(v *DefinedVariable) {
     panic(fmt.Errorf("duplicated variable: %s", name))
   }
   var entity core.IEntity = v
-  self.Variables[name] = &entity
+  self.Variables[name] = entity
 }
 
 func (self *VariableScope) GetToplevel() *VariableScope {
@@ -98,8 +98,8 @@ func (self *VariableScope) StaticLocalVariables() {
 
 func (self *VariableScope) CheckReferences() {
   for _, ent := range self.Variables {
-    if (*ent).IsDefined() && (*ent).IsPrivate() && !(*ent).IsConstant() && !(*ent).IsRefered() {
-      panic(fmt.Errorf("unused variable: %s", (*ent).GetName()))
+    if ent.IsDefined() && ent.IsPrivate() && !ent.IsConstant() && !ent.IsRefered() {
+      panic(fmt.Errorf("unused variable: %s", ent.GetName()))
     }
   }
   for i := range self.Children {

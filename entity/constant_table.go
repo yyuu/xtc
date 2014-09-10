@@ -5,11 +5,11 @@ import (
 )
 
 type ConstantTable struct {
-  Constants map[string]*core.IEntity
+  Constants map[string]core.IEntity
 }
 
 func NewConstantTable() *ConstantTable {
-  return &ConstantTable { make(map[string]*core.IEntity) }
+  return &ConstantTable { make(map[string]core.IEntity) }
 }
 
 func (self *ConstantTable) IsConstantTable() bool {
