@@ -69,9 +69,9 @@ func (self *LocalResolver) resolveConstantValues(a *ast.AST) {
 
 func (self *LocalResolver) resolveFunctions(a *ast.AST) {
   xs := a.GetDefinedFunctions()
-  ys := make([]core.IDefinedFunction, len(xs))
+  ys := make([]*entity.DefinedFunction, len(xs))
   for i := range xs {
-    function := xs[i].(*entity.DefinedFunction)
+    function := xs[i]
     self.pushScope(function.ListParameters())
     body := function.GetBody()
     ast.Visit(self, &body)

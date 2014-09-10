@@ -71,8 +71,8 @@ func asDeclarations(x core.INode) *ast.Declarations {
   return x.(*ast.Declarations)
 }
 
-func asDefinedFunction(x core.IEntity) core.IDefinedFunction {
-  return x.(core.IDefinedFunction)
+func asDefinedFunction(x core.IEntity) *entity.DefinedFunction {
+  return x.(*entity.DefinedFunction)
 }
 
 func asUndefinedFunction(x core.IEntity) *entity.UndefinedFunction {
@@ -144,11 +144,11 @@ func vardecls(xs...*entity.UndefinedVariable) []*entity.UndefinedVariable {
   }
 }
 
-func defuns(xs...core.IDefinedFunction) []core.IDefinedFunction {
+func defuns(xs...*entity.DefinedFunction) []*entity.DefinedFunction {
   if 0 < len(xs) {
     return xs
   } else {
-    return []core.IDefinedFunction { }
+    return []*entity.DefinedFunction { }
   }
 }
 

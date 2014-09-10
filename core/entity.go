@@ -21,16 +21,3 @@ type IDefinedVariable interface {
   GetNumRefered() int
 //Refered()
 }
-
-type IDefinedFunction interface {
-  IEntity
-  IsFunction() bool
-  GetTypeNode() ITypeNode
-//GetParams() IParams
-  IsDefinedFunction() bool
-  GetBody() IStmtNode
-//SetBody(IStmtNode) IDefinedFunction
-//GetScope() IVariableScope
-//SetScope(IVariableScope) IDefinedFunction
-  ListParameters() []IDefinedVariable
-}

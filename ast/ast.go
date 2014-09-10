@@ -101,11 +101,11 @@ func (self *AST) SetDefinedVariables(xs []core.IDefinedVariable) {
   self.Declarations.Defvars = xs
 }
 
-func (self AST) GetDefinedFunctions() []core.IDefinedFunction {
+func (self AST) GetDefinedFunctions() []*entity.DefinedFunction {
   return self.Declarations.Defuns
 }
 
-func (self *AST) SetDefinedFunctions(xs []core.IDefinedFunction) {
+func (self *AST) SetDefinedFunctions(xs []*entity.DefinedFunction) {
   self.Declarations.Defuns = xs
 }
 
