@@ -10,13 +10,13 @@ type DefinedFunction struct {
   Private bool
   TypeNode core.ITypeNode
   Name string
-  Params Params
+  Params core.IParams
   Body core.IStmtNode
   scope core.IVariableScope
 }
 
-func NewDefinedFunction(priv bool, t core.ITypeNode, name string, params Params, body core.IStmtNode) DefinedFunction {
-  return DefinedFunction { "entity.DefinedFunction", priv, t, name, params, body, nil }
+func NewDefinedFunction(priv bool, t core.ITypeNode, name string, params core.IParams, body core.IStmtNode) *DefinedFunction {
+  return &DefinedFunction { "entity.DefinedFunction", priv, t, name, params, body, nil }
 }
 
 func (self DefinedFunction) String() string {
@@ -64,7 +64,7 @@ func (self DefinedFunction) GetParams() core.IParams {
 }
 
 func (self DefinedFunction) ListParameters() []core.IDefinedVariable {
-  xs := self.Params.ParamDescs
+  xs := self.Params.GetParamDescs()
   ys := make([]core.IDefinedVariable, len(xs))
   for i := range xs {
     ys[i] = xs[i].(core.IDefinedVariable)

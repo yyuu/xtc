@@ -12,8 +12,8 @@ type UndefinedVariable struct {
   TypeNode core.ITypeNode
 }
 
-func NewUndefinedVariable(t core.ITypeNode, name string) UndefinedVariable {
-  return UndefinedVariable { "entity.UndefinedVariable", false, name, t }
+func NewUndefinedVariable(t core.ITypeNode, name string) *UndefinedVariable {
+  return &UndefinedVariable { "entity.UndefinedVariable", false, name, t }
 }
 
 func (self UndefinedVariable) String() string {

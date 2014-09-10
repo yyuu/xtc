@@ -242,7 +242,12 @@ defun: typeref_name '(' ')' block
      {
        ps := entity.NewParams($2._token.location, []core.IParameter { })
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, asStmtNode($4._node))
+       $$._entity = entity.NewDefinedFunction(true,
+         ast.NewTypeNode(t.GetLocation(), t),
+         $1._token.literal,
+         ps,
+         asStmtNode($4._node),
+       )
      }
      | typeref_name '(' params ')' block
      {
@@ -355,7 +360,11 @@ funcdecl: extern_typeref_name '(' ')' ';'
         {
           ps := entity.NewParams($1._typeref.GetLocation(), []core.IParameter { })
           ref := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-          $$._entity = entity.NewUndefinedFunction(ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ps)
+          $$._entity = entity.NewUndefinedFunction(
+            ast.NewTypeNode(ref.GetLocation(), ref),
+            $1._token.literal,
+            ps,
+          )
         }
         | extern_typeref_name '(' params ')' ';'
         {

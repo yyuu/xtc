@@ -123,15 +123,15 @@ func asTypedefNode(x core.INode) ast.TypedefNode {
   return x.(ast.TypedefNode)
 }
 
-func asParams(x core.IEntity) entity.Params {
-  return x.(entity.Params)
+func asParams(x core.IEntity) *entity.Params {
+  return x.(*entity.Params)
 }
 
-func asParameter(x core.IEntity) entity.Parameter {
-  return x.(entity.Parameter)
+func asParameter(x core.IEntity) *entity.Parameter {
+  return x.(*entity.Parameter)
 }
 
-func parametersTypeRef(params entity.Params) typesys.ParamTypeRefs {
+func parametersTypeRef(params *entity.Params) typesys.ParamTypeRefs {
   paramDescs := params.GetParamDescs()
   ps := make([]core.ITypeRef, len(paramDescs))
   for i := range paramDescs {

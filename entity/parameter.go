@@ -11,8 +11,8 @@ type Parameter struct {
   Name string
 }
 
-func NewParameter(t core.ITypeNode, name string) Parameter {
-  return Parameter { "entity.Parameter", t, name }
+func NewParameter(t core.ITypeNode, name string) *Parameter {
+  return &Parameter { "entity.Parameter", t, name }
 }
 
 func (self Parameter) String() string {

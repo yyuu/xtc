@@ -11,8 +11,8 @@ type Params struct {
   ParamDescs []core.IParameter
 }
 
-func NewParams(loc core.Location, paramDescs []core.IParameter) Params {
-  return Params { "entity.Params", loc, paramDescs }
+func NewParams(loc core.Location, paramDescs []core.IParameter) *Params {
+  return &Params { "entity.Params", loc, paramDescs }
 }
 
 func (self Params) String() string {
