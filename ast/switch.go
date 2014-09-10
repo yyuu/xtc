@@ -51,7 +51,11 @@ func NewSwitchNode(loc core.Location, cond core.IExprNode, _cases []core.IStmtNo
   if cond == nil { panic("cond is nil") }
   cases := make([]*CaseNode, len(_cases))
   for i := range _cases {
-    cases[i] = _cases[i].(*CaseNode)
+    c, ok := _cases[i].(*CaseNode)
+    if ! ok {
+      panic(fmt.Errorf("syntax error: not a case: %s", _cases[i]))
+    }
+    cases[i] = c
   }
   return SwitchNode { "ast.SwitchNode", loc, cond, cases }
 }
