@@ -99,8 +99,8 @@ func asConstant(x core.IEntity) *entity.Constant {
   return x.(*entity.Constant)
 }
 
-func asStructNode(x core.INode) core.IStructNode {
-  return x.(core.IStructNode)
+func asStructNode(x core.INode) *ast.StructNode {
+  return x.(*ast.StructNode)
 }
 
 func asUnionNode(x core.INode) *ast.UnionNode {
@@ -168,11 +168,11 @@ func defconsts(xs...*entity.Constant) []*entity.Constant {
   }
 }
 
-func defstructs(xs...core.IStructNode) []core.IStructNode {
+func defstructs(xs...*ast.StructNode) []*ast.StructNode {
   if 0 < len(xs) {
     return xs
   } else {
-    return []core.IStructNode { }
+    return []*ast.StructNode { }
   }
 }
 

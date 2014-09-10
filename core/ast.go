@@ -27,7 +27,3 @@ type ITypeDefinition interface {
   GetTypeRef() ITypeRef
   DefiningType() IType
 }
-
-type IStructNode interface {
-  ITypeDefinition
-}
