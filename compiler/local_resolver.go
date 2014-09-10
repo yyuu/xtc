@@ -20,11 +20,11 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
   toplevel := entity.NewToplevelScope()
   self.scopeStack = append(self.scopeStack, toplevel)
 
-  declarations := a.ListDeclaration()
+  declarations := a.ListDeclarations()
   for i := range declarations {
     toplevel.DeclareEntity(declarations[i])
   }
-  definitions := a.ListDefinition()
+  definitions := a.ListDefinitions()
   for i := range definitions {
     toplevel.DefineEntity(definitions[i])
   }
@@ -45,9 +45,7 @@ func (self *LocalResolver) resolveGvarInitializers(a *ast.AST) {
   for i := range xs {
     gvar := xs[i]
     if gvar.HasInitializer() {
-      init := gvar.GetInitializer()
-      ast.Visit(self, &init)
-      gvar.SetInitializer(init)
+      ast.Visit(self, gvar.GetInitializer())
     }
     ys[i] = gvar
   }
@@ -59,9 +57,7 @@ func (self *LocalResolver) resolveConstantValues(a *ast.AST) {
   ys := make([]*entity.Constant, len(xs))
   for i := range xs {
     constant := xs[i]
-    value := constant.GetValue()
-    ast.Visit(self, &value)
-    constant.SetValue(value)
+    ast.Visit(self, constant.GetValue())
     ys[i] = constant
   }
   a.SetConstants(ys)
@@ -73,9 +69,7 @@ func (self *LocalResolver) resolveFunctions(a *ast.AST) {
   for i := range xs {
     function := xs[i]
     self.pushScope(function.ListParameters())
-    body := function.GetBody()
-    ast.Visit(self, &body)
-    function.SetBody(body)
+    ast.Visit(self, function.GetBody())
     function.SetScope(self.popScope())
     ys[i] = function
   }
@@ -137,41 +131,29 @@ func (self *LocalResolver) debugVisit(key string, unknown interface{}) {
   }
 }
 
-func (self *LocalResolver) Visit(unknown interface{}) {
-  self.debugVisit("BEGIN VISIT", unknown) // TODO: remove this
-  switch typed := unknown.(type) {
-    case *core.IStmtNode: {
-      switch stmt := (*typed).(type) {
-        case ast.BlockNode: {
-          self.pushScope(stmt.GetVariables())
-          stmt.SetScope(self.popScope())
-          *typed = stmt
-        }
-      }
+func (self *LocalResolver) Visit(node core.INode) {
+  self.debugVisit("BEGIN VISIT", node) // TODO: remove this
+  switch typed := node.(type) {
+    case *ast.BlockNode: {
+      self.pushScope(typed.GetVariables())
+      typed.SetScope(self.popScope())
     }
-    case *core.IExprNode: {
-      switch expr := (*typed).(type) {
-        case ast.VariableNode: {
-          e := self.currentScope().GetByName(expr.GetName())
-          if e == nil {
-            panic(fmt.Errorf("undefined: %s", expr.GetName()))
-          }
-          variable, ok := e.(entity.DefinedVariable)
-          if ! ok {
-            panic(fmt.Errorf("not a variable: %s", expr.GetName()))
-          }
-          p := &variable
-          p.Refered()
-          expr.SetEntity(p)
-          *typed = expr
-        }
-        case ast.StringLiteralNode: {
-          e := self.constantTable.Intern(expr.GetValue())
-          expr.SetEntry(e)
-          *typed = expr
-        }
+    case *ast.StringLiteralNode: {
+      e := self.constantTable.Intern(typed.GetValue())
+      typed.SetEntry(e)
+    }
+    case *ast.VariableNode: {
+      e := self.currentScope().GetByName(typed.GetName())
+      if e == nil {
+        panic(fmt.Errorf("undefined: %s", typed.GetName()))
       }
+      variable, ok := e.(*entity.DefinedVariable)
+      if ! ok {
+        panic(fmt.Errorf("not a variable: %s", typed.GetName()))
+      }
+      variable.Refered()
+      typed.SetEntity(variable)
     }
   }
-  self.debugVisit("END VISIT", unknown) // TODO: remove this
+  self.debugVisit("END VISIT", node) // TODO: remove this
 }

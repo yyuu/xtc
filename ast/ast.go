@@ -66,7 +66,7 @@ func (self AST) ListEntities() []core.IEntity {
   return result
 }
 
-func (self AST) ListDeclaration() []core.IEntity {
+func (self AST) ListDeclarations() []core.IEntity {
   var result []core.IEntity
   decl := self.Declarations
   for i := range decl.Funcdecls {
@@ -78,7 +78,7 @@ func (self AST) ListDeclaration() []core.IEntity {
   return result
 }
 
-func (self AST) ListDefinition() []core.IEntity {
+func (self AST) ListDefinitions() []core.IEntity {
   var result []core.IEntity
   decl := self.Declarations
   for i := range decl.Defvars {
