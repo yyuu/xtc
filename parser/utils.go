@@ -43,12 +43,12 @@ func asTypeNodes(xs []core.INode) []core.ITypeNode {
   return ys
 }
 
-func asSlot(x core.INode) ast.Slot {
-  return x.(ast.Slot)
+func asSlot(x core.INode) core.ISlot {
+  return x.(core.ISlot)
 }
 
-func asSlots(xs []core.INode) []ast.Slot {
-  ys := make([]ast.Slot, len(xs))
+func asSlots(xs []core.INode) []core.ISlot {
+  ys := make([]core.ISlot, len(xs))
   for i := range xs {
     ys[i] = asSlot(xs[i])
   }

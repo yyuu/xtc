@@ -12,10 +12,10 @@ type UnionNode struct {
   Location core.Location
   TypeNode core.ITypeNode
   Name string
-  Members []Slot
+  Members []core.ISlot
 }
 
-func NewUnionNode(loc core.Location, ref core.ITypeRef, name string, membs []Slot) *UnionNode {
+func NewUnionNode(loc core.Location, ref core.ITypeRef, name string, membs []core.ISlot) *UnionNode {
   if ref == nil { panic("ref is nil") }
   return &UnionNode { "ast.UnionNode", loc, NewTypeNode(loc, ref), name, membs }
 }
