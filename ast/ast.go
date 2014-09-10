@@ -41,11 +41,13 @@ type AST struct {
   ClassName string
   Location duck.ILocation
   Declarations Declarations
+  scope duck.IVariableScope
+  constantTable duck.IConstantTable
 }
 
 func NewAST(loc duck.ILocation, declarations Declarations) AST {
   if loc == nil { panic("location is nil") }
-  return AST { "ast.AST", loc, declarations }
+  return AST { "ast.AST", loc, declarations, nil, nil }
 }
 
 func (self AST) String() string {
@@ -109,4 +111,20 @@ func (self AST) GetConstants() []duck.IConstant {
 
 func (self *AST) SetConstants(xs []duck.IConstant) {
   self.Declarations.Constants = xs
+}
+
+func (self AST) GetScope() duck.IVariableScope {
+  return self.scope
+}
+
+func (self *AST) SetScope(scope duck.IVariableScope) {
+  self.scope = scope
+}
+
+func (self AST) GetConstantTable() duck.IConstantTable {
+  return self.constantTable
+}
+
+func (self *AST) SetConstantTable(table duck.IConstantTable) {
+  self.constantTable = table
 }

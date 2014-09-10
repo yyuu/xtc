@@ -35,8 +35,8 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
 
   toplevel.CheckReferences()
 
-//a.SetScope(toplevel)
-//a.SetConstantTable(constantTable)
+  a.SetScope(toplevel)
+  a.SetConstantTable(self.constantTable)
 }
 
 func (self *LocalResolver) resolveGvarInitializers(a *ast.AST) {
