@@ -11,14 +11,14 @@ type Declarations struct {
   Defvars []core.IDefinedVariable
   Vardecls []*entity.UndefinedVariable
   Defuns []core.IDefinedFunction
-  Funcdecls []core.IUndefinedFunction
+  Funcdecls []*entity.UndefinedFunction
   Constants []*entity.Constant
   Defstructs []core.IStructNode
   Defunions []core.IUnionNode
   Typedefs []core.ITypedefNode
 }
 
-func NewDeclarations(defvars []core.IDefinedVariable, vardecls []*entity.UndefinedVariable, defuns []core.IDefinedFunction, funcdecls []core.IUndefinedFunction, constants []*entity.Constant, defstructs []core.IStructNode, defunions []core.IUnionNode, typedefs []core.ITypedefNode) *Declarations {
+func NewDeclarations(defvars []core.IDefinedVariable, vardecls []*entity.UndefinedVariable, defuns []core.IDefinedFunction, funcdecls []*entity.UndefinedFunction, constants []*entity.Constant, defstructs []core.IStructNode, defunions []core.IUnionNode, typedefs []core.ITypedefNode) *Declarations {
   return &Declarations { "ast.Declarations", defvars, vardecls, defuns, funcdecls, constants, defstructs, defunions, typedefs }
 }
 
@@ -49,7 +49,7 @@ func (self Declarations) AddDefun(f core.IDefinedFunction) *Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, append(self.Defuns, f), self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
-func (self Declarations) AddFuncdecl(f core.IUndefinedFunction) *Declarations {
+func (self Declarations) AddFuncdecl(f *entity.UndefinedFunction) *Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, self.Defuns, append(self.Funcdecls, f), self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
@@ -81,7 +81,7 @@ func (self Declarations) GetDefuns() []core.IDefinedFunction {
   return self.Defuns
 }
 
-func (self Declarations) GetFuncdecls() []core.IUndefinedFunction {
+func (self Declarations) GetFuncdecls() []*entity.UndefinedFunction {
   return self.Funcdecls
 }
 

@@ -75,8 +75,8 @@ func asDefinedFunction(x core.IEntity) core.IDefinedFunction {
   return x.(core.IDefinedFunction)
 }
 
-func asUndefinedFunction(x core.IEntity) core.IUndefinedFunction {
-  return x.(core.IUndefinedFunction)
+func asUndefinedFunction(x core.IEntity) *entity.UndefinedFunction {
+  return x.(*entity.UndefinedFunction)
 }
 
 func asVariable(x core.IEntity) core.IVariable {
@@ -164,11 +164,11 @@ func defuns(xs...core.IDefinedFunction) []core.IDefinedFunction {
   }
 }
 
-func funcdecls(xs...core.IUndefinedFunction) []core.IUndefinedFunction {
+func funcdecls(xs...*entity.UndefinedFunction) []*entity.UndefinedFunction {
   if 0 < len(xs) {
     return xs
   } else {
-    return []core.IUndefinedFunction { }
+    return []*entity.UndefinedFunction { }
   }
 }
 

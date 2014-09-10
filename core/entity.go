@@ -43,11 +43,6 @@ type IDefinedFunction interface {
   ListParameters() []IDefinedVariable
 }
 
-type IUndefinedFunction interface {
-  IFunction
-  IsUndefinedFunction() bool
-}
-
 type IParams interface {
   IEntity
   GetLocation() Location
