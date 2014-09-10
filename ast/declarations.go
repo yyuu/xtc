@@ -15,10 +15,10 @@ type Declarations struct {
   Constants []*entity.Constant
   Defstructs []core.IStructNode
   Defunions []core.IUnionNode
-  Typedefs []core.ITypedefNode
+  Typedefs []*TypedefNode
 }
 
-func NewDeclarations(defvars []*entity.DefinedVariable, vardecls []*entity.UndefinedVariable, defuns []*entity.DefinedFunction, funcdecls []*entity.UndefinedFunction, constants []*entity.Constant, defstructs []core.IStructNode, defunions []core.IUnionNode, typedefs []core.ITypedefNode) *Declarations {
+func NewDeclarations(defvars []*entity.DefinedVariable, vardecls []*entity.UndefinedVariable, defuns []*entity.DefinedFunction, funcdecls []*entity.UndefinedFunction, constants []*entity.Constant, defstructs []core.IStructNode, defunions []core.IUnionNode, typedefs []*TypedefNode) *Declarations {
   return &Declarations { "ast.Declarations", defvars, vardecls, defuns, funcdecls, constants, defstructs, defunions, typedefs }
 }
 
@@ -65,7 +65,7 @@ func (self Declarations) AddDefunion(u core.IUnionNode) *Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, append(self.Defunions, u), self.Typedefs)
 }
 
-func (self Declarations) AddTypedef(t core.ITypedefNode) *Declarations {
+func (self Declarations) AddTypedef(t *TypedefNode) *Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, append(self.Typedefs, t))
 }
 
@@ -97,6 +97,6 @@ func (self Declarations) GetDefunions() []core.IUnionNode {
   return self.Defunions
 }
 
-func (self Declarations) GetTypedefs() []core.ITypedefNode {
+func (self Declarations) GetTypedefs() []*TypedefNode {
   return self.Typedefs
 }

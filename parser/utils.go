@@ -107,8 +107,8 @@ func asUnionNode(x core.INode) core.IUnionNode {
   return x.(core.IUnionNode)
 }
 
-func asTypedefNode(x core.INode) core.ITypedefNode {
-  return x.(core.ITypedefNode)
+func asTypedefNode(x core.INode) *ast.TypedefNode {
+  return x.(*ast.TypedefNode)
 }
 
 func asParams(x core.IEntity) *entity.Params {
@@ -184,10 +184,10 @@ func defunions(xs...core.IUnionNode) []core.IUnionNode {
   }
 }
 
-func typedefs(xs...core.ITypedefNode) []core.ITypedefNode {
+func typedefs(xs...*ast.TypedefNode) []*ast.TypedefNode {
   if 0 < len(xs) {
     return xs
   } else {
-    return []core.ITypedefNode { }
+    return []*ast.TypedefNode { }
   }
 }

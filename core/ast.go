@@ -35,7 +35,3 @@ type IStructNode interface {
 type IUnionNode interface {
   ITypeDefinition
 }
-
-type ITypedefNode interface {
-  ITypeDefinition
-}
