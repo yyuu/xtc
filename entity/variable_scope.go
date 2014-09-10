@@ -59,12 +59,12 @@ func (self *VariableScope) DefineEntity(entity core.IEntity) {
   }
 }
 
-func (self *VariableScope) DefineVariable(v core.IDefinedVariable) {
+func (self *VariableScope) DefineVariable(v *DefinedVariable) {
   name := v.GetName()
   if self.IsDefinedLocally(name) {
     panic(fmt.Errorf("duplicated variable: %s", name))
   }
-  entity := v.(core.IEntity)
+  var entity core.IEntity = v
   self.Variables[name] = &entity
 }
 

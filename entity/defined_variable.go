@@ -74,7 +74,6 @@ func (self DefinedVariable) GetInitializer() core.IExprNode {
   return self.Initializer
 }
 
-func (self DefinedVariable) SetInitializer(init core.IExprNode) core.IDefinedVariable {
+func (self *DefinedVariable) SetInitializer(init core.IExprNode) {
   self.Initializer = init
-  return self
 }

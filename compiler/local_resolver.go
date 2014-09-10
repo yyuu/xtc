@@ -41,13 +41,13 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
 
 func (self *LocalResolver) resolveGvarInitializers(a *ast.AST) {
   xs := a.GetDefinedVariables()
-  ys := make([]core.IDefinedVariable, len(xs))
+  ys := make([]*entity.DefinedVariable, len(xs))
   for i := range xs {
     gvar := xs[i]
     if gvar.HasInitializer() {
       init := gvar.GetInitializer()
       ast.Visit(self, &init)
-      gvar = gvar.SetInitializer(init)
+      gvar.SetInitializer(init)
     }
     ys[i] = gvar
   }
@@ -89,7 +89,7 @@ func (self *LocalResolver) currentScope() *entity.VariableScope {
   return self.scopeStack[len(self.scopeStack)-1]
 }
 
-func (self *LocalResolver) pushScope(vars []core.IDefinedVariable) {
+func (self *LocalResolver) pushScope(vars []*entity.DefinedVariable) {
   scope := entity.NewLocalScope(self.currentScope())
   for i := range vars {
     v := vars[i]

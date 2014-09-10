@@ -63,11 +63,11 @@ func (self DefinedFunction) GetParams() *Params {
   return self.Params
 }
 
-func (self DefinedFunction) ListParameters() []core.IDefinedVariable {
+func (self DefinedFunction) ListParameters() []*DefinedVariable {
   xs := self.Params.GetParamDescs()
-  ys := make([]core.IDefinedVariable, len(xs))
+  ys := make([]*DefinedVariable, len(xs))
   for i := range xs {
-    ys[i] = xs[i]
+    ys[i] = xs[i].DefinedVariable
   }
   return ys
 }

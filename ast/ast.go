@@ -93,11 +93,11 @@ func (self AST) ListDefinition() []core.IEntity {
   return result
 }
 
-func (self AST) GetDefinedVariables() []core.IDefinedVariable {
+func (self AST) GetDefinedVariables() []*entity.DefinedVariable {
   return self.Declarations.Defvars
 }
 
-func (self *AST) SetDefinedVariables(xs []core.IDefinedVariable) {
+func (self *AST) SetDefinedVariables(xs []*entity.DefinedVariable) {
   self.Declarations.Defvars = xs
 }
 

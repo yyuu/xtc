@@ -16,7 +16,7 @@ func TestBlock1(t *testing.T) {
  */
   x := NewBlockNode(
     loc(0,0),
-    []core.IDefinedVariable { },
+    []*entity.DefinedVariable { },
     []core.IStmtNode {
       NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"hello, world\"") })),
     },
@@ -60,7 +60,7 @@ func TestBlock2(t *testing.T) {
  */
   x := NewBlockNode(
     loc(0,0),
-    []core.IDefinedVariable {
+    []*entity.DefinedVariable {
 //    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "12345")),
       entity.NewDefinedVariable(
         true,
@@ -140,7 +140,7 @@ func TestBlock3(t *testing.T) {
  */
   x := NewBlockNode(
     loc(0,0),
-    []core.IDefinedVariable {
+    []*entity.DefinedVariable {
 //    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "12345")),
 //    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "m"), NewIntegerLiteralNode(loc(0,0), "67890")),
       entity.NewDefinedVariable(

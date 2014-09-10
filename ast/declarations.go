@@ -8,7 +8,7 @@ import (
 
 type Declarations struct {
   ClassName string
-  Defvars []core.IDefinedVariable
+  Defvars []*entity.DefinedVariable
   Vardecls []*entity.UndefinedVariable
   Defuns []*entity.DefinedFunction
   Funcdecls []*entity.UndefinedFunction
@@ -18,7 +18,7 @@ type Declarations struct {
   Typedefs []core.ITypedefNode
 }
 
-func NewDeclarations(defvars []core.IDefinedVariable, vardecls []*entity.UndefinedVariable, defuns []*entity.DefinedFunction, funcdecls []*entity.UndefinedFunction, constants []*entity.Constant, defstructs []core.IStructNode, defunions []core.IUnionNode, typedefs []core.ITypedefNode) *Declarations {
+func NewDeclarations(defvars []*entity.DefinedVariable, vardecls []*entity.UndefinedVariable, defuns []*entity.DefinedFunction, funcdecls []*entity.UndefinedFunction, constants []*entity.Constant, defstructs []core.IStructNode, defunions []core.IUnionNode, typedefs []core.ITypedefNode) *Declarations {
   return &Declarations { "ast.Declarations", defvars, vardecls, defuns, funcdecls, constants, defstructs, defunions, typedefs }
 }
 
@@ -37,7 +37,7 @@ func (self Declarations) GetLocation() core.Location {
   panic("Declarations#GetLocation called")
 }
 
-func (self Declarations) AddDefvar(v core.IDefinedVariable) *Declarations {
+func (self Declarations) AddDefvar(v *entity.DefinedVariable) *Declarations {
   return NewDeclarations(append(self.Defvars, v), self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
 }
 
@@ -69,7 +69,7 @@ func (self Declarations) AddTypedef(t core.ITypedefNode) *Declarations {
   return NewDeclarations(self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, append(self.Typedefs, t))
 }
 
-func (self Declarations) GetDefvars() []core.IDefinedVariable {
+func (self Declarations) GetDefvars() []*entity.DefinedVariable {
   return self.Defvars
 }
 

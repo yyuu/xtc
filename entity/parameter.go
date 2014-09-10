@@ -6,13 +6,26 @@ import (
 )
 
 type Parameter struct {
+  *DefinedVariable
   ClassName string
   TypeNode core.ITypeNode
   Name string
 }
 
 func NewParameter(t core.ITypeNode, name string) *Parameter {
-  return &Parameter { "entity.Parameter", t, name }
+  return &Parameter {
+    &DefinedVariable {
+      "entity.Parameter",
+      true,
+      name,
+      t,
+      0,
+      nil,
+    },
+    "entity.Parameter",
+    t,
+    name,
+  }
 }
 
 func (self Parameter) String() string {
@@ -43,8 +56,8 @@ func (self Parameter) GetInitializer() core.IExprNode {
   return nil
 }
 
-func (self Parameter) SetInitializer(e core.IExprNode) core.IDefinedVariable {
-  return self
+func (self *Parameter) SetInitializer(e core.IExprNode) {
+  // noop
 }
 
 func (self Parameter) HasInitializer() bool {

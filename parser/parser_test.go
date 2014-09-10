@@ -41,7 +41,7 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
             []*entity.Parameter { },
           ),
           ast.NewBlockNode(loc(1,13),
-            []core.IDefinedVariable { },
+            []*entity.DefinedVariable { },
             []core.IStmtNode {
               ast.NewReturnNode(loc(2,7),
                 ast.NewFuncallNode(loc(2,14),
@@ -104,7 +104,7 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
             },
           ),
           ast.NewBlockNode(loc(1,19),
-            []core.IDefinedVariable { },
+            []*entity.DefinedVariable { },
             []core.IStmtNode {
               ast.NewExprStmtNode(loc(2,7),
                 ast.NewFuncallNode(loc(2,7),
@@ -177,7 +177,7 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
             },
           ),
           ast.NewBlockNode(loc(2,25),
-            []core.IDefinedVariable {
+            []*entity.DefinedVariable {
               entity.NewDefinedVariable(
                 true,
                 ast.NewTypeNode(loc(3,7),
@@ -251,7 +251,7 @@ func TestFor1(t *testing.T) {
             },
           ),
           ast.NewBlockNode(loc(1,19),
-            []core.IDefinedVariable { },
+            []*entity.DefinedVariable { },
             []core.IStmtNode {
               ast.NewForNode(loc(2,7),
                 ast.NewAssignNode(loc(2,12),
@@ -268,7 +268,7 @@ func TestFor1(t *testing.T) {
                   ast.NewVariableNode(loc(2,22), "i"),
                 ),
                 ast.NewBlockNode(loc(2,27),
-                  []core.IDefinedVariable { },
+                  []*entity.DefinedVariable { },
                   []core.IStmtNode {
                     ast.NewExprStmtNode(loc(3,9),
                       ast.NewAssignNode(loc(3,9),

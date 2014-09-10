@@ -11,12 +11,12 @@ import (
 type BlockNode struct {
   ClassName string
   Location core.Location
-  Variables []core.IDefinedVariable
+  Variables []*entity.DefinedVariable
   Stmts []core.IStmtNode
   scope *entity.VariableScope
 }
 
-func NewBlockNode(loc core.Location, variables []core.IDefinedVariable, stmts []core.IStmtNode) BlockNode {
+func NewBlockNode(loc core.Location, variables []*entity.DefinedVariable, stmts []core.IStmtNode) BlockNode {
   return BlockNode { "ast.BlockNode", loc, variables, stmts, nil }
 }
 
@@ -52,7 +52,7 @@ func (self BlockNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self BlockNode) GetVariables() []core.IDefinedVariable {
+func (self BlockNode) GetVariables() []*entity.DefinedVariable {
   return self.Variables
 }
 

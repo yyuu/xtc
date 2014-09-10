@@ -79,12 +79,12 @@ func asUndefinedFunction(x core.IEntity) *entity.UndefinedFunction {
   return x.(*entity.UndefinedFunction)
 }
 
-func asDefinedVariable(x core.IEntity) core.IDefinedVariable {
-  return x.(core.IDefinedVariable)
+func asDefinedVariable(x core.IEntity) *entity.DefinedVariable {
+  return x.(*entity.DefinedVariable)
 }
 
-func asDefinedVariables(xs []core.IEntity) []core.IDefinedVariable {
-  ys := make([]core.IDefinedVariable, len(xs))
+func asDefinedVariables(xs []core.IEntity) []*entity.DefinedVariable {
+  ys := make([]*entity.DefinedVariable, len(xs))
   for i := range xs {
     ys[i] = asDefinedVariable(xs[i])
   }
@@ -128,11 +128,11 @@ func parametersTypeRef(params *entity.Params) *typesys.ParamTypeRefs {
   return typesys.NewParamTypeRefs(params.GetLocation(), ps, false)
 }
 
-func defvars(xs...core.IDefinedVariable) []core.IDefinedVariable {
+func defvars(xs...*entity.DefinedVariable) []*entity.DefinedVariable {
   if 0 < len(xs) {
     return xs
   } else {
-    return []core.IDefinedVariable { }
+    return []*entity.DefinedVariable { }
   }
 }
 

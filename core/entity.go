@@ -9,15 +9,3 @@ type IEntity interface {
   IsConstant() bool
   IsRefered() bool
 }
-
-type IDefinedVariable interface {
-  IEntity
-  IsVariable() bool
-  GetTypeNode() ITypeNode
-  IsDefinedVariable() bool
-  GetInitializer() IExprNode
-  SetInitializer(IExprNode) IDefinedVariable
-  HasInitializer() bool
-  GetNumRefered() int
-//Refered()
-}
