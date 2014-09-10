@@ -7,29 +7,14 @@ import (
 
 type Parameter struct {
   *DefinedVariable
-  ClassName string
-  TypeNode core.ITypeNode
-  Name string
 }
 
 func NewParameter(t core.ITypeNode, name string) *Parameter {
-  return &Parameter {
-    &DefinedVariable {
-      "entity.Parameter",
-      true,
-      name,
-      t,
-      0,
-      nil,
-    },
-    "entity.Parameter",
-    t,
-    name,
-  }
+  return &Parameter { &DefinedVariable { "entity.Parameter", true, name, t, 0, nil } }
 }
 
 func (self Parameter) String() string {
-  return fmt.Sprintf("<entity.Parameter Name=%s TypeNode=%s>", self.Name, self.TypeNode)
+  return fmt.Sprintf("<entity.Parameter Name=%s TypeNode=%s>", self.DefinedVariable.Name, self.DefinedVariable.TypeNode)
 }
 
 func (self Parameter) IsEntity() bool {
@@ -77,9 +62,9 @@ func (self Parameter) IsDefined() bool {
 }
 
 func (self Parameter) GetTypeNode() core.ITypeNode {
-  return self.TypeNode
+  return self.DefinedVariable.TypeNode
 }
 
 func (self Parameter) GetName() string {
-  return self.Name
+  return self.DefinedVariable.Name
 }
