@@ -71,12 +71,12 @@ func (self *LocalResolver) resolveFunctions(a *ast.AST) {
   xs := a.GetDefinedFunctions()
   ys := make([]core.IDefinedFunction, len(xs))
   for i := range xs {
-    function := xs[i]
+    function := xs[i].(*entity.DefinedFunction)
     self.pushScope(function.ListParameters())
     body := function.GetBody()
     ast.Visit(self, &body)
-    function = function.SetBody(body)
-    function = function.SetScope(self.popScope())
+    function.SetBody(body)
+    function.SetScope(self.popScope())
     ys[i] = function
   }
   a.SetDefinedFunctions(ys)

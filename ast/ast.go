@@ -10,7 +10,7 @@ type AST struct {
   ClassName string
   Location core.Location
   Declarations *Declarations
-  scope core.IVariableScope
+  scope *entity.VariableScope
   constantTable *entity.ConstantTable
 }
 
@@ -117,11 +117,11 @@ func (self *AST) SetConstants(xs []*entity.Constant) {
   self.Declarations.Constants = xs
 }
 
-func (self AST) GetScope() core.IVariableScope {
+func (self AST) GetScope() *entity.VariableScope {
   return self.scope
 }
 
-func (self *AST) SetScope(scope core.IVariableScope) {
+func (self *AST) SetScope(scope *entity.VariableScope) {
   self.scope = scope
 }
 

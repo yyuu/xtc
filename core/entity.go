@@ -29,9 +29,9 @@ type IDefinedFunction interface {
   GetParams() IParams
   IsDefinedFunction() bool
   GetBody() IStmtNode
-  SetBody(IStmtNode) IDefinedFunction
-  GetScope() IVariableScope
-  SetScope(IVariableScope) IDefinedFunction
+//SetBody(IStmtNode) IDefinedFunction
+//GetScope() IVariableScope
+//SetScope(IVariableScope) IDefinedFunction
   ListParameters() []IDefinedVariable
 }
 
@@ -44,11 +44,4 @@ type IParams interface {
 type IParameter interface {
   IEntity
   GetTypeNode() ITypeNode
-}
-
-type IVariableScope interface {
-  IsToplevel() bool
-  GetToplevel() IVariableScope
-  GetParent() IVariableScope
-  GetByName(string) *IEntity
 }

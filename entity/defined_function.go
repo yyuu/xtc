@@ -12,7 +12,7 @@ type DefinedFunction struct {
   Name string
   Params core.IParams
   Body core.IStmtNode
-  scope core.IVariableScope
+  scope *VariableScope
 }
 
 func NewDefinedFunction(priv bool, t core.ITypeNode, name string, params core.IParams, body core.IStmtNode) *DefinedFunction {
@@ -76,16 +76,14 @@ func (self DefinedFunction) GetBody() core.IStmtNode {
   return self.Body
 }
 
-func (self DefinedFunction) SetBody(body core.IStmtNode) core.IDefinedFunction {
+func (self *DefinedFunction) SetBody(body core.IStmtNode) {
   self.Body = body
-  return self
 }
 
-func (self DefinedFunction) GetScope() core.IVariableScope {
+func (self DefinedFunction) GetScope() *VariableScope {
   return self.scope
 }
 
-func (self DefinedFunction) SetScope(scope core.IVariableScope) core.IDefinedFunction {
+func (self *DefinedFunction) SetScope(scope *VariableScope) {
   self.scope = scope
-  return self
 }

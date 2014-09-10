@@ -4,6 +4,7 @@ import (
   "fmt"
   "strings"
   "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/bs/entity"
 )
 
 // BlockNode
@@ -12,7 +13,7 @@ type BlockNode struct {
   Location core.Location
   Variables []core.IDefinedVariable
   Stmts []core.IStmtNode
-  scope core.IVariableScope
+  scope *entity.VariableScope
 }
 
 func NewBlockNode(loc core.Location, variables []core.IDefinedVariable, stmts []core.IStmtNode) BlockNode {
@@ -59,10 +60,10 @@ func (self BlockNode) GetStmts() []core.IStmtNode {
   return self.Stmts
 }
 
-func (self BlockNode) GetScope() core.IVariableScope {
+func (self BlockNode) GetScope() *entity.VariableScope {
   return self.scope
 }
 
-func (self *BlockNode) SetScope(scope core.IVariableScope) {
+func (self *BlockNode) SetScope(scope *entity.VariableScope) {
   self.scope = scope
 }

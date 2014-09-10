@@ -27,7 +27,7 @@ func (self *VariableScope) IsToplevel() bool {
   return self.Parent == nil
 }
 
-func (self *VariableScope) GetParent() core.IVariableScope {
+func (self *VariableScope) GetParent() *VariableScope {
   return self.Parent
 }
 
@@ -68,7 +68,7 @@ func (self *VariableScope) DefineVariable(v core.IDefinedVariable) {
   self.Variables[name] = &entity
 }
 
-func (self *VariableScope) GetToplevel() core.IVariableScope {
+func (self *VariableScope) GetToplevel() *VariableScope {
   if self.Parent == nil {
     return self
   } else {
