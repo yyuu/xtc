@@ -29,7 +29,7 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
           true,
           ast.NewTypeNode(loc(1,5),
             typesys.NewFunctionTypeRef(
-              typesys.NewIntegerTypeRef(loc(1,5), "int"),
+              typesys.NewIntTypeRef(loc(1,5)),
               typesys.NewParamTypeRefs(loc(1,10),
                 []core.ITypeRef { },
                 false,
@@ -86,7 +86,7 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
               typesys.NewVoidTypeRef(loc(1,5)),
               typesys.NewParamTypeRefs(loc(1,12),
                 []core.ITypeRef {
-                  typesys.NewIntegerTypeRef(loc(1,12), "int"),
+                  typesys.NewIntTypeRef(loc(1,12)),
                 },
                 false,
               ),
@@ -97,7 +97,7 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
             []*entity.Parameter {
               entity.NewParameter(
                 ast.NewTypeNode(loc(1,12),
-                  typesys.NewIntegerTypeRef(loc(1,12), "int"),
+                  typesys.NewIntTypeRef(loc(1,12)),
                 ),
                 "n",
               ),
@@ -149,11 +149,11 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
           true,
           ast.NewTypeNode(loc(2,5),
             typesys.NewFunctionTypeRef(
-              typesys.NewIntegerTypeRef(loc(2,5), "int"),
+              typesys.NewIntTypeRef(loc(2,5)),
               typesys.NewParamTypeRefs(loc(2,11),
                 []core.ITypeRef {
-                  typesys.NewIntegerTypeRef(loc(2,11), "int"),
-                  typesys.NewIntegerTypeRef(loc(2,18), "int"),
+                  typesys.NewIntTypeRef(loc(2,11)),
+                  typesys.NewIntTypeRef(loc(2,18)),
                 },
                 false,
               ),
@@ -164,13 +164,13 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
             []*entity.Parameter {
               entity.NewParameter(
                 ast.NewTypeNode(loc(2,11),
-                  typesys.NewIntegerTypeRef(loc(2,11), "int"),
+                  typesys.NewIntTypeRef(loc(2,11)),
                 ),
                 "x",
               ),
               entity.NewParameter(
                 ast.NewTypeNode(loc(2,18),
-                  typesys.NewIntegerTypeRef(loc(2,18), "int"),
+                  typesys.NewIntTypeRef(loc(2,18)),
                 ),
                 "y",
               ),
@@ -181,7 +181,7 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
               entity.NewDefinedVariable(
                 true,
                 ast.NewTypeNode(loc(3,7),
-                  typesys.NewIntegerTypeRef(loc(3,7), "int"),
+                  typesys.NewIntTypeRef(loc(3,7)),
                 ),
                 "n",
                 ast.NewBinaryOpNode(loc(3,15),
@@ -233,7 +233,7 @@ func TestFor1(t *testing.T) {
               typesys.NewVoidTypeRef(loc(1,5)),
               typesys.NewParamTypeRefs(loc(1,12),
                 []core.ITypeRef {
-                  typesys.NewIntegerTypeRef(loc(1,12), "int"),
+                  typesys.NewIntTypeRef(loc(1,12)),
                 },
                 false,
               ),
@@ -244,7 +244,7 @@ func TestFor1(t *testing.T) {
             []*entity.Parameter {
               entity.NewParameter(
                 ast.NewTypeNode(loc(1,12),
-                  typesys.NewIntegerTypeRef(loc(1,12), "int"),
+                  typesys.NewIntTypeRef(loc(1,12)),
                 ),
                 "n",
               ),

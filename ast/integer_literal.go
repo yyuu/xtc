@@ -21,7 +21,7 @@ func NewIntegerLiteralNode(loc core.Location, literal string) *IntegerLiteralNod
   var err error
   if ( startsWith(literal, "'") && endsWith(literal, "'") ) && 2 < len(literal) {
     _, err = fmt.Sscanf(literal[1:len(literal)-1], "%c", &value)
-    ref = typesys.NewIntegerTypeRef(loc, "char")
+    ref = typesys.NewCharTypeRef(loc)
   } else {
     if ( startsWith(literal, "0X") || startsWith(literal, "0x") ) && 2 < len(literal) {
       // hexadecimal
@@ -36,13 +36,13 @@ func NewIntegerLiteralNode(loc core.Location, literal string) *IntegerLiteralNod
       }
     }
     if endsWith(literal, "UL") {
-      ref = typesys.NewIntegerTypeRef(loc, "unsigned long")
+      ref = typesys.NewUnsignedLongTypeRef(loc)
     } else if endsWith(literal, "L") {
-      ref = typesys.NewIntegerTypeRef(loc, "long")
+      ref = typesys.NewLongTypeRef(loc)
     } else if endsWith(literal, "U") {
-      ref = typesys.NewIntegerTypeRef(loc, "unsigned int")
+      ref = typesys.NewUnsignedIntTypeRef(loc)
     } else {
-      ref = typesys.NewIntegerTypeRef(loc, "int")
+      ref = typesys.NewIntTypeRef(loc)
     }
   }
   if err != nil {

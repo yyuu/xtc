@@ -63,7 +63,7 @@ func TestBlock2(t *testing.T) {
     []*entity.DefinedVariable {
       entity.NewDefinedVariable(
         true,
-        NewTypeNode(loc(0,0), typesys.NewIntegerTypeRef(loc(0,0), "int")),
+        NewTypeNode(loc(0,0), typesys.NewIntTypeRef(loc(0,0))),
         "n",
         NewIntegerLiteralNode(loc(0,0), "12345"),
       ),
@@ -151,13 +151,13 @@ func TestBlock3(t *testing.T) {
     []*entity.DefinedVariable {
       entity.NewDefinedVariable(
         true,
-        NewTypeNode(loc(0,0), typesys.NewIntegerTypeRef(loc(0,0), "int")),
+        NewTypeNode(loc(0,0), typesys.NewIntTypeRef(loc(0,0))),
         "n",
         NewIntegerLiteralNode(loc(0,0), "12345"),
       ),
       entity.NewDefinedVariable(
         true,
-        NewTypeNode(loc(0,0), typesys.NewIntegerTypeRef(loc(0,0), "int")),
+        NewTypeNode(loc(0,0), typesys.NewIntTypeRef(loc(0,0))),
         "m",
         NewIntegerLiteralNode(loc(0,0), "67890"),
       ),

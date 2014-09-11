@@ -447,35 +447,35 @@ typeref: VOID
        }
        | CHAR
        {
-         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "char")
+         $$._typeref = typesys.NewCharTypeRef($1._token.location)
        }
        | SHORT
        {
-         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "short")
+         $$._typeref = typesys.NewShortTypeRef($1._token.location)
        }
        | INT
        {
-         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "int")
+         $$._typeref = typesys.NewIntTypeRef($1._token.location)
        }
        | LONG
        {
-         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "long")
+         $$._typeref = typesys.NewLongTypeRef($1._token.location)
        }
        | UNSIGNED CHAR
        {
-         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned char")
+         $$._typeref = typesys.NewUnsignedIntTypeRef($1._token.location)
        }
        | UNSIGNED SHORT
        {
-         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned short")
+         $$._typeref = typesys.NewUnsignedShortTypeRef($1._token.location)
        }
        | UNSIGNED INT
        {
-         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned int")
+         $$._typeref = typesys.NewUnsignedIntTypeRef($1._token.location)
        }
        | UNSIGNED LONG
        {
-         $$._typeref = typesys.NewIntegerTypeRef($1._token.location, "unsigned long")
+         $$._typeref = typesys.NewUnsignedLongTypeRef($1._token.location)
        }
        | STRUCT IDENTIFIER
        {
@@ -824,11 +824,11 @@ unary: PLUSPLUS unary
      }
      | SIZEOF '(' type ')'
      {
-       $$._node = ast.NewSizeofTypeNode($1._token.location, asTypeNode($3._node), typesys.NewIntegerTypeRef($1._token.location, "unsigned long"))
+       $$._node = ast.NewSizeofTypeNode($1._token.location, asTypeNode($3._node), typesys.NewUnsignedLongTypeRef($1._token.location))
      }
      | SIZEOF unary
      {
-       $$._node = ast.NewSizeofExprNode($1._token.location, asExprNode($2._node), typesys.NewIntegerTypeRef($1._token.location, "unsigned long"))
+       $$._node = ast.NewSizeofExprNode($1._token.location, asExprNode($2._node), typesys.NewUnsignedLongTypeRef($1._token.location))
      }
      | postfix
      ;

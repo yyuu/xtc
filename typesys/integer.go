@@ -16,6 +16,38 @@ func NewIntegerType(size int, isSigned bool, name string) *IntegerType {
   return &IntegerType { "typesys.IntegerType", size, isSigned, name }
 }
 
+func NewCharType(size int) *IntegerType {
+  return NewIntegerType(size, true, "char")
+}
+
+func NewShortType(size int) *IntegerType {
+  return NewIntegerType(size, true, "short")
+}
+
+func NewIntType(size int) *IntegerType {
+  return NewIntegerType(size, true, "int")
+}
+
+func NewLongType(size int) *IntegerType {
+  return NewIntegerType(size, true, "long")
+}
+
+func NewUnsignedCharType(size int) *IntegerType {
+  return NewIntegerType(size, false, "unsigned char")
+}
+
+func NewUnsignedShortType(size int) *IntegerType {
+  return NewIntegerType(size, false, "unsigned short")
+}
+
+func NewUnsignedIntType(size int) *IntegerType {
+  return NewIntegerType(size, false, "unsigned int")
+}
+
+func NewUnsignedLongType(size int) *IntegerType {
+  return NewIntegerType(size, false, "unsigned long")
+}
+
 func (self IntegerType) String() string {
   return fmt.Sprintf("<typesys.IntegerType Name=%s IntegerSize=%d Signed=%v>", self.Name, self.IntegerSize, self.Signed)
 }

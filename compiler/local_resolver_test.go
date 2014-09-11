@@ -37,7 +37,7 @@ func TestLocalResolverPushPopStacks(t *testing.T) {
 
   resolver.pushScope(
     entity.NewDefinedVariables(
-      entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")), "foo", ast.NewIntegerLiteralNode(loc, "12345")),
+      entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "foo", ast.NewIntegerLiteralNode(loc, "12345")),
     ),
   )
   scope1 := resolver.currentScope()
@@ -50,7 +50,7 @@ func TestLocalResolverPushPopStacks(t *testing.T) {
 
   resolver.pushScope(
     entity.NewDefinedVariables(
-      entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")), "bar", ast.NewIntegerLiteralNode(loc, "67890")),
+      entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "bar", ast.NewIntegerLiteralNode(loc, "67890")),
     ),
   )
   scope2 := resolver.currentScope()
@@ -98,7 +98,7 @@ func TestLocalResolverWithGlobalVariables(t *testing.T) {
   a := ast.NewAST(loc,
     ast.NewDeclarations(
       entity.NewDefinedVariables(
-        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")), "foo", ast.NewIntegerLiteralNode(loc, "12345")),
+        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "foo", ast.NewIntegerLiteralNode(loc, "12345")),
       ),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(),
@@ -122,7 +122,7 @@ func TestLocalResolverWithGlobalVariables2(t *testing.T) {
   a := ast.NewAST(loc,
     ast.NewDeclarations(
       entity.NewDefinedVariables(
-        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")), "foo", ast.NewVariableNode(loc, "bar")),
+        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "foo", ast.NewVariableNode(loc, "bar")),
       ),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(),
@@ -154,9 +154,9 @@ func TestLocalResolverWithGlobalVariables3(t *testing.T) {
   a := ast.NewAST(loc,
     ast.NewDeclarations(
       entity.NewDefinedVariables(
-        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")), "foo", ast.NewIntegerLiteralNode(loc, "12345")),
-        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")), "bar", ast.NewVariableNode(loc, "foo")),
-        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")), "baz", ast.NewVariableNode(loc, "foo")),
+        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "foo", ast.NewIntegerLiteralNode(loc, "12345")),
+        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "bar", ast.NewVariableNode(loc, "foo")),
+        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "baz", ast.NewVariableNode(loc, "foo")),
       ),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(),
@@ -203,12 +203,12 @@ func TestLocalResolverWithConstants1(t *testing.T) {
       entity.NewUndefinedFunctions(),
       entity.NewConstants(
         entity.NewConstant(
-          ast.NewTypeNode(loc, typesys.NewArrayTypeRef(typesys.NewIntegerTypeRef(loc, "char"), len("foo"))),
+          ast.NewTypeNode(loc, typesys.NewArrayTypeRef(typesys.NewCharTypeRef(loc), len("foo"))),
           "foo",
           ast.NewStringLiteralNode(loc, "\"foo\""),
         ),
         entity.NewConstant(
-          ast.NewTypeNode(loc, typesys.NewArrayTypeRef(typesys.NewIntegerTypeRef(loc, "char"), len("bar"))),
+          ast.NewTypeNode(loc, typesys.NewArrayTypeRef(typesys.NewCharTypeRef(loc), len("bar"))),
           "bar",
           ast.NewStringLiteralNode(loc, "\"bar\""),
         ),
@@ -258,11 +258,11 @@ func TestLocalResolverWithFunctions1(t *testing.T) {
       entity.NewDefinedFunctions(
         entity.NewDefinedFunction(
           true,
-          ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")),
+          ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)),
           "foo",
           entity.NewParams(loc,
             entity.NewParameters(
-              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")), "n"),
+              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "n"),
             ),
           ),
           ast.NewBlockNode(loc,
@@ -280,11 +280,11 @@ func TestLocalResolverWithFunctions1(t *testing.T) {
         ),
         entity.NewDefinedFunction(
           true,
-          ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")),
+          ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)),
           "bar",
           entity.NewParams(loc,
             entity.NewParameters(
-              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")), "m"),
+              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "m"),
             ),
           ),
           ast.NewBlockNode(loc,

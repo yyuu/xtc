@@ -19,22 +19,14 @@ func NewTypeTable(charSize, shortSize, intSize, longSize, ptrSize int) *TypeTabl
   tt := TypeTable { charSize, shortSize, intSize, longSize, ptrSize, make(map[core.ITypeRef]core.IType) }
   tt.PutType(NewVoidTypeRef(loc),
              NewVoidType())
-  tt.PutType(NewIntegerTypeRef(loc, "char"),
-             NewIntegerType(charSize, true, "char"))
-  tt.PutType(NewIntegerTypeRef(loc, "short"),
-             NewIntegerType(shortSize, true, "short"))
-  tt.PutType(NewIntegerTypeRef(loc, "int"),
-             NewIntegerType(intSize, true, "int"))
-  tt.PutType(NewIntegerTypeRef(loc, "long"),
-             NewIntegerType(longSize, true, "long"))
-  tt.PutType(NewIntegerTypeRef(loc, "unsigned char"),
-             NewIntegerType(charSize, true, "unsigned char"))
-  tt.PutType(NewIntegerTypeRef(loc, "unsigned short"),
-             NewIntegerType(shortSize, true, "unsigned short"))
-  tt.PutType(NewIntegerTypeRef(loc, "unsigned int"),
-             NewIntegerType(intSize, true, "unsigned int"))
-  tt.PutType(NewIntegerTypeRef(loc, "unsigned long"),
-             NewIntegerType(longSize, true, "unsigned long"))
+  tt.PutType(NewCharTypeRef(loc), NewCharType(charSize))
+  tt.PutType(NewShortTypeRef(loc), NewShortType(shortSize))
+  tt.PutType(NewIntTypeRef(loc), NewIntType(intSize))
+  tt.PutType(NewLongTypeRef(loc), NewLongType(longSize))
+  tt.PutType(NewUnsignedCharTypeRef(loc), NewUnsignedCharType(charSize))
+  tt.PutType(NewUnsignedShortTypeRef(loc), NewUnsignedShortType(shortSize))
+  tt.PutType(NewUnsignedIntTypeRef(loc), NewUnsignedIntType(intSize))
+  tt.PutType(NewUnsignedLongTypeRef(loc), NewUnsignedLongType(longSize))
 
   return &tt
 }
