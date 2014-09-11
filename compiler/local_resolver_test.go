@@ -239,3 +239,82 @@ func TestLocalResolverWithConstants1(t *testing.T) {
     xt.AssertNotNil(t, "string literal should have its constant entry", s.GetEntry())
   }
 }
+
+func TestLocalResolverWithFunctions1(t *testing.T) {
+/*
+   int foo(int n) {
+     return 12345 + n;
+   }
+
+   int bar(int m) {
+      return 67890 + m;
+   }
+ */
+  loc := core.NewLocation("", 0, 0)
+  a := ast.NewAST(loc,
+    ast.NewDeclarations(
+      entity.NewDefinedVariables(),
+      entity.NewUndefinedVariables(),
+      entity.NewDefinedFunctions(
+        entity.NewDefinedFunction(
+          true,
+          ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")),
+          "foo",
+          entity.NewParams(loc,
+            entity.NewParameters(
+              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")), "n"),
+            ),
+          ),
+          ast.NewBlockNode(loc,
+            entity.NewDefinedVariables(),
+            []core.IStmtNode {
+              ast.NewReturnNode(loc,
+                ast.NewBinaryOpNode(loc,
+                  "+",
+                  ast.NewIntegerLiteralNode(loc, "12345"),
+                  ast.NewVariableNode(loc, "n"),
+                ),
+              ),
+            },
+          ),
+        ),
+        entity.NewDefinedFunction(
+          true,
+          ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")),
+          "bar",
+          entity.NewParams(loc,
+            entity.NewParameters(
+              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")), "m"),
+            ),
+          ),
+          ast.NewBlockNode(loc,
+            entity.NewDefinedVariables(),
+            []core.IStmtNode {
+              ast.NewReturnNode(loc,
+                ast.NewBinaryOpNode(loc,
+                  "+",
+                  ast.NewIntegerLiteralNode(loc, "67890"),
+                  ast.NewVariableNode(loc, "m"),
+                ),
+              ),
+            },
+          ),
+        ),
+      ),
+      entity.NewUndefinedFunctions(),
+      entity.NewConstants(),
+      ast.NewStructNodes(),
+      ast.NewUnionNodes(),
+      ast.NewTypedefNodes(),
+    ),
+  )
+  resolver := setupLocalResolver(a)
+  resolver.resolveFunctions(a)
+
+  functions := a.GetDefinedFunctions()
+  xt.AssertEquals(t, "there should be 2 functions", len(functions), 2)
+  for i := range functions {
+    function := functions[i]
+    xt.AssertNotNil(t, "defined functions should have its own scope", function.GetScope())
+  }
+}
