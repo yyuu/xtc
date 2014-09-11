@@ -18,6 +18,15 @@ func TestArefNode(t *testing.T) {
   "Index": {
     "ClassName": "ast.IntegerLiteralNode",
     "Location": "[:0,0]",
+    "TypeNode": {
+      "ClassName": "ast.TypeNode",
+      "Location": "[:0,0]",
+      "TypeRef": {
+        "ClassName": "typesys.IntegerTypeRef",
+        "Location": "[:0,0]",
+        "Name": "int"
+      }
+    },
     "Value": 12345
   }
 }`

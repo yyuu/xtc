@@ -61,7 +61,6 @@ func TestBlock2(t *testing.T) {
   x := NewBlockNode(
     loc(0,0),
     []*entity.DefinedVariable {
-//    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "12345")),
       entity.NewDefinedVariable(
         true,
         NewTypeNode(loc(0,0), typesys.NewIntegerTypeRef(loc(0,0), "int")),
@@ -94,6 +93,15 @@ func TestBlock2(t *testing.T) {
       "Initializer": {
         "ClassName": "ast.IntegerLiteralNode",
         "Location": "[:0,0]",
+        "TypeNode": {
+          "ClassName": "ast.TypeNode",
+          "Location": "[:0,0]",
+          "TypeRef": {
+            "ClassName": "typesys.IntegerTypeRef",
+            "Location": "[:0,0]",
+            "Name": "int"
+          }
+        },
         "Value": 12345
       }
     }
@@ -141,8 +149,6 @@ func TestBlock3(t *testing.T) {
   x := NewBlockNode(
     loc(0,0),
     []*entity.DefinedVariable {
-//    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "n"), NewIntegerLiteralNode(loc(0,0), "12345")),
-//    NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "m"), NewIntegerLiteralNode(loc(0,0), "67890")),
       entity.NewDefinedVariable(
         true,
         NewTypeNode(loc(0,0), typesys.NewIntegerTypeRef(loc(0,0), "int")),
@@ -182,6 +188,15 @@ func TestBlock3(t *testing.T) {
       "Initializer": {
         "ClassName": "ast.IntegerLiteralNode",
         "Location": "[:0,0]",
+        "TypeNode": {
+          "ClassName": "ast.TypeNode",
+          "Location": "[:0,0]",
+          "TypeRef": {
+            "ClassName": "typesys.IntegerTypeRef",
+            "Location": "[:0,0]",
+            "Name": "int"
+          }
+        },
         "Value": 12345
       }
     },
@@ -202,6 +217,15 @@ func TestBlock3(t *testing.T) {
       "Initializer": {
         "ClassName": "ast.IntegerLiteralNode",
         "Location": "[:0,0]",
+        "TypeNode": {
+          "ClassName": "ast.TypeNode",
+          "Location": "[:0,0]",
+          "TypeRef": {
+            "ClassName": "typesys.IntegerTypeRef",
+            "Location": "[:0,0]",
+            "Name": "int"
+          }
+        },
         "Value": 67890
       }
     }

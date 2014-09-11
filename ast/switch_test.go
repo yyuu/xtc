@@ -51,6 +51,15 @@ func TestSwitch(t *testing.T) {
         {
           "ClassName": "ast.IntegerLiteralNode",
           "Location": "[:0,0]",
+          "TypeNode": {
+            "ClassName": "ast.TypeNode",
+            "Location": "[:0,0]",
+            "TypeRef": {
+              "ClassName": "typesys.IntegerTypeRef",
+              "Location": "[:0,0]",
+              "Name": "int"
+            }
+          },
           "Value": 1
         }
       ],
@@ -82,6 +91,15 @@ func TestSwitch(t *testing.T) {
         {
           "ClassName": "ast.IntegerLiteralNode",
           "Location": "[:0,0]",
+          "TypeNode": {
+            "ClassName": "ast.TypeNode",
+            "Location": "[:0,0]",
+            "TypeRef": {
+              "ClassName": "typesys.IntegerTypeRef",
+              "Location": "[:0,0]",
+              "Name": "int"
+            }
+          },
           "Value": 2
         }
       ],

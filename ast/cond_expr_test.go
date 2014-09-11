@@ -32,12 +32,30 @@ func TestCondExpr(t *testing.T) {
     "Right": {
       "ClassName": "ast.IntegerLiteralNode",
       "Location": "[:0,0]",
+      "TypeNode": {
+        "ClassName": "ast.TypeNode",
+        "Location": "[:0,0]",
+        "TypeRef": {
+          "ClassName": "typesys.IntegerTypeRef",
+          "Location": "[:0,0]",
+          "Name": "int"
+        }
+      },
       "Value": 2
     }
   },
   "ThenExpr": {
     "ClassName": "ast.IntegerLiteralNode",
     "Location": "[:0,0]",
+    "TypeNode": {
+      "ClassName": "ast.TypeNode",
+      "Location": "[:0,0]",
+      "TypeRef": {
+        "ClassName": "typesys.IntegerTypeRef",
+        "Location": "[:0,0]",
+        "Name": "int"
+      }
+    },
     "Value": 1
   },
   "ElseExpr": {
@@ -65,6 +83,15 @@ func TestCondExpr(t *testing.T) {
           "Right": {
             "ClassName": "ast.IntegerLiteralNode",
             "Location": "[:0,0]",
+            "TypeNode": {
+              "ClassName": "ast.TypeNode",
+              "Location": "[:0,0]",
+              "TypeRef": {
+                "ClassName": "typesys.IntegerTypeRef",
+                "Location": "[:0,0]",
+                "Name": "int"
+              }
+            },
             "Value": 1
           }
         }
@@ -91,6 +118,15 @@ func TestCondExpr(t *testing.T) {
           "Right": {
             "ClassName": "ast.IntegerLiteralNode",
             "Location": "[:0,0]",
+            "TypeNode": {
+              "ClassName": "ast.TypeNode",
+              "Location": "[:0,0]",
+              "TypeRef": {
+                "ClassName": "typesys.IntegerTypeRef",
+                "Location": "[:0,0]",
+                "Name": "int"
+              }
+            },
             "Value": 2
           }
         }

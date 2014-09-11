@@ -10,6 +10,15 @@ func TestDecimalIntegerLiteral(t *testing.T) {
   s := `{
   "ClassName": "ast.IntegerLiteralNode",
   "Location": "[:0,0]",
+  "TypeNode": {
+    "ClassName": "ast.TypeNode",
+    "Location": "[:0,0]",
+    "TypeRef": {
+      "ClassName": "typesys.IntegerTypeRef",
+      "Location": "[:0,0]",
+      "Name": "int"
+    }
+  },
   "Value": 12345
 }`
   xt.AssertStringEqualsDiff(t, "DecimalIntegerLiteralNode", xt.JSON(x), s)
@@ -20,6 +29,15 @@ func TestOctalIntegerLiteral(t *testing.T) {
   s := `{
   "ClassName": "ast.IntegerLiteralNode",
   "Location": "[:0,0]",
+  "TypeNode": {
+    "ClassName": "ast.TypeNode",
+    "Location": "[:0,0]",
+    "TypeRef": {
+      "ClassName": "typesys.IntegerTypeRef",
+      "Location": "[:0,0]",
+      "Name": "int"
+    }
+  },
   "Value": 493
 }`
   xt.AssertStringEqualsDiff(t, "OctalIntegerLiteralNode", xt.JSON(x), s)
@@ -30,6 +48,15 @@ func TestHexadecimalIntegerLiteral(t *testing.T) {
   s := `{
   "ClassName": "ast.IntegerLiteralNode",
   "Location": "[:0,0]",
+  "TypeNode": {
+    "ClassName": "ast.TypeNode",
+    "Location": "[:0,0]",
+    "TypeRef": {
+      "ClassName": "typesys.IntegerTypeRef",
+      "Location": "[:0,0]",
+      "Name": "int"
+    }
+  },
   "Value": 65535
 }`
   xt.AssertStringEqualsDiff(t, "HexadecimalIntegerLiteralNode", xt.JSON(x), s)
@@ -40,7 +67,73 @@ func TestCharacterIntegerLiteral(t *testing.T) {
   s := `{
   "ClassName": "ast.IntegerLiteralNode",
   "Location": "[:0,0]",
+  "TypeNode": {
+    "ClassName": "ast.TypeNode",
+    "Location": "[:0,0]",
+    "TypeRef": {
+      "ClassName": "typesys.IntegerTypeRef",
+      "Location": "[:0,0]",
+      "Name": "char"
+    }
+  },
   "Value": 97
 }`
   xt.AssertStringEqualsDiff(t, "CharacterIntegerLiteralNode", xt.JSON(x), s)
+}
+
+func TestUnsignedIntegerLiteral(t *testing.T) {
+  x := NewIntegerLiteralNode(loc(0,0), "12345U")
+  s := `{
+  "ClassName": "ast.IntegerLiteralNode",
+  "Location": "[:0,0]",
+  "TypeNode": {
+    "ClassName": "ast.TypeNode",
+    "Location": "[:0,0]",
+    "TypeRef": {
+      "ClassName": "typesys.IntegerTypeRef",
+      "Location": "[:0,0]",
+      "Name": "unsigned int"
+    }
+  },
+  "Value": 12345
+}`
+  xt.AssertStringEqualsDiff(t, "unsigned literal", xt.JSON(x), s)
+}
+
+func TestLongIntegerLiteral(t *testing.T) {
+  x := NewIntegerLiteralNode(loc(0,0), "12345L")
+  s := `{
+  "ClassName": "ast.IntegerLiteralNode",
+  "Location": "[:0,0]",
+  "TypeNode": {
+    "ClassName": "ast.TypeNode",
+    "Location": "[:0,0]",
+    "TypeRef": {
+      "ClassName": "typesys.IntegerTypeRef",
+      "Location": "[:0,0]",
+      "Name": "long"
+    }
+  },
+  "Value": 12345
+}`
+  xt.AssertStringEqualsDiff(t, "long literal", xt.JSON(x), s)
+}
+
+func TestUnsignedLongIntegerLiteral(t *testing.T) {
+  x := NewIntegerLiteralNode(loc(0,0), "12345UL")
+  s := `{
+  "ClassName": "ast.IntegerLiteralNode",
+  "Location": "[:0,0]",
+  "TypeNode": {
+    "ClassName": "ast.TypeNode",
+    "Location": "[:0,0]",
+    "TypeRef": {
+      "ClassName": "typesys.IntegerTypeRef",
+      "Location": "[:0,0]",
+      "Name": "unsigned long"
+    }
+  },
+  "Value": 12345
+}`
+  xt.AssertStringEqualsDiff(t, "unsigned long literal", xt.JSON(x), s)
 }
