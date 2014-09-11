@@ -18,7 +18,11 @@ func NewArrayTypeRef(baseType core.ITypeRef, length int) *ArrayTypeRef {
 }
 
 func (self ArrayTypeRef) String() string {
-  return fmt.Sprintf("<typesys.ArrayTypeRef Location=%s BaseType=%s Length=%d>", self.Location, self.BaseType, self.Length)
+  if self.Length < 1 {
+    return fmt.Sprintf("%s[]", self.BaseType)
+  } else {
+    return fmt.Sprintf("%s[%d]", self.BaseType, self.Length)
+  }
 }
 
 func (self ArrayTypeRef) GetLocation() core.Location {

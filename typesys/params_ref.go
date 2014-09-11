@@ -1,7 +1,7 @@
 package typesys
 
 import (
-  "fmt"
+  "strings"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -18,7 +18,11 @@ func NewParamTypeRefs(loc core.Location, paramDescs []core.ITypeRef, vararg bool
 }
 
 func (self ParamTypeRefs) String() string {
-  return fmt.Sprintf("<typesys.ParamTypeRefs Location=%s ParamDescs=%s Vararg=%v>", self.Location, self.ParamDescs, self.Vararg)
+  params := make([]string, len(self.ParamDescs))
+  for i := range self.ParamDescs {
+    params[i] = self.ParamDescs[i].String()
+  }
+  return strings.Join(params, ",")
 }
 
 func (self ParamTypeRefs) GetLocation() core.Location {

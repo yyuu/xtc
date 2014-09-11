@@ -1,7 +1,6 @@
 package typesys
 
 import (
-  "fmt"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -17,7 +16,7 @@ func NewUserTypeRef(loc core.Location, name string) *UserTypeRef {
 }
 
 func (self UserTypeRef) String() string {
-  return fmt.Sprintf("<typesys.UserTypeRef Name=%s Location=%s>", self.Name, self.Location)
+  return self.Name
 }
 
 func (self UserTypeRef) GetLocation() core.Location {

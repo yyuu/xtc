@@ -1,7 +1,6 @@
 package typesys
 
 import (
-  "fmt"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -49,7 +48,7 @@ func NewUnsignedLongTypeRef(loc core.Location) *IntegerTypeRef {
 }
 
 func (self IntegerTypeRef) String() string {
-  return fmt.Sprintf("<typesys.IntegerTypeRef Name=%s Location=%s>", self.Name, self.Location)
+  return self.Name
 }
 
 func (self IntegerTypeRef) GetLocation() core.Location {

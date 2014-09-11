@@ -18,7 +18,7 @@ func NewFunctionTypeRef(returnType core.ITypeRef, params core.ITypeRef) *Functio
 }
 
 func (self FunctionTypeRef) String() string {
-  return fmt.Sprintf("<typesys.FunctionTypeRef Location=%s ReturnType=%s Params=%s>", self.Location, self.ReturnType, self.Params)
+  return fmt.Sprintf("%s(%s)", self.ReturnType, self.Params)
 }
 
 func (self FunctionTypeRef) GetLocation() core.Location {

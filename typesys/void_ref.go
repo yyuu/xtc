@@ -1,7 +1,6 @@
 package typesys
 
 import (
-  "fmt"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -16,7 +15,7 @@ func NewVoidTypeRef(loc core.Location) *VoidTypeRef {
 }
 
 func (self VoidTypeRef) String() string {
-  return fmt.Sprintf("<typesys.VoidTypeRef Location=%s>", self.Location)
+  return "void"
 }
 
 func (self VoidTypeRef) GetLocation() core.Location {
