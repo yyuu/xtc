@@ -10,6 +10,7 @@ import (
   "strings"
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/compiler"
+  "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/parser"
   "bitbucket.org/yyuu/bs/typesys"
 )
@@ -17,6 +18,7 @@ import (
 var flagSet = flag.NewFlagSet(os.Args[0], 1)
 var dump = flagSet.Bool("D", false, "dump mode")
 var verbose = flagSet.Int("v", 0, "verbose mode")
+var errorHandler = core.NewErrorHandler(core.LOG_DEBUG)
 
 func main() {
   flagSet.Parse(os.Args[1:])
@@ -76,8 +78,8 @@ func ep(a *ast.AST, err error) *ast.AST {
 
   types := typesys.NewTypeTableFor("x86-linux")
 
-  compiler.NewLocalResolver().Resolve(a)
-  compiler.NewTypeResolver(types).Resolve(a)
+  compiler.NewLocalResolver(errorHandler).Resolve(a)
+  compiler.NewTypeResolver(errorHandler, types).Resolve(a)
 //types.SemanticCheck()
 //compiler.NewDereferenceChecker(types).Check(a)
 //compiler.NewTypeChecker(types).Check(a)

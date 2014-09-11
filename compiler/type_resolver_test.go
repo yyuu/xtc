@@ -10,7 +10,7 @@ import (
 )
 
 func setupTypeResolver(a *ast.AST, table *typesys.TypeTable) *TypeResolver {
-  resolver := NewTypeResolver(table)
+  resolver := NewTypeResolver(core.NewErrorHandler(core.LOG_DEBUG), table)
   resolver.defineTypes(a.ListTypes())
   return resolver
 }

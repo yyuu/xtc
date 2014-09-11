@@ -8,12 +8,13 @@ import (
 )
 
 type LocalResolver struct {
+  errorHandler *core.ErrorHandler
   scopeStack []*entity.VariableScope
   constantTable *entity.ConstantTable
 }
 
-func NewLocalResolver() *LocalResolver {
-  return &LocalResolver { []*entity.VariableScope { }, entity.NewConstantTable() }
+func NewLocalResolver(errorHandler *core.ErrorHandler) *LocalResolver {
+  return &LocalResolver { errorHandler, []*entity.VariableScope { }, entity.NewConstantTable() }
 }
 
 func (self *LocalResolver) Resolve(a *ast.AST) {
