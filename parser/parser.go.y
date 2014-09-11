@@ -33,6 +33,7 @@ import (
 %token INTEGER
 %token CHARACTER
 %token STRING
+%token TYPENAME
 
 /* keywords */
 %token VOID
@@ -506,6 +507,10 @@ typeref: VOID
        {
          $$._typeref = typesys.NewFunctionTypeRef($1._typeref, $3._typeref)
        }
+       | TYPENAME
+       {
+         $$._typeref = typesys.NewUserTypeRef($1._token.location, $1._token.literal)
+       }
        ;
 
 param_typerefs: typeref
@@ -520,6 +525,11 @@ param_typerefs: typeref
 
 typedef: TYPEDEF typeref IDENTIFIER ';'
        {
+         if lex, ok := yylex.(*lex); ok {
+           lex.knownTypedefs = append(lex.knownTypedefs, $3._token.literal)
+         } else {
+           panic("parser is broken")
+         }
          $$._node = ast.NewTypedefNode($1._token.location, $2._typeref, $3._token.literal)
        }
        ;

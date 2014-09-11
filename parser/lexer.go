@@ -19,6 +19,7 @@ type lex struct {
   ignoreComments bool
   ast *ast.AST
   firstToken *token
+  knownTypedefs []string
   isEOF bool
   error error
 }
@@ -49,6 +50,7 @@ func lexer(filename string, source string) *lex {
     ignoreComments: true,
     ast: nil,
     firstToken: nil,
+    knownTypedefs: []string { },
     isEOF: false,
     error: nil,
   }
@@ -241,6 +243,11 @@ func (self *lex) scanIdentifier() *token {
   s := self.scanner.Scan("[_A-Za-z][_0-9A-Za-z]*")
   if s == "" {
     return nil
+  }
+  for i := range self.knownTypedefs {
+    if self.knownTypedefs[i] == s {
+      return self.consume(TYPENAME, s)
+    }
   }
   return self.consume(IDENTIFIER, s)
 }
