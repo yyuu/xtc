@@ -1,9 +1,5 @@
 package typesys
 
-import (
-  "fmt"
-)
-
 // IntegerType
 type IntegerType struct {
   ClassName string
@@ -49,7 +45,7 @@ func NewUnsignedLongType(size int) *IntegerType {
 }
 
 func (self IntegerType) String() string {
-  return fmt.Sprintf("<typesys.IntegerType Name=%s IntegerSize=%d Signed=%v>", self.Name, self.IntegerSize, self.Signed)
+  return self.Name
 }
 
 func (self IntegerType) Size() int {

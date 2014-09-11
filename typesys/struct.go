@@ -18,7 +18,7 @@ func NewStructType(name string, membs []core.ISlot, loc core.Location) *StructTy
 }
 
 func (self StructType) String() string {
-  return fmt.Sprintf("<typesys.StructType Name=%s Location=%s Members=%s>", self.Name, self.Location, self.Members)
+  return fmt.Sprintf("struct %s", self.Name)
 }
 
 func (self StructType) Size() int {

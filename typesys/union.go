@@ -18,7 +18,7 @@ func NewUnionType(name string, membs []core.ISlot, loc core.Location) *UnionType
 }
 
 func (self UnionType) String() string {
-  return fmt.Sprintf("<typesys.UnionType Name=%s Location=%s Members=%s>", self.Name, self.Location, self.Members)
+  return fmt.Sprintf("union %s", self.Name)
 }
 
 func (self UnionType) Size() int {

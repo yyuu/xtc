@@ -1,9 +1,5 @@
 package typesys
 
-import (
-  "fmt"
-)
-
 // VoidType
 type VoidType struct {
   ClassName string
@@ -14,7 +10,7 @@ func NewVoidType() *VoidType {
 }
 
 func (self VoidType) String() string {
-  return fmt.Sprintf("<typesys.VoidType>")
+  return "void"
 }
 
 func (self VoidType) Size() int {

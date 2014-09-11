@@ -1,7 +1,6 @@
 package typesys
 
 import (
-  "fmt"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -18,7 +17,7 @@ func NewUserType(name string, real core.ITypeNode, loc core.Location) *UserType 
 }
 
 func (self UserType) String() string {
-  return fmt.Sprintf("<typesys.UserType Name=%s Location=%s Real=%s>", self.Name, self.Location, self.Real)
+  return self.Name
 }
 
 func (self UserType) Size() int {

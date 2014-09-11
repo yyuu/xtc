@@ -18,7 +18,11 @@ func NewArrayType(baseType core.IType, length int, pointerSize int) *ArrayType {
 }
 
 func (self ArrayType) String() string {
-  return fmt.Sprintf("<typesys.ArrayType BaseType=%s Length=%d PointerSize=%d>", self.BaseType, self.Length, self.PointerSize)
+  if self.Length < 1 {
+    return fmt.Sprintf("%s[]", self.BaseType)
+  } else {
+    return fmt.Sprintf("%s[%d]", self.BaseType, self.Length)
+  }
 }
 
 func (self ArrayType) Size() int {
