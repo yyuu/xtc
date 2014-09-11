@@ -151,3 +151,108 @@ func TestTypeResolverVisitEntity(t *testing.T) {
   // TODO: add asserts
   t.SkipNow()
 }
+
+func TestTypeResolverWithFunctionWithoutArguments(t *testing.T) {
+/*
+  void hello() {
+    println("hello, world");
+  }
+ */
+  loc := core.NewLocation("", 0, 0)
+  a := ast.NewAST(loc,
+    ast.NewDeclarations(
+      entity.NewDefinedVariables(),
+      entity.NewUndefinedVariables(),
+      entity.NewDefinedFunctions(
+        entity.NewDefinedFunction(
+          false,
+          ast.NewTypeNode(loc, typesys.NewVoidTypeRef(loc)),
+          "hello",
+          entity.NewParams(loc,
+            entity.NewParameters(),
+          ),
+          ast.NewBlockNode(loc,
+            entity.NewDefinedVariables(),
+            []core.IStmtNode {
+              ast.NewExprStmtNode(loc,
+                ast.NewFuncallNode(loc,
+                  ast.NewVariableNode(loc, "println"),
+                  []core.IExprNode {
+                    ast.NewStringLiteralNode(loc, "\"hello, world\""),
+                  },
+                ),
+              ),
+            },
+          ),
+        ),
+      ),
+      entity.NewUndefinedFunctions(),
+      entity.NewConstants(),
+      ast.NewStructNodes(),
+      ast.NewUnionNodes(),
+      ast.NewTypedefNodes(),
+    ),
+  )
+  table := typesys.NewTypeTableFor("x86-linux")
+  resolver := setupTypeResolver(a, table)
+
+  entities := a.ListEntities()
+  for i := range entities {
+    entity.VisitEntity(resolver, entities[i])
+  }
+  // TODO: add asserts
+}
+
+func TestTypeResolverWithFunctionWithArguments(t *testing.T) {
+/*
+  int main(int argc, char*[] argv) {
+    println("hello, world");
+  }
+ */
+  loc := core.NewLocation("", 0, 0)
+  a := ast.NewAST(loc,
+    ast.NewDeclarations(
+      entity.NewDefinedVariables(),
+      entity.NewUndefinedVariables(),
+      entity.NewDefinedFunctions(
+        entity.NewDefinedFunction(
+          false,
+          ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)),
+          "main",
+          entity.NewParams(loc,
+            entity.NewParameters(
+              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "argc"),
+              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewArrayTypeRef(typesys.NewPointerTypeRef(typesys.NewCharTypeRef(loc)), 0)), "argv"),
+            ),
+          ),
+          ast.NewBlockNode(loc,
+            entity.NewDefinedVariables(),
+            []core.IStmtNode {
+              ast.NewExprStmtNode(loc,
+                ast.NewFuncallNode(loc,
+                  ast.NewVariableNode(loc, "println"),
+                  []core.IExprNode {
+                    ast.NewStringLiteralNode(loc, "\"hello, world\""),
+                  },
+                ),
+              ),
+            },
+          ),
+        ),
+      ),
+      entity.NewUndefinedFunctions(),
+      entity.NewConstants(),
+      ast.NewStructNodes(),
+      ast.NewUnionNodes(),
+      ast.NewTypedefNodes(),
+    ),
+  )
+  table := typesys.NewTypeTableFor("x86-linux")
+  resolver := setupTypeResolver(a, table)
+
+  entities := a.ListEntities()
+  for i := range entities {
+    entity.VisitEntity(resolver, entities[i])
+  }
+  // TODO: add asserts
+}
