@@ -4,13 +4,14 @@ import (
   "fmt"
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/bs/typesys"
 )
 
 type TypeResolver struct {
-  typeTable core.ITypeTable
+  typeTable *typesys.TypeTable
 }
 
-func NewTypeResolver(table core.ITypeTable) *TypeResolver {
+func NewTypeResolver(table *typesys.TypeTable) *TypeResolver {
   return &TypeResolver { table }
 }
 

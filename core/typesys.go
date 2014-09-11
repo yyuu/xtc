@@ -34,12 +34,3 @@ type ISlot interface {
   GetName() string
   GetOffset() int
 }
-
-type ITypeTable interface {
-  String() string
-
-  IsTypeTable() bool
-  IsDefined(ITypeRef) bool
-  GetType(ITypeRef) IType
-  PutType(ITypeRef, IType)
-}
