@@ -40,40 +40,31 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
 }
 
 func (self *LocalResolver) resolveGvarInitializers(a *ast.AST) {
-  xs := a.GetDefinedVariables()
-  ys := make([]*entity.DefinedVariable, len(xs))
-  for i := range xs {
-    gvar := xs[i]
+  variables := a.GetDefinedVariables()
+  for i := range variables {
+    gvar := variables[i]
     if gvar.HasInitializer() {
       ast.VisitNode(self, gvar.GetInitializer())
     }
-    ys[i] = gvar
   }
-  a.SetDefinedVariables(ys)
 }
 
 func (self *LocalResolver) resolveConstantValues(a *ast.AST) {
-  xs := a.GetConstants()
-  ys := make([]*entity.Constant, len(xs))
-  for i := range xs {
-    constant := xs[i]
+  constants := a.GetConstants()
+  for i := range constants {
+    constant := constants[i]
     ast.VisitNode(self, constant.GetValue())
-    ys[i] = constant
   }
-  a.SetConstants(ys)
 }
 
 func (self *LocalResolver) resolveFunctions(a *ast.AST) {
-  xs := a.GetDefinedFunctions()
-  ys := make([]*entity.DefinedFunction, len(xs))
-  for i := range xs {
-    function := xs[i]
+  functions := a.GetDefinedFunctions()
+  for i := range functions {
+    function := functions[i]
     self.pushScope(function.ListParameters())
     ast.VisitNode(self, function.GetBody())
     function.SetScope(self.popScope())
-    ys[i] = function
   }
-  a.SetDefinedFunctions(ys)
 }
 
 func (self *LocalResolver) currentScope() *entity.VariableScope {

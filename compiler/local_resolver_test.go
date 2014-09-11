@@ -71,7 +71,8 @@ func TestLocalResolverPushPopStacks(t *testing.T) {
 }
 
 func TestLocalResolverWithEmptyDeclarations(t *testing.T) {
-  a := ast.NewAST(core.NewLocation("", 0, 0),
+  loc := core.NewLocation("", 0, 0)
+  a := ast.NewAST(loc,
     ast.NewDeclarations(
       entity.NewDefinedVariables(),
       entity.NewUndefinedVariables(),
@@ -94,7 +95,7 @@ func TestLocalResolverWithGlobalVariables(t *testing.T) {
   static int foo = 12345;
  */
   loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(core.NewLocation("", 0, 0),
+  a := ast.NewAST(loc,
     ast.NewDeclarations(
       entity.NewDefinedVariables(
         entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")), "foo", ast.NewIntegerLiteralNode(loc, "12345")),
@@ -118,7 +119,7 @@ func TestLocalResolverWithGlobalVariables2(t *testing.T) {
   static int foo = bar; // undefined
  */
   loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(core.NewLocation("", 0, 0),
+  a := ast.NewAST(loc,
     ast.NewDeclarations(
       entity.NewDefinedVariables(
         entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")), "foo", ast.NewVariableNode(loc, "bar")),
@@ -150,7 +151,7 @@ func TestLocalResolverWithGlobalVariables3(t *testing.T) {
   static int baz = foo;
  */
   loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(core.NewLocation("", 0, 0),
+  a := ast.NewAST(loc,
     ast.NewDeclarations(
       entity.NewDefinedVariables(
         entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntegerTypeRef(loc, "int")), "foo", ast.NewIntegerLiteralNode(loc, "12345")),
@@ -186,4 +187,55 @@ func TestLocalResolverWithGlobalVariables3(t *testing.T) {
   xt.AssertNotNil(t, "baz should not be nil", baz)
   xt.AssertTrue(t, "baz should be an *entity.DefinedVariable", ok)
   xt.AssertEquals(t, "baz should be refered 0 times", baz_var.GetNumRefered(), 0)
+}
+
+func TestLocalResolverWithConstants1(t *testing.T) {
+/*
+  const char[] foo = "foo";
+  const char[] bar = "bar";
+ */
+  loc := core.NewLocation("", 0, 0)
+  a := ast.NewAST(loc,
+    ast.NewDeclarations(
+      entity.NewDefinedVariables(),
+      entity.NewUndefinedVariables(),
+      entity.NewDefinedFunctions(),
+      entity.NewUndefinedFunctions(),
+      entity.NewConstants(
+        entity.NewConstant(
+          ast.NewTypeNode(loc, typesys.NewArrayTypeRef(typesys.NewIntegerTypeRef(loc, "char"), len("foo"))),
+          "foo",
+          ast.NewStringLiteralNode(loc, "\"foo\""),
+        ),
+        entity.NewConstant(
+          ast.NewTypeNode(loc, typesys.NewArrayTypeRef(typesys.NewIntegerTypeRef(loc, "char"), len("bar"))),
+          "bar",
+          ast.NewStringLiteralNode(loc, "\"bar\""),
+        ),
+      ),
+      ast.NewStructNodes(),
+      ast.NewUnionNodes(),
+      ast.NewTypedefNodes(),
+    ),
+  )
+  resolver := setupLocalResolver(a)
+  resolver.resolveConstantValues(a)
+
+  constants := resolver.constantTable.GetEntries()
+  xt.AssertEquals(t, "there should be 2 constants", len(constants), 2)
+  if constants[0].GetValue() != "\"foo\"" {
+    xt.AssertEquals(t, "rest of constant must be \"foo\"", constants[1].GetValue(), "\"foo\"")
+  } else {
+    xt.AssertEquals(t, "rest of constant must be \"bar\"", constants[1].GetValue(), "\"bar\"")
+  }
+
+  nodes := a.GetConstants()
+  xt.AssertEquals(t, "there should be 2 constant nodes", len(nodes), 2)
+  for i := range nodes {
+    s, ok := nodes[i].GetValue().(*ast.StringLiteralNode)
+    if ! ok {
+      t.Errorf("there should be only string constants: %v", nodes[i])
+    }
+    xt.AssertNotNil(t, "string literal should have its constant entry", s.GetEntry())
+  }
 }
