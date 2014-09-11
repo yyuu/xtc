@@ -28,18 +28,6 @@ func (self UndefinedFunction) String() string {
   return fmt.Sprintf("<entity.UndefinedFunction Name=%s TypeNode=%s Params=%s>", self.Name, self.TypeNode, self.Params)
 }
 
-func (self UndefinedFunction) IsEntity() bool {
-  return true
-}
-
-func (self UndefinedFunction) IsFunction() bool {
-  return true
-}
-
-func (self UndefinedFunction) IsUndefinedFunction() bool {
-  return true
-}
-
 func (self UndefinedFunction) IsDefined() bool {
   return false
 }

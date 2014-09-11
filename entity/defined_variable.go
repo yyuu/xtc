@@ -30,18 +30,6 @@ func (self DefinedVariable) String() string {
   return fmt.Sprintf("<entity.DefinedVariable Name=%s Private=%v TypeNode=%s NumRefered=%d Initializer=%s>", self.Name, self.Private, self.TypeNode, self.NumRefered, self.Initializer)
 }
 
-func (self DefinedVariable) IsEntity() bool {
-  return true
-}
-
-func (self DefinedVariable) IsVariable() bool {
-  return true
-}
-
-func (self DefinedVariable) IsDefinedVariable() bool {
-  return true
-}
-
 func (self DefinedVariable) IsDefined() bool {
   return true
 }

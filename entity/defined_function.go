@@ -43,18 +43,6 @@ func (self DefinedFunction) GetName() string {
   return self.Name
 }
 
-func (self DefinedFunction) IsEntity() bool {
-  return true
-}
-
-func (self DefinedFunction) IsFunction() bool {
-  return true
-}
-
-func (self DefinedFunction) IsDefinedFunction() bool {
-  return true
-}
-
 func (self DefinedFunction) IsDefined() bool {
   return true
 }

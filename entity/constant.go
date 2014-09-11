@@ -28,10 +28,6 @@ func (self Constant) String() string {
   return fmt.Sprintf("<entity.Constant Name=%s TypeNode=%s Value=%s>", self.Name, self.TypeNode, self.Value)
 }
 
-func (self Constant) IsEntity() bool {
-  return true
-}
-
 func (self Constant) IsConstant() bool {
   return true
 }

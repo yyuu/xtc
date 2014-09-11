@@ -19,10 +19,6 @@ func (self Params) String() string {
   return fmt.Sprintf("<entity.Params Location=%s ParamDescs=%s>", self.Location, self.ParamDescs)
 }
 
-func (self Params) IsEntity() bool {
-  return true
-}
-
 func (self Params) IsDefined() bool {
   return false
 }

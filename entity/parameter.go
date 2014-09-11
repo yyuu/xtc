@@ -25,20 +25,8 @@ func (self Parameter) String() string {
   return fmt.Sprintf("<entity.Parameter Name=%s TypeNode=%s>", self.DefinedVariable.Name, self.DefinedVariable.TypeNode)
 }
 
-func (self Parameter) IsEntity() bool {
-  return true
-}
-
 func (self Parameter) IsPrivate() bool {
   return false
-}
-
-func (self Parameter) IsVariable() bool {
-  return true
-}
-
-func (self Parameter) IsDefinedVariable() bool {
-  return true
 }
 
 func (self Parameter) IsConstant() bool {
