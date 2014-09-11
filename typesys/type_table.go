@@ -102,6 +102,9 @@ func (self TypeTable) IsDefined(ref core.ITypeRef) bool {
 
 func (self TypeTable) GetParamType(ref core.ITypeRef) core.IType {
   t := self.GetType(ref)
+  if t == nil {
+    panic(fmt.Errorf("unknown parameter type: %s", ref))
+  }
   if t.IsArray() {
     return NewPointerType(self.ptrSize, t)
   } else {
