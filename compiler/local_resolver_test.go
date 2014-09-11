@@ -10,7 +10,7 @@ import (
 )
 
 func setupLocalResolver(a *ast.AST) *LocalResolver {
-  resolver := NewLocalResolver()
+  resolver := NewLocalResolver(core.NewErrorHandler(core.LOG_DEBUG))
   toplevel := entity.NewToplevelScope()
   resolver.scopeStack = append(resolver.scopeStack, toplevel)
 
@@ -27,7 +27,7 @@ func setupLocalResolver(a *ast.AST) *LocalResolver {
 }
 
 func TestLocalResolverPushPopStacks(t *testing.T) {
-  resolver := NewLocalResolver()
+  resolver := NewLocalResolver(core.NewErrorHandler(core.LOG_DEBUG))
   loc := core.NewLocation("", 0, 0)
   toplevel := entity.NewToplevelScope()
 
