@@ -81,6 +81,19 @@ func TestIf(t *testing.T) {
         {
           "ClassName": "ast.StringLiteralNode",
           "Location": "[:0,0]",
+          "TypeNode": {
+            "ClassName": "ast.TypeNode",
+            "Location": "[:0,0]",
+            "TypeRef": {
+              "ClassName": "typesys.PointerTypeRef",
+              "Location": "[:0,0]",
+              "BaseType": {
+                "ClassName": "typesys.IntegerTypeRef",
+                "Location": "[:0,0]",
+                "Name": "char"
+              }
+            }
+          },
           "Value": "\"even\""
         }
       ]
@@ -101,6 +114,19 @@ func TestIf(t *testing.T) {
         {
           "ClassName": "ast.StringLiteralNode",
           "Location": "[:0,0]",
+          "TypeNode": {
+            "ClassName": "ast.TypeNode",
+            "Location": "[:0,0]",
+            "TypeRef": {
+              "ClassName": "typesys.PointerTypeRef",
+              "Location": "[:0,0]",
+              "BaseType": {
+                "ClassName": "typesys.IntegerTypeRef",
+                "Location": "[:0,0]",
+                "Name": "char"
+              }
+            }
+          },
           "Value": "\"odd\""
         }
       ]

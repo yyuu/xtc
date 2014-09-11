@@ -44,5 +44,13 @@ func (self Params) GetParamDescs() []*Parameter {
 }
 
 func (self Params) GetName() string {
-  panic("Parameter#GetName called")
+  panic("Params#GetName called")
+}
+
+func (self Params) GetTypeNode() core.ITypeNode {
+  panic("Prams#GetTypeNode called")
+}
+
+func (self Params) GetTypeRef() core.ITypeRef {
+  panic("Prams#GetTypeRef called")
 }

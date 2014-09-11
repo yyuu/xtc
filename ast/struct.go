@@ -36,16 +36,32 @@ func (self StructNode) IsTypeDefinition() bool {
   return true
 }
 
+func (self StructNode) IsCompositeType() bool {
+  return true
+}
+
 func (self StructNode) GetLocation() core.Location {
   return self.Location
+}
+
+func (self StructNode) GetName() string {
+  return self.Name
+}
+
+func (self StructNode) GetTypeNode() core.ITypeNode {
+  return self.TypeNode
 }
 
 func (self StructNode) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
+func (self StructNode) GetMembers() []core.ISlot {
+  return self.Members
+}
+
 func (self StructNode) DefiningType() core.IType {
-  var membs []core.ISlot
+  membs := make([]core.ISlot, len(self.Members))
   for i := range self.Members {
     membs[i] = self.Members[i]
   }

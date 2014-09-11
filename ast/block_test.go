@@ -41,6 +41,19 @@ func TestBlock1(t *testing.T) {
           {
             "ClassName": "ast.StringLiteralNode",
             "Location": "[:0,0]",
+            "TypeNode": {
+              "ClassName": "ast.TypeNode",
+              "Location": "[:0,0]",
+              "TypeRef": {
+                "ClassName": "typesys.PointerTypeRef",
+                "Location": "[:0,0]",
+                "BaseType": {
+                  "ClassName": "typesys.IntegerTypeRef",
+                  "Location": "[:0,0]",
+                  "Name": "char"
+                }
+              }
+            },
             "Value": "\"hello, world\""
           }
         ]
@@ -122,6 +135,19 @@ func TestBlock2(t *testing.T) {
           {
             "ClassName": "ast.StringLiteralNode",
             "Location": "[:0,0]",
+            "TypeNode": {
+              "ClassName": "ast.TypeNode",
+              "Location": "[:0,0]",
+              "TypeRef": {
+                "ClassName": "typesys.PointerTypeRef",
+                "Location": "[:0,0]",
+                "BaseType": {
+                  "ClassName": "typesys.IntegerTypeRef",
+                  "Location": "[:0,0]",
+                  "Name": "char"
+                }
+              }
+            },
             "Value": "\"%d\""
           },
           {
@@ -246,6 +272,19 @@ func TestBlock3(t *testing.T) {
           {
             "ClassName": "ast.StringLiteralNode",
             "Location": "[:0,0]",
+            "TypeNode": {
+              "ClassName": "ast.TypeNode",
+              "Location": "[:0,0]",
+              "TypeRef": {
+                "ClassName": "typesys.PointerTypeRef",
+                "Location": "[:0,0]",
+                "BaseType": {
+                  "ClassName": "typesys.IntegerTypeRef",
+                  "Location": "[:0,0]",
+                  "Name": "char"
+                }
+              }
+            },
             "Value": "\"%d\""
           },
           {
@@ -271,6 +310,19 @@ func TestBlock3(t *testing.T) {
           {
             "ClassName": "ast.StringLiteralNode",
             "Location": "[:0,0]",
+            "TypeNode": {
+              "ClassName": "ast.TypeNode",
+              "Location": "[:0,0]",
+              "TypeRef": {
+                "ClassName": "typesys.PointerTypeRef",
+                "Location": "[:0,0]",
+                "BaseType": {
+                  "ClassName": "typesys.IntegerTypeRef",
+                  "Location": "[:0,0]",
+                  "Name": "char"
+                }
+              }
+            },
             "Value": "\"%d\""
           },
           {

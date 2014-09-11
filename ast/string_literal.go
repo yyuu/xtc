@@ -3,18 +3,22 @@ package ast
 import (
   "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/entity"
+  "bitbucket.org/yyuu/bs/typesys"
 )
 
 // StringLiteralNode
 type StringLiteralNode struct {
   ClassName string
   Location core.Location
+  TypeNode core.ITypeNode
   Value string
   entry *entity.ConstantEntry
 }
 
 func NewStringLiteralNode(loc core.Location, literal string) *StringLiteralNode {
-  return &StringLiteralNode { "ast.StringLiteralNode", loc, literal, nil }
+  ref := typesys.NewPointerTypeRef(typesys.NewCharTypeRef(loc))
+  t := NewTypeNode(loc, ref)
+  return &StringLiteralNode { "ast.StringLiteralNode", loc, t, literal, nil }
 }
 
 func (self StringLiteralNode) String() string {
@@ -39,4 +43,12 @@ func (self StringLiteralNode) GetEntry() *entity.ConstantEntry {
 
 func (self *StringLiteralNode) SetEntry(e *entity.ConstantEntry) {
   self.entry = e
+}
+
+func (self StringLiteralNode) GetTypeNode() core.ITypeNode {
+  return self.TypeNode
+}
+
+func (self StringLiteralNode) GetTypeRef() core.ITypeRef {
+  return self.TypeNode.GetTypeRef()
 }

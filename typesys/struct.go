@@ -72,3 +72,43 @@ func (self StructType) IsUserType() bool {
 func (self StructType) IsFunction() bool {
   return false
 }
+
+func (self StructType) GetName() string {
+  return self.Name
+}
+
+func (self StructType) GetMember(name string) core.ISlot {
+  for i := range self.Members {
+    slot := self.Members[i]
+    if slot.GetName() == name {
+      return slot
+    }
+  }
+  return nil
+}
+
+func (self StructType) GetMembers() []core.ISlot {
+  return self.Members
+}
+
+//func (self StructType) GetMemberType(name string) core.IType {
+//  slot := self.GetMember(name)
+//  if slot != nil {
+//    return slot.GetType()
+//  } else {
+//    return nil
+//  }
+//}
+
+//func (self StructType) GetMemberTypes() []core.IType {
+//  types := make([]core.IType, len(self.Members))
+//  for i := range self.Members {
+//    types[i] = self.Members[i].GetType()
+//  }
+//  return types
+//}
+
+func (self StructType) HasMember(name string) bool {
+  slot := self.GetMember(name)
+  return slot != nil
+}

@@ -10,15 +10,15 @@ import (
 type TypedefNode struct {
   ClassName string
   Location core.Location
-  NewType core.ITypeRef
-  Real core.ITypeRef
+  TypeNode core.ITypeNode
+  RealTypeNode core.ITypeNode
   Name string
 }
 
 func NewTypedefNode(loc core.Location, real core.ITypeRef, name string) *TypedefNode {
   if real == nil { panic("real is nil") }
-  newType := real
-  return &TypedefNode { "ast.TypedefNode", loc, newType, real, name }
+  t := NewTypeNode(loc, typesys.NewUserTypeRef(loc, name))
+  return &TypedefNode { "ast.TypedefNode", loc, t, NewTypeNode(loc, real), name }
 }
 
 func NewTypedefNodes(xs...*TypedefNode) []*TypedefNode {
@@ -30,7 +30,7 @@ func NewTypedefNodes(xs...*TypedefNode) []*TypedefNode {
 }
 
 func (self TypedefNode) String() string {
-  return fmt.Sprintf("(typedef %s %s)", self.Name, self.Real)
+  return fmt.Sprintf("(typedef %s %s)", self.Name, self.RealTypeNode)
 }
 
 func (self TypedefNode) IsTypeDefinition() bool {
@@ -41,11 +41,26 @@ func (self TypedefNode) GetLocation() core.Location {
   return self.Location
 }
 
+func (self TypedefNode) GetName() string {
+  return self.Name
+}
+
+func (self TypedefNode) GetTypeNode() core.ITypeNode {
+  return self.TypeNode
+}
+
 func (self TypedefNode) GetTypeRef() core.ITypeRef {
-  return self.NewType
+  return self.TypeNode.GetTypeRef()
+}
+
+func (self TypedefNode) GetRealTypeNode() core.ITypeNode {
+  return self.RealTypeNode
+}
+
+func (self TypedefNode) GetRealTypeRef() core.ITypeRef {
+  return self.RealTypeNode.GetTypeRef()
 }
 
 func (self TypedefNode) DefiningType() core.IType {
-  realTypeNode := NewTypeNode(self.Location, self.Real)
-  return typesys.NewUserType(self.Name, realTypeNode, self.Location)
+  return typesys.NewUserType(self.Name, self.RealTypeNode, self.Location)
 }

@@ -28,9 +28,16 @@ type ITypeRef interface {
   IsTypeRef() bool
 }
 
-type ISlot interface {
-  String() string
-
+type INamedType interface {
+  IType
   GetName() string
-  GetOffset() int
+}
+
+type ICompositeType interface {
+  INamedType
+  GetMember(string) ISlot
+  GetMembers() []ISlot
+//GetMemberType(string) IType
+//GetMemberTypes() []IType
+  HasMember(string) bool
 }

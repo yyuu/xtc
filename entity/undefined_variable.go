@@ -47,3 +47,11 @@ func (self UndefinedVariable) IsRefered() bool {
 func (self UndefinedVariable) GetName() string {
   return self.Name
 }
+
+func (self UndefinedVariable) GetTypeNode() core.ITypeNode {
+  return self.TypeNode
+}
+
+func (self UndefinedVariable) GetTypeRef() core.ITypeRef {
+  return self.TypeNode.GetTypeRef()
+}

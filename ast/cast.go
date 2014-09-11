@@ -30,3 +30,11 @@ func (self CastNode) IsExprNode() bool {
 func (self CastNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self CastNode) GetTypeNode() core.ITypeNode {
+  return self.TypeNode
+}
+
+func (self CastNode) GetTypeRef() core.ITypeRef {
+  return self.TypeNode.GetTypeRef()
+}
