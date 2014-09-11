@@ -1,13 +1,13 @@
 package entity
 
 type ConstantEntry struct {
-  s string
+  value string
 }
 
-func NewConstantEntry(s string) *ConstantEntry {
-  return &ConstantEntry { s }
+func NewConstantEntry(value string) *ConstantEntry {
+  return &ConstantEntry { value }
 }
 
-func (self *ConstantEntry) IsConstantEntry() bool {
-  return true
+func (self ConstantEntry) GetValue() string {
+  return self.value
 }

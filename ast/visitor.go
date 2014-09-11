@@ -1,9 +1,13 @@
 package ast
 
-type IVisitor interface {
-  Visit(interface{})
+import (
+  "bitbucket.org/yyuu/bs/core"
+)
+
+type INodeVisitor interface {
+  VisitNode(core.INode)
 }
 
-func Visit(v IVisitor, unknown interface{}) {
-  v.Visit(unknown)
+func VisitNode(v INodeVisitor, node core.INode) {
+  v.VisitNode(node)
 }

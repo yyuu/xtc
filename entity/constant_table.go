@@ -1,21 +1,30 @@
 package entity
 
-import (
-  "bitbucket.org/yyuu/bs/core"
-)
-
 type ConstantTable struct {
-  Constants map[string]*core.IEntity
+  table map[string]*ConstantEntry
 }
 
 func NewConstantTable() *ConstantTable {
-  return &ConstantTable { make(map[string]*core.IEntity) }
-}
-
-func (self *ConstantTable) IsConstantTable() bool {
-  return true
+  return &ConstantTable { make(map[string]*ConstantEntry) }
 }
 
 func (self *ConstantTable) Intern(s string) *ConstantEntry {
-  return NewConstantEntry(s)
+  ent, ok := self.table[s]
+  if ! ok {
+    ent = NewConstantEntry(s)
+    self.table[s] = ent
+  }
+  return ent
+}
+
+func (self ConstantTable) GetEntries() []*ConstantEntry {
+  entries := []*ConstantEntry { }
+  for _, ent := range self.table {
+    entries = append(entries, ent)
+  }
+  return entries
+}
+
+func (self *ConstantTable) IsEmpty() bool {
+  return len(self.table) < 1
 }

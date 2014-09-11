@@ -11,12 +11,12 @@ type TypeTable struct {
   intSize int
   longSize int
   ptrSize int
-  table map[core.ITypeRef]*core.IType
+  table map[core.ITypeRef]core.IType
 }
 
 func NewTypeTable(charSize, shortSize, intSize, longSize, ptrSize int) *TypeTable {
   loc := core.NewLocation("[builtin:typesys]", 0, 0)
-  tt := TypeTable { charSize, shortSize, intSize, longSize, ptrSize, make(map[core.ITypeRef]*core.IType) }
+  tt := TypeTable { charSize, shortSize, intSize, longSize, ptrSize, make(map[core.ITypeRef]core.IType) }
   tt.PutType(NewVoidTypeRef(loc),
              NewVoidType())
   tt.PutType(NewIntegerTypeRef(loc, "char"),
@@ -63,10 +63,10 @@ func NewTypeTableFor(platform string) *TypeTable {
 }
 
 func (self *TypeTable) PutType(ref core.ITypeRef, t core.IType) {
-  self.table[ref] = &t
+  self.table[ref] = t
 }
 
-func (self TypeTable) GetType(ref core.ITypeRef) *core.IType {
+func (self TypeTable) GetType(ref core.ITypeRef) core.IType {
   return self.table[ref]
 }
 

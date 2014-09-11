@@ -15,16 +15,16 @@ func NewTypeResolver(table core.ITypeTable) *TypeResolver {
 }
 
 func (self *TypeResolver) Resolve(a *ast.AST) {
-  types := a.ListTypes()
-  entities := a.ListEntities()
+//types := a.ListTypes()
+//entities := a.ListEntities()
 
-  self.defineTypes(types)
-  for i := range types {
-    ast.Visit(self, types[i])
-  }
-  for i := range entities {
-    ast.Visit(self, entities[i])
-  }
+//self.defineTypes(types)
+//for i := range types {
+//  ast.VisitNode(self, types[i])
+//}
+//for i := range entities {
+//  entity.VisitNode(self, entities[i])
+//}
 }
 
 func (self *TypeResolver) defineTypes(deftypes []core.ITypeDefinition) {
@@ -37,8 +37,8 @@ func (self *TypeResolver) defineTypes(deftypes []core.ITypeDefinition) {
   }
 }
 
-func (self *TypeResolver) Visit(unknown interface{}) {
-  fmt.Println("FIXME: TypeResolver#Visit called:", unknown)
+func (self *TypeResolver) VisitNode(node core.INode) {
+  fmt.Println("FIXME: TypeResolver#Visit called:", node)
 //switch typed := unknown.(type) {
 //  case ast.StructNode: {
 //  }

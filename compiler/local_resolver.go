@@ -20,11 +20,11 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
   toplevel := entity.NewToplevelScope()
   self.scopeStack = append(self.scopeStack, toplevel)
 
-  declarations := a.ListDeclaration()
+  declarations := a.ListDeclarations()
   for i := range declarations {
     toplevel.DeclareEntity(declarations[i])
   }
-  definitions := a.ListDefinition()
+  definitions := a.ListDefinitions()
   for i := range definitions {
     toplevel.DefineEntity(definitions[i])
   }
@@ -40,46 +40,31 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
 }
 
 func (self *LocalResolver) resolveGvarInitializers(a *ast.AST) {
-  xs := a.GetDefinedVariables()
-  ys := make([]*entity.DefinedVariable, len(xs))
-  for i := range xs {
-    gvar := xs[i]
+  variables := a.GetDefinedVariables()
+  for i := range variables {
+    gvar := variables[i]
     if gvar.HasInitializer() {
-      init := gvar.GetInitializer()
-      ast.Visit(self, &init)
-      gvar.SetInitializer(init)
+      ast.VisitNode(self, gvar.GetInitializer())
     }
-    ys[i] = gvar
   }
-  a.SetDefinedVariables(ys)
 }
 
 func (self *LocalResolver) resolveConstantValues(a *ast.AST) {
-  xs := a.GetConstants()
-  ys := make([]*entity.Constant, len(xs))
-  for i := range xs {
-    constant := xs[i]
-    value := constant.GetValue()
-    ast.Visit(self, &value)
-    constant.SetValue(value)
-    ys[i] = constant
+  constants := a.GetConstants()
+  for i := range constants {
+    constant := constants[i]
+    ast.VisitNode(self, constant.GetValue())
   }
-  a.SetConstants(ys)
 }
 
 func (self *LocalResolver) resolveFunctions(a *ast.AST) {
-  xs := a.GetDefinedFunctions()
-  ys := make([]*entity.DefinedFunction, len(xs))
-  for i := range xs {
-    function := xs[i]
+  functions := a.GetDefinedFunctions()
+  for i := range functions {
+    function := functions[i]
     self.pushScope(function.ListParameters())
-    body := function.GetBody()
-    ast.Visit(self, &body)
-    function.SetBody(body)
+    ast.VisitNode(self, function.GetBody())
     function.SetScope(self.popScope())
-    ys[i] = function
   }
-  a.SetDefinedFunctions(ys)
 }
 
 func (self *LocalResolver) currentScope() *entity.VariableScope {
@@ -112,67 +97,27 @@ func (self *LocalResolver) popScope() *entity.VariableScope {
 
 var Verbose = 0
 
-func (self *LocalResolver) debugVisit(key string, unknown interface{}) {
-  if Verbose < 1 {
-    return
-  }
-  fmt.Println("-----", key, "-----")
-  variables := self.currentScope().Variables
-  for i := range variables {
-    fmt.Println(*variables[i])
-  }
-  fmt.Println("-----", key, "-----")
-
-  switch a := unknown.(type) {
-    case *core.IExprNode: {
-      switch b := (*a).(type) {
-        case ast.IntegerLiteralNode: {
-          fmt.Println("int:", b)
-        }
-        case ast.VariableNode: {
-          fmt.Println("var:", b, ":", b.GetEntity())
-        }
+func (self *LocalResolver) VisitNode(node core.INode) {
+  switch typed := node.(type) {
+    case *ast.BlockNode: {
+      self.pushScope(typed.GetVariables())
+      typed.SetScope(self.popScope())
+    }
+    case *ast.StringLiteralNode: {
+      e := self.constantTable.Intern(typed.GetValue())
+      typed.SetEntry(e)
+    }
+    case *ast.VariableNode: {
+      e := self.currentScope().GetByName(typed.GetName())
+      if e == nil {
+        panic(fmt.Errorf("undefined: %s", typed.GetName()))
       }
+      variable, ok := e.(*entity.DefinedVariable)
+      if ! ok {
+        panic(fmt.Errorf("not a variable: %s", typed.GetName()))
+      }
+      variable.Refered()
+      typed.SetEntity(variable)
     }
   }
-}
-
-func (self *LocalResolver) Visit(unknown interface{}) {
-  self.debugVisit("BEGIN VISIT", unknown) // TODO: remove this
-  switch typed := unknown.(type) {
-    case *core.IStmtNode: {
-      switch stmt := (*typed).(type) {
-        case ast.BlockNode: {
-          self.pushScope(stmt.GetVariables())
-          stmt.SetScope(self.popScope())
-          *typed = stmt
-        }
-      }
-    }
-    case *core.IExprNode: {
-      switch expr := (*typed).(type) {
-        case ast.VariableNode: {
-          e := self.currentScope().GetByName(expr.GetName())
-          if e == nil {
-            panic(fmt.Errorf("undefined: %s", expr.GetName()))
-          }
-          variable, ok := (*e).(entity.DefinedVariable)
-          if ! ok {
-            panic(fmt.Errorf("not a variable: %s", expr.GetName()))
-          }
-          p := &variable
-          p.Refered()
-          *e = p
-          expr.SetEntity(p)
-          *typed = expr
-        }
-        case ast.StringLiteralNode: {
-          e := self.constantTable.Intern(expr.GetValue())
-          expr.SetEntry(e)
-          *typed = expr
-        }
-      }
-    }
-  }
-  self.debugVisit("END VISIT", unknown) // TODO: remove this
 }
