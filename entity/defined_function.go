@@ -39,6 +39,10 @@ func (self DefinedFunction) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
+func (self DefinedFunction) GetTypeRef() core.ITypeRef {
+  return self.TypeNode.GetTypeRef()
+}
+
 func (self DefinedFunction) GetName() string {
   return self.Name
 }
@@ -57,6 +61,10 @@ func (self DefinedFunction) IsRefered() bool {
 
 func (self DefinedFunction) GetParams() *Params {
   return self.Params
+}
+
+func (self DefinedFunction) GetParameters() []*Parameter {
+  return self.Params.ParamDescs
 }
 
 func (self DefinedFunction) ListParameters() []*DefinedVariable {

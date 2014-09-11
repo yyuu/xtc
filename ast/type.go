@@ -10,11 +10,12 @@ type TypeNode struct {
   ClassName string
   Location core.Location
   TypeRef core.ITypeRef
+  t core.IType
 }
 
-func NewTypeNode(loc core.Location, t core.ITypeRef) *TypeNode {
-  if t == nil { panic("t is nil") }
-  return &TypeNode { "ast.TypeNode", loc, t }
+func NewTypeNode(loc core.Location, ref core.ITypeRef) *TypeNode {
+  if ref == nil { panic("ref is nil") }
+  return &TypeNode { "ast.TypeNode", loc, ref, nil }
 }
 
 func (self TypeNode) String() string {
@@ -31,4 +32,16 @@ func (self TypeNode) IsTypeNode() bool {
 
 func (self TypeNode) GetLocation() core.Location {
   return self.Location
+}
+
+func (self TypeNode) IsResolved() bool {
+  return self.t != nil
+}
+
+func (self TypeNode) GetType() core.IType {
+  return self.t
+}
+
+func (self *TypeNode) SetType(t core.IType) {
+  self.t = t
 }

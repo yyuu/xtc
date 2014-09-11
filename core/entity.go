@@ -7,4 +7,14 @@ type IEntity interface {
   IsPrivate() bool
   IsConstant() bool
   IsRefered() bool
+  GetTypeNode() ITypeNode
+  GetTypeRef() ITypeRef
+}
+
+type IFunction interface {
+  IEntity
+}
+
+type IVariable interface {
+  IEntity
 }

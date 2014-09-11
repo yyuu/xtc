@@ -72,3 +72,43 @@ func (self UnionType) IsUserType() bool {
 func (self UnionType) IsFunction() bool {
   return false
 }
+
+func (self UnionType) GetName() string {
+  return self.Name
+}
+
+func (self UnionType) GetMember(name string) core.ISlot {
+  for i := range self.Members {
+    slot := self.Members[i]
+    if slot.GetName() == name {
+      return slot
+    }
+  }
+  return nil
+}
+
+func (self UnionType) GetMembers() []core.ISlot {
+  return self.Members
+}
+
+//func (self UnionType) GetMemberType(name string) core.IType {
+//  slot := self.GetMember(name)
+//  if slot != nil {
+//    return slot.GetType()
+//  } else {
+//    return nil
+//  }
+//}
+
+//func (self UnionType) GetMemberTypes() []core.IType {
+//  types := make([]core.IType, len(self.Members))
+//  for i := range self.Members {
+//    types[i] = self.Members[i].GetType()
+//  }
+//  return types
+//}
+
+func (self UnionType) HasMember(name string) bool {
+  slot := self.GetMember(name)
+  return slot != nil
+}

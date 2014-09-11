@@ -48,10 +48,18 @@ func (self UndefinedFunction) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
+func (self UndefinedFunction) GetTypeRef() core.ITypeRef {
+  return self.TypeNode.GetTypeRef()
+}
+
 func (self UndefinedFunction) GetName() string {
   return self.Name
 }
 
 func (self UndefinedFunction) GetParams() *Params {
   return self.Params
+}
+
+func (self UndefinedFunction) GetParameters() []*Parameter {
+  return self.Params.ParamDescs
 }

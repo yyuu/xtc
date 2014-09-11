@@ -61,6 +61,10 @@ func (self Parameter) GetTypeNode() core.ITypeNode {
   return self.DefinedVariable.TypeNode
 }
 
+func (self Parameter) GetTypeRef() core.ITypeRef {
+  return self.DefinedVariable.TypeNode.GetTypeRef()
+}
+
 func (self Parameter) GetName() string {
   return self.DefinedVariable.Name
 }

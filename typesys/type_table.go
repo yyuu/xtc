@@ -2,6 +2,7 @@ package typesys
 
 import (
   "fmt"
+  "strings"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -87,10 +88,23 @@ func (self TypeTable) IsTypeTable() bool {
 }
 
 func (self TypeTable) String() string {
-  return fmt.Sprintf("(let typetable ((charSize %d) (shortSize %d) (intSize %d) (longSize %d) (ptrSize %d)) '())", self.charSize, self.shortSize, self.intSize, self.longSize, self.ptrSize)
+  xs := make([]string, len(self.table))
+  for key, _ := range self.table {
+    xs = append(xs, fmt.Sprintf("%s", key))
+  }
+  return fmt.Sprintf("(%s)", strings.Join(xs, "\n"))
 }
 
 func (self TypeTable) IsDefined(ref core.ITypeRef) bool {
   _, ok := self.table[ref]
   return ok
+}
+
+func (self TypeTable) GetParamType(ref core.ITypeRef) core.IType {
+  t := self.GetType(ref)
+  if t.IsArray() {
+    return NewPointerType(self.ptrSize, t)
+  } else {
+    return t
+  }
 }
