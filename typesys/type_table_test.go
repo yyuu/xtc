@@ -20,9 +20,11 @@ func TestTypeTableGetPointerTypes(t *testing.T) {
   table := NewTypeTableILP32()
   ref1 := NewPointerTypeRef(NewCharTypeRef(loc))
   xt.AssertNotNil(t, "char* != nil", table.GetType(ref1))
+  xt.AssertEquals(t, "char*", table.GetType(ref1).(*PointerType).GetBaseType().(*IntegerType).GetName(), "char")
 
   ref2 := NewPointerTypeRef(NewPointerTypeRef(NewCharTypeRef(loc)))
   xt.AssertNotNil(t, "char** != nil", table.GetType(ref2))
+  xt.AssertEquals(t, "char**", table.GetType(ref2).(*PointerType).GetBaseType().(*PointerType).GetBaseType().(*IntegerType).GetName(), "char")
 }
 
 func TestTypeTableGetArrayTypes(t *testing.T) {
@@ -30,9 +32,11 @@ func TestTypeTableGetArrayTypes(t *testing.T) {
   table := NewTypeTableILP32()
   ref1 := NewArrayTypeRef(NewIntTypeRef(loc), 255)
   xt.AssertNotNil(t, "int[255] != nil", table.GetType(ref1))
+  xt.AssertEquals(t, "int[255]", table.GetType(ref1).(*ArrayType).GetBaseType().(*IntegerType).GetName(), "int")
 
   ref2 := NewArrayTypeRef(NewArrayTypeRef(NewIntTypeRef(loc), 255), 255)
   xt.AssertNotNil(t, "int[255][255] != nil", table.GetType(ref2))
+  xt.AssertEquals(t, "int[255][255]", table.GetType(ref2).(*ArrayType).GetBaseType().(*ArrayType).GetBaseType().(*IntegerType).GetName(), "int")
 }
 
 func TestTypeTableGetFunctionTypes(t *testing.T) {
@@ -43,6 +47,9 @@ func TestTypeTableGetFunctionTypes(t *testing.T) {
     NewParamTypeRefs(loc, []core.ITypeRef { NewIntTypeRef(loc) }, false),
   )
   xt.AssertNotNil(t, "int f(int x) != nil", table.GetType(ref1))
+  xt.AssertEquals(t, "int f(int x)", table.GetType(ref1).(*FunctionType).GetReturnType().(*IntegerType).GetName(), "int")
+  xt.AssertEquals(t, "int f(int x)", len(table.GetType(ref1).(*FunctionType).GetParamTypes().GetParamDescs()), 1)
+  xt.AssertEquals(t, "int f(int x)", table.GetType(ref1).(*FunctionType).GetParamTypes().GetParamDescs()[0].(*IntegerType).GetName(), "int")
 }
 
 func TestTypeTableGetMixedTypes(t *testing.T) {

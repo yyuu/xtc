@@ -80,7 +80,10 @@ func (self TypeTable) GetType(ref core.ITypeRef) core.IType {
         for i := range paramRefs {
           paramTypes[i] = self.GetParamType(paramRefs[i])
         }
-        t = NewParamTypes(typed.GetLocation(), paramTypes, params.IsVararg())
+        t = NewFunctionType(
+          self.GetType(typed.GetReturnType()),
+          NewParamTypes(typed.GetLocation(), paramTypes, params.IsVararg()),
+        )
         self.PutType(typed, t)
       }
       default: {

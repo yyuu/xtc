@@ -9,10 +9,10 @@ import (
 type FunctionType struct {
   ClassName string
   ReturnType core.IType
-  ParamTypes ParamTypes
+  ParamTypes *ParamTypes
 }
 
-func NewFunctionType(ret core.IType, paramTypes ParamTypes) *FunctionType {
+func NewFunctionType(ret core.IType, paramTypes *ParamTypes) *FunctionType {
   return &FunctionType { "typesys.FunctionType", ret, paramTypes }
 }
 
@@ -70,4 +70,12 @@ func (self FunctionType) IsUserType() bool {
 
 func (self FunctionType) IsFunction() bool {
   return true
+}
+
+func (self FunctionType) GetReturnType() core.IType {
+  return self.ReturnType
+}
+
+func (self FunctionType) GetParamTypes() *ParamTypes {
+  return self.ParamTypes
 }

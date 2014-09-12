@@ -76,3 +76,7 @@ func (self ArrayType) IsUserType() bool {
 func (self ArrayType) IsFunction() bool {
   return false
 }
+
+func (self ArrayType) GetBaseType() core.IType {
+  return self.BaseType
+}

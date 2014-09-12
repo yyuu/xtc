@@ -99,3 +99,7 @@ func (self IntegerType) IsUserType() bool {
 func (self IntegerType) IsFunction() bool {
   return false
 }
+
+func (self IntegerType) GetName() string {
+  return self.Name
+}
