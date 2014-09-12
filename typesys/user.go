@@ -71,3 +71,7 @@ func (self UserType) IsUserType() bool {
 func (self UserType) IsFunction() bool {
   return false
 }
+
+func (self UserType) GetName() string {
+  return self.Name
+}

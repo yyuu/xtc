@@ -71,3 +71,7 @@ func (self PointerType) IsUserType() bool {
 func (self PointerType) IsFunction() bool {
   return false
 }
+
+func (self PointerType) GetBaseType() core.IType {
+  return self.BaseType
+}
