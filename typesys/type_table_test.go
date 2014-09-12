@@ -49,7 +49,7 @@ func TestTypeTableGetFunctionTypes(t *testing.T) {
   xt.AssertNotNil(t, "int f(int x) != nil", table.GetType(ref1))
   xt.AssertEquals(t, "int f(int x)", table.GetType(ref1).(*FunctionType).GetReturnType().(*IntegerType).GetName(), "int")
   xt.AssertEquals(t, "int f(int x)", len(table.GetType(ref1).(*FunctionType).GetParamTypes().GetParamDescs()), 1)
-  xt.AssertEquals(t, "int f(int x)", table.GetType(ref1).(*FunctionType).GetParamTypes().GetParamDescs()[0].(*IntegerType).GetName(), "int")
+  xt.AssertEquals(t, "int f(int x)", table.GetType(ref1).(*FunctionType).GetParamTypes().String(), "int")
 }
 
 func TestTypeTableGetMixedTypes(t *testing.T) {
@@ -66,4 +66,7 @@ func TestTypeTableGetMixedTypes(t *testing.T) {
     ),
   )
   xt.AssertNotNil(t, "int main(int argc, char*[] argv) != nil", table.GetType(ref1))
+  xt.AssertEquals(t, "int main(int argc, char*[] argv)", table.GetType(ref1).(*FunctionType).GetReturnType().(*IntegerType).GetName(), "int")
+  xt.AssertEquals(t, "int main(int argc, char*[] argv)", len(table.GetType(ref1).(*FunctionType).GetParamTypes().GetParamDescs()), 2)
+  xt.AssertEquals(t, "int main(int argc, char*[] argv)", table.GetType(ref1).(*FunctionType).GetParamTypes().String(), "int,char**")
 }

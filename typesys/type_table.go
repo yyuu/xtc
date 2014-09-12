@@ -131,13 +131,14 @@ func (self TypeTable) IsDefined(ref core.ITypeRef) bool {
   return ok
 }
 
+// array is really a pointer on parameters.
 func (self TypeTable) GetParamType(ref core.ITypeRef) core.IType {
   t := self.GetType(ref)
   if t == nil {
     panic(fmt.Errorf("unknown parameter type: %s", ref))
   }
   if t.IsArray() {
-    return NewPointerType(self.ptrSize, t)
+    return NewPointerType(self.ptrSize, t.(*ArrayType).GetBaseType())
   } else {
     return t
   }
