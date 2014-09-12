@@ -15,6 +15,25 @@ func TestTypeTableGetDefaultTypes(t *testing.T) {
   xt.AssertEquals(t, "long is 4 bytes", table.GetType(NewLongTypeRef(loc)).Size(), 4)
 }
 
+func TestTypeTableGetTypesMultipleTimes(t *testing.T) {
+  loc := core.NewLocation("", 0, 0)
+  table := NewTypeTableILP32()
+  xt.AssertEquals(t, "get char multipe times", table.GetType(NewCharTypeRef(loc)), table.GetType(NewCharTypeRef(loc)))
+  xt.AssertEquals(t, "get short multipe times", table.GetType(NewShortTypeRef(loc)), table.GetType(NewShortTypeRef(loc)))
+  xt.AssertEquals(t, "get int multipe times", table.GetType(NewIntTypeRef(loc)), table.GetType(NewIntTypeRef(loc)))
+  xt.AssertEquals(t, "get long multipe times", table.GetType(NewLongTypeRef(loc)), table.GetType(NewLongTypeRef(loc)))
+}
+
+func TestTypeTableGetTypesWithDifferentLocations(t *testing.T) {
+  loc1 := core.NewLocation("", 1, 2)
+  loc2 := core.NewLocation("", 3, 4)
+  table := NewTypeTableILP32()
+  xt.AssertEquals(t, "get char with different locations", table.GetType(NewCharTypeRef(loc1)), table.GetType(NewCharTypeRef(loc2)))
+  xt.AssertEquals(t, "get short with different locations", table.GetType(NewShortTypeRef(loc1)), table.GetType(NewShortTypeRef(loc2)))
+  xt.AssertEquals(t, "get int with different locations", table.GetType(NewIntTypeRef(loc1)), table.GetType(NewIntTypeRef(loc2)))
+  xt.AssertEquals(t, "get long with different locations", table.GetType(NewLongTypeRef(loc1)), table.GetType(NewLongTypeRef(loc2)))
+}
+
 func TestTypeTableGetPointerTypes(t *testing.T) {
   loc := core.NewLocation("", 0, 0)
   table := NewTypeTableILP32()
