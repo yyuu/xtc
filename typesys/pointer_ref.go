@@ -27,3 +27,7 @@ func (self PointerTypeRef) GetLocation() core.Location {
 func (self PointerTypeRef) IsTypeRef() bool {
   return true
 }
+
+func (self PointerTypeRef) GetBaseType() core.ITypeRef {
+  return self.BaseType
+}

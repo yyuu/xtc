@@ -28,3 +28,11 @@ func (self FunctionTypeRef) GetLocation() core.Location {
 func (self FunctionTypeRef) IsTypeRef() bool {
   return true
 }
+
+func (self FunctionTypeRef) GetReturnType() core.ITypeRef {
+  return self.ReturnType
+}
+
+func (self FunctionTypeRef) GetParams() *ParamTypeRefs {
+  return self.Params
+}

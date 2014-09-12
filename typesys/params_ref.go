@@ -32,3 +32,11 @@ func (self ParamTypeRefs) GetLocation() core.Location {
 func (self ParamTypeRefs) IsTypeRef() bool {
   return true
 }
+
+func (self ParamTypeRefs) GetParamDescs() []core.ITypeRef {
+  return self.ParamDescs
+}
+
+func (self ParamTypeRefs) IsVararg() bool {
+  return self.Vararg
+}

@@ -32,3 +32,11 @@ func (self ArrayTypeRef) GetLocation() core.Location {
 func (self ArrayTypeRef) IsTypeRef() bool {
   return true
 }
+
+func (self ArrayTypeRef) GetBaseType() core.ITypeRef {
+  return self.BaseType
+}
+
+func (self ArrayTypeRef) GetLength() int {
+  return self.Length
+}

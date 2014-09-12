@@ -29,7 +29,7 @@ func (self ArrayType) Size() int {
   return self.PointerSize
 }
 
-func (self ArrayType) allocSize() int {
+func (self ArrayType) AllocSize() int {
   return self.BaseType.AllocSize() * self.Length
 }
 

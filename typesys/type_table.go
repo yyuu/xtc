@@ -28,7 +28,6 @@ func NewTypeTable(charSize, shortSize, intSize, longSize, ptrSize int) *TypeTabl
   tt.PutType(NewUnsignedShortTypeRef(loc), NewUnsignedShortType(shortSize))
   tt.PutType(NewUnsignedIntTypeRef(loc), NewUnsignedIntType(intSize))
   tt.PutType(NewUnsignedLongTypeRef(loc), NewUnsignedLongType(longSize))
-
   return &tt
 }
 
@@ -60,7 +59,36 @@ func (self *TypeTable) PutType(ref core.ITypeRef, t core.IType) {
 }
 
 func (self TypeTable) GetType(ref core.ITypeRef) core.IType {
-  return self.table[ref.String()]
+  t := self.table[ref.String()]
+  if t == nil {
+    switch typed := ref.(type) {
+      case *UserTypeRef: {
+        panic(fmt.Errorf("undefined type: %s", typed.GetName()))
+      }
+      case *PointerTypeRef: {
+        t = NewPointerType(self.ptrSize, self.GetType(typed.GetBaseType()))
+        self.PutType(typed, t)
+      }
+      case *ArrayTypeRef: {
+        t = NewArrayType(self.GetType(typed.GetBaseType()), typed.GetLength(), self.ptrSize)
+        self.PutType(typed, t)
+      }
+      case *FunctionTypeRef: {
+        params := typed.GetParams()
+        paramRefs := params.GetParamDescs()
+        paramTypes := make([]core.IType, len(paramRefs))
+        for i := range paramRefs {
+          paramTypes[i] = self.GetParamType(paramRefs[i])
+        }
+        t = NewParamTypes(typed.GetLocation(), paramTypes, params.IsVararg())
+        self.PutType(typed, t)
+      }
+      default: {
+        panic(fmt.Errorf("unregistered type: %s", ref.String()))
+      }
+    }
+  }
+  return t
 }
 
 func (self TypeTable) GetCharSize() int {

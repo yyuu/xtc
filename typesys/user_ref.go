@@ -26,3 +26,7 @@ func (self UserTypeRef) GetLocation() core.Location {
 func (self UserTypeRef) IsTypeRef() bool {
   return true
 }
+
+func (self UserTypeRef) GetName() string {
+  return self.Name
+}

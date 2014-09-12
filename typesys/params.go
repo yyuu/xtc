@@ -76,3 +76,11 @@ func (self ParamTypes) IsUserType() bool {
 func (self ParamTypes) IsFunction() bool {
   return false
 }
+
+func (self ParamTypes) GetParamDescs() []core.IType {
+  return self.ParamDescs
+}
+
+func (self ParamTypes) IsVararg() bool {
+  return self.Vararg
+}
