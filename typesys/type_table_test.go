@@ -89,3 +89,12 @@ func TestTypeTableGetMixedTypes(t *testing.T) {
   xt.AssertEquals(t, "int main(int argc, char*[] argv)", len(table.GetType(ref1).(*FunctionType).GetParamTypes().GetParamDescs()), 2)
   xt.AssertEquals(t, "int main(int argc, char*[] argv)", table.GetType(ref1).(*FunctionType).GetParamTypes().String(), "int,char**")
 }
+
+func TestTypeTableGetUserTypes(t *testing.T) {
+  loc := core.NewLocation("", 0, 0)
+  table := NewTypeTableILP32()
+  t1 := NewUserType("foo", newTypeNode(loc, NewIntTypeRef(loc)), loc)
+  ref1 := NewUserTypeRef(loc, "foo")
+  table.PutType(ref1, t1)
+  xt.AssertNotNil(t, "typedef foo int", table.GetType(ref1))
+}
