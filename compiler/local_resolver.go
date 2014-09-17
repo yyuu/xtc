@@ -102,6 +102,7 @@ func (self *LocalResolver) VisitNode(node core.INode) {
   switch typed := node.(type) {
     case *ast.BlockNode: {
       self.pushScope(typed.GetVariables())
+      visitBlockNode(self, typed)
       typed.SetScope(self.popScope())
     }
     case *ast.StringLiteralNode: {
@@ -119,6 +120,9 @@ func (self *LocalResolver) VisitNode(node core.INode) {
       }
       variable.Refered()
       typed.SetEntity(variable)
+    }
+    default: {
+      visitNode(self, node)
     }
   }
 }
