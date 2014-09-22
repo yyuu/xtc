@@ -160,19 +160,11 @@ func (self *TypeTable) SemanticCheck(errorHandler *core.ErrorHandler) {
   for i := range ts {
     t := ts[i]
     if t.IsCompositeType() {
-      ct, ok := t.(core.ICompositeType)
-      if ! ok {
-        errorHandler.Panicln("not a composite type")
-      }
-      self.checkCompositeVoidMembers(ct, errorHandler)
-      self.checkDuplicatedMembers(ct, errorHandler)
+      self.checkCompositeVoidMembers(t.(core.ICompositeType), errorHandler)
+      self.checkDuplicatedMembers(t.(core.ICompositeType), errorHandler)
     } else {
       if t.IsArray() {
-        at, ok := t.(*ArrayType)
-        if ! ok {
-          errorHandler.Panicln("not an array type")
-        }
-        self.checkArrayVoidMembers(at, errorHandler)
+        self.checkArrayVoidMembers(t.(*ArrayType), errorHandler)
       }
     }
     self.checkRecursiveDefinition(t, errorHandler)
