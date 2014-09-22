@@ -537,7 +537,7 @@ typeref: VOID
        }
        | typeref '(' ')'
        {
-         $$._typeref = typesys.NewFunctionTypeRef($1._typeref, typesys.NewParamTypeRefs($2._token.location, []core.ITypeRef { }, false))
+         $$._typeref = typesys.NewFunctionTypeRef($1._typeref, typesys.NewParamTypeRefs($2._token.location, typesys.NewTypeRefs(), false))
        }
        | typeref '(' param_typerefs ')'
        {
@@ -551,7 +551,7 @@ typeref: VOID
 
 param_typerefs: typeref
                {
-                 $$._typerefs = []core.ITypeRef { $1._typeref }
+                 $$._typerefs = typesys.NewTypeRefs($1._typeref)
                }
                | param_typerefs ',' typeref
                {
