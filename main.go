@@ -74,8 +74,8 @@ func ep(a *ast.AST, err error) *ast.AST {
   compiler.NewLocalResolver(errorHandler).Resolve(a)
   compiler.NewTypeResolver(errorHandler, types).Resolve(a)
   types.SemanticCheck(errorHandler)
-//compiler.NewDereferenceChecker(types).Check(a)
-//compiler.NewTypeChecker(types).Check(a)
+  compiler.NewDereferenceChecker(errorHandler, types).Check(a)
+  compiler.NewTypeChecker(errorHandler, types).Check(a)
 
   // TODO: evaluate AST
   fmt.Fprintln(os.Stdout, a)
