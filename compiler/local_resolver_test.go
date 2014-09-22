@@ -58,7 +58,7 @@ func TestLocalResolverPushPopStacks(t *testing.T) {
   xt.AssertEquals(t, "stack should be increased", resolver.currentScope(), scope2)
   xt.AssertEquals(t, "scope2.GetParent should return scope1", resolver.currentScope().GetParent(), scope1)
   xt.AssertEquals(t, "scope2.GetToplevel should return toplevel", resolver.currentScope().GetToplevel(), toplevel)
-  xt.AssertNil(t, "scope2 should not contain foo", scope2.GetByName("foo"))
+  xt.AssertNotNil(t, "scope2 should contain foo", scope2.GetByName("foo"))
   xt.AssertNotNil(t, "scope2 should contain bar", scope2.GetByName("bar"))
 
   xt.AssertEquals(t, "popScope should decrease the stack", resolver.popScope(), scope2)

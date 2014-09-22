@@ -91,7 +91,7 @@ func (self *LocalResolver) popScope() *entity.VariableScope {
   if len(self.scopeStack) < 1 {
     panic("stack is empty")
   }
-  scope := self.scopeStack[len(self.scopeStack)-1]
+  scope := self.currentScope()
   self.scopeStack = self.scopeStack[0:len(self.scopeStack)-1]
   return scope
 }

@@ -36,7 +36,12 @@ func (self *VariableScope) AddChild(scope *VariableScope) {
 }
 
 func (self *VariableScope) GetByName(name string) core.IEntity {
-  return self.Variables[name]
+  ent := self.Variables[name]
+  if ent == nil && !self.IsToplevel() {
+    return self.Parent.GetByName(name)
+  } else {
+    return ent
+  }
 }
 
 func (self *VariableScope) DeclareEntity(entity core.IEntity) {
