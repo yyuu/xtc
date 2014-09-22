@@ -18,8 +18,7 @@ type TypeTable struct {
 func NewTypeTable(charSize, shortSize, intSize, longSize, ptrSize int) *TypeTable {
   loc := core.NewLocation("[builtin:typesys]", 0, 0)
   tt := TypeTable { charSize, shortSize, intSize, longSize, ptrSize, make(map[string]core.IType) }
-  tt.PutType(NewVoidTypeRef(loc),
-             NewVoidType())
+  tt.PutType(NewVoidTypeRef(loc), NewVoidType())
   tt.PutType(NewCharTypeRef(loc), NewCharType(charSize))
   tt.PutType(NewShortTypeRef(loc), NewShortType(shortSize))
   tt.PutType(NewIntTypeRef(loc), NewIntType(intSize))
@@ -142,4 +141,8 @@ func (self TypeTable) GetParamType(ref core.ITypeRef) core.IType {
   } else {
     return t
   }
+}
+
+func (self TypeTable) NumTypes() int {
+  return len(self.table)
 }
