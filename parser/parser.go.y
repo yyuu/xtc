@@ -96,19 +96,12 @@ import (
 compilation_unit: EOF
                 | import_stmts top_defs EOF
                 {
-                  if lex, ok := yylex.(*lexer); ok {
-                    var loc core.Location
-                    if lex.firstToken != nil {
-                      loc = lex.firstToken.location
-                    }
-                    decl := asDeclaration($2._node)
-                    for i := range $1._nodes {
-                      decl.AddDeclaration(asDeclaration($1._nodes[i]))
-                    }
-                    lex.ast = ast.NewAST(loc, decl)
-                  } else {
-                    panic("parser is broken")
+                  lex := yylex.(*lexer)
+                  decl := asDeclaration($2._node)
+                  for i := range $1._nodes {
+                    decl.AddDeclaration(asDeclaration($1._nodes[i]))
                   }
+                  lex.ast = ast.NewAST(lex.firstToken.location, decl)
                 }
                 ;
 
@@ -568,11 +561,8 @@ param_typerefs: typeref
 
 typedef: TYPEDEF typeref IDENTIFIER ';'
        {
-         if lex, ok := yylex.(*lexer); ok {
-           lex.knownTypedefs = append(lex.knownTypedefs, $3._token.literal)
-         } else {
-           panic("parser is broken")
-         }
+         lex := yylex.(*lexer)
+         lex.knownTypedefs = append(lex.knownTypedefs, $3._token.literal)
          $$._node = ast.NewTypedefNode($1._token.location, $2._typeref, $3._token.literal)
        }
        ;
