@@ -105,61 +105,6 @@ compilation_unit: EOF
                 }
                 ;
 
-declaration_file: import_stmts
-                {
-                  decl := ast.NewDeclaration(
-                    entity.NewDefinedVariables(),
-                    entity.NewUndefinedVariables(),
-                    entity.NewDefinedFunctions(asDefinedFunction($1._entity)),
-                    entity.NewUndefinedFunctions(),
-                    entity.NewConstants(),
-                    ast.NewStructNodes(),
-                    ast.NewUnionNodes(),
-                    ast.NewTypedefNodes(),
-                  )
-                  for i := range $1._nodes {
-                    decl.AddDeclaration(asDeclaration($1._nodes[i]))
-                  }
-                  $$._node = decl
-                }
-                | declaration_file funcdecl
-                {
-                  decl := asDeclaration($1._node)
-                  decl.AddFuncdecl(asUndefinedFunction($2._entity))
-                  $$._node = decl
-                }
-                | declaration_file vardecl
-                {
-                  decl := asDeclaration($1._node)
-                  decl.AddVardecl(asUndefinedVariable($2._entity))
-                  $$._node = decl
-                }
-                | declaration_file defconst
-                {
-                  decl := asDeclaration($1._node)
-                  decl.AddConstant(asConstant($2._entity))
-                  $$._node = decl
-                }
-                | declaration_file defstruct
-                {
-                  decl := asDeclaration($1._node)
-                  decl.AddDefstruct(asStructNode($2._node))
-                  $$._node = decl
-                }
-                | declaration_file defunion
-                {
-                  decl := asDeclaration($1._node)
-                  decl.AddDefunion(asUnionNode($2._node))
-                  $$._node = decl
-                }
-                | declaration_file typedef
-                {
-                  decl := asDeclaration($1._node)
-                  decl.AddTypedef(asTypedefNode($2._node))
-                  $$._node = decl
-                }
-                ;
-
 import_stmts:
             | import_stmts import_stmt
             {
@@ -193,11 +138,37 @@ top_defs: defun
             ast.NewTypedefNodes(),
           )
         }
+        | funcdecl
+        {
+          $$._node = ast.NewDeclaration(
+            entity.NewDefinedVariables(),
+            entity.NewUndefinedVariables(),
+            entity.NewDefinedFunctions(),
+            entity.NewUndefinedFunctions(asUndefinedFunction($1._entity)),
+            entity.NewConstants(),
+            ast.NewStructNodes(),
+            ast.NewUnionNodes(),
+            ast.NewTypedefNodes(),
+          )
+        }
         | defvars
         {
           $$._node = ast.NewDeclaration(
             entity.NewDefinedVariables(asDefinedVariable($1._entity)),
             entity.NewUndefinedVariables(),
+            entity.NewDefinedFunctions(),
+            entity.NewUndefinedFunctions(),
+            entity.NewConstants(),
+            ast.NewStructNodes(),
+            ast.NewUnionNodes(),
+            ast.NewTypedefNodes(),
+          )
+        }
+        | vardecl
+        {
+          $$._node = ast.NewDeclaration(
+            entity.NewDefinedVariables(),
+            entity.NewUndefinedVariables(asUndefinedVariable($1._entity)),
             entity.NewDefinedFunctions(),
             entity.NewUndefinedFunctions(),
             entity.NewConstants(),
@@ -264,10 +235,22 @@ top_defs: defun
           decl.AddDefun(asDefinedFunction($2._entity))
           $$._node = decl
         }
+        | top_defs funcdecl
+        {
+          decl := asDeclaration($1._node)
+          decl.AddFuncdecl(asUndefinedFunction($2._entity))
+          $$._node = decl
+        }
         | top_defs defvars
         {
           decl := asDeclaration($1._node)
           decl.AddDefvar(asDefinedVariable($2._entity))
+          $$._node = decl
+        }
+        | top_defs vardecl
+        {
+          decl := asDeclaration($1._node)
+          decl.AddVardecl(asUndefinedVariable($2._entity))
           $$._node = decl
         }
         | top_defs defconst
@@ -442,7 +425,7 @@ slot: type name
 
 extern_typeref_name: EXTERN typeref_name
               {
-                $$._token = $1._token
+                $$._token = $2._token
                 $$._typeref = $2._typeref
               }
               ;
