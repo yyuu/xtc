@@ -30,3 +30,11 @@ func (self LogicalOrNode) IsExprNode() bool {
 func (self LogicalOrNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self LogicalOrNode) GetLeft() core.IExprNode {
+  return self.Left
+}
+
+func (self LogicalOrNode) GetRight() core.IExprNode {
+  return self.Right
+}

@@ -38,3 +38,7 @@ func (self SizeofExprNode) GetTypeNode() core.ITypeNode {
 func (self SizeofExprNode) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
+
+func (self SizeofExprNode) GetExpr() core.IExprNode {
+  return self.Expr
+}

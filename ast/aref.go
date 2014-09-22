@@ -30,3 +30,11 @@ func (self ArefNode) IsExprNode() bool {
 func (self ArefNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self ArefNode) GetExpr() core.IExprNode {
+  return self.Expr
+}
+
+func (self ArefNode) GetIndex() core.IExprNode {
+  return self.Index
+}

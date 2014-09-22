@@ -27,3 +27,7 @@ func (self DereferenceNode) IsExprNode() bool {
 func (self DereferenceNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self DereferenceNode) GetExpr() core.IExprNode {
+  return self.Expr
+}

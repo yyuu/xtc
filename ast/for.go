@@ -34,3 +34,19 @@ func (self ForNode) IsStmtNode() bool {
 func (self ForNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self ForNode) GetInit() core.IExprNode {
+  return self.Init
+}
+
+func (self ForNode) GetCond() core.IExprNode {
+  return self.Cond
+}
+
+func (self ForNode) GetIncr() core.IExprNode {
+  return self.Incr
+}
+
+func (self ForNode) GetBody() core.IStmtNode {
+  return self.Body
+}

@@ -30,3 +30,11 @@ func (self AssignNode) IsExprNode() bool {
 func (self AssignNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self AssignNode) GetLhs() core.IExprNode {
+  return self.Lhs
+}
+
+func (self AssignNode) GetRhs() core.IExprNode {
+  return self.Rhs
+}

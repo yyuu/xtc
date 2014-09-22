@@ -28,3 +28,7 @@ func (self ExprStmtNode) IsStmtNode() bool {
 func (self ExprStmtNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self ExprStmtNode) GetExpr() core.IExprNode {
+  return self.Expr
+}

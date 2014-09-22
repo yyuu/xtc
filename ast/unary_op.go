@@ -32,3 +32,11 @@ func (self UnaryOpNode) IsExprNode() bool {
 func (self UnaryOpNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self UnaryOpNode) GetOperator() string {
+  return self.Operator
+}
+
+func (self UnaryOpNode) GetExpr() core.IExprNode {
+  return self.Expr
+}

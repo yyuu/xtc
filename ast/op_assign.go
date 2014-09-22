@@ -31,3 +31,15 @@ func (self OpAssignNode) IsExprNode() bool {
 func (self OpAssignNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self OpAssignNode) GetOperator() string {
+  return self.Operator
+}
+
+func (self OpAssignNode) GetLhs() core.IExprNode {
+  return self.Lhs
+}
+
+func (self OpAssignNode) GetRhs() core.IExprNode {
+  return self.Rhs
+}

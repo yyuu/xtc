@@ -28,3 +28,7 @@ func (self AddressNode) IsExprNode() bool {
 func (self AddressNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self AddressNode) GetExpr() core.IExprNode {
+  return self.Expr
+}

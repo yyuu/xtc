@@ -29,3 +29,11 @@ func (self MemberNode) IsExprNode() bool {
 func (self MemberNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self MemberNode) GetExpr() core.IExprNode {
+  return self.Expr
+}
+
+func (self MemberNode) GetMember() string {
+  return self.Member
+}

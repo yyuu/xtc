@@ -38,3 +38,7 @@ func (self CastNode) GetTypeNode() core.ITypeNode {
 func (self CastNode) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
+
+func (self CastNode) GetExpr() core.IExprNode {
+  return self.Expr
+}

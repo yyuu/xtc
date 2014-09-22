@@ -28,3 +28,11 @@ func (self LabelNode) IsStmtNode() bool {
 func (self LabelNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self LabelNode) GetName() string {
+  return self.Name
+}
+
+func (self LabelNode) GetStmt() core.IStmtNode {
+  return self.Stmt
+}

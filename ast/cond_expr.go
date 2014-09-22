@@ -32,3 +32,15 @@ func (self CondExprNode) IsExprNode() bool {
 func (self CondExprNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self CondExprNode) GetCond() core.IExprNode {
+  return self.Cond
+}
+
+func (self CondExprNode) GetThenExpr() core.IExprNode {
+  return self.ThenExpr
+}
+
+func (self CondExprNode) GetElseExpr() core.IExprNode {
+  return self.ElseExpr
+}

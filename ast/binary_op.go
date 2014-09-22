@@ -40,3 +40,15 @@ func (self BinaryOpNode) IsExprNode() bool {
 func (self BinaryOpNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self BinaryOpNode) GetOperator() string {
+  return self.Operator
+}
+
+func (self BinaryOpNode) GetLeft() core.IExprNode {
+  return self.Left
+}
+
+func (self BinaryOpNode) GetRight() core.IExprNode {
+  return self.Right
+}

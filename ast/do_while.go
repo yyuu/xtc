@@ -30,3 +30,11 @@ func (self DoWhileNode) IsStmtNode() bool {
 func (self DoWhileNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self DoWhileNode) GetBody() core.IStmtNode {
+  return self.Body
+}
+
+func (self DoWhileNode) GetCond() core.IExprNode {
+  return self.Cond
+}

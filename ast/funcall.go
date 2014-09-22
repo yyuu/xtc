@@ -38,3 +38,11 @@ func (self FuncallNode) IsExprNode() bool {
 func (self FuncallNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self FuncallNode) GetExpr() core.IExprNode {
+  return self.Expr
+}
+
+func (self FuncallNode) GetArgs() []core.IExprNode {
+  return self.Args
+}

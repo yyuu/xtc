@@ -33,3 +33,11 @@ func (self SuffixOpNode) IsExprNode() bool {
 func (self SuffixOpNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self SuffixOpNode) GetOperator() string {
+  return self.Operator
+}
+
+func (self SuffixOpNode) GetExpr() core.IExprNode {
+  return self.Expr
+}

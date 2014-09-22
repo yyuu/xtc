@@ -39,23 +39,29 @@ func (self CaseNode) GetLocation() core.Location {
   return self.Location
 }
 
+func (self CaseNode) GetValues() []core.IExprNode {
+  return self.Values
+}
+
+func (self CaseNode) GetBody() core.IStmtNode {
+  return self.Body
+}
+
 // SwitchNode
 type SwitchNode struct {
   ClassName string
   Location core.Location
   Cond core.IExprNode
-  Cases []*CaseNode
+  Cases []core.IStmtNode
 }
 
-func NewSwitchNode(loc core.Location, cond core.IExprNode, _cases []core.IStmtNode) SwitchNode {
+func NewSwitchNode(loc core.Location, cond core.IExprNode, cases []core.IStmtNode) SwitchNode {
   if cond == nil { panic("cond is nil") }
-  cases := make([]*CaseNode, len(_cases))
-  for i := range _cases {
-    c, ok := _cases[i].(*CaseNode)
+  for i := range cases {
+    _, ok := cases[i].(*CaseNode)
     if ! ok {
-      panic(fmt.Errorf("syntax error: not a case: %s", _cases[i]))
+      panic(fmt.Errorf("syntax error: not a case: %s", cases[i]))
     }
-    cases[i] = c
   }
   return SwitchNode { "ast.SwitchNode", loc, cond, cases }
 }
@@ -78,4 +84,12 @@ func (self SwitchNode) IsStmtNode() bool {
 
 func (self SwitchNode) GetLocation() core.Location {
   return self.Location
+}
+
+func (self SwitchNode) GetCond() core.IExprNode {
+  return self.Cond
+}
+
+func (self SwitchNode) GetCases() []core.IStmtNode {
+  return self.Cases
 }
