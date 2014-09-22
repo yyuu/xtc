@@ -36,8 +36,12 @@ func (self Slot) GetLocation() core.Location {
 
 func (self Slot) GetTypeNode() core.ITypeNode {
   return self.TypeNode
-} 
+}
 
 func (self Slot) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
-} 
+}
+
+func (self Slot) GetType() core.IType {
+  return self.TypeNode.GetType()
+}

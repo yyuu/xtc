@@ -146,3 +146,69 @@ func (self TypeTable) GetParamType(ref core.ITypeRef) core.IType {
 func (self TypeTable) NumTypes() int {
   return len(self.table)
 }
+
+func (self TypeTable) GetTypes() []core.IType {
+  ts := []core.IType { }
+  for _, t := range self.table {
+    ts = append(ts, t)
+  }
+  return ts
+}
+
+func (self *TypeTable) SemanticCheck(errorHandler *core.ErrorHandler) {
+  ts := self.GetTypes()
+  for i := range ts {
+    t := ts[i]
+    if t.IsCompositeType() {
+      ct, ok := t.(core.ICompositeType)
+      if ! ok {
+        errorHandler.Panicln("not a composite type")
+      }
+      self.checkCompositeVoidMembers(ct, errorHandler)
+      self.checkDuplicatedMembers(ct, errorHandler)
+    } else {
+      if t.IsArray() {
+        at, ok := t.(*ArrayType)
+        if ! ok {
+          errorHandler.Panicln("not an array type")
+        }
+        self.checkArrayVoidMembers(at, errorHandler)
+      }
+    }
+    self.checkRecursiveDefinition(t, errorHandler)
+  }
+}
+
+func (self TypeTable) checkCompositeVoidMembers(t core.ICompositeType, errorHandler *core.ErrorHandler) {
+  members := t.GetMembers()
+  for i := range members {
+    slot := members[i]
+    if slot.GetType().IsVoid() {
+      errorHandler.Errorln("struct/union cannot contain void")
+    }
+  }
+}
+
+func (self TypeTable) checkArrayVoidMembers(t *ArrayType, errorHandler *core.ErrorHandler) {
+  if t.GetBaseType().IsVoid() {
+    errorHandler.Errorln("array cannot contain void")
+  }
+}
+
+func (self TypeTable) checkDuplicatedMembers(t core.ICompositeType, errorHandler *core.ErrorHandler) {
+  seen := make(map[string]core.ISlot)
+  members := t.GetMembers()
+  for i := range members {
+    slot := members[i]
+    name := slot.GetName()
+    _, found := seen[name]
+    if found {
+      errorHandler.Errorf("%s has duplicated member: %s", t.GetName(), name)
+    }
+    seen[name] = slot
+  }
+}
+
+func (self TypeTable) checkRecursiveDefinition(t core.IType, errorHandler *core.ErrorHandler) {
+  // not implemented yet
+}

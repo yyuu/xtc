@@ -30,6 +30,7 @@ type ISlot interface {
   GetOffset() int
   GetTypeNode() ITypeNode
   GetTypeRef() ITypeRef
+  GetType() IType
 }
 
 type ITypeDefinition interface {

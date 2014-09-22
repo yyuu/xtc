@@ -71,10 +71,9 @@ func ep(a *ast.AST, err error) *ast.AST {
   }
 
   types := typesys.NewTypeTableFor("x86-linux")
-
   compiler.NewLocalResolver(errorHandler).Resolve(a)
   compiler.NewTypeResolver(errorHandler, types).Resolve(a)
-//types.SemanticCheck()
+  types.SemanticCheck(errorHandler)
 //compiler.NewDereferenceChecker(types).Check(a)
 //compiler.NewTypeChecker(types).Check(a)
 

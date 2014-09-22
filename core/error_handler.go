@@ -80,21 +80,24 @@ func (self *ErrorHandler) Warn(v...interface{}) {
 }
 
 func (self *ErrorHandler) Errorf(format string, v...interface{}) {
-  if ! self.skip(LOG_ERROR) {
-    self.logger.Printf(format, v...)
-  }
+//if ! self.skip(LOG_ERROR) {
+//  self.logger.Printf(format, v...)
+//}
+  self.logger.Fatalf(format, v...)
 }
 
 func (self *ErrorHandler) Errorln(v...interface{}) {
-  if ! self.skip(LOG_ERROR) {
-    self.logger.Println(v...)
-  }
+//if ! self.skip(LOG_ERROR) {
+//  self.logger.Println(v...)
+//}
+  self.logger.Fatalln(v...)
 }
 
 func (self *ErrorHandler) Error(v...interface{}) {
-  if ! self.skip(LOG_ERROR) {
-    self.logger.Print(v...)
-  }
+//if ! self.skip(LOG_ERROR) {
+//  self.logger.Print(v...)
+//}
+  self.logger.Fatal(v...)
 }
 
 func (self *ErrorHandler) Fatalf(format string, v...interface{}) {
