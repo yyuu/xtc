@@ -331,7 +331,7 @@ defconst: CONST typeref_name '=' expr ';'
 
 defun: typeref_name '(' ')' block
      {
-       ps := entity.NewParams($2._token.location, []*entity.Parameter { })
+       ps := entity.NewParams($2._token.location, entity.NewParameters())
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
        $$._entity = entity.NewDefinedFunction(true,
          ast.NewTypeNode(t.GetLocation(), t),
@@ -348,7 +348,7 @@ defun: typeref_name '(' ')' block
      }
      | static_typeref_name '(' ')' block
      {
-       ps := entity.NewParams($2._token.location, []*entity.Parameter { })
+       ps := entity.NewParams($2._token.location, entity.NewParameters())
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
        $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, asStmtNode($4._node))
      }
@@ -379,7 +379,7 @@ params: fixedparams
 
 fixedparams: param
            {
-             $$._entity = entity.NewParams($1._token.location, []*entity.Parameter { asParameter($1._entity) })
+             $$._entity = entity.NewParams($1._token.location, entity.NewParameters(asParameter($1._entity)))
            }
            | fixedparams ',' param
            {
@@ -449,7 +449,7 @@ extern_typeref_name: EXTERN typeref_name
 
 funcdecl: extern_typeref_name '(' ')' ';'
         {
-          ps := entity.NewParams($1._typeref.GetLocation(), []*entity.Parameter { })
+          ps := entity.NewParams($1._typeref.GetLocation(), entity.NewParameters())
           ref := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
           $$._entity = entity.NewUndefinedFunction(
             ast.NewTypeNode(ref.GetLocation(), ref),
