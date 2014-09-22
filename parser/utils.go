@@ -127,3 +127,27 @@ func parametersTypeRef(params *entity.Params) *typesys.ParamTypeRefs {
   }
   return typesys.NewParamTypeRefs(params.GetLocation(), ps, false)
 }
+
+func newNodes(xs...core.INode) []core.INode {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []core.INode { }
+  }
+}
+
+func newExprs(xs...core.IExprNode) []core.IExprNode {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []core.IExprNode { }
+  }
+}
+
+func newStmts(xs...core.IStmtNode) []core.IStmtNode {
+  if 0 < len(xs) {
+    return xs
+  } else {
+    return []core.IStmtNode { }
+  }
+}

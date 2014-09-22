@@ -426,7 +426,7 @@ member_list: '{' member_list_body '}'
 
 member_list_body: slot ';'
                 {
-                  $$._nodes = []core.INode { $1._node }
+                  $$._nodes = newNodes($1._node)
                 }
                 | member_list_body slot ';'
                 {
@@ -654,7 +654,7 @@ cases:
 
 default_clause: DEFAULT ':' case_body
               {
-                $$._node = ast.NewCaseNode($1._token.location, []core.IExprNode { }, asStmtNode($3._node))
+                $$._node = ast.NewCaseNode($1._token.location, newExprs(), asStmtNode($3._node))
               }
               ;
 
@@ -887,7 +887,7 @@ postfix: primary
        }
        | primary '(' ')'
        {
-         $$._node = ast.NewFuncallNode($1._token.location, asExprNode($1._node), []core.IExprNode { })
+         $$._node = ast.NewFuncallNode($1._token.location, asExprNode($1._node), newExprs())
        }
        | primary '(' args ')'
        {
