@@ -101,7 +101,11 @@ compilation_unit: EOF
                     if lex.firstToken != nil {
                       loc = lex.firstToken.location
                     }
-                    lex.ast = ast.NewAST(loc, asDeclaration($2._node))
+                    decl := asDeclaration($2._node)
+                    for i := range $1._nodes {
+                      decl.AddDeclaration(asDeclaration($1._nodes[i]))
+                    }
+                    lex.ast = ast.NewAST(loc, decl)
                   } else {
                     panic("parser is broken")
                   }
@@ -109,29 +113,57 @@ compilation_unit: EOF
                 ;
 
 declaration_file: import_stmts
+                {
+                  decl := ast.NewDeclaration(
+                    entity.NewDefinedVariables(),
+                    entity.NewUndefinedVariables(),
+                    entity.NewDefinedFunctions(asDefinedFunction($1._entity)),
+                    entity.NewUndefinedFunctions(),
+                    entity.NewConstants(),
+                    ast.NewStructNodes(),
+                    ast.NewUnionNodes(),
+                    ast.NewTypedefNodes(),
+                  )
+                  for i := range $1._nodes {
+                    decl.AddDeclaration(asDeclaration($1._nodes[i]))
+                  }
+                  $$._node = decl
+                }
                 | declaration_file funcdecl
                 {
-                  $$._node = asDeclaration($1._node).AddFuncdecl(asUndefinedFunction($2._entity))
+                  decl := asDeclaration($1._node)
+                  decl.AddFuncdecl(asUndefinedFunction($2._entity))
+                  $$._node = decl
                 }
                 | declaration_file vardecl
                 {
-                  $$._node = asDeclaration($1._node).AddVardecl(asUndefinedVariable($2._entity))
+                  decl := asDeclaration($1._node)
+                  decl.AddVardecl(asUndefinedVariable($2._entity))
+                  $$._node = decl
                 }
                 | declaration_file defconst
                 {
-                  $$._node = asDeclaration($1._node).AddDefconst(asConstant($2._entity))
+                  decl := asDeclaration($1._node)
+                  decl.AddConstant(asConstant($2._entity))
+                  $$._node = decl
                 }
                 | declaration_file defstruct
                 {
-                  $$._node = asDeclaration($1._node).AddDefstruct(asStructNode($2._node))
+                  decl := asDeclaration($1._node)
+                  decl.AddDefstruct(asStructNode($2._node))
+                  $$._node = decl
                 }
                 | declaration_file defunion
                 {
-                  $$._node = asDeclaration($1._node).AddDefunion(asUnionNode($2._node))
+                  decl := asDeclaration($1._node)
+                  decl.AddDefunion(asUnionNode($2._node))
+                  $$._node = decl
                 }
                 | declaration_file typedef
                 {
-                  $$._node = asDeclaration($1._node).AddTypedef(asTypedefNode($2._node))
+                  decl := asDeclaration($1._node)
+                  decl.AddTypedef(asTypedefNode($2._node))
+                  $$._node = decl
                 }
                 ;
 
@@ -235,27 +267,39 @@ top_defs: defun
         }
         | top_defs defun
         {
-          $$._node = asDeclaration($1._node).AddDefun(asDefinedFunction($2._entity))
+          decl := asDeclaration($1._node)
+          decl.AddDefun(asDefinedFunction($2._entity))
+          $$._node = decl
         }
         | top_defs defvars
         {
-          $$._node = asDeclaration($1._node).AddDefvar(asDefinedVariable($2._entity))
+          decl := asDeclaration($1._node)
+          decl.AddDefvar(asDefinedVariable($2._entity))
+          $$._node = decl
         }
         | top_defs defconst
         {
-          $$._node = asDeclaration($1._node).AddDefconst(asConstant($2._entity))
+          decl := asDeclaration($1._node)
+          decl.AddConstant(asConstant($2._entity))
+          $$._node = decl
         }
         | top_defs defstruct
         {
-          $$._node = asDeclaration($1._node).AddDefstruct(asStructNode($2._node))
+          decl := asDeclaration($1._node)
+          decl.AddDefstruct(asStructNode($2._node))
+          $$._node = decl
         }
         | top_defs defunion
         {
-          $$._node = asDeclaration($1._node).AddDefunion(asUnionNode($2._node))
+          decl := asDeclaration($1._node)
+          decl.AddDefunion(asUnionNode($2._node))
+          $$._node = decl
         }
         | top_defs typedef
         {
-          $$._node = asDeclaration($1._node).AddTypedef(asTypedefNode($2._node))
+          decl := asDeclaration($1._node)
+          decl.AddTypedef(asTypedefNode($2._node))
+          $$._node = decl
         }
         ;
 

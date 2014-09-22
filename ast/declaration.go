@@ -37,36 +37,84 @@ func (self Declaration) GetLocation() core.Location {
   panic("Declaration#GetLocation called")
 }
 
-func (self Declaration) AddDefvar(v *entity.DefinedVariable) *Declaration {
-  return NewDeclaration(append(self.Defvars, v), self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
+func (self *Declaration) AddDefvar(v *entity.DefinedVariable) {
+  self.Defvars = append(self.Defvars, v)
 }
 
-func (self Declaration) AddVardecl(v *entity.UndefinedVariable) *Declaration {
-  return NewDeclaration(self.Defvars, append(self.Vardecls, v), self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
+func (self *Declaration) AddVardecl(v *entity.UndefinedVariable) {
+  self.Vardecls = append(self.Vardecls, v)
 }
 
-func (self Declaration) AddDefun(f *entity.DefinedFunction) *Declaration {
-  return NewDeclaration(self.Defvars, self.Vardecls, append(self.Defuns, f), self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
+func (self *Declaration) AddDefun(f *entity.DefinedFunction) {
+  self.Defuns = append(self.Defuns, f)
 }
 
-func (self Declaration) AddFuncdecl(f *entity.UndefinedFunction) *Declaration {
-  return NewDeclaration(self.Defvars, self.Vardecls, self.Defuns, append(self.Funcdecls, f), self.Constants, self.Defstructs, self.Defunions, self.Typedefs)
+func (self *Declaration) AddFuncdecl(f *entity.UndefinedFunction) {
+  self.Funcdecls = append(self.Funcdecls, f)
 }
 
-func (self Declaration) AddDefconst(c *entity.Constant) *Declaration {
-  return NewDeclaration(self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, append(self.Constants, c), self.Defstructs, self.Defunions, self.Typedefs)
+func (self *Declaration) AddConstant(c *entity.Constant) {
+  self.Constants = append(self.Constants, c)
 }
 
-func (self Declaration) AddDefstruct(s *StructNode) *Declaration {
-  return NewDeclaration(self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, append(self.Defstructs, s), self.Defunions, self.Typedefs)
+func (self *Declaration) AddDefstruct(s *StructNode) {
+  self.Defstructs = append(self.Defstructs, s)
 }
 
-func (self Declaration) AddDefunion(u *UnionNode) *Declaration {
-  return NewDeclaration(self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, append(self.Defunions, u), self.Typedefs)
+func (self *Declaration) AddDefunion(u *UnionNode) {
+  self.Defunions = append(self.Defunions, u)
 }
 
-func (self Declaration) AddTypedef(t *TypedefNode) *Declaration {
-  return NewDeclaration(self.Defvars, self.Vardecls, self.Defuns, self.Funcdecls, self.Constants, self.Defstructs, self.Defunions, append(self.Typedefs, t))
+func (self *Declaration) AddTypedef(t *TypedefNode) {
+  self.Typedefs = append(self.Typedefs, t)
+}
+
+func (self *Declaration) AddDefvars(vs []*entity.DefinedVariable) {
+  for i := range vs {
+    self.AddDefvar(vs[i])
+  }
+}
+
+func (self *Declaration) AddVardecls(vs []*entity.UndefinedVariable) {
+  for i := range vs {
+    self.AddVardecl(vs[i])
+  }
+}
+
+func (self *Declaration) AddDefuns(fs []*entity.DefinedFunction) {
+  for i := range fs {
+    self.AddDefun(fs[i])
+  }
+}
+
+func (self *Declaration) AddFuncdecls(fs []*entity.UndefinedFunction) {
+  for i := range fs {
+    self.AddFuncdecl(fs[i])
+  }
+}
+
+func (self *Declaration) AddConstants(cs []*entity.Constant) {
+  for i := range cs {
+    self.AddConstant(cs[i])
+  }
+}
+
+func (self *Declaration) AddDefstructs(ss []*StructNode) {
+  for i := range ss {
+    self.AddDefstruct(ss[i])
+  }
+}
+
+func (self *Declaration) AddDefunions(us []*UnionNode) {
+  for i := range us {
+    self.AddDefunion(us[i])
+  }
+}
+
+func (self *Declaration) AddTypedefs(ts []*TypedefNode) {
+  for i := range ts {
+    self.AddTypedef(ts[i])
+  }
 }
 
 func (self Declaration) GetDefvars() []*entity.DefinedVariable {
@@ -99,4 +147,15 @@ func (self Declaration) GetDefunions() []*UnionNode {
 
 func (self Declaration) GetTypedefs() []*TypedefNode {
   return self.Typedefs
+}
+
+func (self *Declaration) AddDeclaration(other *Declaration) {
+  self.AddDefvars(other.GetDefvars())
+  self.AddVardecls(other.GetVardecls())
+  self.AddDefuns(other.GetDefuns())
+  self.AddFuncdecls(other.GetFuncdecls())
+  self.AddConstants(other.GetConstants())
+  self.AddDefstructs(other.GetDefstructs())
+  self.AddDefunions(other.GetDefunions())
+  self.AddTypedefs(other.GetTypedefs())
 }
