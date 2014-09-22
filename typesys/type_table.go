@@ -210,5 +210,5 @@ func (self TypeTable) checkDuplicatedMembers(t core.ICompositeType, errorHandler
 }
 
 func (self TypeTable) checkRecursiveDefinition(t core.IType, errorHandler *core.ErrorHandler) {
-  // not implemented yet
+  errorHandler.Warnln("TypeTable#checkRecursiveDefinition is not implemented yet")
 }
