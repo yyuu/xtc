@@ -16,8 +16,8 @@ type BlockNode struct {
   scope *entity.VariableScope
 }
 
-func NewBlockNode(loc core.Location, variables []*entity.DefinedVariable, stmts []core.IStmtNode) BlockNode {
-  return BlockNode { "ast.BlockNode", loc, variables, stmts, nil }
+func NewBlockNode(loc core.Location, variables []*entity.DefinedVariable, stmts []core.IStmtNode) *BlockNode {
+  return &BlockNode { "ast.BlockNode", loc, variables, stmts, nil }
 }
 
 func (self BlockNode) String() string {

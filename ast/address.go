@@ -12,9 +12,9 @@ type AddressNode struct {
   Expr core.IExprNode
 }
 
-func NewAddressNode(loc core.Location, expr core.IExprNode) AddressNode {
+func NewAddressNode(loc core.Location, expr core.IExprNode) *AddressNode {
   if expr == nil { panic("expr is nil") }
-  return AddressNode { "ast.AddressNode", loc, expr }
+  return &AddressNode { "ast.AddressNode", loc, expr }
 }
 
 func (self AddressNode) String() string {

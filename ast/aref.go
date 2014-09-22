@@ -13,10 +13,10 @@ type ArefNode struct {
   Index core.IExprNode
 }
 
-func NewArefNode(loc core.Location, expr core.IExprNode, index core.IExprNode) ArefNode {
+func NewArefNode(loc core.Location, expr core.IExprNode, index core.IExprNode) *ArefNode {
   if expr == nil { panic("expr is nil") }
   if index == nil { panic("index is nil") }
-  return ArefNode { "ast.ArefNode", loc, expr, index }
+  return &ArefNode { "ast.ArefNode", loc, expr, index }
 }
 
 func (self ArefNode) String() string {

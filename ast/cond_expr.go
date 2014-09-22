@@ -14,11 +14,11 @@ type CondExprNode struct {
   ElseExpr core.IExprNode
 }
 
-func NewCondExprNode(loc core.Location, cond core.IExprNode, thenExpr core.IExprNode, elseExpr core.IExprNode) CondExprNode {
+func NewCondExprNode(loc core.Location, cond core.IExprNode, thenExpr core.IExprNode, elseExpr core.IExprNode) *CondExprNode {
   if cond == nil { panic("cond is nil") }
   if thenExpr == nil { panic("thenExpr is nil") }
   if elseExpr == nil { panic("elseExpr is nil") }
-  return CondExprNode { "ast.CondExprNode", loc, cond, thenExpr, elseExpr }
+  return &CondExprNode { "ast.CondExprNode", loc, cond, thenExpr, elseExpr }
 }
 
 func (self CondExprNode) String() string {

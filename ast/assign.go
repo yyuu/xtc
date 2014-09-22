@@ -13,10 +13,10 @@ type AssignNode struct {
   Rhs core.IExprNode
 }
 
-func NewAssignNode(loc core.Location, lhs core.IExprNode, rhs core.IExprNode) AssignNode {
+func NewAssignNode(loc core.Location, lhs core.IExprNode, rhs core.IExprNode) *AssignNode {
   if lhs == nil { panic("lhs is nil") }
   if rhs == nil { panic("rhs is nil") }
-  return AssignNode { "ast.AssignNode", loc, lhs, rhs }
+  return &AssignNode { "ast.AssignNode", loc, lhs, rhs }
 }
 
 func (self AssignNode) String() string {

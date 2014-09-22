@@ -13,10 +13,10 @@ type CastNode struct {
   Expr core.IExprNode
 }
 
-func NewCastNode(loc core.Location, t core.ITypeNode, expr core.IExprNode) CastNode {
+func NewCastNode(loc core.Location, t core.ITypeNode, expr core.IExprNode) *CastNode {
   if t == nil { panic("t is nil") }
   if expr == nil { panic("expr is nil") }
-  return CastNode { "ast.CastNode", loc, t, expr }
+  return &CastNode { "ast.CastNode", loc, t, expr }
 }
 
 func (self CastNode) String() string {

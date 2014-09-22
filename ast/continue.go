@@ -10,8 +10,8 @@ type ContinueNode struct {
   Location core.Location
 }
 
-func NewContinueNode(loc core.Location) ContinueNode {
-  return ContinueNode { "ast.ContinueNode", loc }
+func NewContinueNode(loc core.Location) *ContinueNode {
+  return &ContinueNode { "ast.ContinueNode", loc }
 }
 
 func (self ContinueNode) String() string {

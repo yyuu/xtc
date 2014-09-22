@@ -13,10 +13,10 @@ type DoWhileNode struct {
   Cond core.IExprNode
 }
 
-func NewDoWhileNode(loc core.Location, body core.IStmtNode, cond core.IExprNode) DoWhileNode {
+func NewDoWhileNode(loc core.Location, body core.IStmtNode, cond core.IExprNode) *DoWhileNode {
   if body == nil { panic("body is nil") }
   if cond == nil { panic("cond is nil") }
-  return DoWhileNode { "ast.DoWhileNode", loc, body, cond }
+  return &DoWhileNode { "ast.DoWhileNode", loc, body, cond }
 }
 
 func (self DoWhileNode) String() string {

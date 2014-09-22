@@ -11,9 +11,9 @@ type DereferenceNode struct {
   Expr core.IExprNode
 }
 
-func NewDereferenceNode(loc core.Location, expr core.IExprNode) DereferenceNode {
+func NewDereferenceNode(loc core.Location, expr core.IExprNode) *DereferenceNode {
   if expr == nil { panic("expr is nil") }
-  return DereferenceNode { "ast.DereferenceNode", loc, expr }
+  return &DereferenceNode { "ast.DereferenceNode", loc, expr }
 }
 
 func (self DereferenceNode) String() string {

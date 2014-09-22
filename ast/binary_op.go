@@ -14,10 +14,10 @@ type BinaryOpNode struct {
   Right core.IExprNode
 }
 
-func NewBinaryOpNode(loc core.Location, operator string, left core.IExprNode, right core.IExprNode) BinaryOpNode {
+func NewBinaryOpNode(loc core.Location, operator string, left core.IExprNode, right core.IExprNode) *BinaryOpNode {
   if left == nil { panic("left is nil") }
   if right == nil { panic("right is nil") }
-  return BinaryOpNode { "ast.BinaryOpNode", loc, operator, left, right }
+  return &BinaryOpNode { "ast.BinaryOpNode", loc, operator, left, right }
 }
 
 func (self BinaryOpNode) String() string {

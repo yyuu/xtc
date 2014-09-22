@@ -10,8 +10,8 @@ type BreakNode struct {
   Location core.Location
 }
 
-func NewBreakNode(loc core.Location) BreakNode {
-  return BreakNode { "ast.BreakNode", loc }
+func NewBreakNode(loc core.Location) *BreakNode {
+  return &BreakNode { "ast.BreakNode", loc }
 }
 
 func (self BreakNode) String() string {
