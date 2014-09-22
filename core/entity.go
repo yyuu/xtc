@@ -20,3 +20,11 @@ type IFunction interface {
 type IVariable interface {
   IEntity
 }
+
+type IScope interface {
+  IsToplevel() bool
+  GetToplevel() IScope
+  GetParent() IScope
+  GetByName(string) IEntity
+  CheckReferences(*ErrorHandler)
+}

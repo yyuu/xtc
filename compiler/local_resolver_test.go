@@ -46,7 +46,6 @@ func TestLocalResolverPushPopStacks(t *testing.T) {
   xt.AssertEquals(t, "scope1.GetParent should return toplevel", resolver.currentScope().GetParent(), toplevel)
   xt.AssertEquals(t, "scope1.GetToplevel should return toplevel", resolver.currentScope().GetToplevel(), toplevel)
   xt.AssertNotNil(t, "scope1 should contain foo", scope1.GetByName("foo"))
-  xt.AssertNil(t, "scope1 should not contain bar", scope1.GetByName("bar"))
 
   resolver.pushScope(
     entity.NewDefinedVariables(
@@ -64,7 +63,6 @@ func TestLocalResolverPushPopStacks(t *testing.T) {
   xt.AssertEquals(t, "popScope should decrease the stack", resolver.popScope(), scope2)
   xt.AssertEquals(t, "stack should be decreased", len(resolver.scopeStack), 2)
   xt.AssertNotNil(t, "scope1 should contain foo", scope1.GetByName("foo"))
-  xt.AssertNil(t, "scope1 should not contain bar", scope1.GetByName("bar"))
 
   xt.AssertEquals(t, "popScope should decrease the stack", resolver.popScope(), scope1)
   xt.AssertEquals(t, "stack should be decreased", len(resolver.scopeStack), 1)

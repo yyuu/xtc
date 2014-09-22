@@ -13,7 +13,7 @@ type BlockNode struct {
   Location core.Location
   Variables []*entity.DefinedVariable
   Stmts []core.IStmtNode
-  scope *entity.VariableScope
+  scope *entity.LocalScope
 }
 
 func NewBlockNode(loc core.Location, variables []*entity.DefinedVariable, stmts []core.IStmtNode) *BlockNode {
@@ -60,10 +60,10 @@ func (self BlockNode) GetStmts() []core.IStmtNode {
   return self.Stmts
 }
 
-func (self BlockNode) GetScope() *entity.VariableScope {
+func (self BlockNode) GetScope() *entity.LocalScope {
   return self.scope
 }
 
-func (self *BlockNode) SetScope(scope *entity.VariableScope) {
+func (self *BlockNode) SetScope(scope *entity.LocalScope) {
   self.scope = scope
 }

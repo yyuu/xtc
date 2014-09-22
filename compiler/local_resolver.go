@@ -9,12 +9,12 @@ import (
 
 type LocalResolver struct {
   errorHandler *core.ErrorHandler
-  scopeStack []*entity.VariableScope
+  scopeStack []core.IScope
   constantTable *entity.ConstantTable
 }
 
 func NewLocalResolver(errorHandler *core.ErrorHandler) *LocalResolver {
-  return &LocalResolver { errorHandler, []*entity.VariableScope { }, entity.NewConstantTable() }
+  return &LocalResolver { errorHandler, []core.IScope { }, entity.NewConstantTable() }
 }
 
 func (self *LocalResolver) Resolve(a *ast.AST) {
@@ -34,7 +34,7 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
   self.resolveConstantValues(a)
   self.resolveFunctions(a)
 
-  toplevel.CheckReferences()
+  toplevel.CheckReferences(self.errorHandler)
 
   a.SetScope(toplevel)
   a.SetConstantTable(self.constantTable)
@@ -64,11 +64,11 @@ func (self *LocalResolver) resolveFunctions(a *ast.AST) {
     function := functions[i]
     self.pushScope(function.ListParameters())
     ast.VisitNode(self, function.GetBody())
-    function.SetScope(self.popScope())
+    function.SetScope(self.popScope().(*entity.LocalScope))
   }
 }
 
-func (self *LocalResolver) currentScope() *entity.VariableScope {
+func (self *LocalResolver) currentScope() core.IScope {
   if len(self.scopeStack) < 1 {
     panic("stack is empty")
   }
@@ -87,7 +87,7 @@ func (self *LocalResolver) pushScope(vars []*entity.DefinedVariable) {
   self.scopeStack = append(self.scopeStack, scope)
 }
 
-func (self *LocalResolver) popScope() *entity.VariableScope {
+func (self *LocalResolver) popScope() core.IScope {
   if len(self.scopeStack) < 1 {
     panic("stack is empty")
   }
@@ -103,23 +103,19 @@ func (self *LocalResolver) VisitNode(node core.INode) {
     case *ast.BlockNode: {
       self.pushScope(typed.GetVariables())
       visitBlockNode(self, typed)
-      typed.SetScope(self.popScope())
+      typed.SetScope(self.popScope().(*entity.LocalScope))
     }
     case *ast.StringLiteralNode: {
-      e := self.constantTable.Intern(typed.GetValue())
-      typed.SetEntry(e)
+      ent := self.constantTable.Intern(typed.GetValue())
+      typed.SetEntry(ent)
     }
     case *ast.VariableNode: {
-      e := self.currentScope().GetByName(typed.GetName())
-      if e == nil {
+      ent := self.currentScope().GetByName(typed.GetName())
+      if ent == nil {
         panic(fmt.Errorf("undefined: %s", typed.GetName()))
       }
-      variable, ok := e.(*entity.DefinedVariable)
-      if ! ok {
-        panic(fmt.Errorf("not a variable: %s", typed.GetName()))
-      }
-      variable.Refered()
-      typed.SetEntity(variable)
+      ent.Refered()
+      typed.SetEntity(ent)
     }
     default: {
       visitNode(self, node)

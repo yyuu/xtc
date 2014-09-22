@@ -12,7 +12,7 @@ type DefinedFunction struct {
   Name string
   Params *Params
   Body core.IStmtNode
-  scope *VariableScope
+  scope *LocalScope
   numRefered int
 }
 
@@ -93,10 +93,10 @@ func (self *DefinedFunction) SetBody(body core.IStmtNode) {
   self.Body = body
 }
 
-func (self DefinedFunction) GetScope() *VariableScope {
+func (self DefinedFunction) GetScope() *LocalScope {
   return self.scope
 }
 
-func (self *DefinedFunction) SetScope(scope *VariableScope) {
+func (self *DefinedFunction) SetScope(scope *LocalScope) {
   self.scope = scope
 }

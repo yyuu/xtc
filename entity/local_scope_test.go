@@ -5,13 +5,6 @@ import (
   "bitbucket.org/yyuu/bs/xt"
 )
 
-func TestToplevelScope(t *testing.T) {
-  toplevel := NewToplevelScope()
-  xt.AssertTrue(t, "toplevel is toplevel", toplevel.IsToplevel())
-  xt.AssertEquals(t, "toplevel's toplevel is toplevel", toplevel.GetToplevel(), toplevel)
-  xt.AssertTrue(t, "toplevel doesn't have parent", toplevel.GetParent() == nil)
-}
-
 func TestLocalScope(t *testing.T) {
   toplevel := NewToplevelScope()
   scope1 := NewLocalScope(toplevel)
