@@ -11,7 +11,7 @@ import (
 )
 
 type lexer struct {
-  scanner strscan.StringScanner
+  scanner *strscan.StringScanner
   sourceName string
   lineNumber int
   lineOffset int

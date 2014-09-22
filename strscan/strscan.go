@@ -13,8 +13,8 @@ type StringScanner struct {
   matched string
 }
 
-func New(s string) StringScanner {
-  return StringScanner {
+func New(s string) *StringScanner {
+  return &StringScanner {
     String: s, 
     offset: 0,
     lineNumber: 0,
