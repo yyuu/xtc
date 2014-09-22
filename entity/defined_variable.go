@@ -10,12 +10,12 @@ type DefinedVariable struct {
   Private bool
   Name string
   TypeNode core.ITypeNode
-  NumRefered int
   Initializer core.IExprNode
+  numRefered int
 }
 
 func NewDefinedVariable(isPrivate bool, t core.ITypeNode, name string, init core.IExprNode) *DefinedVariable {
-  return &DefinedVariable { "entity.DefinedVariable", isPrivate, name, t, 0, init }
+  return &DefinedVariable { "entity.DefinedVariable", isPrivate, name, t, init, 0 }
 }
 
 func NewDefinedVariables(xs...*DefinedVariable) []*DefinedVariable {
@@ -27,7 +27,7 @@ func NewDefinedVariables(xs...*DefinedVariable) []*DefinedVariable {
 }
 
 func (self DefinedVariable) String() string {
-  return fmt.Sprintf("<entity.DefinedVariable Name=%s Private=%v TypeNode=%s NumRefered=%d Initializer=%s>", self.Name, self.Private, self.TypeNode, self.NumRefered, self.Initializer)
+  return fmt.Sprintf("<entity.DefinedVariable Name=%s Private=%v TypeNode=%s NumRefered=%d Initializer=%s>", self.Name, self.Private, self.TypeNode, self.numRefered, self.Initializer)
 }
 
 func (self DefinedVariable) IsDefined() bool {
@@ -59,15 +59,15 @@ func (self DefinedVariable) GetTypeRef() core.ITypeRef {
 }
 
 func (self DefinedVariable) GetNumRefered() int {
-  return self.NumRefered
+  return self.numRefered
 }
 
 func (self DefinedVariable) IsRefered() bool {
-  return 0 < self.NumRefered
+  return 0 < self.numRefered
 }
 
 func (self *DefinedVariable) Refered() {
-  self.NumRefered++
+  self.numRefered++
 }
 
 func (self DefinedVariable) GetInitializer() core.IExprNode {

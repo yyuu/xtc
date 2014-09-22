@@ -13,10 +13,11 @@ type DefinedFunction struct {
   Params *Params
   Body core.IStmtNode
   scope *VariableScope
+  numRefered int
 }
 
 func NewDefinedFunction(priv bool, t core.ITypeNode, name string, params *Params, body core.IStmtNode) *DefinedFunction {
-  return &DefinedFunction { "entity.DefinedFunction", priv, t, name, params, body, nil }
+  return &DefinedFunction { "entity.DefinedFunction", priv, t, name, params, body, nil, 0 }
 }
 
 func NewDefinedFunctions(xs...*DefinedFunction) []*DefinedFunction {
@@ -55,8 +56,16 @@ func (self DefinedFunction) IsConstant() bool {
   return false
 }
 
+func (self DefinedFunction) GetNumRefered() int {
+  return self.numRefered
+}
+
 func (self DefinedFunction) IsRefered() bool {
-  return true // FIXME: count up references
+  return 0 < self.numRefered
+}
+
+func (self *DefinedFunction) Refered() {
+  self.numRefered++
 }
 
 func (self DefinedFunction) GetParams() *Params {

@@ -10,10 +10,11 @@ type Constant struct {
   Name string
   TypeNode core.ITypeNode
   Value core.IExprNode
+  numRefered int
 }
 
 func NewConstant(t core.ITypeNode, name string, value core.IExprNode) *Constant {
-  return &Constant { "entity.Constant", name, t, value }
+  return &Constant { "entity.Constant", name, t, value, 0 }
 }
 
 func NewConstants(xs...*Constant) []*Constant {
@@ -40,8 +41,16 @@ func (self Constant) IsPrivate() bool {
   return false
 }
 
+func (self Constant) GetNumRefered() int {
+  return self.numRefered
+}
+
 func (self Constant) IsRefered() bool {
-  return true // FIXME: count references
+  return 0 < self.numRefered
+}
+
+func (self *Constant) Refered() {
+  self.numRefered++
 }
 
 func (self Constant) GetName() string {

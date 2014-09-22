@@ -10,10 +10,11 @@ type UndefinedFunction struct {
   TypeNode core.ITypeNode
   Name string
   Params *Params
+  numRefered int
 }
 
 func NewUndefinedFunction(t core.ITypeNode, name string, params *Params) *UndefinedFunction {
-  return &UndefinedFunction { "entity.UndefinedFunction", t, name, params }
+  return &UndefinedFunction { "entity.UndefinedFunction", t, name, params, 0 }
 }
 
 func NewUndefinedFunctions(xs...*UndefinedFunction) []*UndefinedFunction {
@@ -40,8 +41,16 @@ func (self UndefinedFunction) IsPrivate() bool {
   return true
 }
 
+func (self UndefinedFunction) GetNumRefered() int {
+  return self.numRefered
+}
+
 func (self UndefinedFunction) IsRefered() bool {
-  return true // FIXME: count up references
+  return 0 < self.numRefered
+}
+
+func (self *UndefinedFunction) Refered() {
+  self.numRefered++
 }
 
 func (self UndefinedFunction) GetTypeNode() core.ITypeNode {

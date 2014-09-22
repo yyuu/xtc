@@ -102,7 +102,6 @@ func TestBlock2(t *testing.T) {
           "Name": "int"
         }
       },
-      "NumRefered": 0,
       "Initializer": {
         "ClassName": "ast.IntegerLiteralNode",
         "Location": "[:0,0]",
@@ -210,7 +209,6 @@ func TestBlock3(t *testing.T) {
           "Name": "int"
         }
       },
-      "NumRefered": 0,
       "Initializer": {
         "ClassName": "ast.IntegerLiteralNode",
         "Location": "[:0,0]",
@@ -239,7 +237,6 @@ func TestBlock3(t *testing.T) {
           "Name": "int"
         }
       },
-      "NumRefered": 0,
       "Initializer": {
         "ClassName": "ast.IntegerLiteralNode",
         "Location": "[:0,0]",

@@ -6,7 +6,9 @@ type IEntity interface {
   IsDefined() bool
   IsPrivate() bool
   IsConstant() bool
+  Refered()
   IsRefered() bool
+  GetNumRefered() int
   GetTypeNode() ITypeNode
   GetTypeRef() ITypeRef
 }

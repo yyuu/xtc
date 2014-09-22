@@ -31,8 +31,16 @@ func (self Params) IsPrivate() bool {
   return true
 }
 
+func (self Params) GetNumRefered() int {
+  return -1
+}
+
 func (self Params) IsRefered() bool {
-  return true // FIXME: count up references
+  return false
+}
+
+func (self *Params) Refered() {
+  // nop
 }
 
 func (self Params) GetLocation() core.Location {

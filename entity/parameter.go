@@ -10,7 +10,7 @@ type Parameter struct {
 }
 
 func NewParameter(t core.ITypeNode, name string) *Parameter {
-  return &Parameter { &DefinedVariable { "entity.Parameter", true, name, t, 0, nil } }
+  return &Parameter { &DefinedVariable { "entity.Parameter", true, name, t, nil, 0 } }
 }
 
 func NewParameters(xs...*Parameter) []*Parameter {
@@ -45,12 +45,16 @@ func (self Parameter) HasInitializer() bool {
   return false
 }
 
-func (self Parameter) GetNumRefered() int {
-  return 0
+func (self *Parameter) GetNumRefered() int {
+  return self.DefinedVariable.GetNumRefered()
 }
 
 func (self Parameter) IsRefered() bool {
-  return false
+  return self.DefinedVariable.IsRefered()
+}
+
+func (self *Parameter) Refered() {
+  self.DefinedVariable.Refered()
 }
 
 func (self Parameter) IsDefined() bool {

@@ -10,10 +10,11 @@ type UndefinedVariable struct {
   Private bool
   Name string
   TypeNode core.ITypeNode
+  numRefered int
 }
 
 func NewUndefinedVariable(t core.ITypeNode, name string) *UndefinedVariable {
-  return &UndefinedVariable { "entity.UndefinedVariable", false, name, t }
+  return &UndefinedVariable { "entity.UndefinedVariable", false, name, t, 0 }
 }
 
 func NewUndefinedVariables(xs...*UndefinedVariable) []*UndefinedVariable {
@@ -40,8 +41,16 @@ func (self UndefinedVariable) IsPrivate() bool {
   return true
 }
 
+func (self UndefinedVariable) GetNumRefered() int {
+  return self.numRefered
+}
+
 func (self UndefinedVariable) IsRefered() bool {
-  return true // FIXME: count up references
+  return 0 < self.numRefered
+}
+
+func (self *UndefinedVariable) Refered() {
+  self.numRefered++
 }
 
 func (self UndefinedVariable) GetName() string {
