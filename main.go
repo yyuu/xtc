@@ -5,7 +5,6 @@ import (
   "encoding/json"
   "flag"
   "fmt"
-  "io/ioutil"
   "os"
   "strings"
   "bitbucket.org/yyuu/bs/ast"
@@ -28,12 +27,7 @@ func main() {
   files := flagSet.Args()
   if 0 < len(files) {
     for i := range files {
-      cs, err := ioutil.ReadFile(files[i])
-      if err != nil {
-        fmt.Fprintln(os.Stderr, err)
-        os.Exit(1)
-      }
-      ep(parser.ParseExpr(string(cs)))
+      ep(parser.ParseFile(files[i]))
     }
   } else {
     repl()

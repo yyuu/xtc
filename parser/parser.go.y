@@ -4,6 +4,8 @@ package parser
 import (
   "errors"
   "fmt"
+  "io/ioutil"
+  "os"
   "strconv"
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/core"
@@ -94,7 +96,7 @@ import (
 compilation_unit: EOF
                 | import_stmts top_defs EOF
                 {
-                  if lex, ok := yylex.(*lex); ok {
+                  if lex, ok := yylex.(*lexer); ok {
                     var loc core.Location
                     if lex.firstToken != nil {
                       loc = lex.firstToken.location
@@ -142,10 +144,7 @@ import_stmts:
 
 import_stmt: IMPORT import_name ';'
            {
-//           $$._nodes, err := loader.LoadLibrary($2._tokens.literal)
-//           if err != nil {
-//             panic(err)
-//           }
+//           $$._nodes := loadLibrary($2._tokens.literal)
            }
            ;
 
@@ -525,7 +524,7 @@ param_typerefs: typeref
 
 typedef: TYPEDEF typeref IDENTIFIER ';'
        {
-         if lex, ok := yylex.(*lex); ok {
+         if lex, ok := yylex.(*lexer); ok {
            lex.knownTypedefs = append(lex.knownTypedefs, $3._token.literal)
          } else {
            panic("parser is broken")
@@ -902,7 +901,7 @@ primary: INTEGER
 
 var Verbose = 0
 
-func (self *lex) Lex(lval *yySymType) int {
+func (self *lexer) Lex(lval *yySymType) int {
   t := self.getNextToken()
   if t == nil {
     if self.isEOF {
@@ -917,14 +916,28 @@ func (self *lex) Lex(lval *yySymType) int {
   }
 }
 
-func (self *lex) Error(s string) {
+func (self *lexer) Error(s string) {
   self.error = errors.New(s)
   panic(fmt.Errorf("%s: %s", self, s))
 }
 
 func ParseExpr(s string) (*ast.AST, error) {
+  return doParse("", s)
+}
+
+func ParseFile(path string) (*ast.AST, error) {
+  cs, err := ioutil.ReadFile(path)
+  if err != nil {
+    panic(err)
+    fmt.Fprintln(os.Stderr, err)
+    os.Exit(1)
+  }
+  return doParse(path, string(cs))
+}
+
+func doParse(name string, source string) (*ast.AST, error) {
   yyDebug = Verbose
-  lex := lexer("", s)
+  lex := newLexer(name, source)
   if yyParse(lex) == 0 {
     return lex.ast, nil // success
   } else {

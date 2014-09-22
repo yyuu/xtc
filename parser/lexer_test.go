@@ -16,12 +16,12 @@ func assertTokenNull(t *testing.T, tok *token) {
 }
 
 func TestEmpty(t *testing.T) {
-  lex := lexer("test.txt", "")
+  lex := newLexer("test.txt", "")
   assertTokenNull(t, lex.getNextToken())
 }
 
 func TestSpaces(t *testing.T) {
-  lex := lexer("test.txt", "\tfoo\n\t\tbar\n\n")
+  lex := newLexer("test.txt", "\tfoo\n\t\tbar\n\n")
 //assertToken(t, lex.getNextToken(), SPACES, "\t")
   assertToken(t, lex.getNextToken(), IDENTIFIER, "foo")
 //assertToken(t, lex.getNextToken(), SPACES, "\n\t\t")
@@ -31,14 +31,14 @@ func TestSpaces(t *testing.T) {
 }
 
 func TestBlockComment1(t *testing.T) {
-  lex := lexer("test.txt", "/* foo */\n")
+  lex := newLexer("test.txt", "/* foo */\n")
 //assertToken(t, lex.getNextToken(), BLOCK_COMMENT, "/* foo */")
 //assertToken(t, lex.getNextToken(), SPACES, "\n")
   assertTokenNull(t, lex.getNextToken())
 }
 
 func TestBlockComment2(t *testing.T) {
-  lex := lexer("test.txt", "foo\n/* bar\n   baz\n */\n")
+  lex := newLexer("test.txt", "foo\n/* bar\n   baz\n */\n")
   assertToken(t, lex.getNextToken(), IDENTIFIER, "foo")
 //assertToken(t, lex.getNextToken(), SPACES, "\n")
 //assertToken(t, lex.getNextToken(), BLOCK_COMMENT, "/* bar\n   baz\n */")
@@ -47,7 +47,7 @@ func TestBlockComment2(t *testing.T) {
 }
 
 func TestLineComment(t *testing.T) {
-  lex := lexer("test.txt", "foo\n// bar\nbaz\n")
+  lex := newLexer("test.txt", "foo\n// bar\nbaz\n")
   assertToken(t, lex.getNextToken(), IDENTIFIER, "foo")
 //assertToken(t, lex.getNextToken(), SPACES, "\n")
 //assertToken(t, lex.getNextToken(), LINE_COMMENT, "// bar\n")
@@ -57,7 +57,7 @@ func TestLineComment(t *testing.T) {
 }
 
 func TestKeyword1(t *testing.T) {
-  lex := lexer("test.txt", "unsigned int foo;\n")
+  lex := newLexer("test.txt", "unsigned int foo;\n")
   assertToken(t, lex.getNextToken(), UNSIGNED, "unsigned")
 //assertToken(t, lex.getNextToken(), SPACES, " ")
   assertToken(t, lex.getNextToken(), INT, "int")
@@ -69,7 +69,7 @@ func TestKeyword1(t *testing.T) {
 }
 
 func TestKeyword2(t *testing.T) {
-  lex := lexer("test.txt", "\n\nif ( foo ) {\n  bar;\n}\nbaz;\n")
+  lex := newLexer("test.txt", "\n\nif ( foo ) {\n  bar;\n}\nbaz;\n")
 //assertToken(t, lex.getNextToken(), SPACES, "\n\n")
   assertToken(t, lex.getNextToken(), IF, "if")
 //assertToken(t, lex.getNextToken(), SPACES, " ")
@@ -93,7 +93,7 @@ func TestKeyword2(t *testing.T) {
 }
 
 func TestIdentifier1(t *testing.T) {
-  lex := lexer("test.txt", "foo\nbar\nbaz\n")
+  lex := newLexer("test.txt", "foo\nbar\nbaz\n")
   assertToken(t, lex.getNextToken(), IDENTIFIER, "foo")
 //assertToken(t, lex.getNextToken(), SPACES, "\n")
   assertToken(t, lex.getNextToken(), IDENTIFIER, "bar")
@@ -104,7 +104,7 @@ func TestIdentifier1(t *testing.T) {
 }
 
 func TestIdentifier2(t *testing.T) {
-  lex := lexer("test.txt", "f00\n64r\nb42\n")
+  lex := newLexer("test.txt", "f00\n64r\nb42\n")
   assertToken(t, lex.getNextToken(), IDENTIFIER, "f00")
 //assertToken(t, lex.getNextToken(), SPACES, "\n")
   assertToken(t, lex.getNextToken(), INTEGER, "64")
@@ -116,7 +116,7 @@ func TestIdentifier2(t *testing.T) {
 }
 
 func TestInteger1(t *testing.T) {
-  lex := lexer("test.txt", "1\n23U\n456L\n7890UL\n")
+  lex := newLexer("test.txt", "1\n23U\n456L\n7890UL\n")
   assertToken(t, lex.getNextToken(), INTEGER, "1")
 //assertToken(t, lex.getNextToken(), SPACES, "\n")
   assertToken(t, lex.getNextToken(), INTEGER, "23U")
@@ -129,7 +129,7 @@ func TestInteger1(t *testing.T) {
 }
 
 func TestInteger2(t *testing.T) {
-  lex := lexer("test.txt", "0xf00\n0x64U\n0X642L\n0xc4febabe\n0XC0FFEEUL\n")
+  lex := newLexer("test.txt", "0xf00\n0x64U\n0X642L\n0xc4febabe\n0XC0FFEEUL\n")
   assertToken(t, lex.getNextToken(), INTEGER, "0xf00")
 //assertToken(t, lex.getNextToken(), SPACES, "\n")
   assertToken(t, lex.getNextToken(), INTEGER, "0x64U")
@@ -144,7 +144,7 @@ func TestInteger2(t *testing.T) {
 }
 
 func TestInteger3(t *testing.T) {
-  lex := lexer("test.txt", "0\n012U\n034L\n056UL\n")
+  lex := newLexer("test.txt", "0\n012U\n034L\n056UL\n")
   assertToken(t, lex.getNextToken(), INTEGER, "0")
 //assertToken(t, lex.getNextToken(), SPACES, "\n")
   assertToken(t, lex.getNextToken(), INTEGER, "012U")
@@ -157,7 +157,7 @@ func TestInteger3(t *testing.T) {
 }
 
 func TestCharacter1(t *testing.T) {
-  lex := lexer("test.txt", "{'f', 'o', 'o'}")
+  lex := newLexer("test.txt", "{'f', 'o', 'o'}")
   assertToken(t, lex.getNextToken(), '{', "{")
   assertToken(t, lex.getNextToken(), CHARACTER, "'f'")
   assertToken(t, lex.getNextToken(), ',', ",")
@@ -171,19 +171,19 @@ func TestCharacter1(t *testing.T) {
 }
 
 func TestCharacter2(t *testing.T) {
-  lex := lexer("test.txt", "'\x20'")
+  lex := newLexer("test.txt", "'\x20'")
   assertToken(t, lex.getNextToken(), CHARACTER, "'\x20'")
   assertTokenNull(t, lex.getNextToken())
 }
 
 func TestString1(t *testing.T) {
-  lex := lexer("test.txt", "\"foo, bar, baz\"")
+  lex := newLexer("test.txt", "\"foo, bar, baz\"")
   assertToken(t, lex.getNextToken(), STRING, "\"foo, bar, baz\"")
   assertTokenNull(t, lex.getNextToken())
 }
 
 func TestOperator1(t *testing.T) {
-  lex := lexer("test.txt", "+++....<<<<===&=&&")
+  lex := newLexer("test.txt", "+++....<<<<===&=&&")
   assertToken(t, lex.getNextToken(), PLUSPLUS, "++")
   assertToken(t, lex.getNextToken(), '+', "+")
   assertToken(t, lex.getNextToken(), DOTDOTDOT, "...")
@@ -197,7 +197,7 @@ func TestOperator1(t *testing.T) {
 }
 
 func TestOperator2(t *testing.T) {
-  lex := lexer("test.txt", "foo ? bar : baz;\n")
+  lex := newLexer("test.txt", "foo ? bar : baz;\n")
   assertToken(t, lex.getNextToken(), IDENTIFIER, "foo")
 //assertToken(t, lex.getNextToken(), SPACES, " ")
   assertToken(t, lex.getNextToken(), '?', "?")
