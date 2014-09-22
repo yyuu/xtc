@@ -144,7 +144,7 @@ import_stmts:
 
 import_stmt: IMPORT import_name ';'
            {
-//           $$._nodes := loadLibrary($2._tokens.literal)
+             $$._node = loadLibrary($2._token.literal)
            }
            ;
 
