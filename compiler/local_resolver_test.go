@@ -70,10 +70,10 @@ func TestLocalResolverPushPopStacks(t *testing.T) {
   xt.AssertEquals(t, "stack should be decreased", len(resolver.scopeStack), 1)
 }
 
-func TestLocalResolverWithEmptyDeclarations(t *testing.T) {
+func TestLocalResolverWithEmptyDeclaration(t *testing.T) {
   loc := core.NewLocation("", 0, 0)
   a := ast.NewAST(loc,
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(),
@@ -86,8 +86,8 @@ func TestLocalResolverWithEmptyDeclarations(t *testing.T) {
   )
   resolver := setupLocalResolver(a)
   resolver.resolveGvarInitializers(a)
-  xt.AssertEquals(t, "empty declarations should only have toplevel", len(resolver.scopeStack), 1)
-  xt.AssertTrue(t, "empty declarations should have empty constants", resolver.constantTable.IsEmpty())
+  xt.AssertEquals(t, "empty declaration should only have toplevel", len(resolver.scopeStack), 1)
+  xt.AssertTrue(t, "empty declaration should have empty constants", resolver.constantTable.IsEmpty())
 }
 
 func TestLocalResolverWithGlobalVariables(t *testing.T) {
@@ -96,7 +96,7 @@ func TestLocalResolverWithGlobalVariables(t *testing.T) {
  */
   loc := core.NewLocation("", 0, 0)
   a := ast.NewAST(loc,
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(
         entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "foo", ast.NewIntegerLiteralNode(loc, "12345")),
       ),
@@ -120,7 +120,7 @@ func TestLocalResolverWithGlobalVariables2(t *testing.T) {
  */
   loc := core.NewLocation("", 0, 0)
   a := ast.NewAST(loc,
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(
         entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "foo", ast.NewVariableNode(loc, "bar")),
       ),
@@ -152,7 +152,7 @@ func TestLocalResolverWithGlobalVariables3(t *testing.T) {
  */
   loc := core.NewLocation("", 0, 0)
   a := ast.NewAST(loc,
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(
         entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "foo", ast.NewIntegerLiteralNode(loc, "12345")),
         entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "bar", ast.NewVariableNode(loc, "foo")),
@@ -196,7 +196,7 @@ func TestLocalResolverWithConstants1(t *testing.T) {
  */
   loc := core.NewLocation("", 0, 0)
   a := ast.NewAST(loc,
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(),
@@ -252,7 +252,7 @@ func TestLocalResolverWithFunctions1(t *testing.T) {
  */
   loc := core.NewLocation("", 0, 0)
   a := ast.NewAST(loc,
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(

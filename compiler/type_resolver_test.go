@@ -18,7 +18,7 @@ func setupTypeResolver(a *ast.AST, table *typesys.TypeTable) *TypeResolver {
 func TestTypeResolverVisitNodeEmpty(t *testing.T) {
   loc := core.NewLocation("", 0, 0)
   a := ast.NewAST(loc,
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(),
@@ -54,7 +54,7 @@ func TestTypeResolverWithStruct(t *testing.T) {
  */
   loc := core.NewLocation("", 0, 0)
   a := ast.NewAST(loc,
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(),
@@ -95,7 +95,7 @@ func TestTypeResolverWithUnion(t *testing.T) {
  */
   loc := core.NewLocation("", 0, 0)
   a := ast.NewAST(loc,
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(),
@@ -130,7 +130,7 @@ func TestTypeResolverWithUnion(t *testing.T) {
 func TestTypeResolverVisitEntity(t *testing.T) {
   loc := core.NewLocation("", 0, 0)
   a := ast.NewAST(loc,
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(),
@@ -160,7 +160,7 @@ func TestTypeResolverWithFunctionWithoutArguments(t *testing.T) {
  */
   loc := core.NewLocation("", 0, 0)
   a := ast.NewAST(loc,
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(
@@ -211,7 +211,7 @@ func TestTypeResolverWithFunctionWithArguments(t *testing.T) {
  */
   loc := core.NewLocation("", 0, 0)
   a := ast.NewAST(loc,
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(

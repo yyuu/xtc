@@ -99,7 +99,7 @@ compilation_unit: EOF
                     if lex.firstToken != nil {
                       loc = lex.firstToken.location
                     }
-                    lex.ast = ast.NewAST(loc, asDeclarations($2._node))
+                    lex.ast = ast.NewAST(loc, asDeclaration($2._node))
                   } else {
                     panic("parser is broken")
                   }
@@ -109,27 +109,27 @@ compilation_unit: EOF
 declaration_file: import_stmts
                 | declaration_file funcdecl
                 {
-                  $$._node = asDeclarations($1._node).AddFuncdecl(asUndefinedFunction($2._entity))
+                  $$._node = asDeclaration($1._node).AddFuncdecl(asUndefinedFunction($2._entity))
                 }
                 | declaration_file vardecl
                 {
-                  $$._node = asDeclarations($1._node).AddVardecl(asUndefinedVariable($2._entity))
+                  $$._node = asDeclaration($1._node).AddVardecl(asUndefinedVariable($2._entity))
                 }
                 | declaration_file defconst
                 {
-                  $$._node = asDeclarations($1._node).AddDefconst(asConstant($2._entity))
+                  $$._node = asDeclaration($1._node).AddDefconst(asConstant($2._entity))
                 }
                 | declaration_file defstruct
                 {
-                  $$._node = asDeclarations($1._node).AddDefstruct(asStructNode($2._node))
+                  $$._node = asDeclaration($1._node).AddDefstruct(asStructNode($2._node))
                 }
                 | declaration_file defunion
                 {
-                  $$._node = asDeclarations($1._node).AddDefunion(asUnionNode($2._node))
+                  $$._node = asDeclaration($1._node).AddDefunion(asUnionNode($2._node))
                 }
                 | declaration_file typedef
                 {
-                  $$._node = asDeclarations($1._node).AddTypedef(asTypedefNode($2._node))
+                  $$._node = asDeclaration($1._node).AddTypedef(asTypedefNode($2._node))
                 }
                 ;
 
@@ -158,7 +158,7 @@ import_name: name
 
 top_defs: defun
         {
-          $$._node = ast.NewDeclarations(
+          $$._node = ast.NewDeclaration(
             entity.NewDefinedVariables(),
             entity.NewUndefinedVariables(),
             entity.NewDefinedFunctions(asDefinedFunction($1._entity)),
@@ -171,7 +171,7 @@ top_defs: defun
         }
         | defvars
         {
-          $$._node = ast.NewDeclarations(
+          $$._node = ast.NewDeclaration(
             entity.NewDefinedVariables(asDefinedVariable($1._entity)),
             entity.NewUndefinedVariables(),
             entity.NewDefinedFunctions(),
@@ -184,7 +184,7 @@ top_defs: defun
         }
         | defconst
         {
-          $$._node = ast.NewDeclarations(
+          $$._node = ast.NewDeclaration(
             entity.NewDefinedVariables(),
             entity.NewUndefinedVariables(),
             entity.NewDefinedFunctions(),
@@ -197,7 +197,7 @@ top_defs: defun
         }
         | defstruct
         {
-          $$._node = ast.NewDeclarations(
+          $$._node = ast.NewDeclaration(
             entity.NewDefinedVariables(),
             entity.NewUndefinedVariables(),
             entity.NewDefinedFunctions(),
@@ -210,7 +210,7 @@ top_defs: defun
         }
         | defunion
         {
-          $$._node = ast.NewDeclarations(
+          $$._node = ast.NewDeclaration(
             entity.NewDefinedVariables(),
             entity.NewUndefinedVariables(),
             entity.NewDefinedFunctions(),
@@ -223,7 +223,7 @@ top_defs: defun
         }
         | typedef
         {
-          $$._node = ast.NewDeclarations(
+          $$._node = ast.NewDeclaration(
             entity.NewDefinedVariables(),
             entity.NewUndefinedVariables(),
             entity.NewDefinedFunctions(),
@@ -236,27 +236,27 @@ top_defs: defun
         }
         | top_defs defun
         {
-          $$._node = asDeclarations($1._node).AddDefun(asDefinedFunction($2._entity))
+          $$._node = asDeclaration($1._node).AddDefun(asDefinedFunction($2._entity))
         }
         | top_defs defvars
         {
-          $$._node = asDeclarations($1._node).AddDefvar(asDefinedVariable($2._entity))
+          $$._node = asDeclaration($1._node).AddDefvar(asDefinedVariable($2._entity))
         }
         | top_defs defconst
         {
-          $$._node = asDeclarations($1._node).AddDefconst(asConstant($2._entity))
+          $$._node = asDeclaration($1._node).AddDefconst(asConstant($2._entity))
         }
         | top_defs defstruct
         {
-          $$._node = asDeclarations($1._node).AddDefstruct(asStructNode($2._node))
+          $$._node = asDeclaration($1._node).AddDefstruct(asStructNode($2._node))
         }
         | top_defs defunion
         {
-          $$._node = asDeclarations($1._node).AddDefunion(asUnionNode($2._node))
+          $$._node = asDeclaration($1._node).AddDefunion(asUnionNode($2._node))
         }
         | top_defs typedef
         {
-          $$._node = asDeclarations($1._node).AddTypedef(asTypedefNode($2._node))
+          $$._node = asDeclaration($1._node).AddTypedef(asTypedefNode($2._node))
         }
         ;
 

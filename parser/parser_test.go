@@ -21,7 +21,7 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
     }
   `
   x := ast.NewAST(loc(0,0),
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(
@@ -75,7 +75,7 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
     }
   `
   x := ast.NewAST(loc(0,0),
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(
@@ -141,7 +141,7 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
     }
   `
   x := ast.NewAST(loc(0,0),
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(
@@ -222,7 +222,7 @@ func TestFor1(t *testing.T) {
     }
 `
   x := ast.NewAST(loc(0,0),
-    ast.NewDeclarations(
+    ast.NewDeclaration(
       entity.NewDefinedVariables(),
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(
