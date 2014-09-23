@@ -77,10 +77,7 @@ func (self *TypeResolver) VisitNode(unknown core.INode) {
       for i := range variables {
         entity.VisitEntity(self, variables[i])
       }
-      stmts := node.GetStmts()
-      for i := range stmts {
-        ast.VisitNode(self, stmts[i])
-      }
+      ast.VisitStmts(self, node.GetStmts())
     }
     case *ast.CastNode: {
       self.bindType(node.GetTypeNode())
