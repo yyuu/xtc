@@ -88,3 +88,7 @@ func (self ParamTypes) GetParamDescs() []core.IType {
 func (self ParamTypes) IsVararg() bool {
   return self.Vararg
 }
+
+func (self ParamTypes) GetBaseType() core.IType {
+  panic("#baseType called for undereferable type")
+}

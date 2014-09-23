@@ -116,3 +116,7 @@ func (self StructType) HasMember(name string) bool {
   slot := self.GetMember(name)
   return slot != nil
 }
+
+func (self StructType) GetBaseType() core.IType {
+  panic("#baseType called for undereferable type")
+}

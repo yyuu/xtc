@@ -1,5 +1,9 @@
 package typesys
 
+import (
+  "bitbucket.org/yyuu/bs/core"
+)
+
 // VoidType
 type VoidType struct {
   ClassName string
@@ -67,4 +71,8 @@ func (self VoidType) IsFunction() bool {
 
 func (self VoidType) IsCallable() bool {
   return false
+}
+
+func (self VoidType) GetBaseType() core.IType {
+  panic("#baseType called for undereferable type")
 }

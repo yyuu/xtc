@@ -79,3 +79,7 @@ func (self UserType) IsCallable() bool {
 func (self UserType) GetName() string {
   return self.Name
 }
+
+func (self UserType) GetBaseType() core.IType {
+  panic("#baseType called for undereferable type")
+}

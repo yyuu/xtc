@@ -19,6 +19,8 @@ type IType interface {
   IsUserType() bool
   IsFunction() bool
   IsCallable() bool
+
+  GetBaseType() IType
 }
 
 // ITypeRef

@@ -1,5 +1,9 @@
 package typesys
 
+import (
+  "bitbucket.org/yyuu/bs/core"
+)
+
 // IntegerType
 type IntegerType struct {
   ClassName string
@@ -106,4 +110,8 @@ func (self IntegerType) IsCallable() bool {
 
 func (self IntegerType) GetName() string {
   return self.Name
+}
+
+func (self IntegerType) GetBaseType() core.IType {
+  panic("#baseType called for undereferable type")
 }

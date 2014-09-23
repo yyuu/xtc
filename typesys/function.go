@@ -83,3 +83,7 @@ func (self FunctionType) GetReturnType() core.IType {
 func (self FunctionType) GetParamTypes() *ParamTypes {
   return self.ParamTypes
 }
+
+func (self FunctionType) GetBaseType() core.IType {
+  panic("#baseType called for undereferable type")
+}

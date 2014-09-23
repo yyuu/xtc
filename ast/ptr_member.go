@@ -3,6 +3,7 @@ package ast
 import (
   "fmt"
   "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/bs/typesys"
 )
 
 // PtrMemberNode
@@ -76,4 +77,14 @@ func (self PtrMemberNode) IsCallable() bool {
 
 func (self PtrMemberNode) IsPointer() bool {
   return self.GetType().IsPointer()
+}
+
+func (self PtrMemberNode) GetDereferedCompositeType() core.ICompositeType {
+  pt := self.Expr.GetType().(*typesys.PointerType)
+  return pt.GetBaseType().(core.ICompositeType)
+}
+
+func (self PtrMemberNode) GetDereferedType() core.IType {
+  pt := self.Expr.GetType().(*typesys.PointerType)
+  return pt.GetBaseType()
 }
