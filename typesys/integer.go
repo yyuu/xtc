@@ -100,6 +100,10 @@ func (self IntegerType) IsFunction() bool {
   return false
 }
 
+func (self IntegerType) IsCallable() bool {
+  return false
+}
+
 func (self IntegerType) GetName() string {
   return self.Name
 }

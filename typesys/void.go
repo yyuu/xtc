@@ -64,3 +64,7 @@ func (self VoidType) IsUserType() bool {
 func (self VoidType) IsFunction() bool {
   return false
 }
+
+func (self VoidType) IsCallable() bool {
+  return false
+}

@@ -73,6 +73,10 @@ func (self UnionType) IsFunction() bool {
   return false
 }
 
+func (self UnionType) IsCallable() bool {
+  return false
+}
+
 func (self UnionType) GetName() string {
   return self.Name
 }

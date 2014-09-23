@@ -77,6 +77,10 @@ func (self ParamTypes) IsFunction() bool {
   return false
 }
 
+func (self ParamTypes) IsCallable() bool {
+  return false
+}
+
 func (self ParamTypes) GetParamDescs() []core.IType {
   return self.ParamDescs
 }

@@ -73,6 +73,10 @@ func (self StructType) IsFunction() bool {
   return false
 }
 
+func (self StructType) IsCallable() bool {
+  return false
+}
+
 func (self StructType) GetName() string {
   return self.Name
 }

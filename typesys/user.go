@@ -72,6 +72,10 @@ func (self UserType) IsFunction() bool {
   return false
 }
 
+func (self UserType) IsCallable() bool {
+  return false
+}
+
 func (self UserType) GetName() string {
   return self.Name
 }

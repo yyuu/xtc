@@ -77,6 +77,10 @@ func (self ArrayType) IsFunction() bool {
   return false
 }
 
+func (self ArrayType) IsCallable() bool {
+  return false
+}
+
 func (self ArrayType) GetBaseType() core.IType {
   return self.BaseType
 }

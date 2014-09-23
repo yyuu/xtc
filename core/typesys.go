@@ -18,6 +18,7 @@ type IType interface {
   IsUnion() bool
   IsUserType() bool
   IsFunction() bool
+  IsCallable() bool
 }
 
 // ITypeRef

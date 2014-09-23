@@ -72,6 +72,10 @@ func (self FunctionType) IsFunction() bool {
   return true
 }
 
+func (self FunctionType) IsCallable() bool {
+  return true
+}
+
 func (self FunctionType) GetReturnType() core.IType {
   return self.ReturnType
 }
