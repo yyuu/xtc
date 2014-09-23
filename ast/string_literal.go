@@ -64,3 +64,31 @@ func (self StringLiteralNode) GetType() core.IType {
 func (self *StringLiteralNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self StringLiteralNode) IsConstant() bool {
+  return true
+}
+
+func (self StringLiteralNode) IsParameter() bool {
+  return false
+}
+
+func (self StringLiteralNode) IsLvalue() bool {
+  return false
+}
+
+func (self StringLiteralNode) IsAssignable() bool {
+  return false
+}
+
+func (self StringLiteralNode) IsLoadable() bool {
+  return false
+}
+
+func (self StringLiteralNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self StringLiteralNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

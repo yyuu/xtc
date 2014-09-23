@@ -50,3 +50,31 @@ func (self ArefNode) GetType() core.IType {
 func (self *ArefNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self ArefNode) IsConstant() bool {
+  return false
+}
+
+func (self ArefNode) IsParameter() bool {
+  return false
+}
+
+func (self ArefNode) IsLvalue() bool {
+  return true
+}
+
+func (self ArefNode) IsAssignable() bool {
+  return true
+}
+
+func (self ArefNode) IsLoadable() bool {
+  return false
+}
+
+func (self ArefNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self ArefNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

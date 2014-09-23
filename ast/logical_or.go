@@ -50,3 +50,31 @@ func (self LogicalOrNode) GetType() core.IType {
 func (self *LogicalOrNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self LogicalOrNode) IsConstant() bool {
+  return false
+}
+
+func (self LogicalOrNode) IsParameter() bool {
+  return false
+}
+
+func (self LogicalOrNode) IsLvalue() bool {
+  return false
+}
+
+func (self LogicalOrNode) IsAssignable() bool {
+  return false
+}
+
+func (self LogicalOrNode) IsLoadable() bool {
+  return false
+}
+
+func (self LogicalOrNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self LogicalOrNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

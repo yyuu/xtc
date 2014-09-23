@@ -52,3 +52,31 @@ func (self UnaryOpNode) GetType() core.IType {
 func (self *UnaryOpNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self UnaryOpNode) IsConstant() bool {
+  return false
+}
+
+func (self UnaryOpNode) IsParameter() bool {
+  return false
+}
+
+func (self UnaryOpNode) IsLvalue() bool {
+  return false
+}
+
+func (self UnaryOpNode) IsAssignable() bool {
+  return false
+}
+
+func (self UnaryOpNode) IsLoadable() bool {
+  return false
+}
+
+func (self UnaryOpNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self UnaryOpNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

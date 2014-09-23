@@ -31,6 +31,10 @@ func (self Params) IsPrivate() bool {
   return true
 }
 
+func (self Params) IsParameter() bool {
+  return false
+}
+
 func (self Params) GetNumRefered() int {
   return -1
 }

@@ -53,3 +53,31 @@ func (self SuffixOpNode) GetType() core.IType {
 func (self *SuffixOpNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self SuffixOpNode) IsConstant() bool {
+  return false
+}
+
+func (self SuffixOpNode) IsParameter() bool {
+  return false
+}
+
+func (self SuffixOpNode) IsLvalue() bool {
+  return false
+}
+
+func (self SuffixOpNode) IsAssignable() bool {
+  return false
+}
+
+func (self SuffixOpNode) IsLoadable() bool {
+  return false
+}
+
+func (self SuffixOpNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self SuffixOpNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

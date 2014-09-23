@@ -41,6 +41,10 @@ func (self UndefinedVariable) IsPrivate() bool {
   return true
 }
 
+func (self UndefinedVariable) IsParameter() bool {
+  return false
+}
+
 func (self UndefinedVariable) GetNumRefered() int {
   return self.numRefered
 }

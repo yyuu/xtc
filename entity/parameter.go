@@ -33,6 +33,10 @@ func (self Parameter) IsConstant() bool {
   return false
 }
 
+func (self Parameter) IsParameter() bool {
+  return true
+}
+
 func (self Parameter) GetInitializer() core.IExprNode {
   return nil
 }

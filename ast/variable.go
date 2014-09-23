@@ -51,3 +51,31 @@ func (self VariableNode) GetType() core.IType {
 func (self *VariableNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self VariableNode) IsConstant() bool {
+  return false
+}
+
+func (self VariableNode) IsParameter() bool {
+  return self.entity.IsParameter()
+}
+
+func (self VariableNode) IsLvalue() bool {
+  return true
+}
+
+func (self VariableNode) IsAssignable() bool {
+  return true
+}
+
+func (self VariableNode) IsLoadable() bool {
+  return false
+}
+
+func (self VariableNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self VariableNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

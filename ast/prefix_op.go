@@ -53,3 +53,31 @@ func (self PrefixOpNode) GetType() core.IType {
 func (self *PrefixOpNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self PrefixOpNode) IsConstant() bool {
+  return false
+}
+
+func (self PrefixOpNode) IsParameter() bool {
+  return false
+}
+
+func (self PrefixOpNode) IsLvalue() bool {
+  return false
+}
+
+func (self PrefixOpNode) IsAssignable() bool {
+  return false
+}
+
+func (self PrefixOpNode) IsLoadable() bool {
+  return false
+}
+
+func (self PrefixOpNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self PrefixOpNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

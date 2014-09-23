@@ -54,3 +54,31 @@ func (self SizeofExprNode) GetType() core.IType {
 func (self *SizeofExprNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self SizeofExprNode) IsConstant() bool {
+  return false
+}
+
+func (self SizeofExprNode) IsParameter() bool {
+  return false
+}
+
+func (self SizeofExprNode) IsLvalue() bool {
+  return false
+}
+
+func (self SizeofExprNode) IsAssignable() bool {
+  return false
+}
+
+func (self SizeofExprNode) IsLoadable() bool {
+  return false
+}
+
+func (self SizeofExprNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self SizeofExprNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

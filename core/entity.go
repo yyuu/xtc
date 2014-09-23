@@ -6,6 +6,7 @@ type IEntity interface {
   IsDefined() bool
   IsPrivate() bool
   IsConstant() bool
+  IsParameter() bool
   Refered()
   IsRefered() bool
   GetNumRefered() int

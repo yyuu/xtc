@@ -46,6 +46,10 @@ func (self DefinedVariable) IsConstant() bool {
   return false
 }
 
+func (self DefinedVariable) IsParameter() bool {
+  return false
+}
+
 func (self DefinedVariable) GetName() string {
   return self.Name
 }

@@ -86,3 +86,31 @@ func (self IntegerLiteralNode) GetType() core.IType {
 func (self *IntegerLiteralNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self IntegerLiteralNode) IsConstant() bool {
+  return true
+}
+
+func (self IntegerLiteralNode) IsParameter() bool {
+  return false
+}
+
+func (self IntegerLiteralNode) IsLvalue() bool {
+  return false
+}
+
+func (self IntegerLiteralNode) IsAssignable() bool {
+  return false
+}
+
+func (self IntegerLiteralNode) IsLoadable() bool {
+  return false
+}
+
+func (self IntegerLiteralNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self IntegerLiteralNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

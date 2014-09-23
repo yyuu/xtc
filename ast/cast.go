@@ -54,3 +54,31 @@ func (self CastNode) GetType() core.IType {
 func (self *CastNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self CastNode) IsConstant() bool {
+  return false
+}
+
+func (self CastNode) IsParameter() bool {
+  return false
+}
+
+func (self CastNode) IsLvalue() bool {
+  return self.Expr.IsLvalue()
+}
+
+func (self CastNode) IsAssignable() bool {
+  return true
+}
+
+func (self CastNode) IsLoadable() bool {
+  return false
+}
+
+func (self CastNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self CastNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

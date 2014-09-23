@@ -56,6 +56,10 @@ func (self DefinedFunction) IsConstant() bool {
   return false
 }
 
+func (self DefinedFunction) IsParameter() bool {
+  return false
+}
+
 func (self DefinedFunction) GetNumRefered() int {
   return self.numRefered
 }

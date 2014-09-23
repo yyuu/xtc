@@ -45,30 +45,30 @@ func (self *AddressNode) SetType(t core.IType) {
   self.t = t
 }
 
-//func (self AddressNode) IsConstant() bool {
-//  return false
-//}
+func (self AddressNode) IsConstant() bool {
+  return false
+}
 
-//func (self AddressNode) IsParameter() bool {
-//  return false
-//}
+func (self AddressNode) IsParameter() bool {
+  return false
+}
 
-//func (self AddressNode) IsLvalue() bool {
-//  return false
-//}
+func (self AddressNode) IsLvalue() bool {
+  return false
+}
 
-//func (self AddressNode) IsAssignable() bool {
-//  return false
-//}
+func (self AddressNode) IsAssignable() bool {
+  return false
+}
 
-//func (self AddressNode) IsLoadable() bool {
-//  return false
-//}
+func (self AddressNode) IsLoadable() bool {
+  return false
+}
 
-//func (self AddressNode) IsCallable() bool {
-//  return self.GetType().IsCallable()
-//}
+func (self AddressNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
 
-//func (self AddressNode) IsPointer() bool {
-//  return self.GetType().IsPointer()
-//}
+func (self AddressNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

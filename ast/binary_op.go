@@ -64,3 +64,31 @@ func (self BinaryOpNode) GetType() core.IType {
 func (self *BinaryOpNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self BinaryOpNode) IsConstant() bool {
+  return false
+}
+
+func (self BinaryOpNode) IsParameter() bool {
+  return false
+}
+
+func (self BinaryOpNode) IsLvalue() bool {
+  return false
+}
+
+func (self BinaryOpNode) IsAssignable() bool {
+  return false
+}
+
+func (self BinaryOpNode) IsLoadable() bool {
+  return false
+}
+
+func (self BinaryOpNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self BinaryOpNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

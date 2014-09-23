@@ -43,3 +43,31 @@ func (self DereferenceNode) GetType() core.IType {
 func (self *DereferenceNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self DereferenceNode) IsConstant() bool {
+  return false
+}
+
+func (self DereferenceNode) IsParameter() bool {
+  return false
+}
+
+func (self DereferenceNode) IsLvalue() bool {
+  return true
+}
+
+func (self DereferenceNode) IsAssignable() bool {
+  return true
+}
+
+func (self DereferenceNode) IsLoadable() bool {
+  return false
+}
+
+func (self DereferenceNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self DereferenceNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

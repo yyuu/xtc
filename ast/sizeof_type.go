@@ -59,3 +59,31 @@ func (self SizeofTypeNode) GetType() core.IType {
 func (self *SizeofTypeNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self SizeofTypeNode) IsConstant() bool {
+  return false
+}
+
+func (self SizeofTypeNode) IsParameter() bool {
+  return false
+}
+
+func (self SizeofTypeNode) IsLvalue() bool {
+  return false
+}
+
+func (self SizeofTypeNode) IsAssignable() bool {
+  return false
+}
+
+func (self SizeofTypeNode) IsLoadable() bool {
+  return false
+}
+
+func (self SizeofTypeNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self SizeofTypeNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

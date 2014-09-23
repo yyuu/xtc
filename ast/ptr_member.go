@@ -49,3 +49,31 @@ func (self PtrMemberNode) GetType() core.IType {
 func (self *PtrMemberNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self PtrMemberNode) IsConstant() bool {
+  return false
+}
+
+func (self PtrMemberNode) IsParameter() bool {
+  return false
+}
+
+func (self PtrMemberNode) IsLvalue() bool {
+  return true
+}
+
+func (self PtrMemberNode) IsAssignable() bool {
+  return true
+}
+
+func (self PtrMemberNode) IsLoadable() bool {
+  return false
+}
+
+func (self PtrMemberNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self PtrMemberNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

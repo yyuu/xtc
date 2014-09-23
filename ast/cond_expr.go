@@ -56,3 +56,31 @@ func (self CondExprNode) GetType() core.IType {
 func (self *CondExprNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self CondExprNode) IsConstant() bool {
+  return false
+}
+
+func (self CondExprNode) IsParameter() bool {
+  return false
+}
+
+func (self CondExprNode) IsLvalue() bool {
+  return false
+}
+
+func (self CondExprNode) IsAssignable() bool {
+  return false
+}
+
+func (self CondExprNode) IsLoadable() bool {
+  return false
+}
+
+func (self CondExprNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self CondExprNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}

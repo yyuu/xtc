@@ -58,3 +58,31 @@ func (self FuncallNode) GetType() core.IType {
 func (self *FuncallNode) SetType(t core.IType) {
   self.t = t
 }
+
+func (self FuncallNode) IsConstant() bool {
+  return false
+}
+
+func (self FuncallNode) IsParameter() bool {
+  return false
+}
+
+func (self FuncallNode) IsLvalue() bool {
+  return false
+}
+
+func (self FuncallNode) IsAssignable() bool {
+  return false
+}
+
+func (self FuncallNode) IsLoadable() bool {
+  return false
+}
+
+func (self FuncallNode) IsCallable() bool {
+  return self.GetType().IsCallable()
+}
+
+func (self FuncallNode) IsPointer() bool {
+  return self.GetType().IsPointer()
+}
