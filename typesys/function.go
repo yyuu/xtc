@@ -16,8 +16,12 @@ func NewFunctionType(ret core.IType, paramTypes *ParamTypes) *FunctionType {
   return &FunctionType { "typesys.FunctionType", ret, paramTypes }
 }
 
-func (self FunctionType) String() string {
+func (self FunctionType) Key() string {
   return fmt.Sprintf("%s(%s)", self.ReturnType, self.ParamTypes)
+}
+
+func (self FunctionType) String() string {
+  return self.Key()
 }
 
 func (self FunctionType) Size() int {

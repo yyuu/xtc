@@ -47,8 +47,12 @@ func NewUnsignedLongTypeRef(loc core.Location) *IntegerTypeRef {
   return NewIntegerTypeRef(loc, "unsigned long")
 }
 
-func (self IntegerTypeRef) String() string {
+func (self IntegerTypeRef) Key() string {
   return self.Name
+}
+
+func (self IntegerTypeRef) String() string {
+  return self.Key()
 }
 
 func (self IntegerTypeRef) GetLocation() core.Location {

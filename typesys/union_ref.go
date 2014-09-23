@@ -16,8 +16,12 @@ func NewUnionTypeRef(loc core.Location, name string) *UnionTypeRef {
   return &UnionTypeRef { "typesys.UnionTypeRef", loc, name }
 }
 
-func (self UnionTypeRef) String() string {
+func (self UnionTypeRef) Key() string {
   return fmt.Sprintf("union %s", self.Name)
+}
+
+func (self UnionTypeRef) String() string {
+  return self.Key()
 }
 
 func (self UnionTypeRef) GetLocation() core.Location {

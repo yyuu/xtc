@@ -2,6 +2,7 @@ package core
 
 // IType
 type IType interface {
+  Key() string
   String() string
 
   Size() int
@@ -25,6 +26,7 @@ type IType interface {
 
 // ITypeRef
 type ITypeRef interface {
+  Key() string
   String() string
 
   GetLocation() Location

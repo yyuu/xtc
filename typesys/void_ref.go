@@ -14,8 +14,12 @@ func NewVoidTypeRef(loc core.Location) *VoidTypeRef {
   return &VoidTypeRef { "typesys.VoidTypeRef", loc }
 }
 
-func (self VoidTypeRef) String() string {
+func (self VoidTypeRef) Key() string {
   return "void"
+}
+
+func (self VoidTypeRef) String() string {
+  return self.Key()
 }
 
 func (self VoidTypeRef) GetLocation() core.Location {

@@ -6,16 +6,16 @@ import (
   "bitbucket.org/yyuu/bs/xt"
 )
 
-func TestParamTypeRefsToString1(t *testing.T) {
+func TestParamTypeRefsKeyString1(t *testing.T) {
   loc := core.NewLocation("", 1, 2)
   x := NewParamTypeRefs(loc,
          []core.ITypeRef { },
          false,
        )
-  xt.AssertEquals(t, "(empty params)", x.String(), "")
+  xt.AssertEquals(t, "(empty params)", x.Key(), "")
 }
 
-func TestParamTypeRefsToString2(t *testing.T) {
+func TestParamTypeRefsKeyString2(t *testing.T) {
   loc := core.NewLocation("", 1, 2)
   x := NewParamTypeRefs(loc,
          []core.ITypeRef {
@@ -24,5 +24,5 @@ func TestParamTypeRefsToString2(t *testing.T) {
          },
          false,
        )
-  xt.AssertEquals(t, "int argc, char*[] argv", x.String(), "int,char*[]")
+  xt.AssertEquals(t, "int argc, char*[] argv", x.Key(), "int,char*[]")
 }

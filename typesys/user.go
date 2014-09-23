@@ -16,8 +16,12 @@ func NewUserType(name string, real core.ITypeNode, loc core.Location) *UserType 
   return &UserType { "typesys.UserType", loc, name, real }
 }
 
-func (self UserType) String() string {
+func (self UserType) Key() string {
   return self.Name
+}
+
+func (self UserType) String() string {
+  return self.Key()
 }
 
 func (self UserType) Size() int {

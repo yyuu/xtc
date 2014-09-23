@@ -54,11 +54,11 @@ func NewTypeTableFor(platform string) *TypeTable {
 }
 
 func (self *TypeTable) PutType(ref core.ITypeRef, t core.IType) {
-  self.table[ref.String()] = t
+  self.table[ref.Key()] = t
 }
 
 func (self TypeTable) GetType(ref core.ITypeRef) core.IType {
-  t := self.table[ref.String()]
+  t := self.table[ref.Key()]
   if t == nil {
     switch typed := ref.(type) {
       case *UserTypeRef: {
@@ -86,7 +86,7 @@ func (self TypeTable) GetType(ref core.ITypeRef) core.IType {
         self.PutType(typed, t)
       }
       default: {
-        panic(fmt.Errorf("unregistered type: %s", ref.String()))
+        panic(fmt.Errorf("unregistered type: %s", ref))
       }
     }
   }
@@ -126,7 +126,7 @@ func (self TypeTable) String() string {
 }
 
 func (self TypeTable) IsDefined(ref core.ITypeRef) bool {
-  _, ok := self.table[ref.String()]
+  _, ok := self.table[ref.Key()]
   return ok
 }
 

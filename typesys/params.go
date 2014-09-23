@@ -17,12 +17,16 @@ func NewParamTypes(loc core.Location, paramDescs []core.IType, vararg bool) *Par
   return &ParamTypes { "typesys.ParamTypes", loc, paramDescs, vararg }
 }
 
-func (self ParamTypes) String() string {
+func (self ParamTypes) Key() string {
   params := make([]string, len(self.ParamDescs))
   for i := range self.ParamDescs {
     params[i] = self.ParamDescs[i].String()
   }
   return strings.Join(params, ",")
+}
+
+func (self ParamTypes) String() string {
+  return self.Key()
 }
 
 func (self ParamTypes) Size() int {

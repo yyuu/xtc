@@ -13,8 +13,12 @@ func NewVoidType() *VoidType {
   return &VoidType { "typesys.VoidType" }
 }
 
-func (self VoidType) String() string {
+func (self VoidType) Key() string {
   return "void"
+}
+
+func (self VoidType) String() string {
+  return self.Key()
 }
 
 func (self VoidType) Size() int {

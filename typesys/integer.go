@@ -48,8 +48,12 @@ func NewUnsignedLongType(size int) *IntegerType {
   return NewIntegerType(size, false, "unsigned long")
 }
 
-func (self IntegerType) String() string {
+func (self IntegerType) Key() string {
   return self.Name
+}
+
+func (self IntegerType) String() string {
+  return self.Key()
 }
 
 func (self IntegerType) Size() int {

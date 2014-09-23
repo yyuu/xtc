@@ -15,8 +15,12 @@ func NewUserTypeRef(loc core.Location, name string) *UserTypeRef {
   return &UserTypeRef { "typesys.UserTypeRef", loc, name }
 }
 
-func (self UserTypeRef) String() string {
+func (self UserTypeRef) Key() string {
   return self.Name
+}
+
+func (self UserTypeRef) String() string {
+  return self.Key()
 }
 
 func (self UserTypeRef) GetLocation() core.Location {

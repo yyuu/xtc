@@ -6,8 +6,8 @@ import (
   "bitbucket.org/yyuu/bs/xt"
 )
 
-func TestUnionTypeRefToString(t *testing.T) {
+func TestUnionTypeRefKeyString(t *testing.T) {
   loc := core.NewLocation("", 1, 2)
   x := NewUnionTypeRef(loc, "foo")
-  xt.AssertEquals(t, "union foo { ... }", x.String(), "union foo")
+  xt.AssertEquals(t, "union foo { ... }", x.Key(), "union foo")
 }

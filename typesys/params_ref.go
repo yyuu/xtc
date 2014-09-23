@@ -17,12 +17,16 @@ func NewParamTypeRefs(loc core.Location, paramDescs []core.ITypeRef, vararg bool
   return &ParamTypeRefs { "typesys.ParamTypeRefs", loc, paramDescs, vararg }
 }
 
-func (self ParamTypeRefs) String() string {
+func (self ParamTypeRefs) Key() string {
   params := make([]string, len(self.ParamDescs))
   for i := range self.ParamDescs {
     params[i] = self.ParamDescs[i].String()
   }
   return strings.Join(params, ",")
+}
+
+func (self ParamTypeRefs) String() string {
+  return self.Key()
 }
 
 func (self ParamTypeRefs) GetLocation() core.Location {

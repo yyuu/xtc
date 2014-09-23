@@ -16,8 +16,12 @@ func NewPointerType(size int, baseType core.IType) *PointerType {
   return &PointerType { "typesys.PointerType", size, baseType }
 }
 
-func (self PointerType) String() string {
+func (self PointerType) Key() string {
   return fmt.Sprintf("%s*", self.BaseType)
+}
+
+func (self PointerType) String() string {
+  return self.Key()
 }
 
 func (self PointerType) Size() int {

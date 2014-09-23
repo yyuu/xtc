@@ -6,8 +6,8 @@ import (
   "bitbucket.org/yyuu/bs/xt"
 )
 
-func TestStructTypeRefToString(t *testing.T) {
+func TestStructTypeRefKeyString(t *testing.T) {
   loc := core.NewLocation("", 1, 2)
   x := NewStructTypeRef(loc, "foo")
-  xt.AssertEquals(t, "struct foo { ... }", x.String(), "struct foo")
+  xt.AssertEquals(t, "struct foo { ... }", x.Key(), "struct foo")
 }

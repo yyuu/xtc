@@ -17,8 +17,12 @@ func NewUnionType(name string, membs []core.ISlot, loc core.Location) *UnionType
   return &UnionType { "typesys.UnionType", loc, name, membs }
 }
 
-func (self UnionType) String() string {
+func (self UnionType) Key() string {
   return fmt.Sprintf("union %s", self.Name)
+}
+
+func (self UnionType) String() string {
+  return self.Key()
 }
 
 func (self UnionType) Size() int {

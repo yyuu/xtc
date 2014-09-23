@@ -13,14 +13,14 @@ func TestSignedInt32TypeRef(t *testing.T) {
   xt.AssertEquals(t, "int32 is int32", x.Name, "int32")
 }
 
-func TestIntTypeRefToString(t *testing.T) {
+func TestIntTypeRefKeyString(t *testing.T) {
   loc := core.NewLocation("", 1, 2)
   x := NewIntTypeRef(loc)
-  xt.AssertEquals(t, "int", x.String(), "int")
+  xt.AssertEquals(t, "int", x.Key(), "int")
 }
 
-func TestUnsignedLongTypeRefToString(t *testing.T) {
+func TestUnsignedLongTypeRefKeyString(t *testing.T) {
   loc := core.NewLocation("", 1, 2)
   x := NewUnsignedLongTypeRef(loc)
-  xt.AssertEquals(t, "unsigned long", x.String(), "unsigned long")
+  xt.AssertEquals(t, "unsigned long", x.Key(), "unsigned long")
 }

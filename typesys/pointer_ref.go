@@ -16,8 +16,12 @@ func NewPointerTypeRef(baseType core.ITypeRef) *PointerTypeRef {
   return &PointerTypeRef { "typesys.PointerTypeRef", baseType.GetLocation(), baseType }
 }
 
-func (self PointerTypeRef) String() string {
+func (self PointerTypeRef) Key() string {
   return fmt.Sprintf("%s*", self.BaseType)
+}
+
+func (self PointerTypeRef) String() string {
+  return self.Key()
 }
 
 func (self PointerTypeRef) GetLocation() core.Location {

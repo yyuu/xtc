@@ -16,8 +16,12 @@ func NewStructTypeRef(loc core.Location, name string) *StructTypeRef {
   return &StructTypeRef { "typesys.StructTypeRef", loc, name }
 }
 
-func (self StructTypeRef) String() string {
+func (self StructTypeRef) Key() string {
   return fmt.Sprintf("struct %s", self.Name)
+}
+
+func (self StructTypeRef) String() string {
+  return self.Key()
 }
 
 func (self StructTypeRef) GetLocation() core.Location {

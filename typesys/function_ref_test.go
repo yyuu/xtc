@@ -6,7 +6,7 @@ import (
   "bitbucket.org/yyuu/bs/xt"
 )
 
-func TestFunctionTypeRefToString1(t *testing.T) {
+func TestFunctionTypeRefKeyString1(t *testing.T) {
   loc := core.NewLocation("", 1, 2)
   x := NewFunctionTypeRef(
     NewIntTypeRef(loc),
@@ -17,10 +17,10 @@ func TestFunctionTypeRefToString1(t *testing.T) {
       false,
     ),
   )
-  xt.AssertEquals(t, "int f(int x)", x.String(), "int(int)")
+  xt.AssertEquals(t, "int f(int x)", x.Key(), "int(int)")
 }
 
-func TestFunctionTypeRefToString2(t *testing.T) {
+func TestFunctionTypeRefKeyString2(t *testing.T) {
   loc := core.NewLocation("", 1, 2)
   x := NewFunctionTypeRef(
     NewIntTypeRef(loc),
@@ -32,5 +32,5 @@ func TestFunctionTypeRefToString2(t *testing.T) {
       false,
     ),
   )
-  xt.AssertEquals(t, "int main(int argc, char*[] argv)", x.String(), "int(int,char*[])")
+  xt.AssertEquals(t, "int main(int argc, char*[] argv)", x.Key(), "int(int,char*[])")
 }
