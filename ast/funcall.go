@@ -12,11 +12,12 @@ type FuncallNode struct {
   Location core.Location
   Expr core.IExprNode
   Args []core.IExprNode
+  t core.IType
 }
 
 func NewFuncallNode(loc core.Location, expr core.IExprNode, args []core.IExprNode) *FuncallNode {
   if expr == nil { panic("expr is nil") }
-  return &FuncallNode { "ast.FuncallNode", loc, expr, args }
+  return &FuncallNode { "ast.FuncallNode", loc, expr, args, nil }
 }
 
 func (self FuncallNode) String() string {
@@ -45,4 +46,15 @@ func (self FuncallNode) GetExpr() core.IExprNode {
 
 func (self FuncallNode) GetArgs() []core.IExprNode {
   return self.Args
+}
+
+func (self FuncallNode) GetType() core.IType {
+  if self.t == nil {
+    panic("type is nil")
+  }
+  return self.t
+}
+
+func (self *FuncallNode) SetType(t core.IType) {
+  self.t = t
 }

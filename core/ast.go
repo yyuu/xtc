@@ -8,6 +8,15 @@ type INode interface {
 type IExprNode interface {
   INode
   IsExprNode() bool
+  GetType() IType
+  SetType(IType)
+//IsConstant() bool
+//IsParameter() bool
+//IsLvalue() bool
+//IsAssignable() bool
+//IsLoadable() bool
+//IsCallable() bool
+//IsPointer() bool
 }
 
 type IStmtNode interface {

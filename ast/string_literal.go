@@ -13,12 +13,13 @@ type StringLiteralNode struct {
   TypeNode core.ITypeNode
   Value string
   entry *entity.ConstantEntry
+  t core.IType
 }
 
 func NewStringLiteralNode(loc core.Location, literal string) *StringLiteralNode {
   ref := typesys.NewPointerTypeRef(typesys.NewCharTypeRef(loc))
   t := NewTypeNode(loc, ref)
-  return &StringLiteralNode { "ast.StringLiteralNode", loc, t, literal, nil }
+  return &StringLiteralNode { "ast.StringLiteralNode", loc, t, literal, nil, nil }
 }
 
 func (self StringLiteralNode) String() string {
@@ -51,4 +52,15 @@ func (self StringLiteralNode) GetTypeNode() core.ITypeNode {
 
 func (self StringLiteralNode) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
+}
+
+func (self StringLiteralNode) GetType() core.IType {
+  if self.t == nil {
+    panic("type is nil")
+  }
+  return self.t
+}
+
+func (self *StringLiteralNode) SetType(t core.IType) {
+  self.t = t
 }

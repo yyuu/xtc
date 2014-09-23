@@ -12,12 +12,13 @@ type OpAssignNode struct {
   Operator string
   Lhs core.IExprNode
   Rhs core.IExprNode
+  t core.IType
 }
 
 func NewOpAssignNode(loc core.Location, operator string, lhs core.IExprNode, rhs core.IExprNode) *OpAssignNode {
   if lhs == nil { panic("lhs is nil") }
   if rhs == nil { panic("rhs is nil") }
-  return &OpAssignNode { "ast.OpAssignNode", loc, operator, lhs, rhs }
+  return &OpAssignNode { "ast.OpAssignNode", loc, operator, lhs, rhs, nil }
 }
 
 func (self OpAssignNode) String() string {
@@ -42,4 +43,15 @@ func (self OpAssignNode) GetLhs() core.IExprNode {
 
 func (self OpAssignNode) GetRhs() core.IExprNode {
   return self.Rhs
+}
+
+func (self OpAssignNode) GetType() core.IType {
+  if self.t == nil {
+    panic("type is nil")
+  }
+  return self.t
+}
+
+func (self *OpAssignNode) SetType(t core.IType) {
+  self.t = t
 }

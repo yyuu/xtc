@@ -11,11 +11,12 @@ type UnaryOpNode struct {
   Location core.Location
   Operator string
   Expr core.IExprNode
+  t core.IType
 }
 
 func NewUnaryOpNode(loc core.Location, operator string, expr core.IExprNode) *UnaryOpNode {
   if expr == nil { panic("expr is nil") }
-  return &UnaryOpNode { "ast.UnaryOpNode", loc, operator, expr }
+  return &UnaryOpNode { "ast.UnaryOpNode", loc, operator, expr, nil }
 }
 
 func (self UnaryOpNode) String() string {
@@ -39,4 +40,15 @@ func (self UnaryOpNode) GetOperator() string {
 
 func (self UnaryOpNode) GetExpr() core.IExprNode {
   return self.Expr
+}
+
+func (self UnaryOpNode) GetType() core.IType {
+  if self.t == nil {
+    panic("type is nil")
+  }
+  return self.t
+}
+
+func (self *UnaryOpNode) SetType(t core.IType) {
+  self.t = t
 }

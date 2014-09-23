@@ -11,11 +11,12 @@ type PrefixOpNode struct {
   Location core.Location
   Operator string
   Expr core.IExprNode
+  t core.IType
 }
 
 func NewPrefixOpNode(loc core.Location, operator string, expr core.IExprNode) *PrefixOpNode {
   if expr == nil { panic("expr is nil") }
-  return &PrefixOpNode { "ast.PrefixOpNode", loc, operator, expr }
+  return &PrefixOpNode { "ast.PrefixOpNode", loc, operator, expr, nil }
 }
 
 func (self PrefixOpNode) String() string {
@@ -40,4 +41,15 @@ func (self PrefixOpNode) GetOperator() string {
 
 func (self PrefixOpNode) GetExpr() core.IExprNode {
   return self.Expr
+}
+
+func (self PrefixOpNode) GetType() core.IType {
+  if self.t == nil {
+    panic("type is nil")
+  }
+  return self.t
+}
+
+func (self *PrefixOpNode) SetType(t core.IType) {
+  self.t = t
 }

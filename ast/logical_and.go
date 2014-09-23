@@ -11,12 +11,13 @@ type LogicalAndNode struct {
   Location core.Location
   Left core.IExprNode
   Right core.IExprNode
+  t core.IType
 }
 
 func NewLogicalAndNode(loc core.Location, left core.IExprNode, right core.IExprNode) *LogicalAndNode {
   if left == nil { panic("left is nil") }
   if right == nil { panic("right is nil") }
-  return &LogicalAndNode { "ast.LogicalAndNode", loc, left, right }
+  return &LogicalAndNode { "ast.LogicalAndNode", loc, left, right, nil }
 }
 
 func (self LogicalAndNode) String() string {
@@ -37,4 +38,15 @@ func (self LogicalAndNode) GetLeft() core.IExprNode {
 
 func (self LogicalAndNode) GetRight() core.IExprNode {
   return self.Right
+}
+
+func (self LogicalAndNode) GetType() core.IType {
+  if self.t == nil {
+    panic("type is nil")
+  }
+  return self.t
+}
+
+func (self *LogicalAndNode) SetType(t core.IType) {
+  self.t = t
 }

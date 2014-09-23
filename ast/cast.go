@@ -11,12 +11,13 @@ type CastNode struct {
   Location core.Location
   TypeNode core.ITypeNode
   Expr core.IExprNode
+  t core.IType
 }
 
 func NewCastNode(loc core.Location, t core.ITypeNode, expr core.IExprNode) *CastNode {
   if t == nil { panic("t is nil") }
   if expr == nil { panic("expr is nil") }
-  return &CastNode { "ast.CastNode", loc, t, expr }
+  return &CastNode { "ast.CastNode", loc, t, expr, nil }
 }
 
 func (self CastNode) String() string {
@@ -41,4 +42,15 @@ func (self CastNode) GetTypeRef() core.ITypeRef {
 
 func (self CastNode) GetExpr() core.IExprNode {
   return self.Expr
+}
+
+func (self CastNode) GetType() core.IType {
+  if self.t == nil {
+    panic("type is nil")
+  }
+  return self.t
+}
+
+func (self *CastNode) SetType(t core.IType) {
+  self.t = t
 }

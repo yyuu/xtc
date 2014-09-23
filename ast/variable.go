@@ -10,10 +10,11 @@ type VariableNode struct {
   Location core.Location
   Name string
   entity core.IEntity
+  t core.IType
 }
 
 func NewVariableNode(loc core.Location, name string) *VariableNode {
-  return &VariableNode { "ast.VariableNode", loc, name, nil }
+  return &VariableNode { "ast.VariableNode", loc, name, nil, nil }
 }
 
 func (self VariableNode) String() string {
@@ -38,4 +39,15 @@ func (self *VariableNode) SetEntity(ent core.IEntity) {
 
 func (self VariableNode) GetEntity() core.IEntity {
   return self.entity
+}
+
+func (self VariableNode) GetType() core.IType {
+  if self.t == nil {
+    panic("type is nil")
+  }
+  return self.t
+}
+
+func (self *VariableNode) SetType(t core.IType) {
+  self.t = t
 }

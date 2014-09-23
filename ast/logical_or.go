@@ -11,12 +11,13 @@ type LogicalOrNode struct {
   Location core.Location
   Left core.IExprNode
   Right core.IExprNode
+  t core.IType
 }
 
 func NewLogicalOrNode(loc core.Location, left core.IExprNode, right core.IExprNode) *LogicalOrNode {
   if left == nil { panic("left is nil") }
   if right == nil { panic("right is nil") }
-  return &LogicalOrNode { "ast.LogicalOrNode", loc, left, right }
+  return &LogicalOrNode { "ast.LogicalOrNode", loc, left, right, nil }
 }
 
 func (self LogicalOrNode) String() string {
@@ -37,4 +38,15 @@ func (self LogicalOrNode) GetLeft() core.IExprNode {
 
 func (self LogicalOrNode) GetRight() core.IExprNode {
   return self.Right
+}
+
+func (self LogicalOrNode) GetType() core.IType {
+  if self.t == nil {
+    panic("type is nil")
+  }
+  return self.t
+}
+
+func (self *LogicalOrNode) SetType(t core.IType) {
+  self.t = t
 }

@@ -11,11 +11,12 @@ type MemberNode struct {
   Location core.Location
   Expr core.IExprNode
   Member string
+  t core.IType
 }
 
 func NewMemberNode(loc core.Location, expr core.IExprNode, member string) *MemberNode {
   if expr == nil { panic("expr is nil") }
-  return &MemberNode { "ast.MemberNode", loc, expr, member }
+  return &MemberNode { "ast.MemberNode", loc, expr, member, nil }
 }
 
 func (self MemberNode) String() string {
@@ -36,4 +37,15 @@ func (self MemberNode) GetExpr() core.IExprNode {
 
 func (self MemberNode) GetMember() string {
   return self.Member
+}
+
+func (self MemberNode) GetType() core.IType {
+  if self.t == nil {
+    panic("type is nil")
+  }
+  return self.t
+}
+
+func (self *MemberNode) SetType(t core.IType) {
+  self.t = t
 }

@@ -12,12 +12,13 @@ type BinaryOpNode struct {
   Operator string
   Left core.IExprNode
   Right core.IExprNode
+  t core.IType
 }
 
 func NewBinaryOpNode(loc core.Location, operator string, left core.IExprNode, right core.IExprNode) *BinaryOpNode {
   if left == nil { panic("left is nil") }
   if right == nil { panic("right is nil") }
-  return &BinaryOpNode { "ast.BinaryOpNode", loc, operator, left, right }
+  return &BinaryOpNode { "ast.BinaryOpNode", loc, operator, left, right, nil }
 }
 
 func (self BinaryOpNode) String() string {
@@ -51,4 +52,15 @@ func (self BinaryOpNode) GetLeft() core.IExprNode {
 
 func (self BinaryOpNode) GetRight() core.IExprNode {
   return self.Right
+}
+
+func (self BinaryOpNode) GetType() core.IType {
+  if self.t == nil {
+    panic("type is nil")
+  }
+  return self.t
+}
+
+func (self *BinaryOpNode) SetType(t core.IType) {
+  self.t = t
 }

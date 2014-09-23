@@ -9,11 +9,12 @@ type DereferenceNode struct {
   ClassName string
   Location core.Location
   Expr core.IExprNode
+  t core.IType
 }
 
 func NewDereferenceNode(loc core.Location, expr core.IExprNode) *DereferenceNode {
   if expr == nil { panic("expr is nil") }
-  return &DereferenceNode { "ast.DereferenceNode", loc, expr }
+  return &DereferenceNode { "ast.DereferenceNode", loc, expr, nil }
 }
 
 func (self DereferenceNode) String() string {
@@ -30,4 +31,15 @@ func (self DereferenceNode) GetLocation() core.Location {
 
 func (self DereferenceNode) GetExpr() core.IExprNode {
   return self.Expr
+}
+
+func (self DereferenceNode) GetType() core.IType {
+  if self.t == nil {
+    panic("type is nil")
+  }
+  return self.t
+}
+
+func (self *DereferenceNode) SetType(t core.IType) {
+  self.t = t
 }
