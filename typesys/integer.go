@@ -1,6 +1,7 @@
 package typesys
 
 import (
+  "math"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -118,4 +119,20 @@ func (self IntegerType) GetName() string {
 
 func (self IntegerType) GetBaseType() core.IType {
   panic("#baseType called for undereferable type")
+}
+
+func (self IntegerType) MinValue() int64 {
+  if self.Signed {
+    return 0 - int64(math.Pow(2, float64(self.IntegerSize*8-1)))
+  } else {
+    return 0
+  }
+}
+
+func (self IntegerType) MaxValue() int64 {
+  if self.Signed {
+    return int64(math.Pow(2, float64(self.IntegerSize*8-1))) - 1
+  } else {
+    return int64(math.Pow(2, float64(self.IntegerSize*8))) - 1
+  }
 }

@@ -12,13 +12,13 @@ type IntegerLiteralNode struct {
   ClassName string
   Location core.Location
   TypeNode core.ITypeNode
-  Value int
+  Value int64
   t core.IType
 }
 
 func NewIntegerLiteralNode(loc core.Location, literal string) *IntegerLiteralNode {
   var ref core.ITypeRef
-  var value int
+  var value int64
   var err error
   if ( startsWith(literal, "'") && endsWith(literal, "'") ) && 2 < len(literal) {
     _, err = fmt.Sscanf(literal[1:len(literal)-1], "%c", &value)
@@ -113,4 +113,8 @@ func (self IntegerLiteralNode) IsCallable() bool {
 
 func (self IntegerLiteralNode) IsPointer() bool {
   return self.GetType().IsPointer()
+}
+
+func (self IntegerLiteralNode) GetValue() int64 {
+  return self.Value
 }
