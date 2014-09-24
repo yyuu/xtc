@@ -77,8 +77,60 @@ func (self UnionType) IsFunction() bool {
   return false
 }
 
+func (self UnionType) IsAllocatedArray() bool {
+  return false
+}
+
+func (self UnionType) IsIncompleteArray() bool {
+  return false
+}
+
+func (self UnionType) IsScalar() bool {
+  return false
+}
+
 func (self UnionType) IsCallable() bool {
   return false
+}
+
+func (self UnionType) IsCompatible(target core.IType) bool {
+  if !target.IsUnion() {
+    return false
+  }
+  t, ok := target.(UnionType)
+  if ! ok {
+    return false
+  }
+  ts1, ts2 := self.GetMemberTypes(), t.GetMemberTypes()
+  if len(ts1) != len(ts2) {
+    return false
+  }
+  for i := range self.Members {
+    if ! ts1[i].IsCompatible(ts2[i]) {
+      return false
+    }
+  }
+  return true
+}
+
+func (self UnionType) IsCastableTo(target core.IType) bool {
+  if !target.IsUnion() {
+    return false
+  }
+  t, ok := target.(UnionType)
+  if ! ok {
+    return false
+  }
+  ts1, ts2 := self.GetMemberTypes(), t.GetMemberTypes()
+  if len(ts1) != len(ts2) {
+    return false
+  }
+  for i := range self.Members {
+    if ! ts1[i].IsCompatible(ts2[i]) {
+      return false
+    }
+  }
+  return true
 }
 
 func (self UnionType) GetName() string {
@@ -108,13 +160,13 @@ func (self UnionType) GetMembers() []core.ISlot {
 //  }
 //}
 
-//func (self UnionType) GetMemberTypes() []core.IType {
-//  types := make([]core.IType, len(self.Members))
-//  for i := range self.Members {
-//    types[i] = self.Members[i].GetType()
-//  }
-//  return types
-//}
+func (self UnionType) GetMemberTypes() []core.IType {
+  types := make([]core.IType, len(self.Members))
+  for i := range self.Members {
+    types[i] = self.Members[i].GetType()
+  }
+  return types
+}
 
 func (self UnionType) HasMember(name string) bool {
   slot := self.GetMember(name)

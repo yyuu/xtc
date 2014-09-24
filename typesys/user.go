@@ -76,8 +76,28 @@ func (self UserType) IsFunction() bool {
   return false
 }
 
+func (self UserType) IsAllocatedArray() bool {
+  return self.GetRealType().IsAllocatedArray()
+}
+
+func (self UserType) IsIncompleteArray() bool {
+  return false
+}
+
+func (self UserType) IsScalar() bool {
+  return self.GetRealType().IsScalar()
+}
+
 func (self UserType) IsCallable() bool {
   return false
+}
+
+func (self UserType) IsCompatible(target core.IType) bool {
+  return self.GetRealType().IsCompatible(target)
+}
+
+func (self UserType) IsCastableTo(target core.IType) bool {
+  return self.GetRealType().IsCastableTo(target)
 }
 
 func (self UserType) GetName() string {
@@ -86,4 +106,8 @@ func (self UserType) GetName() string {
 
 func (self UserType) GetBaseType() core.IType {
   panic("#baseType called for undereferable type")
+}
+
+func (self UserType) GetRealType() core.IType {
+  return self.Real.GetType()
 }

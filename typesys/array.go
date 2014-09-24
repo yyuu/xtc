@@ -81,8 +81,40 @@ func (self ArrayType) IsFunction() bool {
   return false
 }
 
+func (self ArrayType) IsAllocatedArray() bool {
+  return self.Length < 1 && (!self.BaseType.IsArray() || self.BaseType.IsAllocatedArray())
+}
+
+func (self ArrayType) IsIncompleteArray() bool {
+  if self.BaseType.IsArray() {
+    return false
+  } else {
+    return ! self.BaseType.IsAllocatedArray()
+  }
+}
+
+func (self ArrayType) IsScalar() bool {
+  return false
+}
+
 func (self ArrayType) IsCallable() bool {
   return false
+}
+
+func (self ArrayType) IsCompatible(target core.IType) bool {
+  if !target.IsPointer() && !target.IsArray() {
+    return false
+  } else {
+    if target.GetBaseType().IsVoid() {
+      return true
+    } else {
+      return target.GetBaseType().IsCompatible(target.GetBaseType()) && self.BaseType.Size() == target.GetBaseType().Size()
+    }
+  }
+}
+
+func (self ArrayType) IsCastableTo(target core.IType) bool {
+  return target.IsPointer() || target.IsArray()
 }
 
 func (self ArrayType) GetBaseType() core.IType {

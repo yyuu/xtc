@@ -77,8 +77,60 @@ func (self StructType) IsFunction() bool {
   return false
 }
 
+func (self StructType) IsAllocatedArray() bool {
+  return false
+}
+
+func (self StructType) IsIncompleteArray() bool {
+  return false
+}
+
+func (self StructType) IsScalar() bool {
+  return false
+}
+
 func (self StructType) IsCallable() bool {
   return false
+}
+
+func (self StructType) IsCompatible(target core.IType) bool {
+  if !target.IsStruct() {
+    return false
+  }
+  t, ok := target.(StructType)
+  if ! ok {
+    return false
+  }
+  ts1, ts2 := self.GetMemberTypes(), t.GetMemberTypes()
+  if len(ts1) != len(ts2) {
+    return false
+  }
+  for i := range ts1 {
+    if ! ts1[i].IsCompatible(ts2[i]) {
+      return false
+    }
+  }
+  return true
+}
+
+func (self StructType) IsCastableTo(target core.IType) bool {
+  if !target.IsStruct() {
+    return false
+  }
+  t, ok := target.(StructType)
+  if ! ok {
+    return false
+  }
+  ts1, ts2 := self.GetMemberTypes(), t.GetMemberTypes()
+  if len(ts1) != len(ts2) {
+    return false
+  }
+  for i := range self.Members {
+    if ! ts1[i].IsCompatible(ts2[i]) {
+      return false
+    }
+  }
+  return true
 }
 
 func (self StructType) GetName() string {
@@ -108,13 +160,13 @@ func (self StructType) GetMembers() []core.ISlot {
 //  }
 //}
 
-//func (self StructType) GetMemberTypes() []core.IType {
-//  types := make([]core.IType, len(self.Members))
-//  for i := range self.Members {
-//    types[i] = self.Members[i].GetType()
-//  }
-//  return types
-//}
+func (self StructType) GetMemberTypes() []core.IType {
+  types := make([]core.IType, len(self.Members))
+  for i := range self.Members {
+    types[i] = self.Members[i].GetType()
+  }
+  return types
+}
 
 func (self StructType) HasMember(name string) bool {
   slot := self.GetMember(name)

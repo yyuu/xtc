@@ -76,8 +76,34 @@ func (self FunctionType) IsFunction() bool {
   return true
 }
 
+func (self FunctionType) IsAllocatedArray() bool {
+  return false
+}
+
+func (self FunctionType) IsIncompleteArray() bool {
+  return false
+}
+
+func (self FunctionType) IsScalar() bool {
+  return false
+}
+
 func (self FunctionType) IsCallable() bool {
   return true
+}
+
+func (self FunctionType) IsCompatible(target core.IType) bool {
+  if ! target.IsFunction() {
+    return false
+  } else {
+    t := target.(FunctionType)
+//  return t.GetReturnType().IsCompatible(self.ReturnType) && t.GetParamTypes().IsSameType(self.ParamTypes)
+    return t.GetReturnType().IsCompatible(self.ReturnType)
+  }
+}
+
+func (self FunctionType) IsCastableTo(target core.IType) bool {
+  return target.IsFunction()
 }
 
 func (self FunctionType) GetReturnType() core.IType {

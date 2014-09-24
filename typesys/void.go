@@ -73,8 +73,28 @@ func (self VoidType) IsFunction() bool {
   return false
 }
 
+func (self VoidType) IsAllocatedArray() bool {
+  return false
+}
+
+func (self VoidType) IsIncompleteArray() bool {
+  return false
+}
+
+func (self VoidType) IsScalar() bool {
+  return false
+}
+
 func (self VoidType) IsCallable() bool {
   return false
+}
+
+func (self VoidType) IsCompatible(target core.IType) bool {
+  return target.IsVoid()
+}
+
+func (self VoidType) IsCastableTo(target core.IType) bool {
+  return target.IsVoid()
 }
 
 func (self VoidType) GetBaseType() core.IType {

@@ -19,7 +19,14 @@ type IType interface {
   IsUnion() bool
   IsUserType() bool
   IsFunction() bool
+
+  IsAllocatedArray() bool
+  IsIncompleteArray() bool
+  IsScalar() bool
   IsCallable() bool
+
+  IsCompatible(IType) bool
+  IsCastableTo(IType) bool
 
   GetBaseType() IType
 }

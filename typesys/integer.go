@@ -109,8 +109,28 @@ func (self IntegerType) IsFunction() bool {
   return false
 }
 
+func (self IntegerType) IsAllocatedArray() bool {
+  return false
+}
+
+func (self IntegerType) IsIncompleteArray() bool {
+  return false
+}
+
+func (self IntegerType) IsScalar() bool {
+  return true
+}
+
 func (self IntegerType) IsCallable() bool {
   return false
+}
+
+func (self IntegerType) IsCompatible(target core.IType) bool {
+  return target.IsInteger() && self.Size() <= target.Size()
+}
+
+func (self IntegerType) IsCastableTo(target core.IType) bool {
+  return target.IsInteger() || target.IsPointer()
 }
 
 func (self IntegerType) GetName() string {
@@ -135,4 +155,8 @@ func (self IntegerType) MaxValue() int64 {
   } else {
     return int64(math.Pow(2, float64(self.IntegerSize*8))) - 1
   }
+}
+
+func (self IntegerType) IsInDomain(i int64) bool {
+  return self.MinValue() <= i && i <= self.MaxValue()
 }

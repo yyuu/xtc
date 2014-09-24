@@ -81,7 +81,27 @@ func (self ParamTypes) IsFunction() bool {
   return false
 }
 
+func (self ParamTypes) IsAllocatedArray() bool {
+  return false
+}
+
+func (self ParamTypes) IsIncompleteArray() bool {
+  return false
+}
+
+func (self ParamTypes) IsScalar() bool {
+  return false
+}
+
 func (self ParamTypes) IsCallable() bool {
+  return false
+}
+
+func (self ParamTypes) IsCompatible(target core.IType) bool {
+  return false
+}
+
+func (self ParamTypes) IsCastableTo(target core.IType) bool {
   return false
 }
 

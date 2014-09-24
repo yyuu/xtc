@@ -76,8 +76,38 @@ func (self PointerType) IsFunction() bool {
   return false
 }
 
+func (self PointerType) IsAllocatedArray() bool {
+  return false
+}
+
+func (self PointerType) IsIncompleteArray() bool {
+  return false
+}
+
+func (self PointerType) IsScalar() bool {
+  return true
+}
+
 func (self PointerType) IsCallable() bool {
   return false
+}
+
+func (self PointerType) IsCompatible(target core.IType) bool {
+  if !target.IsPointer() {
+    return false
+  } else {
+    if self.BaseType.IsVoid() {
+      return true
+    }
+    if target.GetBaseType().IsVoid() {
+      return true
+    }
+    return self.BaseType.IsCompatible(target.GetBaseType())
+  }
+}
+
+func (self PointerType) IsCastableTo(target core.IType) bool {
+  return target.IsPointer() || target.IsInteger()
 }
 
 func (self PointerType) GetBaseType() core.IType {
