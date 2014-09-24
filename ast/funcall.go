@@ -4,6 +4,7 @@ import (
   "fmt"
   "strings"
   "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/bs/typesys"
 )
 
 // FuncallNode
@@ -48,15 +49,21 @@ func (self FuncallNode) GetArgs() []core.IExprNode {
   return self.Args
 }
 
+func (self FuncallNode) NumArgs() int {
+  return len(self.Args)
+}
+
+func (self FuncallNode) GetFunctionType() *typesys.FunctionType {
+  pt := self.Expr.GetType().(*typesys.PointerType)
+  return pt.GetBaseType().(*typesys.FunctionType)
+}
+
 func (self FuncallNode) GetType() core.IType {
-  if self.t == nil {
-    panic("type is nil")
-  }
-  return self.t
+  return self.GetFunctionType().GetReturnType()
 }
 
 func (self *FuncallNode) SetType(t core.IType) {
-  self.t = t
+  panic("FuncallNode#SetType called")
 }
 
 func (self FuncallNode) IsConstant() bool {

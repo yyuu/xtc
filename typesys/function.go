@@ -125,3 +125,11 @@ func (self FunctionType) GetParamTypes() *ParamTypes {
 func (self FunctionType) GetBaseType() core.IType {
   panic("#baseType called for undereferable type")
 }
+
+func (self FunctionType) AcceptsArgc(numArgs int) bool {
+  if self.ParamTypes.IsVararg() {
+    return numArgs >= self.ParamTypes.MinArgc()
+  } else {
+    return numArgs == self.ParamTypes.Argc()
+  }
+}

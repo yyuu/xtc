@@ -129,6 +129,17 @@ func (self ParamTypes) GetParamDescs() []core.IType {
   return self.ParamDescs
 }
 
+func (self ParamTypes) Argc() int {
+  if self.Vararg {
+    panic("must not happen")
+  }
+  return len(self.ParamDescs)
+}
+
+func (self ParamTypes) MinArgc() int {
+  return len(self.ParamDescs)
+}
+
 func (self ParamTypes) IsVararg() bool {
   return self.Vararg
 }
