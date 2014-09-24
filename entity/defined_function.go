@@ -44,6 +44,10 @@ func (self DefinedFunction) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
+func (self DefinedFunction) GetType() core.IType {
+  return self.TypeNode.GetType()
+}
+
 func (self DefinedFunction) GetName() string {
   return self.Name
 }

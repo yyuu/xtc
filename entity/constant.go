@@ -69,6 +69,10 @@ func (self Constant) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
+func (self Constant) GetType() core.IType {
+  return self.TypeNode.GetType()
+}
+
 func (self Constant) GetValue() core.IExprNode {
   return self.Value
 }

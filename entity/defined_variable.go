@@ -62,6 +62,10 @@ func (self DefinedVariable) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
+func (self DefinedVariable) GetType() core.IType {
+  return self.TypeNode.GetType()
+}
+
 func (self DefinedVariable) GetNumRefered() int {
   return self.numRefered
 }

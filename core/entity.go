@@ -12,6 +12,7 @@ type IEntity interface {
   GetNumRefered() int
   GetTypeNode() ITypeNode
   GetTypeRef() ITypeRef
+  GetType() IType
 }
 
 type IFunction interface {

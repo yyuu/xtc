@@ -73,6 +73,10 @@ func (self Parameter) GetTypeRef() core.ITypeRef {
   return self.DefinedVariable.TypeNode.GetTypeRef()
 }
 
+func (self Parameter) GetType() core.IType {
+  return self.DefinedVariable.TypeNode.GetType()
+}
+
 func (self Parameter) GetName() string {
   return self.DefinedVariable.Name
 }

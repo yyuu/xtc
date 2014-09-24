@@ -68,3 +68,7 @@ func (self UndefinedVariable) GetTypeNode() core.ITypeNode {
 func (self UndefinedVariable) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
+
+func (self UndefinedVariable) GetType() core.IType {
+  return self.TypeNode.GetType()
+}

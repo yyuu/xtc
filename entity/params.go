@@ -60,9 +60,13 @@ func (self Params) GetName() string {
 }
 
 func (self Params) GetTypeNode() core.ITypeNode {
-  panic("Prams#GetTypeNode called")
+  panic("Params#GetTypeNode called")
 }
 
 func (self Params) GetTypeRef() core.ITypeRef {
-  panic("Prams#GetTypeRef called")
+  panic("Params#GetTypeRef called")
+}
+
+func (self Params) GetType() core.IType {
+  panic("Params#GetType called")
 }
