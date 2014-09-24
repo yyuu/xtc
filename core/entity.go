@@ -17,6 +17,7 @@ type IEntity interface {
 
 type IFunction interface {
   IEntity
+  GetReturnType() IType
 }
 
 type IVariable interface {

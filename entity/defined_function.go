@@ -3,6 +3,7 @@ package entity
 import (
   "fmt"
   "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/bs/typesys"
 )
 
 type DefinedFunction struct {
@@ -107,4 +108,9 @@ func (self DefinedFunction) GetScope() *LocalScope {
 
 func (self *DefinedFunction) SetScope(scope *LocalScope) {
   self.scope = scope
+}
+
+func (self DefinedFunction) GetReturnType() core.IType {
+  t := self.GetType().(*typesys.FunctionType)
+  return t.GetReturnType()
 }

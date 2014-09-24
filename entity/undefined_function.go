@@ -3,6 +3,7 @@ package entity
 import (
   "fmt"
   "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/bs/typesys"
 )
 
 type UndefinedFunction struct {
@@ -79,4 +80,9 @@ func (self UndefinedFunction) GetParams() *Params {
 
 func (self UndefinedFunction) GetParameters() []*Parameter {
   return self.Params.ParamDescs
+}
+
+func (self UndefinedFunction) GetReturnType() core.IType {
+  t := self.GetType().(*typesys.FunctionType)
+  return t.GetReturnType()
 }

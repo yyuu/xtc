@@ -11,11 +11,11 @@ go test -v ./strscan
 go test -i ./core
 go test -v ./core
 
-go test -i ./entity
-go test -v ./entity
-
 go test -i ./typesys
 go test -v ./typesys
+
+go test -i ./entity
+go test -v ./entity
 
 go test -i ./ast
 go test -v ./ast
