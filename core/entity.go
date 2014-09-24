@@ -18,6 +18,7 @@ type IEntity interface {
 type IFunction interface {
   IEntity
   GetReturnType() IType
+  IsVoid() bool
 }
 
 type IVariable interface {

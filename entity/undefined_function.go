@@ -86,3 +86,7 @@ func (self UndefinedFunction) GetReturnType() core.IType {
   t := self.GetType().(*typesys.FunctionType)
   return t.GetReturnType()
 }
+
+func (self UndefinedFunction) IsVoid() bool {
+  return self.GetReturnType().IsVoid()
+}
