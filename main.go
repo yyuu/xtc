@@ -10,6 +10,7 @@ import (
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/compiler"
   "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/bs/ir"
   "bitbucket.org/yyuu/bs/parser"
   "bitbucket.org/yyuu/bs/typesys"
 )
@@ -22,6 +23,7 @@ var errorHandler = core.NewErrorHandler(core.LOG_DEBUG)
 const (
   DUMP_AST = 1<<iota
   DUMP_SEMANT
+  DUMP_IR
 )
 
 func main() {
@@ -79,6 +81,10 @@ func ep(a *ast.AST, err error) *ast.AST {
   if (*dump & DUMP_SEMANT) != 0 {
     dumpSemant(sem)
   }
+  ir := compiler.NewIRGenerator(errorHandler, types).Generate(sem)
+  if (*dump & DUMP_IR) != 0 {
+    dumpIR(ir)
+  }
 
   // TODO: evaluate AST
   fmt.Fprintln(os.Stdout, a)
@@ -110,4 +116,10 @@ func dumpSemant(a *ast.AST) {
   }
   fmt.Fprintln(os.Stderr, "// Semantics")
   fmt.Fprintln(os.Stderr, string(cs))
+}
+
+func dumpIR(ir *ir.IR) {
+  s := fmt.Sprintf("%v", ir)
+  fmt.Fprintln(os.Stderr, "// IR")
+  fmt.Fprintln(os.Stderr, s)
 }

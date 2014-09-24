@@ -4,6 +4,7 @@ import (
   "fmt"
   "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/entity"
+  "bitbucket.org/yyuu/bs/ir"
 )
 
 type AST struct {
@@ -131,4 +132,15 @@ func (self AST) GetConstantTable() *entity.ConstantTable {
 
 func (self *AST) SetConstantTable(table *entity.ConstantTable) {
   self.constantTable = table
+}
+
+func (self *AST) GenerateIR() *ir.IR {
+  return ir.NewIR(
+    self.Location,
+    self.Declaration.Defvars,
+    self.Declaration.Defuns,
+    self.Declaration.Funcdecls,
+    self.scope,
+    self.constantTable,
+  )
 }
