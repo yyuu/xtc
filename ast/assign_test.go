@@ -10,12 +10,12 @@ func TestAssignNode(t *testing.T) {
   s := `{
   "ClassName": "ast.AssignNode",
   "Location": "[:0,0]",
-  "Lhs": {
+  "LHS": {
     "ClassName": "ast.VariableNode",
     "Location": "[:0,0]",
     "Name": "a"
   },
-  "Rhs": {
+  "RHS": {
     "ClassName": "ast.StringLiteralNode",
     "Location": "[:0,0]",
     "TypeNode": {

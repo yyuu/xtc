@@ -9,8 +9,8 @@ import (
 type AssignNode struct {
   ClassName string
   Location core.Location
-  Lhs core.IExprNode
-  Rhs core.IExprNode
+  LHS core.IExprNode
+  RHS core.IExprNode
   t core.IType
 }
 
@@ -21,7 +21,7 @@ func NewAssignNode(loc core.Location, lhs core.IExprNode, rhs core.IExprNode) *A
 }
 
 func (self AssignNode) String() string {
-  return fmt.Sprintf("(%s %s)", self.Lhs, self.Rhs)
+  return fmt.Sprintf("(%s %s)", self.LHS, self.RHS)
 }
 
 func (self AssignNode) IsExprNode() bool {
@@ -32,20 +32,20 @@ func (self AssignNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self AssignNode) GetLhs() core.IExprNode {
-  return self.Lhs
+func (self AssignNode) GetLHS() core.IExprNode {
+  return self.LHS
 }
 
-func (self *AssignNode) SetLhs(expr core.IExprNode) {
-  self.Lhs = expr
+func (self *AssignNode) SetLHS(expr core.IExprNode) {
+  self.LHS = expr
 }
 
-func (self AssignNode) GetRhs() core.IExprNode {
-  return self.Rhs
+func (self AssignNode) GetRHS() core.IExprNode {
+  return self.RHS
 }
 
-func (self *AssignNode) SetRhs(expr core.IExprNode) {
-  self.Rhs = expr
+func (self *AssignNode) SetRHS(expr core.IExprNode) {
+  self.RHS = expr
 }
 
 func (self AssignNode) GetType() core.IType {

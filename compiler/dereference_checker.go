@@ -78,13 +78,13 @@ func (self *DereferenceChecker) VisitNode(unknown core.INode) {
     }
     case *ast.AssignNode: {
       visitAssignNode(self, node)
-      if ! node.GetLhs().IsAssignable() {
+      if ! node.GetLHS().IsAssignable() {
         self.errorHandler.Fatalf("%s invalid lhs expression\n", node.GetLocation())
       }
     }
     case *ast.OpAssignNode: {
       visitOpAssignNode(self, node)
-      if ! node.GetLhs().IsAssignable() {
+      if ! node.GetLHS().IsAssignable() {
         self.errorHandler.Fatalf("%s invalid lhs expression\n", node.GetLocation())
       }
     }

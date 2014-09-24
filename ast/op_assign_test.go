@@ -11,12 +11,12 @@ func TestOpAssignNode(t *testing.T) {
   "ClassName": "ast.OpAssignNode",
   "Location": "[:0,0]",
   "Operator": "+",
-  "Lhs": {
+  "LHS": {
     "ClassName": "ast.VariableNode",
     "Location": "[:0,0]",
     "Name": "a"
   },
-  "Rhs": {
+  "RHS": {
     "ClassName": "ast.IntegerLiteralNode",
     "Location": "[:0,0]",
     "TypeNode": {

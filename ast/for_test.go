@@ -25,12 +25,12 @@ func TestFor(t *testing.T) {
   "Init": {
     "ClassName": "ast.AssignNode",
     "Location": "[:0,0]",
-    "Lhs": {
+    "LHS": {
       "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
       "Name": "i"
     },
-    "Rhs": {
+    "RHS": {
       "ClassName": "ast.IntegerLiteralNode",
       "Location": "[:0,0]",
       "TypeNode": {

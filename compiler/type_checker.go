@@ -353,44 +353,44 @@ func (self *TypeChecker) VisitNode(unknown core.INode) {
     }
     case *ast.AssignNode: {
       visitAssignNode(self, node)
-      if ! self.checkLHS(node.GetLhs()) {
+      if ! self.checkLHS(node.GetLHS()) {
         return
       }
-      if ! self.checkRHS(node.GetRhs()) {
+      if ! self.checkRHS(node.GetRHS()) {
         return
       }
-      node.SetRhs(self.implicitCast(node.GetLhs().GetType(), node.GetRhs()))
+      node.SetRHS(self.implicitCast(node.GetLHS().GetType(), node.GetRHS()))
     }
     case *ast.OpAssignNode: {
       visitOpAssignNode(self, node)
-      if ! self.checkLHS(node.GetLhs()) {
+      if ! self.checkLHS(node.GetLHS()) {
         return
       }
-      if ! self.checkRHS(node.GetRhs()) {
+      if ! self.checkRHS(node.GetRHS()) {
         return
       }
       if node.GetOperator() == "+" || node.GetOperator() == "-" {
-        if node.GetLhs().GetType().IsPointer() {
-          self.mustBeInteger(node.GetRhs(), node.GetOperator())
-          node.SetRhs(self.integralPromotedExpr(node.GetRhs()))
+        if node.GetLHS().GetType().IsPointer() {
+          self.mustBeInteger(node.GetRHS(), node.GetOperator())
+          node.SetRHS(self.integralPromotedExpr(node.GetRHS()))
           return
         }
       }
-      if ! self.mustBeInteger(node.GetLhs(), node.GetOperator()) {
+      if ! self.mustBeInteger(node.GetLHS(), node.GetOperator()) {
         return
       }
-      if ! self.mustBeInteger(node.GetRhs(), node.GetOperator()) {
+      if ! self.mustBeInteger(node.GetRHS(), node.GetOperator()) {
         return
       }
-      l := self.integralPromotion(node.GetLhs().GetType())
-      r := self.integralPromotion(node.GetRhs().GetType())
+      l := self.integralPromotion(node.GetLHS().GetType())
+      r := self.integralPromotion(node.GetRHS().GetType())
       opType := self.usualArithmeticConversion(l, r)
-      if ! opType.IsCompatible(l) && self.isSafeIntegerCast(node.GetRhs(), opType) {
+      if ! opType.IsCompatible(l) && self.isSafeIntegerCast(node.GetRHS(), opType) {
         self.errorHandler.Warnf("%s incompatible implicit cast from %s to %s\n", node.GetLocation(), opType, l)
       }
       if ! r.IsSameType(opType) {
         typeNode := ast.NewTypeNode(node.GetLocation(), typesys.NewVoidTypeRef(node.GetLocation()))
-        node.SetRhs(ast.NewCastNode(node.GetLocation(), typeNode, node.GetRhs()))
+        node.SetRHS(ast.NewCastNode(node.GetLocation(), typeNode, node.GetRHS()))
       }
     }
     case *ast.CondExprNode: {

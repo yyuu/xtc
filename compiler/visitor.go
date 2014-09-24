@@ -17,8 +17,8 @@ func visitArefNode(v ast.INodeVisitor, node *ast.ArefNode) {
 }
 
 func visitAssignNode(v ast.INodeVisitor, node *ast.AssignNode) {
-  ast.VisitExpr(v, node.GetLhs())
-  ast.VisitExpr(v, node.GetRhs())
+  ast.VisitExpr(v, node.GetLHS())
+  ast.VisitExpr(v, node.GetRHS())
 }
 
 func visitBinaryOpNode(v ast.INodeVisitor, node *ast.BinaryOpNode) {
@@ -119,8 +119,8 @@ func visitMemberNode(v ast.INodeVisitor, node *ast.MemberNode) {
 }
 
 func visitOpAssignNode(v ast.INodeVisitor, node *ast.OpAssignNode) {
-  ast.VisitExpr(v, node.GetLhs())
-  ast.VisitExpr(v, node.GetRhs())
+  ast.VisitExpr(v, node.GetLHS())
+  ast.VisitExpr(v, node.GetRHS())
 }
 
 func visitPrefixOpNode(v ast.INodeVisitor, node *ast.PrefixOpNode) {

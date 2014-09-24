@@ -10,8 +10,8 @@ type OpAssignNode struct {
   ClassName string
   Location core.Location
   Operator string
-  Lhs core.IExprNode
-  Rhs core.IExprNode
+  LHS core.IExprNode
+  RHS core.IExprNode
   t core.IType
 }
 
@@ -22,7 +22,7 @@ func NewOpAssignNode(loc core.Location, operator string, lhs core.IExprNode, rhs
 }
 
 func (self OpAssignNode) String() string {
-  return fmt.Sprintf("(%s (%s %s %s))", self.Lhs, self.Operator, self.Lhs, self.Rhs)
+  return fmt.Sprintf("(%s (%s %s %s))", self.LHS, self.Operator, self.LHS, self.RHS)
 }
 
 func (self OpAssignNode) IsExprNode() bool {
@@ -37,20 +37,20 @@ func (self OpAssignNode) GetOperator() string {
   return self.Operator
 }
 
-func (self OpAssignNode) GetLhs() core.IExprNode {
-  return self.Lhs
+func (self OpAssignNode) GetLHS() core.IExprNode {
+  return self.LHS
 }
 
-func (self *OpAssignNode) SetLhs(expr core.IExprNode) {
-  self.Lhs = expr
+func (self *OpAssignNode) SetLHS(expr core.IExprNode) {
+  self.LHS = expr
 }
 
-func (self OpAssignNode) GetRhs() core.IExprNode {
-  return self.Rhs
+func (self OpAssignNode) GetRHS() core.IExprNode {
+  return self.RHS
 }
 
-func (self *OpAssignNode) SetRhs(expr core.IExprNode) {
-  self.Rhs = expr
+func (self *OpAssignNode) SetRHS(expr core.IExprNode) {
+  self.RHS = expr
 }
 
 func (self OpAssignNode) GetType() core.IType {
