@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -35,7 +36,7 @@ func (self DereferenceNode) GetExpr() core.IExprNode {
 
 func (self DereferenceNode) GetType() core.IType {
   if self.t == nil {
-    panic("type is nil")
+    panic(fmt.Errorf("%s type is nil", self.Location))
   }
   return self.t
 }

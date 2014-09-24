@@ -46,7 +46,7 @@ func (self SizeofExprNode) GetExpr() core.IExprNode {
 
 func (self SizeofExprNode) GetType() core.IType {
   if self.t == nil {
-    panic("type is nil")
+    panic(fmt.Errorf("%s type is nil", self.Location))
   }
   return self.t
 }

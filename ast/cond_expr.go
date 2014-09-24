@@ -56,7 +56,7 @@ func (self *CondExprNode) SetElseExpr(expr core.IExprNode) {
 
 func (self CondExprNode) GetType() core.IType {
   if self.t == nil {
-    panic("type is nil")
+    panic(fmt.Errorf("%s type is nil", self.Location))
   }
   return self.t
 }

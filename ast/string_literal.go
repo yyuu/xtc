@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/entity"
   "bitbucket.org/yyuu/bs/typesys"
@@ -56,7 +57,7 @@ func (self StringLiteralNode) GetTypeRef() core.ITypeRef {
 
 func (self StringLiteralNode) GetType() core.IType {
   if self.t == nil {
-    panic("type is nil")
+    panic(fmt.Errorf("%s type is nil", self.Location))
   }
   return self.t
 }

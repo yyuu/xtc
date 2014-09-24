@@ -54,7 +54,7 @@ func (self *LogicalOrNode) SetRight(expr core.IExprNode) {
 
 func (self LogicalOrNode) GetType() core.IType {
   if self.t == nil {
-    panic("type is nil")
+    panic(fmt.Errorf("%s type is nil", self.Location))
   }
   return self.t
 }

@@ -55,7 +55,7 @@ func (self *OpAssignNode) SetRhs(expr core.IExprNode) {
 
 func (self OpAssignNode) GetType() core.IType {
   if self.t == nil {
-    panic("type is nil")
+    panic(fmt.Errorf("%s type is nil", self.Location))
   }
   return self.t
 }
