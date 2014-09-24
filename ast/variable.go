@@ -30,6 +30,10 @@ func (self VariableNode) GetLocation() core.Location {
   return self.Location
 }
 
+func (self VariableNode) IsResolved() bool {
+  return self.entity != nil
+}
+
 func (self VariableNode) GetName() string {
   return self.Name
 }
@@ -39,14 +43,14 @@ func (self *VariableNode) SetEntity(ent core.IEntity) {
 }
 
 func (self VariableNode) GetEntity() core.IEntity {
+  if self.entity == nil {
+    panic(fmt.Errorf("%s entity is nil: %s", self.Location, self.Name))
+  }
   return self.entity
 }
 
 func (self VariableNode) GetType() core.IType {
-  if self.t == nil {
-    panic(fmt.Errorf("%s type is nil", self.Location))
-  }
-  return self.t
+  return self.GetEntity().GetType()
 }
 
 func (self *VariableNode) SetType(t core.IType) {
