@@ -42,8 +42,16 @@ func (self CondExprNode) GetThenExpr() core.IExprNode {
   return self.ThenExpr
 }
 
+func (self *CondExprNode) SetThenExpr(expr core.IExprNode) {
+  self.ThenExpr = expr
+}
+
 func (self CondExprNode) GetElseExpr() core.IExprNode {
   return self.ElseExpr
+}
+
+func (self *CondExprNode) SetElseExpr(expr core.IExprNode) {
+  self.ElseExpr = expr
 }
 
 func (self CondExprNode) GetType() core.IType {

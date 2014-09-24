@@ -19,6 +19,26 @@ type IExprNode interface {
   IsPointer() bool
 }
 
+type IBinaryOpNode interface {
+  IExprNode
+  GetOperator() string
+  GetLeft() IExprNode
+  GetRight() IExprNode
+  SetLeft(IExprNode)
+  SetRight(IExprNode)
+}
+
+type IUnaryArithmeticOpNode interface {
+  IExprNode
+  GetOperator() string
+  GetOpType() IType
+  SetOpType(IType)
+  GetExpr() IExprNode
+  SetExpr(IExprNode)
+  GetAmount() int
+  SetAmount(int)
+}
+
 type IStmtNode interface {
   INode
   IsStmtNode() bool

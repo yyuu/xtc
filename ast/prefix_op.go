@@ -11,12 +11,13 @@ type PrefixOpNode struct {
   Location core.Location
   Operator string
   Expr core.IExprNode
+  amount int
   t core.IType
 }
 
 func NewPrefixOpNode(loc core.Location, operator string, expr core.IExprNode) *PrefixOpNode {
   if expr == nil { panic("expr is nil") }
-  return &PrefixOpNode { "ast.PrefixOpNode", loc, operator, expr, nil }
+  return &PrefixOpNode { "ast.PrefixOpNode", loc, operator, expr, 1, nil }
 }
 
 func (self PrefixOpNode) String() string {
@@ -43,15 +44,32 @@ func (self PrefixOpNode) GetExpr() core.IExprNode {
   return self.Expr
 }
 
-func (self PrefixOpNode) GetType() core.IType {
-  if self.t == nil {
-    panic("type is nil")
-  }
+func (self *PrefixOpNode) SetExpr(expr core.IExprNode) {
+  self.Expr = expr
+}
+
+func (self PrefixOpNode) GetAmount() int {
+  return self.amount
+}
+
+func (self *PrefixOpNode) SetAmount(i int) {
+  self.amount = i
+}
+
+func (self PrefixOpNode) GetOpType() core.IType {
   return self.t
 }
 
-func (self *PrefixOpNode) SetType(t core.IType) {
+func (self *PrefixOpNode) SetOpType(t core.IType) {
   self.t = t
+}
+
+func (self PrefixOpNode) GetType() core.IType {
+  return self.Expr.GetType()
+}
+
+func (self *PrefixOpNode) SetType(t core.IType) {
+  panic("PrefixOpNode#SetType called")
 }
 
 func (self PrefixOpNode) IsConstant() bool {

@@ -32,3 +32,7 @@ func (self ReturnNode) GetLocation() core.Location {
 func (self ReturnNode) GetExpr() core.IExprNode {
   return self.Expr
 }
+
+func (self *ReturnNode) SetExpr(expr core.IExprNode) {
+  self.Expr = expr
+}

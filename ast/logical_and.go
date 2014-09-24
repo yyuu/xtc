@@ -32,12 +32,24 @@ func (self LogicalAndNode) GetLocation() core.Location {
   return self.Location
 }
 
+func (self LogicalAndNode) GetOperator() string {
+  return "&&"
+}
+
 func (self LogicalAndNode) GetLeft() core.IExprNode {
   return self.Left
 }
 
+func (self *LogicalAndNode) SetLeft(expr core.IExprNode) {
+  self.Left = expr
+}
+
 func (self LogicalAndNode) GetRight() core.IExprNode {
   return self.Right
+}
+
+func (self *LogicalAndNode) SetRight(expr core.IExprNode) {
+  self.Right = expr
 }
 
 func (self LogicalAndNode) GetType() core.IType {

@@ -50,8 +50,16 @@ func (self BinaryOpNode) GetLeft() core.IExprNode {
   return self.Left
 }
 
+func (self *BinaryOpNode) SetLeft(expr core.IExprNode) {
+  self.Left = expr
+}
+
 func (self BinaryOpNode) GetRight() core.IExprNode {
   return self.Right
+}
+
+func (self *BinaryOpNode) SetRight(expr core.IExprNode) {
+  self.Right = expr
 }
 
 func (self BinaryOpNode) GetType() core.IType {

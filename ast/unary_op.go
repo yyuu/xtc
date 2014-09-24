@@ -42,15 +42,20 @@ func (self UnaryOpNode) GetExpr() core.IExprNode {
   return self.Expr
 }
 
-func (self UnaryOpNode) GetType() core.IType {
-  if self.t == nil {
-    panic("type is nil")
-  }
+func (self UnaryOpNode) GetOpType() core.IType {
   return self.t
 }
 
-func (self *UnaryOpNode) SetType(t core.IType) {
+func (self *UnaryOpNode) SetOpType(t core.IType) {
   self.t = t
+}
+
+func (self UnaryOpNode) GetType() core.IType {
+  return self.Expr.GetType()
+}
+
+func (self *UnaryOpNode) SetType(t core.IType) {
+  panic("UnaryOpNode#SetType called")
 }
 
 func (self UnaryOpNode) IsConstant() bool {

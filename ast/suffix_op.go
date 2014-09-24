@@ -11,12 +11,13 @@ type SuffixOpNode struct {
   Location core.Location
   Operator string
   Expr core.IExprNode
+  amount int
   t core.IType
 }
 
 func NewSuffixOpNode(loc core.Location, operator string, expr core.IExprNode) *SuffixOpNode {
   if expr == nil { panic("expr is nil") }
-  return &SuffixOpNode { "ast.SuffixOpNode", loc, operator, expr, nil }
+  return &SuffixOpNode { "ast.SuffixOpNode", loc, operator, expr, 1, nil }
 }
 
 func (self SuffixOpNode) String() string {
@@ -43,15 +44,32 @@ func (self SuffixOpNode) GetExpr() core.IExprNode {
   return self.Expr
 }
 
-func (self SuffixOpNode) GetType() core.IType {
-  if self.t == nil {
-    panic("type is nil")
-  }
+func (self *SuffixOpNode) SetExpr(expr core.IExprNode) {
+  self.Expr = expr
+}
+
+func (self SuffixOpNode) GetAmount() int {
+  return self.amount
+}
+
+func (self *SuffixOpNode) SetAmount(i int) {
+  self.amount = i
+}
+
+func (self SuffixOpNode) GetOpType() core.IType {
   return self.t
 }
 
-func (self *SuffixOpNode) SetType(t core.IType) {
+func (self *SuffixOpNode) SetOpType(t core.IType) {
   self.t = t
+}
+
+func (self SuffixOpNode) GetType() core.IType {
+  return self.Expr.GetType()
+}
+
+func (self *SuffixOpNode) SetType(t core.IType) {
+  panic("SuffixOpNode#SetType called")
 }
 
 func (self SuffixOpNode) IsConstant() bool {

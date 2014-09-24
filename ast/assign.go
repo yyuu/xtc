@@ -36,8 +36,16 @@ func (self AssignNode) GetLhs() core.IExprNode {
   return self.Lhs
 }
 
+func (self *AssignNode) SetLhs(expr core.IExprNode) {
+  self.Lhs = expr
+}
+
 func (self AssignNode) GetRhs() core.IExprNode {
   return self.Rhs
+}
+
+func (self *AssignNode) SetRhs(expr core.IExprNode) {
+  self.Rhs = expr
 }
 
 func (self AssignNode) GetType() core.IType {

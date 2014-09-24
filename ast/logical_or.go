@@ -32,12 +32,24 @@ func (self LogicalOrNode) GetLocation() core.Location {
   return self.Location
 }
 
+func (self LogicalOrNode) GetOperator() string {
+  return "||"
+}
+
 func (self LogicalOrNode) GetLeft() core.IExprNode {
   return self.Left
 }
 
+func (self *LogicalOrNode) SetLeft(expr core.IExprNode) {
+  self.Left = expr
+}
+
 func (self LogicalOrNode) GetRight() core.IExprNode {
   return self.Right
+}
+
+func (self *LogicalOrNode) SetRight(expr core.IExprNode) {
+  self.Right = expr
 }
 
 func (self LogicalOrNode) GetType() core.IType {
