@@ -41,6 +41,26 @@ func (self ParamTypes) Alignment() int {
   panic("ParamTypes#Alignment called")
 }
 
+func (self ParamTypes) IsSameType(other core.IType) bool {
+  t, ok := other.(ParamTypes)
+  if ! ok {
+    return false
+  }
+  if self.Vararg != t.IsVararg() {
+    return false
+  }
+  ps := t.GetParamDescs()
+  if len(self.ParamDescs) != len(ps) {
+    return false
+  }
+  for i := range self.ParamDescs {
+    if ! self.ParamDescs[i].IsSameType(ps[i]) {
+      return false
+    }
+  }
+  return true
+}
+
 func (self ParamTypes) IsVoid() bool {
   return false
 }

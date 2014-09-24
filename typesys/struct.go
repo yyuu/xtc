@@ -2,6 +2,7 @@ package typesys
 
 import (
   "fmt"
+  "reflect"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -35,6 +36,14 @@ func (self StructType) AllocSize() int {
 
 func (self StructType) Alignment() int {
   panic("StructType#Alignment called")
+}
+
+func (self StructType) IsSameType(other core.IType) bool {
+  if ! other.IsStruct() {
+    return false
+  } else {
+    return reflect.DeepEqual(self, other.(StructType))
+  }
 }
 
 func (self StructType) IsVoid() bool {

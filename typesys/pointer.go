@@ -36,6 +36,14 @@ func (self PointerType) Alignment() int {
   return self.AllocSize()
 }
 
+func (self PointerType) IsSameType(other core.IType) bool {
+  if ! other.IsPointer() {
+    return false
+  } else {
+    return self.BaseType.IsSameType(other.GetBaseType())
+  }
+}
+
 func (self PointerType) IsVoid() bool {
   return false
 }

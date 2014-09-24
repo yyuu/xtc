@@ -69,6 +69,14 @@ func (self IntegerType) Alignment() int {
   return self.AllocSize()
 }
 
+func (self IntegerType) IsSameType(other core.IType) bool {
+  if !other.IsInteger() {
+    return false
+  } else {
+    return self == other.(IntegerType)
+  }
+}
+
 func (self IntegerType) IsVoid() bool {
   return false
 }

@@ -36,6 +36,15 @@ func (self FunctionType) Alignment() int {
   panic("FunctionType#Alignment called")
 }
 
+func (self FunctionType) IsSameType(other core.IType) bool {
+  if !other.IsFunction() {
+    return false
+  } else {
+    t := other.(*FunctionType)
+    return t.GetReturnType().IsSameType(self.ReturnType) && t.GetParamTypes().IsSameType(self.ParamTypes)
+  }
+}
+
 func (self FunctionType) IsVoid() bool {
   return false
 }
@@ -97,8 +106,7 @@ func (self FunctionType) IsCompatible(target core.IType) bool {
     return false
   } else {
     t := target.(FunctionType)
-//  return t.GetReturnType().IsCompatible(self.ReturnType) && t.GetParamTypes().IsSameType(self.ParamTypes)
-    return t.GetReturnType().IsCompatible(self.ReturnType)
+    return t.GetReturnType().IsCompatible(self.ReturnType) && t.GetParamTypes().IsSameType(self.ParamTypes)
   }
 }
 

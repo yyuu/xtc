@@ -33,6 +33,10 @@ func (self VoidType) Alignment() int {
   return self.AllocSize()
 }
 
+func (self VoidType) IsSameType(other core.IType) bool {
+  return other.IsVoid()
+}
+
 func (self VoidType) IsVoid() bool {
   return true
 }

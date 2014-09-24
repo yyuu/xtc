@@ -2,6 +2,7 @@ package typesys
 
 import (
   "fmt"
+  "reflect"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -35,6 +36,14 @@ func (self UnionType) AllocSize() int {
 
 func (self UnionType) Alignment() int {
   panic("UnionType#Alignment called")
+}
+
+func (self UnionType) IsSameType(other core.IType) bool {
+  if !other.IsUnion() {
+    return false
+  } else {
+    return reflect.DeepEqual(self, other.(UnionType))
+  }
 }
 
 func (self UnionType) IsVoid() bool {

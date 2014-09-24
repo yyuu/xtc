@@ -9,6 +9,8 @@ type IType interface {
   AllocSize() int
   Alignment() int
 
+  IsSameType(IType) bool
+
   IsVoid() bool
   IsInteger() bool
   IsSigned() bool

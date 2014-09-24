@@ -36,6 +36,10 @@ func (self UserType) Alignment() int {
   panic("UserType#Alignment called")
 }
 
+func (self UserType) IsSameType(other core.IType) bool {
+  return self.GetRealType().IsSameType(other)
+}
+
 func (self UserType) IsVoid() bool {
   return false
 }

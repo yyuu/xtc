@@ -41,6 +41,14 @@ func (self ArrayType) Alignment() int {
   return self.BaseType.AllocSize()
 }
 
+func (self ArrayType) IsSameType(other core.IType) bool {
+  if !other.IsPointer() && !other.IsArray() {
+    return false
+  } else {
+    return self.BaseType.IsSameType(other.GetBaseType())
+  }
+}
+
 func (self ArrayType) IsVoid() bool {
   return false
 }
