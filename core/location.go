@@ -28,7 +28,8 @@ func (self Location) GetLineOffset() int {
 }
 
 func (self Location) String() string {
-  return fmt.Sprintf("[%s:%d,%d]", self.sourceName, self.lineNumber, self.lineOffset)
+  // display as "1 origin"
+  return fmt.Sprintf("[%s:%d,%d]", self.sourceName, self.lineNumber+1, self.lineOffset+1)
 }
 
 func (self Location) MarshalJSON() ([]byte, error) {
