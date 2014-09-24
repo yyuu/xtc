@@ -11,7 +11,7 @@ type TypeTable struct {
   shortSize int
   intSize int
   longSize int
-  ptrSize int
+  pointerSize int
   table map[string]core.IType
 }
 
@@ -65,11 +65,11 @@ func (self TypeTable) GetType(ref core.ITypeRef) core.IType {
         panic(fmt.Errorf("undefined type: %s", typed.GetName()))
       }
       case *PointerTypeRef: {
-        t = NewPointerType(self.ptrSize, self.GetType(typed.GetBaseType()))
+        t = NewPointerType(self.pointerSize, self.GetType(typed.GetBaseType()))
         self.PutType(typed, t)
       }
       case *ArrayTypeRef: {
-        t = NewArrayType(self.GetType(typed.GetBaseType()), typed.GetLength(), self.ptrSize)
+        t = NewArrayType(self.GetType(typed.GetBaseType()), typed.GetLength(), self.pointerSize)
         self.PutType(typed, t)
       }
       case *FunctionTypeRef: {
@@ -110,7 +110,7 @@ func (self TypeTable) GetLongSize() int {
 }
 
 func (self TypeTable) GetPointerSize() int {
-  return self.ptrSize
+  return self.pointerSize
 }
 
 func (self TypeTable) IsTypeTable() bool {
@@ -137,7 +137,7 @@ func (self TypeTable) GetParamType(ref core.ITypeRef) core.IType {
     panic(fmt.Errorf("unknown parameter type: %s", ref))
   }
   if t.IsArray() {
-    return NewPointerType(self.ptrSize, t.(*ArrayType).GetBaseType())
+    return NewPointerType(self.pointerSize, t.(*ArrayType).GetBaseType())
   } else {
     return t
   }
@@ -205,6 +205,85 @@ func (self TypeTable) checkRecursiveDefinition(t core.IType, errorHandler *core.
   errorHandler.Warnf("typesys.TypeTable#checkRecursiveDefinition: not implemented: %s\n", t)
 }
 
+func (self TypeTable) VoidType() *VoidType {
+  loc := core.NewLocation("[typesys:builtin]", 0, 0)
+  ref := NewVoidTypeRef(loc)
+  return self.GetType(ref).(*VoidType)
+}
+
+func (self TypeTable) SignedChar() *IntegerType {
+  loc := core.NewLocation("[typesys:builtin]", 0, 0)
+  ref := NewCharTypeRef(loc)
+  return self.GetType(ref).(*IntegerType)
+}
+
+func (self TypeTable) SignedShort() *IntegerType {
+  loc := core.NewLocation("[typesys:builtin]", 0, 0)
+  ref := NewShortTypeRef(loc)
+  return self.GetType(ref).(*IntegerType)
+}
+
+func (self TypeTable) SignedInt() *IntegerType {
+  loc := core.NewLocation("[typesys:builtin]", 0, 0)
+  ref := NewIntTypeRef(loc)
+  return self.GetType(ref).(*IntegerType)
+}
+
+func (self TypeTable) SignedLong() *IntegerType {
+  loc := core.NewLocation("[typesys:builtin]", 0, 0)
+  ref := NewLongTypeRef(loc)
+  return self.GetType(ref).(*IntegerType)
+}
+
+func (self TypeTable) UnsignedChar() *IntegerType {
+  loc := core.NewLocation("[typesys:builtin]", 0, 0)
+  ref := NewUnsignedCharTypeRef(loc)
+  return self.GetType(ref).(*IntegerType)
+}
+
+func (self TypeTable) UnsignedShort() *IntegerType {
+  loc := core.NewLocation("[typesys:builtin]", 0, 0)
+  ref := NewUnsignedShortTypeRef(loc)
+  return self.GetType(ref).(*IntegerType)
+}
+
+func (self TypeTable) UnsignedInt() *IntegerType {
+  loc := core.NewLocation("[typesys:builtin]", 0, 0)
+  ref := NewUnsignedIntTypeRef(loc)
+  return self.GetType(ref).(*IntegerType)
+}
+
+func (self TypeTable) UnsignedLong() *IntegerType {
+  loc := core.NewLocation("[typesys:builtin]", 0, 0)
+  ref := NewUnsignedLongTypeRef(loc)
+  return self.GetType(ref).(*IntegerType)
+}
+
 func (self TypeTable) PointerTo(baseType core.IType) *PointerType {
-  return NewPointerType(self.ptrSize, baseType)
+  return NewPointerType(self.pointerSize, baseType)
+}
+
+func (self TypeTable) PtrDiffType() core.IType {
+  return self.GetType(self.PtrDiffTypeRef())
+}
+
+func (self TypeTable) PtrDiffTypeRef() core.ITypeRef {
+  loc := core.NewLocation("[builtin:typesys]", 0, 0)
+  return NewIntegerTypeRef(loc, self.PtrDiffTypeName())
+}
+
+func (self TypeTable) PtrDiffTypeName() string {
+  if self.SignedLong().Size() == self.pointerSize {
+    return "long"
+  } else {
+    if self.SignedInt().Size() == self.pointerSize {
+      return "int"
+    } else {
+      if self.SignedShort().Size() == self.pointerSize {
+        return "short"
+      } else {
+        panic("must not happen: interger.size != pointer.size")
+      }
+    }
+  }
 }
