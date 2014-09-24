@@ -42,7 +42,7 @@ func (self StructType) IsSameType(other core.IType) bool {
   if ! other.IsStruct() {
     return false
   } else {
-    return reflect.DeepEqual(self, other.(StructType))
+    return reflect.DeepEqual(self, *(other.(*StructType)))
   }
 }
 

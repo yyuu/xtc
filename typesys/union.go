@@ -42,7 +42,7 @@ func (self UnionType) IsSameType(other core.IType) bool {
   if !other.IsUnion() {
     return false
   } else {
-    return reflect.DeepEqual(self, other.(UnionType))
+    return reflect.DeepEqual(self, *(other.(*UnionType)))
   }
 }
 

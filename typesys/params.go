@@ -42,7 +42,7 @@ func (self ParamTypes) Alignment() int {
 }
 
 func (self ParamTypes) IsSameType(other core.IType) bool {
-  t, ok := other.(ParamTypes)
+  t, ok := other.(*ParamTypes)
   if ! ok {
     return false
   }
