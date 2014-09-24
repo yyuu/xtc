@@ -70,74 +70,77 @@ func (self *TypeResolver) resolveFunctionHeader(fun core.IFunction, params []*en
   }
 }
 
-func (self *TypeResolver) VisitNode(node core.INode) {
-  switch typed := node.(type) {
+func (self *TypeResolver) VisitNode(unknown core.INode) {
+  switch node := unknown.(type) {
     case *ast.BlockNode: {
-      variables := typed.GetVariables()
+      variables := node.GetVariables()
       for i := range variables {
         entity.VisitEntity(self, variables[i])
       }
-      stmts := typed.GetStmts()
+      stmts := node.GetStmts()
       for i := range stmts {
         ast.VisitNode(self, stmts[i])
       }
     }
     case *ast.CastNode: {
-      self.bindType(typed.GetTypeNode())
-      visitCastNode(self, typed)
+      self.bindType(node.GetTypeNode())
+      visitCastNode(self, node)
     }
     case *ast.IntegerLiteralNode: {
-      self.bindType(typed.GetTypeNode())
+      self.bindType(node.GetTypeNode())
     }
     case *ast.SizeofExprNode: {
-      self.bindType(typed.GetTypeNode())
-      visitSizeofExprNode(self, typed)
+      self.bindType(node.GetTypeNode())
+      visitSizeofExprNode(self, node)
     }
     case *ast.SizeofTypeNode: {
-      self.bindType(typed.GetOperandTypeNode())
-      self.bindType(typed.GetTypeNode())
-      visitSizeofTypeNode(self, typed)
+      self.bindType(node.GetOperandTypeNode())
+      self.bindType(node.GetTypeNode())
+      visitSizeofTypeNode(self, node)
     }
     case *ast.StringLiteralNode: {
-      self.bindType(typed.GetTypeNode())
+      self.bindType(node.GetTypeNode())
     }
     case *ast.StructNode: {
-      self.resolveCompositeType(typed)
+      self.resolveCompositeType(node)
     }
     case *ast.TypedefNode: {
-      self.bindType(typed.GetTypeNode())
-      self.bindType(typed.GetRealTypeNode())
+      self.bindType(node.GetTypeNode())
+      self.bindType(node.GetRealTypeNode())
     }
     case *ast.UnionNode: {
-      self.resolveCompositeType(typed)
+      self.resolveCompositeType(node)
     }
     default: {
-      visitNode(self, node)
+      visitNode(self, unknown)
     }
   }
 }
 
-func (self *TypeResolver) VisitEntity(ent core.IEntity) {
-  switch typed := ent.(type) {
+func (self *TypeResolver) VisitEntity(unknown core.IEntity) {
+  switch ent := unknown.(type) {
     case *entity.DefinedVariable: {
-      self.bindType(typed.GetTypeNode())
-      if typed.HasInitializer() {
-        ast.VisitNode(self, typed.GetInitializer())
+      self.bindType(ent.GetTypeNode())
+      if ent.HasInitializer() {
+        ast.VisitNode(self, ent.GetInitializer())
       }
     }
     case *entity.UndefinedVariable: {
-      self.bindType(typed.GetTypeNode())
+      self.bindType(ent.GetTypeNode())
     }
     case *entity.Constant: {
-      self.bindType(typed.GetTypeNode())
-      ast.VisitExpr(self, typed.GetValue())
+      self.bindType(ent.GetTypeNode())
+      ast.VisitExpr(self, ent.GetValue())
     }
     case *entity.DefinedFunction: {
-      self.resolveFunctionHeader(typed, typed.GetParameters())
-      ast.VisitStmt(self, typed.GetBody())
+      self.resolveFunctionHeader(ent, ent.GetParameters())
+      ast.VisitStmt(self, ent.GetBody())
     }
     case *entity.UndefinedFunction: {
-      self.resolveFunctionHeader(typed, typed.GetParameters())
+      self.resolveFunctionHeader(ent, ent.GetParameters())
+    }
+    default: {
+      visitEntity(self, unknown)
     }
   }
 }

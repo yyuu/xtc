@@ -1,8 +1,10 @@
 package compiler
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/bs/entity"
 )
 
 func visitAddressNode(v ast.INodeVisitor, node *ast.AddressNode) {
@@ -185,45 +187,61 @@ func visitWhileNode(v ast.INodeVisitor, node *ast.WhileNode) {
   ast.VisitStmt(v, node.GetBody())
 }
 
-func visitNode(v ast.INodeVisitor, node core.INode) {
-  switch typed := node.(type) {
-    case *ast.AddressNode: visitAddressNode(v, typed)
-    case *ast.ArefNode: visitArefNode(v, typed)
-    case *ast.AssignNode: visitAssignNode(v, typed)
-    case *ast.BinaryOpNode: visitBinaryOpNode(v, typed)
-    case *ast.BlockNode: visitBlockNode(v, typed)
-    case *ast.BreakNode: visitBreakNode(v, typed)
-    case *ast.CaseNode: visitCaseNode(v, typed)
-    case *ast.CastNode: visitCastNode(v, typed)
-    case *ast.CondExprNode: visitCondExprNode(v, typed)
-    case *ast.ContinueNode: visitContinueNode(v, typed)
-    case *ast.DereferenceNode: visitDereferenceNode(v, typed)
-    case *ast.DoWhileNode: visitDoWhileNode(v, typed)
-    case *ast.ExprStmtNode: visitExprStmtNode(v, typed)
-    case *ast.ForNode: visitForNode(v, typed)
-    case *ast.FuncallNode: visitFuncallNode(v, typed)
-    case *ast.GotoNode: visitGotoNode(v, typed)
-    case *ast.IfNode: visitIfNode(v, typed)
-    case *ast.IntegerLiteralNode: visitIntegerLiteralNode(v, typed)
-    case *ast.LabelNode: visitLabelNode(v, typed)
-    case *ast.LogicalAndNode: visitLogicalAndNode(v, typed)
-    case *ast.LogicalOrNode: visitLogicalOrNode(v, typed)
-    case *ast.MemberNode: visitMemberNode(v, typed)
-    case *ast.OpAssignNode: visitOpAssignNode(v, typed)
-    case *ast.PrefixOpNode: visitPrefixOpNode(v, typed)
-    case *ast.PtrMemberNode: visitPtrMemberNode(v, typed)
-    case *ast.ReturnNode: visitReturnNode(v, typed)
-    case *ast.SizeofExprNode: visitSizeofExprNode(v, typed)
-    case *ast.SizeofTypeNode: visitSizeofTypeNode(v, typed)
-    case *ast.StringLiteralNode: visitStringLiteralNode(v, typed)
-    case *ast.StructNode: visitStructNode(v, typed)
-    case *ast.SuffixOpNode: visitSuffixOpNode(v, typed)
-    case *ast.SwitchNode: visitSwitchNode(v, typed)
-    case *ast.TypeNode: visitTypeNode(v, typed)
-    case *ast.TypedefNode: visitTypedefNode(v, typed)
-    case *ast.UnaryOpNode: visitUnaryOpNode(v, typed)
-    case *ast.UnionNode: visitUnionNode(v, typed)
-    case *ast.VariableNode: visitVariableNode(v, typed)
-    case *ast.WhileNode: visitWhileNode(v, typed)
+func visitNode(v ast.INodeVisitor, unknown core.INode) {
+  switch node := unknown.(type) {
+    case *ast.AddressNode: visitAddressNode(v, node)
+    case *ast.ArefNode: visitArefNode(v, node)
+    case *ast.AssignNode: visitAssignNode(v, node)
+    case *ast.BinaryOpNode: visitBinaryOpNode(v, node)
+    case *ast.BlockNode: visitBlockNode(v, node)
+    case *ast.BreakNode: visitBreakNode(v, node)
+    case *ast.CaseNode: visitCaseNode(v, node)
+    case *ast.CastNode: visitCastNode(v, node)
+    case *ast.CondExprNode: visitCondExprNode(v, node)
+    case *ast.ContinueNode: visitContinueNode(v, node)
+    case *ast.DereferenceNode: visitDereferenceNode(v, node)
+    case *ast.DoWhileNode: visitDoWhileNode(v, node)
+    case *ast.ExprStmtNode: visitExprStmtNode(v, node)
+    case *ast.ForNode: visitForNode(v, node)
+    case *ast.FuncallNode: visitFuncallNode(v, node)
+    case *ast.GotoNode: visitGotoNode(v, node)
+    case *ast.IfNode: visitIfNode(v, node)
+    case *ast.IntegerLiteralNode: visitIntegerLiteralNode(v, node)
+    case *ast.LabelNode: visitLabelNode(v, node)
+    case *ast.LogicalAndNode: visitLogicalAndNode(v, node)
+    case *ast.LogicalOrNode: visitLogicalOrNode(v, node)
+    case *ast.MemberNode: visitMemberNode(v, node)
+    case *ast.OpAssignNode: visitOpAssignNode(v, node)
+    case *ast.PrefixOpNode: visitPrefixOpNode(v, node)
+    case *ast.PtrMemberNode: visitPtrMemberNode(v, node)
+    case *ast.ReturnNode: visitReturnNode(v, node)
+    case *ast.SizeofExprNode: visitSizeofExprNode(v, node)
+    case *ast.SizeofTypeNode: visitSizeofTypeNode(v, node)
+    case *ast.StringLiteralNode: visitStringLiteralNode(v, node)
+    case *ast.StructNode: visitStructNode(v, node)
+    case *ast.SuffixOpNode: visitSuffixOpNode(v, node)
+    case *ast.SwitchNode: visitSwitchNode(v, node)
+    case *ast.TypeNode: visitTypeNode(v, node)
+    case *ast.TypedefNode: visitTypedefNode(v, node)
+    case *ast.UnaryOpNode: visitUnaryOpNode(v, node)
+    case *ast.UnionNode: visitUnionNode(v, node)
+    case *ast.VariableNode: visitVariableNode(v, node)
+    case *ast.WhileNode: visitWhileNode(v, node)
+    default: {
+      panic(fmt.Errorf("unknown node: %s", unknown))
+    }
+  }
+}
+
+func visitEntity(v entity.IEntityVisitor, unknown core.IEntity) {
+  switch unknown.(type) {
+    case *entity.DefinedVariable: { }
+    case *entity.UndefinedVariable: { }
+    case *entity.Constant: { }
+    case *entity.DefinedFunction: { }
+    case *entity.UndefinedFunction: { }
+    default: {
+      panic(fmt.Errorf("unknown entity: %s", unknown))
+    }
   }
 }

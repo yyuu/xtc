@@ -67,99 +67,99 @@ func (self *DereferenceChecker) checkMemberRef(loc core.Location, t core.IType, 
   }
 }
 
-func (self *DereferenceChecker) VisitNode(node core.INode) {
-  switch typed := node.(type) {
+func (self *DereferenceChecker) VisitNode(unknown core.INode) {
+  switch node := unknown.(type) {
     case *ast.BlockNode: {
-      vs := typed.GetVariables()
+      vs := node.GetVariables()
       for i := range vs {
         self.checkVariable(vs[i])
       }
-      ast.VisitStmts(self, typed.GetStmts())
+      ast.VisitStmts(self, node.GetStmts())
     }
     case *ast.AssignNode: {
-      visitAssignNode(self, typed)
-      if ! typed.GetLhs().IsAssignable() {
-        self.errorHandler.Fatalf("%s invalid lhs expression\n", typed.GetLocation())
+      visitAssignNode(self, node)
+      if ! node.GetLhs().IsAssignable() {
+        self.errorHandler.Fatalf("%s invalid lhs expression\n", node.GetLocation())
       }
     }
     case *ast.OpAssignNode: {
-      visitOpAssignNode(self, typed)
-      if ! typed.GetLhs().IsAssignable() {
-        self.errorHandler.Fatalf("%s invalid lhs expression\n", typed.GetLocation())
+      visitOpAssignNode(self, node)
+      if ! node.GetLhs().IsAssignable() {
+        self.errorHandler.Fatalf("%s invalid lhs expression\n", node.GetLocation())
       }
     }
     case *ast.PrefixOpNode: {
-      visitPrefixOpNode(self, typed)
-      if ! typed.GetExpr().IsAssignable() {
-        self.errorHandler.Fatalf("%s cannot increment/decrement\n", typed.GetExpr().GetLocation())
+      visitPrefixOpNode(self, node)
+      if ! node.GetExpr().IsAssignable() {
+        self.errorHandler.Fatalf("%s cannot increment/decrement\n", node.GetExpr().GetLocation())
       }
     }
     case *ast.SuffixOpNode: {
-      visitSuffixOpNode(self, typed)
-      if ! typed.GetExpr().IsAssignable() {
-        self.errorHandler.Fatalf("%s cannot increment/decrement\n", typed.GetExpr().GetLocation())
+      visitSuffixOpNode(self, node)
+      if ! node.GetExpr().IsAssignable() {
+        self.errorHandler.Fatalf("%s cannot increment/decrement\n", node.GetExpr().GetLocation())
       }
     }
     case *ast.FuncallNode: {
-      visitFuncallNode(self, typed)
-      if ! typed.GetExpr().IsCallable() {
-        self.errorHandler.Fatalf("%s calling object is not a function\n", typed.GetLocation())
+      visitFuncallNode(self, node)
+      if ! node.GetExpr().IsCallable() {
+        self.errorHandler.Fatalf("%s calling object is not a function\n", node.GetLocation())
       }
     }
     case *ast.ArefNode: {
-      visitArefNode(self, typed)
-      if ! typed.GetExpr().IsPointer() {
-        self.errorHandler.Fatalf("%s indexing non-array/pointer expression\n", typed.GetLocation())
+      visitArefNode(self, node)
+      if ! node.GetExpr().IsPointer() {
+        self.errorHandler.Fatalf("%s indexing non-array/pointer expression\n", node.GetLocation())
       }
-      self.handleImplicitAddress(typed)
+      self.handleImplicitAddress(node)
     }
     case *ast.MemberNode: {
-      visitMemberNode(self, typed)
-      self.checkMemberRef(typed.GetLocation(), typed.GetExpr().GetType(), typed.GetMember())
-      self.handleImplicitAddress(typed)
+      visitMemberNode(self, node)
+      self.checkMemberRef(node.GetLocation(), node.GetExpr().GetType(), node.GetMember())
+      self.handleImplicitAddress(node)
     }
     case *ast.PtrMemberNode: {
-      visitPtrMemberNode(self, typed)
-      if ! typed.GetExpr().IsPointer() {
-        self.errorHandler.Fatalf("%s undereferable error\n", typed.GetLocation())
+      visitPtrMemberNode(self, node)
+      if ! node.GetExpr().IsPointer() {
+        self.errorHandler.Fatalf("%s undereferable error\n", node.GetLocation())
       }
-      self.checkMemberRef(typed.GetLocation(), typed.GetDereferedType(), typed.GetMember())
-      self.handleImplicitAddress(typed)
+      self.checkMemberRef(node.GetLocation(), node.GetDereferedType(), node.GetMember())
+      self.handleImplicitAddress(node)
     }
     case *ast.DereferenceNode: {
-      visitDereferenceNode(self, typed)
-      if ! typed.GetExpr().IsPointer() {
-        self.errorHandler.Fatalf("%s undereferable error\n", typed.GetLocation())
+      visitDereferenceNode(self, node)
+      if ! node.GetExpr().IsPointer() {
+        self.errorHandler.Fatalf("%s undereferable error\n", node.GetLocation())
       }
-      self.handleImplicitAddress(typed)
+      self.handleImplicitAddress(node)
     }
     case *ast.AddressNode: {
-      visitAddressNode(self, typed)
-      if ! typed.GetExpr().IsLvalue() {
-        self.errorHandler.Fatalf("%s invalid expression for &\n", typed.GetLocation())
+      visitAddressNode(self, node)
+      if ! node.GetExpr().IsLvalue() {
+        self.errorHandler.Fatalf("%s invalid expression for &\n", node.GetLocation())
       }
-      base := typed.GetExpr().GetType()
-      if ! typed.GetExpr().IsLoadable() {
-        typed.SetType(base)
+      base := node.GetExpr().GetType()
+      if ! node.GetExpr().IsLoadable() {
+        node.SetType(base)
       } else {
-        typed.SetType(self.typeTable.PointerTo(base))
+        node.SetType(self.typeTable.PointerTo(base))
       }
     }
     case *ast.VariableNode: {
-      visitVariableNode(self, typed)
-      if typed.GetEntity().IsConstant() {
-        self.checkConstant(typed.GetEntity().(*entity.Constant).GetValue())
+      visitVariableNode(self, node)
+      if node.GetEntity().IsConstant() {
+        self.checkConstant(node.GetEntity().(*entity.Constant).GetValue())
       }
-      self.handleImplicitAddress(typed)
+      self.handleImplicitAddress(node)
     }
     case *ast.CastNode: {
-      visitCastNode(self, typed)
-      if typed.GetType().IsArray() {
-        self.errorHandler.Fatalf("%s cast specifies array type\n", typed.GetLocation())
+      visitCastNode(self, node)
+      if node.GetType().IsArray() {
+        self.errorHandler.Fatalf("%s cast specifies array type\n", node.GetLocation())
       }
     }
     default: {
-      visitNode(self, node)
+      visitNode(self, unknown)
     }
   }
 }

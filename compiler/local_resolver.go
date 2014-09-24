@@ -98,27 +98,27 @@ func (self *LocalResolver) popScope() core.IScope {
 
 var Verbose = 0
 
-func (self *LocalResolver) VisitNode(node core.INode) {
-  switch typed := node.(type) {
+func (self *LocalResolver) VisitNode(unknown core.INode) {
+  switch node := unknown.(type) {
     case *ast.BlockNode: {
-      self.pushScope(typed.GetVariables())
-      visitBlockNode(self, typed)
-      typed.SetScope(self.popScope().(*entity.LocalScope))
+      self.pushScope(node.GetVariables())
+      visitBlockNode(self, node)
+      node.SetScope(self.popScope().(*entity.LocalScope))
     }
     case *ast.StringLiteralNode: {
-      ent := self.constantTable.Intern(typed.GetValue())
-      typed.SetEntry(ent)
+      ent := self.constantTable.Intern(node.GetValue())
+      node.SetEntry(ent)
     }
     case *ast.VariableNode: {
-      ent := self.currentScope().GetByName(typed.GetName())
+      ent := self.currentScope().GetByName(node.GetName())
       if ent == nil {
-        panic(fmt.Errorf("undefined: %s", typed.GetName()))
+        panic(fmt.Errorf("undefined: %s", node.GetName()))
       }
       ent.Refered()
-      typed.SetEntity(ent)
+      node.SetEntity(ent)
     }
     default: {
-      visitNode(self, node)
+      visitNode(self, unknown)
     }
   }
 }
