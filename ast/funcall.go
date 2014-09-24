@@ -54,8 +54,9 @@ func (self FuncallNode) NumArgs() int {
 }
 
 func (self FuncallNode) GetFunctionType() *typesys.FunctionType {
-  pt := self.Expr.GetType().(*typesys.PointerType)
-  return pt.GetBaseType().(*typesys.FunctionType)
+//pt := self.Expr.GetType().(*typesys.PointerType)
+//return pt.GetBaseType().(*typesys.FunctionType)
+  return self.Expr.GetType().(*typesys.FunctionType)
 }
 
 func (self FuncallNode) GetType() core.IType {
