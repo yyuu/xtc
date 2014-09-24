@@ -119,7 +119,10 @@ func dumpSemant(a *ast.AST) {
 }
 
 func dumpIR(ir *ir.IR) {
-  s := fmt.Sprintf("%v", ir)
+  cs, err := json.MarshalIndent(ir, "", "  ")
+  if err != nil {
+    panic(err)
+  }
   fmt.Fprintln(os.Stderr, "// IR")
-  fmt.Fprintln(os.Stderr, s)
+  fmt.Fprintln(os.Stderr, string(cs))
 }

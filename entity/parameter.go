@@ -10,7 +10,7 @@ type Parameter struct {
 }
 
 func NewParameter(t core.ITypeNode, name string) *Parameter {
-  return &Parameter { &DefinedVariable { "entity.Parameter", true, name, t, nil, 0 } }
+  return &Parameter { &DefinedVariable { "entity.Parameter", true, name, t, nil, 0, nil } }
 }
 
 func NewParameters(xs...*Parameter) []*Parameter {

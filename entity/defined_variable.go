@@ -12,10 +12,11 @@ type DefinedVariable struct {
   TypeNode core.ITypeNode
   Initializer core.IExprNode
   numRefered int
+  ir_expr core.IExpr
 }
 
 func NewDefinedVariable(isPrivate bool, t core.ITypeNode, name string, init core.IExprNode) *DefinedVariable {
-  return &DefinedVariable { "entity.DefinedVariable", isPrivate, name, t, init, 0 }
+  return &DefinedVariable { "entity.DefinedVariable", isPrivate, name, t, init, 0, nil }
 }
 
 func NewDefinedVariables(xs...*DefinedVariable) []*DefinedVariable {
@@ -94,4 +95,12 @@ func (self *DefinedVariable) SetInitializer(init core.IExprNode) {
 
 func (self DefinedVariable) GetValue() core.IExprNode {
   panic("DefinedVariable#GetValue called")
+}
+
+func (self DefinedVariable) GetIR() core.IExpr {
+  return self.ir_expr
+}
+
+func (self *DefinedVariable) SetIR(expr core.IExpr) {
+  self.ir_expr = expr
 }

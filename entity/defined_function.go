@@ -15,10 +15,11 @@ type DefinedFunction struct {
   Body core.IStmtNode
   scope *LocalScope
   numRefered int
+  ir_stmts []core.IStmt
 }
 
 func NewDefinedFunction(priv bool, t core.ITypeNode, name string, params *Params, body core.IStmtNode) *DefinedFunction {
-  return &DefinedFunction { "entity.DefinedFunction", priv, t, name, params, body, nil, 0 }
+  return &DefinedFunction { "entity.DefinedFunction", priv, t, name, params, body, nil, 0, []core.IStmt { } }
 }
 
 func NewDefinedFunctions(xs...*DefinedFunction) []*DefinedFunction {
@@ -121,4 +122,12 @@ func (self DefinedFunction) IsVoid() bool {
 
 func (self DefinedFunction) GetValue() core.IExprNode {
   panic("DefinedFunction#GetValue called")
+}
+
+func (self DefinedFunction) GetIR() []core.IStmt {
+  return self.ir_stmts
+}
+
+func (self *DefinedFunction) SetIR(stmts []core.IStmt) {
+  self.ir_stmts = stmts
 }

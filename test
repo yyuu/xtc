@@ -25,3 +25,6 @@ go test -v ./parser
 
 go test -i ./compiler
 go test -v ./compiler
+
+go test -i ./ir
+go test -v ./ir
