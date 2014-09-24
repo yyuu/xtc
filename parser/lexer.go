@@ -44,8 +44,8 @@ func newLexer(filename string, source string) *lexer {
   return &lexer {
     scanner: strscan.New(source),
     sourceName: filename,
-    lineNumber: 0,
-    lineOffset: 0,
+    lineNumber: 1,
+    lineOffset: 1,
     ignoreSpaces: true,
     ignoreComments: true,
     ast: nil,

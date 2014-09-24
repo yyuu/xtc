@@ -8,8 +8,6 @@ import (
 type StringScanner struct {
   String string
   offset int
-  lineNumber int
-  lineOffset int
   matched string
 }
 
@@ -17,8 +15,6 @@ func New(s string) *StringScanner {
   return &StringScanner {
     String: s, 
     offset: 0,
-    lineNumber: 0,
-    lineOffset: 0,
     matched: "",
   }
 }
