@@ -13,7 +13,6 @@ type IntegerLiteralNode struct {
   Location core.Location
   TypeNode core.ITypeNode
   Value int64
-  t core.IType
 }
 
 func NewIntegerLiteralNode(loc core.Location, literal string) *IntegerLiteralNode {
@@ -49,7 +48,7 @@ func NewIntegerLiteralNode(loc core.Location, literal string) *IntegerLiteralNod
   if err != nil {
     panic(err)
   }
-  return &IntegerLiteralNode { "ast.IntegerLiteralNode", loc, NewTypeNode(loc, ref), value, nil }
+  return &IntegerLiteralNode { "ast.IntegerLiteralNode", loc, NewTypeNode(loc, ref), value }
 }
 
 func startsWith(s, prefix string) bool {
@@ -77,14 +76,11 @@ func (self IntegerLiteralNode) GetTypeNode() core.ITypeNode {
 }
 
 func (self IntegerLiteralNode) GetType() core.IType {
-  if self.t == nil {
-    panic(fmt.Errorf("%s type is nil", self.Location))
-  }
-  return self.t
+  return self.TypeNode.GetType()
 }
 
 func (self *IntegerLiteralNode) SetType(t core.IType) {
-  self.t = t
+  panic("IntegerLiteralNode#SetType called")
 }
 
 func (self IntegerLiteralNode) IsConstant() bool {

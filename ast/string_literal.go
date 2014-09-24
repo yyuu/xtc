@@ -1,7 +1,6 @@
 package ast
 
 import (
-  "fmt"
   "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/entity"
   "bitbucket.org/yyuu/bs/typesys"
@@ -14,13 +13,12 @@ type StringLiteralNode struct {
   TypeNode core.ITypeNode
   Value string
   entry *entity.ConstantEntry
-  t core.IType
 }
 
 func NewStringLiteralNode(loc core.Location, literal string) *StringLiteralNode {
   ref := typesys.NewPointerTypeRef(typesys.NewCharTypeRef(loc))
   t := NewTypeNode(loc, ref)
-  return &StringLiteralNode { "ast.StringLiteralNode", loc, t, literal, nil, nil }
+  return &StringLiteralNode { "ast.StringLiteralNode", loc, t, literal, nil }
 }
 
 func (self StringLiteralNode) String() string {
@@ -56,14 +54,11 @@ func (self StringLiteralNode) GetTypeRef() core.ITypeRef {
 }
 
 func (self StringLiteralNode) GetType() core.IType {
-  if self.t == nil {
-    panic(fmt.Errorf("%s type is nil", self.Location))
-  }
-  return self.t
+  return self.TypeNode.GetType()
 }
 
 func (self *StringLiteralNode) SetType(t core.IType) {
-  self.t = t
+  panic("StringLiteralNode#SetType called")
 }
 
 func (self StringLiteralNode) IsConstant() bool {
