@@ -15,9 +15,14 @@ import (
 )
 
 var flagSet = flag.NewFlagSet(os.Args[0], 1)
-var dump = flagSet.Bool("D", false, "dump mode")
+var dump = flagSet.Int("d", 0, "dump mode")
 var verbose = flagSet.Int("v", 0, "verbose mode")
 var errorHandler = core.NewErrorHandler(core.LOG_DEBUG)
+
+const (
+  DUMP_AST = 1<<iota
+  DUMP_SEMANT
+)
 
 func main() {
   flagSet.Parse(os.Args[1:])
@@ -66,27 +71,43 @@ func ep(a *ast.AST, err error) *ast.AST {
     panic(err)
   }
 
-  if *dump == true {
-    d(a)
+  if (*dump & DUMP_AST) != 0 {
+    dumpAST(a)
   }
-
   types := typesys.NewTypeTableFor("x86-linux")
-  compiler.NewLocalResolver(errorHandler).Resolve(a)
-  compiler.NewTypeResolver(errorHandler, types).Resolve(a)
-  types.SemanticCheck(errorHandler)
-  compiler.NewDereferenceChecker(errorHandler, types).Check(a)
-  compiler.NewTypeChecker(errorHandler, types).Check(a)
+  sem := semanticAnalyze(a, types)
+  if (*dump & DUMP_SEMANT) != 0 {
+    dumpSemant(sem)
+  }
 
   // TODO: evaluate AST
   fmt.Fprintln(os.Stdout, a)
   return a
 }
 
-func d(a *ast.AST) *ast.AST {
+func semanticAnalyze(a *ast.AST, types *typesys.TypeTable) *ast.AST {
+  compiler.NewLocalResolver(errorHandler).Resolve(a)
+  compiler.NewTypeResolver(errorHandler, types).Resolve(a)
+  types.SemanticCheck(errorHandler)
+  compiler.NewDereferenceChecker(errorHandler, types).Check(a)
+  compiler.NewTypeChecker(errorHandler, types).Check(a)
+  return a
+}
+
+func dumpAST(a *ast.AST) {
   cs, err := json.MarshalIndent(a, "", "  ")
   if err != nil {
     panic(err)
   }
+  fmt.Fprintln(os.Stderr, "// AST")
   fmt.Fprintln(os.Stderr, string(cs))
-  return a
+}
+
+func dumpSemant(a *ast.AST) {
+  cs, err := json.MarshalIndent(a, "", "  ")
+  if err != nil {
+    panic(err)
+  }
+  fmt.Fprintln(os.Stderr, "// Semantics")
+  fmt.Fprintln(os.Stderr, string(cs))
 }
