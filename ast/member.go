@@ -86,3 +86,7 @@ func (self MemberNode) GetBaseType() core.ICompositeType {
   t := self.Expr.GetType()
   return t.(core.ICompositeType)
 }
+
+func (self MemberNode) GetOffset() int {
+  return self.GetBaseType().GetMemberOffset(self.Member)
+}

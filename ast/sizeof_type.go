@@ -49,6 +49,10 @@ func (self SizeofTypeNode) GetOperandTypeRef() core.ITypeRef {
   return self.OperandTypeNode.GetTypeRef()
 }
 
+func (self SizeofTypeNode) GetOperandType() core.IType {
+  return self.OperandTypeNode.GetType()
+}
+
 func (self SizeofTypeNode) GetType() core.IType {
   if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))

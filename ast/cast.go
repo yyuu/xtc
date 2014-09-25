@@ -86,3 +86,7 @@ func (self CastNode) IsCallable() bool {
 func (self CastNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }
+
+func (self CastNode) IsEffectiveCast() bool {
+  return self.GetType().Size() > self.Expr.GetType().Size()
+}

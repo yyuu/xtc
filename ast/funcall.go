@@ -44,6 +44,10 @@ func (self FuncallNode) GetExpr() core.IExprNode {
   return self.Expr
 }
 
+func (self FuncallNode) GetArg(i int) core.IExprNode {
+  return self.Args[i]
+}
+
 func (self FuncallNode) GetArgs() []core.IExprNode {
   return self.Args
 }

@@ -92,3 +92,7 @@ func (self PtrMemberNode) GetDereferedType() core.IType {
   pt := self.Expr.GetType().(*typesys.PointerType)
   return pt.GetBaseType()
 }
+
+func (self PtrMemberNode) GetOffset() int {
+  return self.GetDereferedCompositeType().GetMemberOffset(self.Member)
+}
