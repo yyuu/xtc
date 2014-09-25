@@ -24,6 +24,11 @@ func (self UnionTypeRef) String() string {
   return self.Key()
 }
 
+func (self UnionTypeRef) MarshalJSON() ([]byte, error) {
+  s := fmt.Sprintf("%q", self.Key())
+  return []byte(s), nil
+}
+
 func (self UnionTypeRef) GetLocation() core.Location {
   return self.Location
 }

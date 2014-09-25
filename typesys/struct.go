@@ -26,6 +26,11 @@ func (self StructType) String() string {
   return self.Key()
 }
 
+func (self StructType) MarshalJSON() ([]byte, error) {
+  s := fmt.Sprintf("%q", self.Key())
+  return []byte(s), nil
+}
+
 func (self StructType) Size() int {
   panic("StructType#Size called")
 }

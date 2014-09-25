@@ -26,6 +26,11 @@ func (self UnionType) String() string {
   return self.Key()
 }
 
+func (self UnionType) MarshalJSON() ([]byte, error) {
+  s := fmt.Sprintf("%q", self.Key())
+  return []byte(s), nil
+}
+
 func (self UnionType) Size() int {
   panic("UnionType#Size called")
 }

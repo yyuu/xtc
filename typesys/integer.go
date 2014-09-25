@@ -1,6 +1,7 @@
 package typesys
 
 import (
+  "fmt"
   "math"
   "bitbucket.org/yyuu/bs/core"
 )
@@ -55,6 +56,11 @@ func (self IntegerType) Key() string {
 
 func (self IntegerType) String() string {
   return self.Key()
+}
+
+func (self IntegerType) MarshalJSON() ([]byte, error) {
+  s := fmt.Sprintf("%q", self.Key())
+  return []byte(s), nil
 }
 
 func (self IntegerType) Size() int {
