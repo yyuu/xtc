@@ -16,19 +16,22 @@ func TestLogicalOrNode(t *testing.T) {
     "Left": {
       "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
-      "Name": "a"
+      "Name": "a",
+      "Entity": null
     },
     "Right": {
       "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
-      "Name": "b"
+      "Name": "b",
+      "Entity": null
     },
     "Type": null
   },
   "Right": {
     "ClassName": "ast.VariableNode",
     "Location": "[:0,0]",
-    "Name": "c"
+    "Name": "c",
+    "Entity": null
   },
   "Type": null
 }`

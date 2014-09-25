@@ -14,7 +14,8 @@ func TestFuncallNode(t *testing.T) {
   "Expr": {
     "ClassName": "ast.VariableNode",
     "Location": "[:0,0]",
-    "Name": "a"
+    "Name": "a",
+    "Entity": null
   },
   "Args": [
     {
@@ -60,7 +61,8 @@ func TestFuncallNode2(t *testing.T) {
   "Expr": {
     "ClassName": "ast.VariableNode",
     "Location": "[:0,0]",
-    "Name": "b"
+    "Name": "b",
+    "Entity": null
   },
   "Args": []
 }`

@@ -40,7 +40,8 @@ func TestUnaryOpNode2(t *testing.T) {
   "Expr": {
     "ClassName": "ast.VariableNode",
     "Location": "[:0,0]",
-    "Name": "a"
+    "Name": "a",
+    "Entity": null
   },
   "Type": null
 }`

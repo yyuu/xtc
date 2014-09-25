@@ -10,7 +10,7 @@ type VariableNode struct {
   ClassName string
   Location core.Location
   Name string
-  entity core.IEntity
+  Entity core.IEntity
 }
 
 func NewVariableNode(loc core.Location, name string) *VariableNode {
@@ -30,7 +30,7 @@ func (self VariableNode) GetLocation() core.Location {
 }
 
 func (self VariableNode) IsResolved() bool {
-  return self.entity != nil
+  return self.Entity != nil
 }
 
 func (self VariableNode) GetName() string {
@@ -38,14 +38,14 @@ func (self VariableNode) GetName() string {
 }
 
 func (self *VariableNode) SetEntity(ent core.IEntity) {
-  self.entity = ent
+  self.Entity = ent
 }
 
 func (self VariableNode) GetEntity() core.IEntity {
-  if self.entity == nil {
+  if self.Entity == nil {
     panic(fmt.Errorf("%s entity is nil: %s", self.Location, self.Name))
   }
-  return self.entity
+  return self.Entity
 }
 
 func (self VariableNode) GetType() core.IType {
@@ -64,7 +64,7 @@ func (self VariableNode) IsConstant() bool {
 }
 
 func (self VariableNode) IsParameter() bool {
-  return self.entity.IsParameter()
+  return self.GetEntity().IsParameter()
 }
 
 func (self VariableNode) IsLvalue() bool {

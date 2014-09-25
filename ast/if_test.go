@@ -34,7 +34,8 @@ func TestIf(t *testing.T) {
       "Left": {
         "ClassName": "ast.VariableNode",
         "Location": "[:0,0]",
-        "Name": "n"
+        "Name": "n",
+        "Entity": null
       },
       "Right": {
         "ClassName": "ast.IntegerLiteralNode",
@@ -79,7 +80,8 @@ func TestIf(t *testing.T) {
       "Expr": {
         "ClassName": "ast.VariableNode",
         "Location": "[:0,0]",
-        "Name": "println"
+        "Name": "println",
+        "Entity": null
       },
       "Args": [
         {
@@ -113,7 +115,8 @@ func TestIf(t *testing.T) {
       "Expr": {
         "ClassName": "ast.VariableNode",
         "Location": "[:0,0]",
-        "Name": "println"
+        "Name": "println",
+        "Entity": null
       },
       "Args": [
         {

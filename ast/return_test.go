@@ -13,7 +13,8 @@ func TestReturn(t *testing.T) {
   "Expr": {
     "ClassName": "ast.VariableNode",
     "Location": "[:0,0]",
-    "Name": "a"
+    "Name": "a",
+    "Entity": null
   }
 }`
   xt.AssertStringEqualsDiff(t, "VariableNode", xt.JSON(x), s)

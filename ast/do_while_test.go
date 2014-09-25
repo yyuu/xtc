@@ -29,13 +29,15 @@ func TestDoWhile(t *testing.T) {
       "Expr": {
         "ClassName": "ast.VariableNode",
         "Location": "[:0,0]",
-        "Name": "b"
+        "Name": "b",
+        "Entity": null
       },
       "Args": [
         {
           "ClassName": "ast.VariableNode",
           "Location": "[:0,0]",
-          "Name": "a"
+          "Name": "a",
+          "Entity": null
         }
       ]
     }
@@ -47,7 +49,8 @@ func TestDoWhile(t *testing.T) {
     "Left": {
       "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
-      "Name": "a"
+      "Name": "a",
+      "Entity": null
     },
     "Right": {
       "ClassName": "ast.IntegerLiteralNode",

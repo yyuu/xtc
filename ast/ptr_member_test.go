@@ -13,7 +13,8 @@ func TestPtrMemberNode(t *testing.T) {
   "Expr": {
     "ClassName": "ast.VariableNode",
     "Location": "[:0,0]",
-    "Name": "a"
+    "Name": "a",
+    "Entity": null
   },
   "Member": "b",
   "Type": null

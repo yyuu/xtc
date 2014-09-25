@@ -27,7 +27,8 @@ func TestWhile(t *testing.T) {
     "Expr": {
       "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
-      "Name": "eof"
+      "Name": "eof",
+      "Entity": null
     },
     "Type": null
   },
@@ -40,7 +41,8 @@ func TestWhile(t *testing.T) {
       "Expr": {
         "ClassName": "ast.VariableNode",
         "Location": "[:0,0]",
-        "Name": "gets"
+        "Name": "gets",
+        "Entity": null
       },
       "Args": []
     }

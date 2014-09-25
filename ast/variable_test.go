@@ -10,7 +10,8 @@ func TestVariableNode(t *testing.T) {
   s := `{
   "ClassName": "ast.VariableNode",
   "Location": "[:0,0]",
-  "Name": "a"
+  "Name": "a",
+  "Entity": null
 }`
   xt.AssertStringEqualsDiff(t, "VariableNode", xt.JSON(x), s)
 }

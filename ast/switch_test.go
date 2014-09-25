@@ -41,7 +41,8 @@ func TestSwitch(t *testing.T) {
   "Cond": {
     "ClassName": "ast.VariableNode",
     "Location": "[:0,0]",
-    "Name": "n"
+    "Name": "n",
+    "Entity": null
   },
   "Cases": [
     {
@@ -73,7 +74,8 @@ func TestSwitch(t *testing.T) {
           "Expr": {
             "ClassName": "ast.VariableNode",
             "Location": "[:0,0]",
-            "Name": "println"
+            "Name": "println",
+            "Entity": null
           },
           "Args": [
             {
@@ -128,7 +130,8 @@ func TestSwitch(t *testing.T) {
           "Expr": {
             "ClassName": "ast.VariableNode",
             "Location": "[:0,0]",
-            "Name": "println"
+            "Name": "println",
+            "Entity": null
           },
           "Args": [
             {
@@ -167,7 +170,8 @@ func TestSwitch(t *testing.T) {
           "Expr": {
             "ClassName": "ast.VariableNode",
             "Location": "[:0,0]",
-            "Name": "println"
+            "Name": "println",
+            "Entity": null
           },
           "Args": [
             {

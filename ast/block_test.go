@@ -35,7 +35,8 @@ func TestBlock1(t *testing.T) {
         "Expr": {
           "ClassName": "ast.VariableNode",
           "Location": "[:0,0]",
-          "Name": "println"
+          "Name": "println",
+          "Entity": null
         },
         "Args": [
           {
@@ -131,7 +132,8 @@ func TestBlock2(t *testing.T) {
         "Expr": {
           "ClassName": "ast.VariableNode",
           "Location": "[:0,0]",
-          "Name": "printf"
+          "Name": "printf",
+          "Entity": null
         },
         "Args": [
           {
@@ -156,7 +158,8 @@ func TestBlock2(t *testing.T) {
           {
             "ClassName": "ast.VariableNode",
             "Location": "[:0,0]",
-            "Name": "n"
+            "Name": "n",
+            "Entity": null
           }
         ]
       }
@@ -271,7 +274,8 @@ func TestBlock3(t *testing.T) {
         "Expr": {
           "ClassName": "ast.VariableNode",
           "Location": "[:0,0]",
-          "Name": "printf"
+          "Name": "printf",
+          "Entity": null
         },
         "Args": [
           {
@@ -296,7 +300,8 @@ func TestBlock3(t *testing.T) {
           {
             "ClassName": "ast.VariableNode",
             "Location": "[:0,0]",
-            "Name": "n"
+            "Name": "n",
+            "Entity": null
           }
         ]
       }
@@ -310,7 +315,8 @@ func TestBlock3(t *testing.T) {
         "Expr": {
           "ClassName": "ast.VariableNode",
           "Location": "[:0,0]",
-          "Name": "printf"
+          "Name": "printf",
+          "Entity": null
         },
         "Args": [
           {
@@ -335,7 +341,8 @@ func TestBlock3(t *testing.T) {
           {
             "ClassName": "ast.VariableNode",
             "Location": "[:0,0]",
-            "Name": "m"
+            "Name": "m",
+            "Entity": null
           }
         ]
       }

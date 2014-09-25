@@ -28,7 +28,8 @@ func TestFor(t *testing.T) {
     "LHS": {
       "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
-      "Name": "i"
+      "Name": "i",
+      "Entity": null
     },
     "RHS": {
       "ClassName": "ast.IntegerLiteralNode",
@@ -54,7 +55,8 @@ func TestFor(t *testing.T) {
     "Left": {
       "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
-      "Name": "i"
+      "Name": "i",
+      "Entity": null
     },
     "Right": {
       "ClassName": "ast.IntegerLiteralNode",
@@ -80,7 +82,8 @@ func TestFor(t *testing.T) {
     "Expr": {
       "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
-      "Name": "i"
+      "Name": "i",
+      "Entity": null
     },
     "Amount": 1,
     "Type": null
@@ -94,13 +97,15 @@ func TestFor(t *testing.T) {
       "Expr": {
         "ClassName": "ast.VariableNode",
         "Location": "[:0,0]",
-        "Name": "f"
+        "Name": "f",
+        "Entity": null
       },
       "Args": [
         {
           "ClassName": "ast.VariableNode",
           "Location": "[:0,0]",
-          "Name": "i"
+          "Name": "i",
+          "Entity": null
         }
       ]
     }

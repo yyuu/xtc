@@ -14,7 +14,8 @@ func TestPrefixOpNode(t *testing.T) {
   "Expr": {
     "ClassName": "ast.VariableNode",
     "Location": "[:0,0]",
-    "Name": "a"
+    "Name": "a",
+    "Entity": null
   },
   "Amount": 1,
   "Type": null

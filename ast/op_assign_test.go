@@ -14,7 +14,8 @@ func TestOpAssignNode(t *testing.T) {
   "LHS": {
     "ClassName": "ast.VariableNode",
     "Location": "[:0,0]",
-    "Name": "a"
+    "Name": "a",
+    "Entity": null
   },
   "RHS": {
     "ClassName": "ast.IntegerLiteralNode",

@@ -27,7 +27,8 @@ func TestCondExpr(t *testing.T) {
     "Left": {
       "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
-      "Name": "n"
+      "Name": "n",
+      "Entity": null
     },
     "Right": {
       "ClassName": "ast.IntegerLiteralNode",
@@ -71,7 +72,8 @@ func TestCondExpr(t *testing.T) {
       "Expr": {
         "ClassName": "ast.VariableNode",
         "Location": "[:0,0]",
-        "Name": "f"
+        "Name": "f",
+        "Entity": null
       },
       "Args": [
         {
@@ -81,7 +83,8 @@ func TestCondExpr(t *testing.T) {
           "Left": {
             "ClassName": "ast.VariableNode",
             "Location": "[:0,0]",
-            "Name": "n"
+            "Name": "n",
+            "Entity": null
           },
           "Right": {
             "ClassName": "ast.IntegerLiteralNode",
@@ -108,7 +111,8 @@ func TestCondExpr(t *testing.T) {
       "Expr": {
         "ClassName": "ast.VariableNode",
         "Location": "[:0,0]",
-        "Name": "f"
+        "Name": "f",
+        "Entity": null
       },
       "Args": [
         {
@@ -118,7 +122,8 @@ func TestCondExpr(t *testing.T) {
           "Left": {
             "ClassName": "ast.VariableNode",
             "Location": "[:0,0]",
-            "Name": "n"
+            "Name": "n",
+            "Entity": null
           },
           "Right": {
             "ClassName": "ast.IntegerLiteralNode",
