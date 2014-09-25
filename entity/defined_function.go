@@ -15,7 +15,7 @@ type DefinedFunction struct {
   Body core.IStmtNode
   scope *LocalScope
   numRefered int
-  ir_stmts []core.IStmt
+  IR []core.IStmt
 }
 
 func NewDefinedFunction(priv bool, t core.ITypeNode, name string, params *Params, body core.IStmtNode) *DefinedFunction {
@@ -125,9 +125,9 @@ func (self DefinedFunction) GetValue() core.IExprNode {
 }
 
 func (self DefinedFunction) GetIR() []core.IStmt {
-  return self.ir_stmts
+  return self.IR
 }
 
 func (self *DefinedFunction) SetIR(stmts []core.IStmt) {
-  self.ir_stmts = stmts
+  self.IR = stmts
 }

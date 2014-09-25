@@ -12,7 +12,7 @@ type DefinedVariable struct {
   TypeNode core.ITypeNode
   Initializer core.IExprNode
   numRefered int
-  ir_expr core.IExpr
+  IR core.IExpr
 }
 
 func NewDefinedVariable(isPrivate bool, t core.ITypeNode, name string, init core.IExprNode) *DefinedVariable {
@@ -98,9 +98,9 @@ func (self DefinedVariable) GetValue() core.IExprNode {
 }
 
 func (self DefinedVariable) GetIR() core.IExpr {
-  return self.ir_expr
+  return self.IR
 }
 
 func (self *DefinedVariable) SetIR(expr core.IExpr) {
-  self.ir_expr = expr
+  self.IR = expr
 }

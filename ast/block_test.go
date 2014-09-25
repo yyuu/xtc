@@ -103,7 +103,8 @@ func TestBlock2(t *testing.T) {
           "Type": null
         },
         "Value": 12345
-      }
+      },
+      "IR": null
     }
   ],
   "Stmts": [
@@ -199,7 +200,8 @@ func TestBlock3(t *testing.T) {
           "Type": null
         },
         "Value": 12345
-      }
+      },
+      "IR": null
     },
     {
       "ClassName": "entity.DefinedVariable",
@@ -221,7 +223,8 @@ func TestBlock3(t *testing.T) {
           "Type": null
         },
         "Value": 67890
-      }
+      },
+      "IR": null
     }
   ],
   "Stmts": [
