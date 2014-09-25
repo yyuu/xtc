@@ -15,7 +15,8 @@ func TestMemberNode(t *testing.T) {
     "Location": "[:0,0]",
     "Name": "a"
   },
-  "Member": "b"
+  "Member": "b",
+  "Type": null
 }`
   xt.AssertStringEqualsDiff(t, "MemberNode", xt.JSON(x), s)
 }

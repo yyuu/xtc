@@ -11,7 +11,7 @@ type LogicalAndNode struct {
   Location core.Location
   Left core.IExprNode
   Right core.IExprNode
-  t core.IType
+  Type core.IType
 }
 
 func NewLogicalAndNode(loc core.Location, left core.IExprNode, right core.IExprNode) *LogicalAndNode {
@@ -53,14 +53,14 @@ func (self *LogicalAndNode) SetRight(expr core.IExprNode) {
 }
 
 func (self LogicalAndNode) GetType() core.IType {
-  if self.t == nil {
+  if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
-  return self.t
+  return self.Type
 }
 
 func (self *LogicalAndNode) SetType(t core.IType) {
-  self.t = t
+  self.Type = t
 }
 
 func (self LogicalAndNode) IsConstant() bool {

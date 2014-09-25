@@ -27,7 +27,8 @@ func TestFuncallNode(t *testing.T) {
           "ClassName": "typesys.IntegerTypeRef",
           "Location": "[:0,0]",
           "Name": "int"
-        }
+        },
+        "Type": null
       },
       "Value": 12345
     },
@@ -41,7 +42,8 @@ func TestFuncallNode(t *testing.T) {
           "ClassName": "typesys.IntegerTypeRef",
           "Location": "[:0,0]",
           "Name": "int"
-        }
+        },
+        "Type": null
       },
       "Value": 67890
     }

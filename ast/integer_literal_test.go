@@ -17,7 +17,8 @@ func TestDecimalIntegerLiteral(t *testing.T) {
       "ClassName": "typesys.IntegerTypeRef",
       "Location": "[:0,0]",
       "Name": "int"
-    }
+    },
+    "Type": null
   },
   "Value": 12345
 }`
@@ -36,7 +37,8 @@ func TestOctalIntegerLiteral(t *testing.T) {
       "ClassName": "typesys.IntegerTypeRef",
       "Location": "[:0,0]",
       "Name": "int"
-    }
+    },
+    "Type": null
   },
   "Value": 493
 }`
@@ -55,7 +57,8 @@ func TestHexadecimalIntegerLiteral(t *testing.T) {
       "ClassName": "typesys.IntegerTypeRef",
       "Location": "[:0,0]",
       "Name": "int"
-    }
+    },
+    "Type": null
   },
   "Value": 65535
 }`
@@ -74,7 +77,8 @@ func TestCharacterIntegerLiteral(t *testing.T) {
       "ClassName": "typesys.IntegerTypeRef",
       "Location": "[:0,0]",
       "Name": "char"
-    }
+    },
+    "Type": null
   },
   "Value": 97
 }`
@@ -93,7 +97,8 @@ func TestUnsignedIntegerLiteral(t *testing.T) {
       "ClassName": "typesys.IntegerTypeRef",
       "Location": "[:0,0]",
       "Name": "unsigned int"
-    }
+    },
+    "Type": null
   },
   "Value": 12345
 }`
@@ -112,7 +117,8 @@ func TestLongIntegerLiteral(t *testing.T) {
       "ClassName": "typesys.IntegerTypeRef",
       "Location": "[:0,0]",
       "Name": "long"
-    }
+    },
+    "Type": null
   },
   "Value": 12345
 }`
@@ -131,7 +137,8 @@ func TestUnsignedLongIntegerLiteral(t *testing.T) {
       "ClassName": "typesys.IntegerTypeRef",
       "Location": "[:0,0]",
       "Name": "unsigned long"
-    }
+    },
+    "Type": null
   },
   "Value": 12345
 }`

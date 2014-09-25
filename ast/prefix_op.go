@@ -12,7 +12,7 @@ type PrefixOpNode struct {
   Operator string
   Expr core.IExprNode
   amount int
-  t core.IType
+  Type core.IType
 }
 
 func NewPrefixOpNode(loc core.Location, operator string, expr core.IExprNode) *PrefixOpNode {
@@ -57,11 +57,11 @@ func (self *PrefixOpNode) SetAmount(i int) {
 }
 
 func (self PrefixOpNode) GetOpType() core.IType {
-  return self.t
+  return self.Type
 }
 
 func (self *PrefixOpNode) SetOpType(t core.IType) {
-  self.t = t
+  self.Type = t
 }
 
 func (self PrefixOpNode) GetType() core.IType {

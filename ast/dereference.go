@@ -10,7 +10,7 @@ type DereferenceNode struct {
   ClassName string
   Location core.Location
   Expr core.IExprNode
-  t core.IType
+  Type core.IType
 }
 
 func NewDereferenceNode(loc core.Location, expr core.IExprNode) *DereferenceNode {
@@ -35,14 +35,14 @@ func (self DereferenceNode) GetExpr() core.IExprNode {
 }
 
 func (self DereferenceNode) GetType() core.IType {
-  if self.t == nil {
+  if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
-  return self.t
+  return self.Type
 }
 
 func (self *DereferenceNode) SetType(t core.IType) {
-  self.t = t
+  self.Type = t
 }
 
 func (self DereferenceNode) IsConstant() bool {

@@ -21,10 +21,12 @@ func TestUnaryOpNode1(t *testing.T) {
         "ClassName": "typesys.IntegerTypeRef",
         "Location": "[:0,0]",
         "Name": "int"
-      }
+      },
+      "Type": null
     },
     "Value": 12345
-  }
+  },
+  "Type": null
 }`
   xt.AssertStringEqualsDiff(t, "UnaryOpNode1", xt.JSON(x), s)
 }
@@ -39,7 +41,8 @@ func TestUnaryOpNode2(t *testing.T) {
     "ClassName": "ast.VariableNode",
     "Location": "[:0,0]",
     "Name": "a"
-  }
+  },
+  "Type": null
 }`
   xt.AssertStringEqualsDiff(t, "UnaryOpNode2", xt.JSON(x), s)
 }

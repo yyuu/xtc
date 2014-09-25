@@ -10,7 +10,7 @@ type TypeNode struct {
   ClassName string
   Location core.Location
   TypeRef core.ITypeRef
-  t core.IType
+  Type core.IType
 }
 
 func NewTypeNode(loc core.Location, ref core.ITypeRef) *TypeNode {
@@ -35,16 +35,16 @@ func (self TypeNode) GetLocation() core.Location {
 }
 
 func (self TypeNode) IsResolved() bool {
-  return self.t != nil
+  return self.Type != nil
 }
 
 func (self TypeNode) GetType() core.IType {
-  return self.t
+  return self.Type
 }
 
 func (self *TypeNode) SetType(t core.IType) {
-  if self.t != nil {
+  if self.Type != nil {
     panic("TypeNode#SetType called twice")
   }
-  self.t = t
+  self.Type = t
 }

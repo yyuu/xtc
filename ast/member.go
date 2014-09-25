@@ -11,7 +11,7 @@ type MemberNode struct {
   Location core.Location
   Expr core.IExprNode
   Member string
-  t core.IType
+  Type core.IType
 }
 
 func NewMemberNode(loc core.Location, expr core.IExprNode, member string) *MemberNode {
@@ -40,14 +40,14 @@ func (self MemberNode) GetMember() string {
 }
 
 func (self MemberNode) GetType() core.IType {
-  if self.t == nil {
+  if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
-  return self.t
+  return self.Type
 }
 
 func (self *MemberNode) SetType(t core.IType) {
-  self.t = t
+  self.Type = t
 }
 
 func (self MemberNode) IsConstant() bool {

@@ -11,7 +11,7 @@ type AssignNode struct {
   Location core.Location
   LHS core.IExprNode
   RHS core.IExprNode
-  t core.IType
+  Type core.IType
 }
 
 func NewAssignNode(loc core.Location, lhs core.IExprNode, rhs core.IExprNode) *AssignNode {
@@ -49,14 +49,14 @@ func (self *AssignNode) SetRHS(expr core.IExprNode) {
 }
 
 func (self AssignNode) GetType() core.IType {
-  if self.t == nil {
+  if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
-  return self.t
+  return self.Type
 }
 
 func (self *AssignNode) SetType(t core.IType) {
-  self.t = t
+  self.Type = t
 }
 
 func (self AssignNode) IsConstant() bool {

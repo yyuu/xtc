@@ -12,7 +12,7 @@ type BinaryOpNode struct {
   Operator string
   Left core.IExprNode
   Right core.IExprNode
-  t core.IType
+  Type core.IType
 }
 
 func NewBinaryOpNode(loc core.Location, operator string, left core.IExprNode, right core.IExprNode) *BinaryOpNode {
@@ -63,14 +63,14 @@ func (self *BinaryOpNode) SetRight(expr core.IExprNode) {
 }
 
 func (self BinaryOpNode) GetType() core.IType {
-  if self.t == nil {
+  if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
-  return self.t
+  return self.Type
 }
 
 func (self *BinaryOpNode) SetType(t core.IType) {
-  self.t = t
+  self.Type = t
 }
 
 func (self BinaryOpNode) IsConstant() bool {

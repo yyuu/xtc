@@ -11,7 +11,7 @@ type SizeofExprNode struct {
   Location core.Location
   Expr core.IExprNode
   TypeNode core.ITypeNode
-  t core.IType
+  Type core.IType
 }
 
 func NewSizeofExprNode(loc core.Location, expr core.IExprNode, t core.ITypeRef) *SizeofExprNode {
@@ -45,14 +45,14 @@ func (self SizeofExprNode) GetExpr() core.IExprNode {
 }
 
 func (self SizeofExprNode) GetType() core.IType {
-  if self.t == nil {
+  if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
-  return self.t
+  return self.Type
 }
 
 func (self *SizeofExprNode) SetType(t core.IType) {
-  self.t = t
+  self.Type = t
 }
 
 func (self SizeofExprNode) IsConstant() bool {

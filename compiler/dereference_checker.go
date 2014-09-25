@@ -150,7 +150,7 @@ func (self *DereferenceChecker) VisitNode(unknown core.INode) {
       if node.GetEntity().IsConstant() {
         self.checkConstant(node.GetEntity().(*entity.Constant).GetValue())
       }
-      self.handleImplicitAddress(node)
+//    self.handleImplicitAddress(node)
     }
     case *ast.CastNode: {
       visitCastNode(self, node)

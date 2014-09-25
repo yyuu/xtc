@@ -11,7 +11,7 @@ type SizeofTypeNode struct {
   Location core.Location
   TypeNode core.ITypeNode
   OperandTypeNode core.ITypeNode
-  t core.IType
+  Type core.IType
 }
 
 func NewSizeofTypeNode(loc core.Location, operand core.ITypeNode, ref core.ITypeRef) *SizeofTypeNode {
@@ -50,14 +50,14 @@ func (self SizeofTypeNode) GetOperandTypeRef() core.ITypeRef {
 }
 
 func (self SizeofTypeNode) GetType() core.IType {
-  if self.t == nil {
+  if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
-  return self.t
+  return self.Type
 }
 
 func (self *SizeofTypeNode) SetType(t core.IType) {
-  self.t = t
+  self.Type = t
 }
 
 func (self SizeofTypeNode) IsConstant() bool {

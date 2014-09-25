@@ -11,7 +11,7 @@ type UnaryOpNode struct {
   Location core.Location
   Operator string
   Expr core.IExprNode
-  t core.IType
+  Type core.IType
 }
 
 func NewUnaryOpNode(loc core.Location, operator string, expr core.IExprNode) *UnaryOpNode {
@@ -43,11 +43,11 @@ func (self UnaryOpNode) GetExpr() core.IExprNode {
 }
 
 func (self UnaryOpNode) GetOpType() core.IType {
-  return self.t
+  return self.Type
 }
 
 func (self *UnaryOpNode) SetOpType(t core.IType) {
-  self.t = t
+  self.Type = t
 }
 
 func (self UnaryOpNode) GetType() core.IType {

@@ -59,10 +59,12 @@ func TestDoWhile(t *testing.T) {
           "ClassName": "typesys.IntegerTypeRef",
           "Location": "[:0,0]",
           "Name": "int"
-        }
+        },
+        "Type": null
       },
       "Value": 100
-    }
+    },
+    "Type": null
   }
 }`
   xt.AssertStringEqualsDiff(t, "DoWhileNode", xt.JSON(x), s)

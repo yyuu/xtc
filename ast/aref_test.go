@@ -25,10 +25,12 @@ func TestArefNode(t *testing.T) {
         "ClassName": "typesys.IntegerTypeRef",
         "Location": "[:0,0]",
         "Name": "int"
-      }
+      },
+      "Type": null
     },
     "Value": 12345
-  }
+  },
+  "Type": null
 }`
   xt.AssertStringEqualsDiff(t, "ArefNode", xt.JSON(x), s)
 }

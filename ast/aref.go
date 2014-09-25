@@ -11,7 +11,7 @@ type ArefNode struct {
   Location core.Location
   Expr core.IExprNode
   Index core.IExprNode
-  t core.IType
+  Type core.IType
 }
 
 func NewArefNode(loc core.Location, expr core.IExprNode, index core.IExprNode) *ArefNode {
@@ -41,14 +41,14 @@ func (self ArefNode) GetIndex() core.IExprNode {
 }
 
 func (self ArefNode) GetType() core.IType {
-  if self.t == nil {
+  if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
-  return self.t
+  return self.Type
 }
 
 func (self *ArefNode) SetType(t core.IType) {
-  self.t = t
+  self.Type = t
 }
 
 func (self ArefNode) IsConstant() bool {

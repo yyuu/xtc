@@ -11,7 +11,7 @@ type CastNode struct {
   Location core.Location
   TypeNode core.ITypeNode
   Expr core.IExprNode
-  t core.IType
+  Type core.IType
 }
 
 func NewCastNode(loc core.Location, t core.ITypeNode, expr core.IExprNode) *CastNode {
@@ -45,14 +45,14 @@ func (self CastNode) GetExpr() core.IExprNode {
 }
 
 func (self CastNode) GetType() core.IType {
-  if self.t == nil {
+  if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
-  return self.t
+  return self.Type
 }
 
 func (self *CastNode) SetType(t core.IType) {
-  self.t = t
+  self.Type = t
 }
 
 func (self CastNode) IsConstant() bool {

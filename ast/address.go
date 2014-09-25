@@ -10,7 +10,7 @@ type AddressNode struct {
   ClassName string
   Location core.Location
   Expr core.IExprNode
-  t core.IType
+  Type core.IType
 }
 
 func NewAddressNode(loc core.Location, expr core.IExprNode) *AddressNode {
@@ -35,14 +35,14 @@ func (self AddressNode) GetExpr() core.IExprNode {
 }
 
 func (self AddressNode) GetType() core.IType {
-  if self.t == nil {
+  if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
-  return self.t
+  return self.Type
 }
 
 func (self *AddressNode) SetType(t core.IType) {
-  self.t = t
+  self.Type = t
 }
 
 func (self AddressNode) IsConstant() bool {

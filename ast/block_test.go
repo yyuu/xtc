@@ -52,7 +52,8 @@ func TestBlock1(t *testing.T) {
                   "Location": "[:0,0]",
                   "Name": "char"
                 }
-              }
+              },
+              "Type": null
             },
             "Value": "\"hello, world\""
           }
@@ -100,7 +101,8 @@ func TestBlock2(t *testing.T) {
           "ClassName": "typesys.IntegerTypeRef",
           "Location": "[:0,0]",
           "Name": "int"
-        }
+        },
+        "Type": null
       },
       "Initializer": {
         "ClassName": "ast.IntegerLiteralNode",
@@ -112,7 +114,8 @@ func TestBlock2(t *testing.T) {
             "ClassName": "typesys.IntegerTypeRef",
             "Location": "[:0,0]",
             "Name": "int"
-          }
+          },
+          "Type": null
         },
         "Value": 12345
       }
@@ -145,7 +148,8 @@ func TestBlock2(t *testing.T) {
                   "Location": "[:0,0]",
                   "Name": "char"
                 }
-              }
+              },
+              "Type": null
             },
             "Value": "\"%d\""
           },
@@ -207,7 +211,8 @@ func TestBlock3(t *testing.T) {
           "ClassName": "typesys.IntegerTypeRef",
           "Location": "[:0,0]",
           "Name": "int"
-        }
+        },
+        "Type": null
       },
       "Initializer": {
         "ClassName": "ast.IntegerLiteralNode",
@@ -219,7 +224,8 @@ func TestBlock3(t *testing.T) {
             "ClassName": "typesys.IntegerTypeRef",
             "Location": "[:0,0]",
             "Name": "int"
-          }
+          },
+          "Type": null
         },
         "Value": 12345
       }
@@ -235,7 +241,8 @@ func TestBlock3(t *testing.T) {
           "ClassName": "typesys.IntegerTypeRef",
           "Location": "[:0,0]",
           "Name": "int"
-        }
+        },
+        "Type": null
       },
       "Initializer": {
         "ClassName": "ast.IntegerLiteralNode",
@@ -247,7 +254,8 @@ func TestBlock3(t *testing.T) {
             "ClassName": "typesys.IntegerTypeRef",
             "Location": "[:0,0]",
             "Name": "int"
-          }
+          },
+          "Type": null
         },
         "Value": 67890
       }
@@ -280,7 +288,8 @@ func TestBlock3(t *testing.T) {
                   "Location": "[:0,0]",
                   "Name": "char"
                 }
-              }
+              },
+              "Type": null
             },
             "Value": "\"%d\""
           },
@@ -318,7 +327,8 @@ func TestBlock3(t *testing.T) {
                   "Location": "[:0,0]",
                   "Name": "char"
                 }
-              }
+              },
+              "Type": null
             },
             "Value": "\"%d\""
           },

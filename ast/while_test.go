@@ -28,7 +28,8 @@ func TestWhile(t *testing.T) {
       "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
       "Name": "eof"
-    }
+    },
+    "Type": null
   },
   "Body": {
     "ClassName": "ast.ExprStmtNode",

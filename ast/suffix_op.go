@@ -12,7 +12,7 @@ type SuffixOpNode struct {
   Operator string
   Expr core.IExprNode
   amount int
-  t core.IType
+  Type core.IType
 }
 
 func NewSuffixOpNode(loc core.Location, operator string, expr core.IExprNode) *SuffixOpNode {
@@ -57,11 +57,11 @@ func (self *SuffixOpNode) SetAmount(i int) {
 }
 
 func (self SuffixOpNode) GetOpType() core.IType {
-  return self.t
+  return self.Type
 }
 
 func (self *SuffixOpNode) SetOpType(t core.IType) {
-  self.t = t
+  self.Type = t
 }
 
 func (self SuffixOpNode) GetType() core.IType {

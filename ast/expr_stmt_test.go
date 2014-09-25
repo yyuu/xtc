@@ -24,7 +24,8 @@ func TestExprStmt(t *testing.T) {
           "ClassName": "typesys.IntegerTypeRef",
           "Location": "[:0,0]",
           "Name": "int"
-        }
+        },
+        "Type": null
       },
       "Value": 1
     },
@@ -38,10 +39,12 @@ func TestExprStmt(t *testing.T) {
           "ClassName": "typesys.IntegerTypeRef",
           "Location": "[:0,0]",
           "Name": "int"
-        }
+        },
+        "Type": null
       },
       "Value": 1
-    }
+    },
+    "Type": null
   }
 }`
   xt.AssertStringEqualsDiff(t, "ExprStmtNode", xt.JSON(x), s)

@@ -58,7 +58,8 @@ func TestSwitch(t *testing.T) {
               "ClassName": "typesys.IntegerTypeRef",
               "Location": "[:0,0]",
               "Name": "int"
-            }
+            },
+            "Type": null
           },
           "Value": 1
         }
@@ -89,7 +90,8 @@ func TestSwitch(t *testing.T) {
                     "Location": "[:0,0]",
                     "Name": "char"
                   }
-                }
+                },
+                "Type": null
               },
               "Value": "\"one\""
             }
@@ -111,7 +113,8 @@ func TestSwitch(t *testing.T) {
               "ClassName": "typesys.IntegerTypeRef",
               "Location": "[:0,0]",
               "Name": "int"
-            }
+            },
+            "Type": null
           },
           "Value": 2
         }
@@ -142,7 +145,8 @@ func TestSwitch(t *testing.T) {
                     "Location": "[:0,0]",
                     "Name": "char"
                   }
-                }
+                },
+                "Type": null
               },
               "Value": "\"two\""
             }
@@ -180,7 +184,8 @@ func TestSwitch(t *testing.T) {
                     "Location": "[:0,0]",
                     "Name": "char"
                   }
-                }
+                },
+                "Type": null
               },
               "Value": "\"plentiful\""
             }

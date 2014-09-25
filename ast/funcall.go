@@ -13,12 +13,11 @@ type FuncallNode struct {
   Location core.Location
   Expr core.IExprNode
   Args []core.IExprNode
-  t core.IType
 }
 
 func NewFuncallNode(loc core.Location, expr core.IExprNode, args []core.IExprNode) *FuncallNode {
   if expr == nil { panic("expr is nil") }
-  return &FuncallNode { "ast.FuncallNode", loc, expr, args, nil }
+  return &FuncallNode { "ast.FuncallNode", loc, expr, args }
 }
 
 func (self FuncallNode) String() string {

@@ -40,10 +40,12 @@ func TestFor(t *testing.T) {
           "ClassName": "typesys.IntegerTypeRef",
           "Location": "[:0,0]",
           "Name": "int"
-        }
+        },
+        "Type": null
       },
       "Value": 0
-    }
+    },
+    "Type": null
   },
   "Cond": {
     "ClassName": "ast.BinaryOpNode",
@@ -64,10 +66,12 @@ func TestFor(t *testing.T) {
           "ClassName": "typesys.IntegerTypeRef",
           "Location": "[:0,0]",
           "Name": "int"
-        }
+        },
+        "Type": null
       },
       "Value": 100
-    }
+    },
+    "Type": null
   },
   "Incr": {
     "ClassName": "ast.SuffixOpNode",
@@ -77,7 +81,8 @@ func TestFor(t *testing.T) {
       "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
       "Name": "i"
-    }
+    },
+    "Type": null
   },
   "Body": {
     "ClassName": "ast.ExprStmtNode",

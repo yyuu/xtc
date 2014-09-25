@@ -12,7 +12,7 @@ type CondExprNode struct {
   Cond core.IExprNode
   ThenExpr core.IExprNode
   ElseExpr core.IExprNode
-  t core.IType
+  Type core.IType
 }
 
 func NewCondExprNode(loc core.Location, cond core.IExprNode, thenExpr core.IExprNode, elseExpr core.IExprNode) *CondExprNode {
@@ -55,14 +55,14 @@ func (self *CondExprNode) SetElseExpr(expr core.IExprNode) {
 }
 
 func (self CondExprNode) GetType() core.IType {
-  if self.t == nil {
+  if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
-  return self.t
+  return self.Type
 }
 
 func (self *CondExprNode) SetType(t core.IType) {
-  self.t = t
+  self.Type = t
 }
 
 func (self CondExprNode) IsConstant() bool {

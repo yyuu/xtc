@@ -24,13 +24,15 @@ func TestBinaryOp(t *testing.T) {
       "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
       "Name": "b"
-    }
+    },
+    "Type": null
   },
   "Right": {
     "ClassName": "ast.VariableNode",
     "Location": "[:0,0]",
     "Name": "c"
-  }
+  },
+  "Type": null
 }`
   xt.AssertStringEqualsDiff(t, "BinaryOpNode", xt.JSON(x), s)
 }

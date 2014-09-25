@@ -46,10 +46,12 @@ func TestIf(t *testing.T) {
             "ClassName": "typesys.IntegerTypeRef",
             "Location": "[:0,0]",
             "Name": "int"
-          }
+          },
+          "Type": null
         },
         "Value": 2
-      }
+      },
+      "Type": null
     },
     "Right": {
       "ClassName": "ast.IntegerLiteralNode",
@@ -61,10 +63,12 @@ func TestIf(t *testing.T) {
           "ClassName": "typesys.IntegerTypeRef",
           "Location": "[:0,0]",
           "Name": "int"
-        }
+        },
+        "Type": null
       },
       "Value": 0
-    }
+    },
+    "Type": null
   },
   "ThenBody": {
     "ClassName": "ast.ExprStmtNode",
@@ -92,7 +96,8 @@ func TestIf(t *testing.T) {
                 "Location": "[:0,0]",
                 "Name": "char"
               }
-            }
+            },
+            "Type": null
           },
           "Value": "\"even\""
         }
@@ -125,7 +130,8 @@ func TestIf(t *testing.T) {
                 "Location": "[:0,0]",
                 "Name": "char"
               }
-            }
+            },
+            "Type": null
           },
           "Value": "\"odd\""
         }

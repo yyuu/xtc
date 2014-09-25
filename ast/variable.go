@@ -11,11 +11,10 @@ type VariableNode struct {
   Location core.Location
   Name string
   entity core.IEntity
-  t core.IType
 }
 
 func NewVariableNode(loc core.Location, name string) *VariableNode {
-  return &VariableNode { "ast.VariableNode", loc, name, nil, nil }
+  return &VariableNode { "ast.VariableNode", loc, name, nil }
 }
 
 func (self VariableNode) String() string {
@@ -54,7 +53,10 @@ func (self VariableNode) GetType() core.IType {
 }
 
 func (self *VariableNode) SetType(t core.IType) {
-  self.t = t
+//if ! self.GetEntity().GetType().IsCompatible(t) {
+//  panic(fmt.Sprintf("type mismatch: %s != %s", self.GetEntity().GetType(), t))
+//}
+  panic("VariableNode#SetType called")
 }
 
 func (self VariableNode) IsConstant() bool {

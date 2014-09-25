@@ -39,10 +39,12 @@ func TestCondExpr(t *testing.T) {
           "ClassName": "typesys.IntegerTypeRef",
           "Location": "[:0,0]",
           "Name": "int"
-        }
+        },
+        "Type": null
       },
       "Value": 2
-    }
+    },
+    "Type": null
   },
   "ThenExpr": {
     "ClassName": "ast.IntegerLiteralNode",
@@ -54,7 +56,8 @@ func TestCondExpr(t *testing.T) {
         "ClassName": "typesys.IntegerTypeRef",
         "Location": "[:0,0]",
         "Name": "int"
-      }
+      },
+      "Type": null
     },
     "Value": 1
   },
@@ -90,10 +93,12 @@ func TestCondExpr(t *testing.T) {
                 "ClassName": "typesys.IntegerTypeRef",
                 "Location": "[:0,0]",
                 "Name": "int"
-              }
+              },
+              "Type": null
             },
             "Value": 1
-          }
+          },
+          "Type": null
         }
       ]
     },
@@ -125,14 +130,18 @@ func TestCondExpr(t *testing.T) {
                 "ClassName": "typesys.IntegerTypeRef",
                 "Location": "[:0,0]",
                 "Name": "int"
-              }
+              },
+              "Type": null
             },
             "Value": 2
-          }
+          },
+          "Type": null
         }
       ]
-    }
-  }
+    },
+    "Type": null
+  },
+  "Type": null
 }`
   xt.AssertStringEqualsDiff(t, "CondExprNode", xt.JSON(x), s)
 }

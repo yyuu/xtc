@@ -27,8 +27,10 @@ func TestLogicalAndNode(t *testing.T) {
       "ClassName": "ast.VariableNode",
       "Location": "[:0,0]",
       "Name": "c"
-    }
-  }
+    },
+    "Type": null
+  },
+  "Type": null
 }`
   xt.AssertStringEqualsDiff(t, "LogicalAndNode", xt.JSON(x), s)
 }

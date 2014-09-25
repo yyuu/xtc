@@ -29,10 +29,12 @@ func TestAssignNode(t *testing.T) {
           "Location": "[:0,0]",
           "Name": "char"
         }
-      }
+      },
+      "Type": null
     },
     "Value": "\"xxx\""
-  }
+  },
+  "Type": null
 }`
   xt.AssertStringEqualsDiff(t, "AssignNode", xt.JSON(x), s)
 }

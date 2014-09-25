@@ -15,7 +15,8 @@ func TestSuffixOpNode(t *testing.T) {
     "ClassName": "ast.VariableNode",
     "Location": "[:0,0]",
     "Name": "a"
-  }
+  },
+  "Type": null
 }`
   xt.AssertStringEqualsDiff(t, "SuffixOpNode", xt.JSON(x), s)
 }

@@ -21,7 +21,8 @@ func TestStringLiteral1(t *testing.T) {
         "Location": "[:0,0]",
         "Name": "char"
       }
-    }
+    },
+    "Type": null
   },
   "Value": "\"hello, world\""
 }`
