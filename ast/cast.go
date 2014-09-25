@@ -24,8 +24,8 @@ func (self CastNode) String() string {
   return fmt.Sprintf("(%s %s)", self.TypeNode, self.Expr)
 }
 
-func (self CastNode) IsExprNode() bool {
-  return true
+func (self *CastNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self CastNode) GetLocation() core.Location {

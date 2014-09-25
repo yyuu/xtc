@@ -25,8 +25,8 @@ func (self StringLiteralNode) String() string {
   return self.Value
 }
 
-func (self StringLiteralNode) IsExprNode() bool {
-  return true
+func (self *StringLiteralNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self StringLiteralNode) GetLocation() core.Location {

@@ -25,8 +25,8 @@ func (self SizeofTypeNode) String() string {
   return fmt.Sprintf("(sizeof %s)", self.TypeNode)
 }
 
-func (self SizeofTypeNode) IsExprNode() bool {
-  return true
+func (self *SizeofTypeNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self SizeofTypeNode) GetLocation() core.Location {

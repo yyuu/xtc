@@ -34,8 +34,8 @@ func (self BinaryOpNode) String() string {
   }
 }
 
-func (self BinaryOpNode) IsExprNode() bool {
-  return true
+func (self *BinaryOpNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self BinaryOpNode) GetLocation() core.Location {

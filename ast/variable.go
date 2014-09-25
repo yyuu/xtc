@@ -22,8 +22,8 @@ func (self VariableNode) String() string {
   return self.Name
 }
 
-func (self VariableNode) IsExprNode() bool {
-  return true
+func (self *VariableNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self VariableNode) GetLocation() core.Location {

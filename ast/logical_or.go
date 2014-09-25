@@ -24,8 +24,8 @@ func (self LogicalOrNode) String() string {
   return fmt.Sprintf("(or %s %s)", self.Left, self.Right)
 }
 
-func (self LogicalOrNode) IsExprNode() bool {
-  return true
+func (self *LogicalOrNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self LogicalOrNode) GetLocation() core.Location {

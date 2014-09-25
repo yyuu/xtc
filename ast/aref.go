@@ -24,8 +24,8 @@ func (self ArefNode) String() string {
   return fmt.Sprintf("(vector-ref %s %s)", self.Expr, self.Index)
 }
 
-func (self ArefNode) IsExprNode() bool {
-  return true
+func (self *ArefNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self ArefNode) GetLocation() core.Location {

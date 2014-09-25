@@ -26,8 +26,8 @@ func (self UnaryOpNode) String() string {
   }
 }
 
-func (self UnaryOpNode) IsExprNode() bool {
-  return true
+func (self *UnaryOpNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self UnaryOpNode) GetLocation() core.Location {

@@ -33,8 +33,8 @@ func (self FuncallNode) String() string {
   }
 }
 
-func (self FuncallNode) IsExprNode() bool {
-  return true
+func (self *FuncallNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self FuncallNode) GetLocation() core.Location {

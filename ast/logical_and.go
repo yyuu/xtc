@@ -24,8 +24,8 @@ func (self LogicalAndNode) String() string {
   return fmt.Sprintf("(and %s %s)", self.Left, self.Right)
 }
 
-func (self LogicalAndNode) IsExprNode() bool {
-  return true
+func (self *LogicalAndNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self LogicalAndNode) GetLocation() core.Location {

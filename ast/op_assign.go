@@ -25,8 +25,8 @@ func (self OpAssignNode) String() string {
   return fmt.Sprintf("(%s (%s %s %s))", self.LHS, self.Operator, self.LHS, self.RHS)
 }
 
-func (self OpAssignNode) IsExprNode() bool {
-  return true
+func (self *OpAssignNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self OpAssignNode) GetLocation() core.Location {

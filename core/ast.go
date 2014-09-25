@@ -7,7 +7,7 @@ type INode interface {
 
 type IExprNode interface {
   INode
-  IsExprNode() bool
+  AsExprNode() IExprNode
   GetType() IType
   SetType(IType)
   IsConstant() bool

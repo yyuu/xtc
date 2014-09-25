@@ -22,8 +22,8 @@ func (self DereferenceNode) String() string {
   panic("not implemented")
 }
 
-func (self DereferenceNode) IsExprNode() bool {
-  return true
+func (self *DereferenceNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self DereferenceNode) GetLocation() core.Location {

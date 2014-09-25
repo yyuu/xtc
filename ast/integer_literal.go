@@ -63,8 +63,8 @@ func (self IntegerLiteralNode) String() string {
   return fmt.Sprintf("%d", self.Value)
 }
 
-func (self IntegerLiteralNode) IsExprNode() bool {
-  return true
+func (self *IntegerLiteralNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self IntegerLiteralNode) GetLocation() core.Location {

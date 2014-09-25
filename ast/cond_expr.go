@@ -26,8 +26,8 @@ func (self CondExprNode) String() string {
   return fmt.Sprintf("(if %s %s %s)", self.Cond, self.ThenExpr, self.ElseExpr)
 }
 
-func (self CondExprNode) IsExprNode() bool {
-  return true
+func (self *CondExprNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self CondExprNode) GetLocation() core.Location {

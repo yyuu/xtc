@@ -22,8 +22,8 @@ func (self AddressNode) String() string {
   return fmt.Sprintf("<ast.AddressNode location=%s expr=%s>", self.Location, self.Expr)
 }
 
-func (self AddressNode) IsExprNode() bool {
-  return true
+func (self *AddressNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self AddressNode) GetLocation() core.Location {

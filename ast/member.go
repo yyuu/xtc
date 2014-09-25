@@ -23,8 +23,8 @@ func (self MemberNode) String() string {
   return fmt.Sprintf("(slot-ref %s '%s)", self.Expr, self.Member)
 }
 
-func (self MemberNode) IsExprNode() bool {
-  return true
+func (self *MemberNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self MemberNode) GetLocation() core.Location {

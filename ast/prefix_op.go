@@ -28,8 +28,8 @@ func (self PrefixOpNode) String() string {
   }
 }
 
-func (self PrefixOpNode) IsExprNode() bool {
-  return true
+func (self *PrefixOpNode) AsExprNode() core.IExprNode {
+  return self
 }
 
 func (self PrefixOpNode) GetLocation() core.Location {
