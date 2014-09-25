@@ -29,6 +29,11 @@ func (self ArrayType) String() string {
   return self.Key()
 }
 
+func (self ArrayType) MarshalJSON() ([]byte, error) {
+  s := fmt.Sprintf("%q", self.Key())
+  return []byte(s), nil
+}
+
 func (self ArrayType) Size() int {
   return self.PointerSize
 }

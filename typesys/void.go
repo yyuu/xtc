@@ -1,6 +1,7 @@
 package typesys
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -19,6 +20,11 @@ func (self VoidType) Key() string {
 
 func (self VoidType) String() string {
   return self.Key()
+}
+
+func (self VoidType) MarshalJSON() ([]byte, error) {
+  s := fmt.Sprintf("%q", self.Key())
+  return []byte(s), nil
 }
 
 func (self VoidType) Size() int {

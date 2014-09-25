@@ -24,6 +24,11 @@ func (self StructTypeRef) String() string {
   return self.Key()
 }
 
+func (self StructTypeRef) MarshalJSON() ([]byte, error) {
+  s := fmt.Sprintf("%q", self.Key())
+  return []byte(s), nil
+}
+
 func (self StructTypeRef) GetLocation() core.Location {
   return self.Location
 }

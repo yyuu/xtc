@@ -1,6 +1,7 @@
 package typesys
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -21,6 +22,11 @@ func (self UserTypeRef) Key() string {
 
 func (self UserTypeRef) String() string {
   return self.Key()
+}
+
+func (self UserTypeRef) MarshalJSON() ([]byte, error) {
+  s := fmt.Sprintf("%q", self.Key())
+  return []byte(s), nil
 }
 
 func (self UserTypeRef) GetLocation() core.Location {

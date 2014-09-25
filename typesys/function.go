@@ -24,6 +24,11 @@ func (self FunctionType) String() string {
   return self.Key()
 }
 
+func (self FunctionType) MarshalJSON() ([]byte, error) {
+  s := fmt.Sprintf("%q", self.Key())
+  return []byte(s), nil
+}
+
 func (self FunctionType) Size() int {
   panic("FunctionType#Size called")
 }

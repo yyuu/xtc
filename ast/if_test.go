@@ -43,11 +43,7 @@ func TestIf(t *testing.T) {
         "TypeNode": {
           "ClassName": "ast.TypeNode",
           "Location": "[:0,0]",
-          "TypeRef": {
-            "ClassName": "typesys.IntegerTypeRef",
-            "Location": "[:0,0]",
-            "Name": "int"
-          },
+          "TypeRef": "int",
           "Type": null
         },
         "Value": 2
@@ -60,11 +56,7 @@ func TestIf(t *testing.T) {
       "TypeNode": {
         "ClassName": "ast.TypeNode",
         "Location": "[:0,0]",
-        "TypeRef": {
-          "ClassName": "typesys.IntegerTypeRef",
-          "Location": "[:0,0]",
-          "Name": "int"
-        },
+        "TypeRef": "int",
         "Type": null
       },
       "Value": 0
@@ -90,15 +82,7 @@ func TestIf(t *testing.T) {
           "TypeNode": {
             "ClassName": "ast.TypeNode",
             "Location": "[:0,0]",
-            "TypeRef": {
-              "ClassName": "typesys.PointerTypeRef",
-              "Location": "[:0,0]",
-              "BaseType": {
-                "ClassName": "typesys.IntegerTypeRef",
-                "Location": "[:0,0]",
-                "Name": "char"
-              }
-            },
+            "TypeRef": "char*",
             "Type": null
           },
           "Value": "\"even\""
@@ -125,15 +109,7 @@ func TestIf(t *testing.T) {
           "TypeNode": {
             "ClassName": "ast.TypeNode",
             "Location": "[:0,0]",
-            "TypeRef": {
-              "ClassName": "typesys.PointerTypeRef",
-              "Location": "[:0,0]",
-              "BaseType": {
-                "ClassName": "typesys.IntegerTypeRef",
-                "Location": "[:0,0]",
-                "Name": "char"
-              }
-            },
+            "TypeRef": "char*",
             "Type": null
           },
           "Value": "\"odd\""

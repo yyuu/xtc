@@ -24,6 +24,11 @@ func (self PointerTypeRef) String() string {
   return self.Key()
 }
 
+func (self PointerTypeRef) MarshalJSON() ([]byte, error) {
+  s := fmt.Sprintf("%q", self.Key())
+  return []byte(s), nil
+}
+
 func (self PointerTypeRef) GetLocation() core.Location {
   return self.Location
 }

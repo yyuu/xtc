@@ -55,11 +55,7 @@ func TestSwitch(t *testing.T) {
           "TypeNode": {
             "ClassName": "ast.TypeNode",
             "Location": "[:0,0]",
-            "TypeRef": {
-              "ClassName": "typesys.IntegerTypeRef",
-              "Location": "[:0,0]",
-              "Name": "int"
-            },
+            "TypeRef": "int",
             "Type": null
           },
           "Value": 1
@@ -84,15 +80,7 @@ func TestSwitch(t *testing.T) {
               "TypeNode": {
                 "ClassName": "ast.TypeNode",
                 "Location": "[:0,0]",
-                "TypeRef": {
-                  "ClassName": "typesys.PointerTypeRef",
-                  "Location": "[:0,0]",
-                  "BaseType": {
-                    "ClassName": "typesys.IntegerTypeRef",
-                    "Location": "[:0,0]",
-                    "Name": "char"
-                  }
-                },
+                "TypeRef": "char*",
                 "Type": null
               },
               "Value": "\"one\""
@@ -111,11 +99,7 @@ func TestSwitch(t *testing.T) {
           "TypeNode": {
             "ClassName": "ast.TypeNode",
             "Location": "[:0,0]",
-            "TypeRef": {
-              "ClassName": "typesys.IntegerTypeRef",
-              "Location": "[:0,0]",
-              "Name": "int"
-            },
+            "TypeRef": "int",
             "Type": null
           },
           "Value": 2
@@ -140,15 +124,7 @@ func TestSwitch(t *testing.T) {
               "TypeNode": {
                 "ClassName": "ast.TypeNode",
                 "Location": "[:0,0]",
-                "TypeRef": {
-                  "ClassName": "typesys.PointerTypeRef",
-                  "Location": "[:0,0]",
-                  "BaseType": {
-                    "ClassName": "typesys.IntegerTypeRef",
-                    "Location": "[:0,0]",
-                    "Name": "char"
-                  }
-                },
+                "TypeRef": "char*",
                 "Type": null
               },
               "Value": "\"two\""
@@ -180,15 +156,7 @@ func TestSwitch(t *testing.T) {
               "TypeNode": {
                 "ClassName": "ast.TypeNode",
                 "Location": "[:0,0]",
-                "TypeRef": {
-                  "ClassName": "typesys.PointerTypeRef",
-                  "Location": "[:0,0]",
-                  "BaseType": {
-                    "ClassName": "typesys.IntegerTypeRef",
-                    "Location": "[:0,0]",
-                    "Name": "char"
-                  }
-                },
+                "TypeRef": "char*",
                 "Type": null
               },
               "Value": "\"plentiful\""

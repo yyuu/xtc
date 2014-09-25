@@ -22,15 +22,7 @@ func TestAssignNode(t *testing.T) {
     "TypeNode": {
       "ClassName": "ast.TypeNode",
       "Location": "[:0,0]",
-      "TypeRef": {
-        "ClassName": "typesys.PointerTypeRef",
-        "Location": "[:0,0]",
-        "BaseType": {
-          "ClassName": "typesys.IntegerTypeRef",
-          "Location": "[:0,0]",
-          "Name": "char"
-        }
-      },
+      "TypeRef": "char*",
       "Type": null
     },
     "Value": "\"xxx\""

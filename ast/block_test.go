@@ -45,15 +45,7 @@ func TestBlock1(t *testing.T) {
             "TypeNode": {
               "ClassName": "ast.TypeNode",
               "Location": "[:0,0]",
-              "TypeRef": {
-                "ClassName": "typesys.PointerTypeRef",
-                "Location": "[:0,0]",
-                "BaseType": {
-                  "ClassName": "typesys.IntegerTypeRef",
-                  "Location": "[:0,0]",
-                  "Name": "char"
-                }
-              },
+              "TypeRef": "char*",
               "Type": null
             },
             "Value": "\"hello, world\""
@@ -98,11 +90,7 @@ func TestBlock2(t *testing.T) {
       "TypeNode": {
         "ClassName": "ast.TypeNode",
         "Location": "[:0,0]",
-        "TypeRef": {
-          "ClassName": "typesys.IntegerTypeRef",
-          "Location": "[:0,0]",
-          "Name": "int"
-        },
+        "TypeRef": "int",
         "Type": null
       },
       "Initializer": {
@@ -111,11 +99,7 @@ func TestBlock2(t *testing.T) {
         "TypeNode": {
           "ClassName": "ast.TypeNode",
           "Location": "[:0,0]",
-          "TypeRef": {
-            "ClassName": "typesys.IntegerTypeRef",
-            "Location": "[:0,0]",
-            "Name": "int"
-          },
+          "TypeRef": "int",
           "Type": null
         },
         "Value": 12345
@@ -142,15 +126,7 @@ func TestBlock2(t *testing.T) {
             "TypeNode": {
               "ClassName": "ast.TypeNode",
               "Location": "[:0,0]",
-              "TypeRef": {
-                "ClassName": "typesys.PointerTypeRef",
-                "Location": "[:0,0]",
-                "BaseType": {
-                  "ClassName": "typesys.IntegerTypeRef",
-                  "Location": "[:0,0]",
-                  "Name": "char"
-                }
-              },
+              "TypeRef": "char*",
               "Type": null
             },
             "Value": "\"%d\""
@@ -210,11 +186,7 @@ func TestBlock3(t *testing.T) {
       "TypeNode": {
         "ClassName": "ast.TypeNode",
         "Location": "[:0,0]",
-        "TypeRef": {
-          "ClassName": "typesys.IntegerTypeRef",
-          "Location": "[:0,0]",
-          "Name": "int"
-        },
+        "TypeRef": "int",
         "Type": null
       },
       "Initializer": {
@@ -223,11 +195,7 @@ func TestBlock3(t *testing.T) {
         "TypeNode": {
           "ClassName": "ast.TypeNode",
           "Location": "[:0,0]",
-          "TypeRef": {
-            "ClassName": "typesys.IntegerTypeRef",
-            "Location": "[:0,0]",
-            "Name": "int"
-          },
+          "TypeRef": "int",
           "Type": null
         },
         "Value": 12345
@@ -240,11 +208,7 @@ func TestBlock3(t *testing.T) {
       "TypeNode": {
         "ClassName": "ast.TypeNode",
         "Location": "[:0,0]",
-        "TypeRef": {
-          "ClassName": "typesys.IntegerTypeRef",
-          "Location": "[:0,0]",
-          "Name": "int"
-        },
+        "TypeRef": "int",
         "Type": null
       },
       "Initializer": {
@@ -253,11 +217,7 @@ func TestBlock3(t *testing.T) {
         "TypeNode": {
           "ClassName": "ast.TypeNode",
           "Location": "[:0,0]",
-          "TypeRef": {
-            "ClassName": "typesys.IntegerTypeRef",
-            "Location": "[:0,0]",
-            "Name": "int"
-          },
+          "TypeRef": "int",
           "Type": null
         },
         "Value": 67890
@@ -284,15 +244,7 @@ func TestBlock3(t *testing.T) {
             "TypeNode": {
               "ClassName": "ast.TypeNode",
               "Location": "[:0,0]",
-              "TypeRef": {
-                "ClassName": "typesys.PointerTypeRef",
-                "Location": "[:0,0]",
-                "BaseType": {
-                  "ClassName": "typesys.IntegerTypeRef",
-                  "Location": "[:0,0]",
-                  "Name": "char"
-                }
-              },
+              "TypeRef": "char*",
               "Type": null
             },
             "Value": "\"%d\""
@@ -325,15 +277,7 @@ func TestBlock3(t *testing.T) {
             "TypeNode": {
               "ClassName": "ast.TypeNode",
               "Location": "[:0,0]",
-              "TypeRef": {
-                "ClassName": "typesys.PointerTypeRef",
-                "Location": "[:0,0]",
-                "BaseType": {
-                  "ClassName": "typesys.IntegerTypeRef",
-                  "Location": "[:0,0]",
-                  "Name": "char"
-                }
-              },
+              "TypeRef": "char*",
               "Type": null
             },
             "Value": "\"%d\""
