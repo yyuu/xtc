@@ -16,6 +16,7 @@ func TestPrefixOpNode(t *testing.T) {
     "Location": "[:0,0]",
     "Name": "a"
   },
+  "Amount": 1,
   "Type": null
 }`
   xt.AssertStringEqualsDiff(t, "PrefixOpNode", xt.JSON(x), s)

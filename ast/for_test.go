@@ -82,6 +82,7 @@ func TestFor(t *testing.T) {
       "Location": "[:0,0]",
       "Name": "i"
     },
+    "Amount": 1,
     "Type": null
   },
   "Body": {

@@ -16,6 +16,7 @@ func TestSuffixOpNode(t *testing.T) {
     "Location": "[:0,0]",
     "Name": "a"
   },
+  "Amount": 1,
   "Type": null
 }`
   xt.AssertStringEqualsDiff(t, "SuffixOpNode", xt.JSON(x), s)
