@@ -13,11 +13,7 @@ func TestDecimalIntegerLiteral(t *testing.T) {
   "TypeNode": {
     "ClassName": "ast.TypeNode",
     "Location": "[:0,0]",
-    "TypeRef": {
-      "ClassName": "typesys.IntegerTypeRef",
-      "Location": "[:0,0]",
-      "Name": "int"
-    },
+    "TypeRef": "int",
     "Type": null
   },
   "Value": 12345
@@ -33,11 +29,7 @@ func TestOctalIntegerLiteral(t *testing.T) {
   "TypeNode": {
     "ClassName": "ast.TypeNode",
     "Location": "[:0,0]",
-    "TypeRef": {
-      "ClassName": "typesys.IntegerTypeRef",
-      "Location": "[:0,0]",
-      "Name": "int"
-    },
+    "TypeRef": "int",
     "Type": null
   },
   "Value": 493
@@ -53,11 +45,7 @@ func TestHexadecimalIntegerLiteral(t *testing.T) {
   "TypeNode": {
     "ClassName": "ast.TypeNode",
     "Location": "[:0,0]",
-    "TypeRef": {
-      "ClassName": "typesys.IntegerTypeRef",
-      "Location": "[:0,0]",
-      "Name": "int"
-    },
+    "TypeRef": "int",
     "Type": null
   },
   "Value": 65535
@@ -73,11 +61,7 @@ func TestCharacterIntegerLiteral(t *testing.T) {
   "TypeNode": {
     "ClassName": "ast.TypeNode",
     "Location": "[:0,0]",
-    "TypeRef": {
-      "ClassName": "typesys.IntegerTypeRef",
-      "Location": "[:0,0]",
-      "Name": "char"
-    },
+    "TypeRef": "char",
     "Type": null
   },
   "Value": 97
@@ -93,11 +77,7 @@ func TestUnsignedIntegerLiteral(t *testing.T) {
   "TypeNode": {
     "ClassName": "ast.TypeNode",
     "Location": "[:0,0]",
-    "TypeRef": {
-      "ClassName": "typesys.IntegerTypeRef",
-      "Location": "[:0,0]",
-      "Name": "unsigned int"
-    },
+    "TypeRef": "unsigned int",
     "Type": null
   },
   "Value": 12345
@@ -113,11 +93,7 @@ func TestLongIntegerLiteral(t *testing.T) {
   "TypeNode": {
     "ClassName": "ast.TypeNode",
     "Location": "[:0,0]",
-    "TypeRef": {
-      "ClassName": "typesys.IntegerTypeRef",
-      "Location": "[:0,0]",
-      "Name": "long"
-    },
+    "TypeRef": "long",
     "Type": null
   },
   "Value": 12345
@@ -133,11 +109,7 @@ func TestUnsignedLongIntegerLiteral(t *testing.T) {
   "TypeNode": {
     "ClassName": "ast.TypeNode",
     "Location": "[:0,0]",
-    "TypeRef": {
-      "ClassName": "typesys.IntegerTypeRef",
-      "Location": "[:0,0]",
-      "Name": "unsigned long"
-    },
+    "TypeRef": "unsigned long",
     "Type": null
   },
   "Value": 12345

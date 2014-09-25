@@ -24,11 +24,7 @@ func TestFuncallNode(t *testing.T) {
       "TypeNode": {
         "ClassName": "ast.TypeNode",
         "Location": "[:0,0]",
-        "TypeRef": {
-          "ClassName": "typesys.IntegerTypeRef",
-          "Location": "[:0,0]",
-          "Name": "int"
-        },
+        "TypeRef": "int",
         "Type": null
       },
       "Value": 12345
@@ -39,11 +35,7 @@ func TestFuncallNode(t *testing.T) {
       "TypeNode": {
         "ClassName": "ast.TypeNode",
         "Location": "[:0,0]",
-        "TypeRef": {
-          "ClassName": "typesys.IntegerTypeRef",
-          "Location": "[:0,0]",
-          "Name": "int"
-        },
+        "TypeRef": "int",
         "Type": null
       },
       "Value": 67890
