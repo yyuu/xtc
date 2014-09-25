@@ -3,6 +3,7 @@ package ast
 import (
   "fmt"
   "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/bs/typesys"
 )
 
 // ArefNode
@@ -81,4 +82,26 @@ func (self ArefNode) IsCallable() bool {
 
 func (self ArefNode) IsPointer() bool {
   return self.GetType().IsPointer()
+}
+
+func (self ArefNode) IsMultiDimension() bool {
+  _, ok := self.Expr.(*ArefNode)
+  return ok
+}
+
+func (self ArefNode) GetBaseExpr() core.IExprNode {
+  if self.IsMultiDimension() {
+    return self.Expr.(*ArefNode).GetBaseExpr()
+  } else {
+    return self.Expr
+  }
+}
+
+func (self ArefNode) GetElementSize() int {
+  return self.GetOrigType().AllocSize()
+}
+
+func (self ArefNode) GetLength() int {
+  t := self.Expr.GetOrigType().(*typesys.ArrayType)
+  return t.GetLength()
 }
