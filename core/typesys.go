@@ -51,7 +51,8 @@ type ICompositeType interface {
   INamedType
   GetMember(string) ISlot
   GetMembers() []ISlot
-//GetMemberType(string) IType
-//GetMemberTypes() []IType
+  GetMemberType(string) IType
+  GetMemberOffset(string) int
+  GetMemberTypes() []IType
   HasMember(string) bool
 }

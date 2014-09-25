@@ -160,14 +160,22 @@ func (self UnionType) GetMembers() []core.ISlot {
   return self.Members
 }
 
-//func (self UnionType) GetMemberType(name string) core.IType {
-//  slot := self.GetMember(name)
-//  if slot != nil {
-//    return slot.GetType()
-//  } else {
-//    return nil
-//  }
-//}
+func (self UnionType) GetMemberType(name string) core.IType {
+  slot := self.GetMember(name)
+  if slot != nil {
+    return slot.GetType()
+  } else {
+    return nil
+  }
+}
+
+func (self UnionType) GetMemberOffset(name string) int {
+  slot := self.GetMember(name)
+  if slot == nil {
+    panic(fmt.Sprintf("no such member in `%s' in %s", name, self.Name))
+  }
+  return slot.GetOffset()
+}
 
 func (self UnionType) GetMemberTypes() []core.IType {
   types := make([]core.IType, len(self.Members))
