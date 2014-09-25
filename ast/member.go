@@ -50,6 +50,10 @@ func (self *MemberNode) SetType(t core.IType) {
   self.Type = t
 }
 
+func (self MemberNode) GetOrigType() core.IType {
+  return self.GetBaseType().GetMemberType(self.Member)
+}
+
 func (self MemberNode) IsConstant() bool {
   return false
 }
@@ -76,4 +80,9 @@ func (self MemberNode) IsCallable() bool {
 
 func (self MemberNode) IsPointer() bool {
   return self.GetType().IsPointer()
+}
+
+func (self MemberNode) GetBaseType() core.ICompositeType {
+  t := self.Expr.GetType()
+  return t.(core.ICompositeType)
 }

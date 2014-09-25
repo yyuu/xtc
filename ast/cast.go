@@ -55,6 +55,10 @@ func (self *CastNode) SetType(t core.IType) {
   self.Type = t
 }
 
+func (self CastNode) GetOrigType() core.IType {
+  return self.GetType()
+}
+
 func (self CastNode) IsConstant() bool {
   return false
 }

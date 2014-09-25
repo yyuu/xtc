@@ -72,6 +72,10 @@ func (self *SuffixOpNode) SetType(t core.IType) {
   panic("SuffixOpNode#SetType called")
 }
 
+func (self SuffixOpNode) GetOrigType() core.IType {
+  return self.GetType()
+}
+
 func (self SuffixOpNode) IsConstant() bool {
   return false
 }

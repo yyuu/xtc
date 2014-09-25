@@ -41,6 +41,10 @@ func (self AddressNode) GetType() core.IType {
   return self.Type
 }
 
+func (self AddressNode) GetOrigType() core.IType {
+  return self.GetType()
+}
+
 func (self *AddressNode) SetType(t core.IType) {
   self.Type = t
 }

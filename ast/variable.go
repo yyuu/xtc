@@ -59,6 +59,10 @@ func (self *VariableNode) SetType(t core.IType) {
   panic("VariableNode#SetType called")
 }
 
+func (self VariableNode) GetOrigType() core.IType {
+  return self.GetEntity().GetType()
+}
+
 func (self VariableNode) IsConstant() bool {
   return false
 }

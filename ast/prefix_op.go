@@ -72,6 +72,10 @@ func (self *PrefixOpNode) SetType(t core.IType) {
   panic("PrefixOpNode#SetType called")
 }
 
+func (self PrefixOpNode) GetOrigType() core.IType {
+  return self.GetType()
+}
+
 func (self PrefixOpNode) IsConstant() bool {
   return false
 }

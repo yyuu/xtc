@@ -66,6 +66,10 @@ func (self *FuncallNode) SetType(t core.IType) {
   panic("FuncallNode#SetType called")
 }
 
+func (self FuncallNode) GetOrigType() core.IType {
+  return self.GetType()
+}
+
 func (self FuncallNode) IsConstant() bool {
   return false
 }

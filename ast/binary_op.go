@@ -73,6 +73,10 @@ func (self *BinaryOpNode) SetType(t core.IType) {
   self.Type = t
 }
 
+func (self BinaryOpNode) GetOrigType() core.IType {
+  return self.GetType()
+}
+
 func (self BinaryOpNode) IsConstant() bool {
   return false
 }

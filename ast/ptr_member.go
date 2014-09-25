@@ -51,6 +51,10 @@ func (self *PtrMemberNode) SetType(t core.IType) {
   self.Type = t
 }
 
+func (self PtrMemberNode) GetOrigType() core.IType {
+  return self.GetDereferedCompositeType().GetMemberType(self.Member)
+}
+
 func (self PtrMemberNode) IsConstant() bool {
   return false
 }

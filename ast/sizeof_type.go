@@ -60,6 +60,10 @@ func (self *SizeofTypeNode) SetType(t core.IType) {
   self.Type = t
 }
 
+func (self SizeofTypeNode) GetOrigType() core.IType {
+  return self.GetType()
+}
+
 func (self SizeofTypeNode) IsConstant() bool {
   return false
 }

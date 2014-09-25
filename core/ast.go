@@ -10,6 +10,7 @@ type IExprNode interface {
   AsExprNode() IExprNode
   GetType() IType
   SetType(IType)
+  GetOrigType() IType
   IsConstant() bool
   IsParameter() bool
   IsLvalue() bool

@@ -63,6 +63,10 @@ func (self *LogicalAndNode) SetType(t core.IType) {
   self.Type = t
 }
 
+func (self LogicalAndNode) GetOrigType() core.IType {
+  return self.GetType()
+}
+
 func (self LogicalAndNode) IsConstant() bool {
   return false
 }

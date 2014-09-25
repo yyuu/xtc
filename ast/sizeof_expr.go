@@ -55,6 +55,10 @@ func (self *SizeofExprNode) SetType(t core.IType) {
   self.Type = t
 }
 
+func (self SizeofExprNode) GetOrigType() core.IType {
+  return self.GetType()
+}
+
 func (self SizeofExprNode) IsConstant() bool {
   return false
 }

@@ -65,6 +65,10 @@ func (self *CondExprNode) SetType(t core.IType) {
   self.Type = t
 }
 
+func (self CondExprNode) GetOrigType() core.IType {
+  return self.GetType()
+}
+
 func (self CondExprNode) IsConstant() bool {
   return false
 }

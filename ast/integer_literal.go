@@ -83,6 +83,10 @@ func (self *IntegerLiteralNode) SetType(t core.IType) {
   panic("IntegerLiteralNode#SetType called")
 }
 
+func (self IntegerLiteralNode) GetOrigType() core.IType {
+  return self.GetType()
+}
+
 func (self IntegerLiteralNode) IsConstant() bool {
   return true
 }

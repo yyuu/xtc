@@ -64,6 +64,10 @@ func (self *OpAssignNode) SetType(t core.IType) {
   self.Type = t
 }
 
+func (self OpAssignNode) GetOrigType() core.IType {
+  return self.GetType()
+}
+
 func (self OpAssignNode) IsConstant() bool {
   return false
 }

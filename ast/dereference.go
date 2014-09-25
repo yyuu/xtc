@@ -45,6 +45,10 @@ func (self *DereferenceNode) SetType(t core.IType) {
   self.Type = t
 }
 
+func (self DereferenceNode) GetOrigType() core.IType {
+  return self.GetType().GetBaseType()
+}
+
 func (self DereferenceNode) IsConstant() bool {
   return false
 }

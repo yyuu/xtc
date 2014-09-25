@@ -51,6 +51,10 @@ func (self *ArefNode) SetType(t core.IType) {
   self.Type = t
 }
 
+func (self ArefNode) GetOrigType() core.IType {
+  return self.Expr.GetOrigType().GetBaseType()
+}
+
 func (self ArefNode) IsConstant() bool {
   return false
 }
