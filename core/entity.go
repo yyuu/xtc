@@ -13,6 +13,7 @@ type IEntity interface {
   GetTypeNode() ITypeNode
   GetTypeRef() ITypeRef
   GetType() IType
+  GetValue() IExprNode
 }
 
 type IFunction interface {

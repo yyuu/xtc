@@ -90,3 +90,7 @@ func (self UndefinedFunction) GetReturnType() core.IType {
 func (self UndefinedFunction) IsVoid() bool {
   return self.GetReturnType().IsVoid()
 }
+
+func (self UndefinedFunction) GetValue() core.IExprNode {
+  panic("UndefinedFunction#GetValue called")
+}

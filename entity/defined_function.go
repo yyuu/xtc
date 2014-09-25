@@ -118,3 +118,7 @@ func (self DefinedFunction) GetReturnType() core.IType {
 func (self DefinedFunction) IsVoid() bool {
   return self.GetReturnType().IsVoid()
 }
+
+func (self DefinedFunction) GetValue() core.IExprNode {
+  panic("DefinedFunction#GetValue called")
+}

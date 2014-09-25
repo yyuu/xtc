@@ -80,3 +80,7 @@ func (self Parameter) GetType() core.IType {
 func (self Parameter) GetName() string {
   return self.DefinedVariable.Name
 }
+
+func (self Parameter) GetValue() core.IExprNode {
+  panic("Parameter#GetValue called")
+}

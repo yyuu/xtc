@@ -85,3 +85,7 @@ func (self DefinedVariable) GetInitializer() core.IExprNode {
 func (self *DefinedVariable) SetInitializer(init core.IExprNode) {
   self.Initializer = init
 }
+
+func (self DefinedVariable) GetValue() core.IExprNode {
+  panic("DefinedVariable#GetValue called")
+}

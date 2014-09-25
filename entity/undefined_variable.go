@@ -72,3 +72,7 @@ func (self UndefinedVariable) GetTypeRef() core.ITypeRef {
 func (self UndefinedVariable) GetType() core.IType {
   return self.TypeNode.GetType()
 }
+
+func (self UndefinedVariable) GetValue() core.IExprNode {
+  panic("UndefinedVariable#GetValue called")
+}

@@ -70,3 +70,7 @@ func (self Params) GetTypeRef() core.ITypeRef {
 func (self Params) GetType() core.IType {
   panic("Params#GetType called")
 }
+
+func (self Params) GetValue() core.IExprNode {
+  panic("Params#GetValue called")
+}
