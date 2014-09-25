@@ -70,7 +70,7 @@ func (self *TypeResolver) resolveFunctionHeader(fun core.IFunction, params []*en
   }
 }
 
-func (self *TypeResolver) VisitNode(unknown core.INode) {
+func (self *TypeResolver) VisitNode(unknown core.INode) interface{} {
   switch node := unknown.(type) {
     case *ast.BlockNode: {
       variables := node.GetVariables()
@@ -112,9 +112,10 @@ func (self *TypeResolver) VisitNode(unknown core.INode) {
       visitNode(self, unknown)
     }
   }
+  return nil
 }
 
-func (self *TypeResolver) VisitEntity(unknown core.IEntity) {
+func (self *TypeResolver) VisitEntity(unknown core.IEntity) interface{} {
   switch ent := unknown.(type) {
     case *entity.DefinedVariable: {
       self.bindType(ent.GetTypeNode())
@@ -140,4 +141,5 @@ func (self *TypeResolver) VisitEntity(unknown core.IEntity) {
       visitEntity(self, unknown)
     }
   }
+  return nil
 }

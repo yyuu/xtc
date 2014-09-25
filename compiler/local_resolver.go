@@ -98,7 +98,7 @@ func (self *LocalResolver) popScope() core.IScope {
 
 var Verbose = 0
 
-func (self *LocalResolver) VisitNode(unknown core.INode) {
+func (self *LocalResolver) VisitNode(unknown core.INode) interface{} {
   switch node := unknown.(type) {
     case *ast.BlockNode: {
       self.pushScope(node.GetVariables())
@@ -121,4 +121,5 @@ func (self *LocalResolver) VisitNode(unknown core.INode) {
       visitNode(self, unknown)
     }
   }
+  return nil
 }

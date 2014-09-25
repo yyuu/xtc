@@ -5,9 +5,9 @@ import (
 )
 
 type IEntityVisitor interface {
-  VisitEntity(core.IEntity)
+  VisitEntity(core.IEntity) interface{}
 }
 
-func VisitEntity(v IEntityVisitor, entity core.IEntity) {
-  v.VisitEntity(entity)
+func VisitEntity(v IEntityVisitor, entity core.IEntity) interface{} {
+  return v.VisitEntity(entity)
 }
