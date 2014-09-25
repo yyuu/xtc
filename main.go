@@ -7,34 +7,36 @@ import (
   "fmt"
   "os"
   "strings"
-  "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/compiler"
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/ir"
-  "bitbucket.org/yyuu/bs/parser"
-  "bitbucket.org/yyuu/bs/typesys"
+  bs_ast "bitbucket.org/yyuu/bs/ast"
+  bs_compiler "bitbucket.org/yyuu/bs/compiler"
+  bs_core "bitbucket.org/yyuu/bs/core"
+  bs_ir "bitbucket.org/yyuu/bs/ir"
+  bs_parser "bitbucket.org/yyuu/bs/parser"
+  bs_sysdep "bitbucket.org/yyuu/bs/sysdep"
+  bs_typesys "bitbucket.org/yyuu/bs/typesys"
 )
 
 var flagSet = flag.NewFlagSet(os.Args[0], 1)
 var dump = flagSet.Int("d", 0, "dump mode")
 var verbose = flagSet.Int("v", 0, "verbose mode")
-var errorHandler = core.NewErrorHandler(core.LOG_DEBUG)
+var errorHandler = bs_core.NewErrorHandler(bs_core.LOG_DEBUG)
 
 const (
   DUMP_AST = 1<<iota
   DUMP_SEMANT
   DUMP_IR
+  DUMP_ASM
 )
 
 func main() {
   flagSet.Parse(os.Args[1:])
-  parser.Verbose = *verbose
-  compiler.Verbose = *verbose
+  bs_parser.Verbose = *verbose
+  bs_compiler.Verbose = *verbose
 
   files := flagSet.Args()
   if 0 < len(files) {
     for i := range files {
-      ep(parser.ParseFile(files[i]))
+      ep(bs_parser.ParseFile(files[i]))
     }
   } else {
     repl()
@@ -53,7 +55,7 @@ func repl() {
   for {
     s := r(in, out)
     if s != "" {
-      ep(parser.ParseExpr(s))
+      ep(bs_parser.ParseExpr(s))
     }
   }
 }
@@ -68,40 +70,46 @@ func r(in *bufio.Reader, out *bufio.Writer) string {
   return strings.TrimSpace(s)
 }
 
-func ep(a *ast.AST, err error) *ast.AST {
+func ep(ast *bs_ast.AST, err error) {
   if err != nil {
     panic(err)
   }
-
   if (*dump & DUMP_AST) != 0 {
-    dumpAST(a)
+    dumpAST(ast)
   }
-  types := typesys.NewTypeTableFor("x86-linux")
-  sem := semanticAnalyze(a, types)
+  types := bs_typesys.NewTypeTableFor("x86-linux")
+  sem := semanticAnalyze(ast, types)
   if (*dump & DUMP_SEMANT) != 0 {
     dumpSemant(sem)
   }
-  ir := compiler.NewIRGenerator(errorHandler, types).Generate(sem)
+  ir := bs_compiler.NewIRGenerator(errorHandler, types).Generate(sem)
   if (*dump & DUMP_IR) != 0 {
     dumpIR(ir)
   }
+  asm := generateAssembly(ir)
+  if (*dump & DUMP_ASM) != 0 {
+    dumpAsm(asm)
+  }
 
-  // TODO: evaluate AST
-  fmt.Fprintln(os.Stdout, a)
-  return a
+  // TODO: remove this
+  fmt.Fprintln(os.Stdout, ast)
 }
 
-func semanticAnalyze(a *ast.AST, types *typesys.TypeTable) *ast.AST {
-  compiler.NewLocalResolver(errorHandler).Resolve(a)
-  compiler.NewTypeResolver(errorHandler, types).Resolve(a)
+func semanticAnalyze(ast *bs_ast.AST, types *bs_typesys.TypeTable) *bs_ast.AST {
+  bs_compiler.NewLocalResolver(errorHandler).Resolve(ast)
+  bs_compiler.NewTypeResolver(errorHandler, types).Resolve(ast)
   types.SemanticCheck(errorHandler)
-  compiler.NewDereferenceChecker(errorHandler, types).Check(a)
-  compiler.NewTypeChecker(errorHandler, types).Check(a)
-  return a
+  bs_compiler.NewDereferenceChecker(errorHandler, types).Check(ast)
+  bs_compiler.NewTypeChecker(errorHandler, types).Check(ast)
+  return ast
 }
 
-func dumpAST(a *ast.AST) {
-  cs, err := json.MarshalIndent(a, "", "  ")
+func generateAssembly(ir *bs_ir.IR) *bs_sysdep.AssemblyCode {
+  return bs_sysdep.NewCodeGeneratorFor(errorHandler, "x86-linux").Generate(ir)
+}
+
+func dumpAST(ast *bs_ast.AST) {
+  cs, err := json.MarshalIndent(ast, "", "  ")
   if err != nil {
     panic(err)
   }
@@ -109,8 +117,8 @@ func dumpAST(a *ast.AST) {
   fmt.Fprintln(os.Stderr, string(cs))
 }
 
-func dumpSemant(a *ast.AST) {
-  cs, err := json.MarshalIndent(a, "", "  ")
+func dumpSemant(ast *bs_ast.AST) {
+  cs, err := json.MarshalIndent(ast, "", "  ")
   if err != nil {
     panic(err)
   }
@@ -118,11 +126,20 @@ func dumpSemant(a *ast.AST) {
   fmt.Fprintln(os.Stderr, string(cs))
 }
 
-func dumpIR(ir *ir.IR) {
+func dumpIR(ir *bs_ir.IR) {
   cs, err := json.MarshalIndent(ir, "", "  ")
   if err != nil {
     panic(err)
   }
   fmt.Fprintln(os.Stderr, "// IR")
+  fmt.Fprintln(os.Stderr, string(cs))
+}
+
+func dumpAsm(asm *bs_sysdep.AssemblyCode) {
+  cs, err := json.MarshalIndent(asm, "", "  ")
+  if err != nil {
+    panic(err)
+  }
+  fmt.Fprintln(os.Stderr, "// Asm")
   fmt.Fprintln(os.Stderr, string(cs))
 }
