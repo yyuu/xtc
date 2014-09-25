@@ -1,6 +1,7 @@
 package compiler
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/bs/asm"
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/core"
@@ -17,7 +18,19 @@ type IRGenerator struct {
   scopeStack []*entity.LocalScope
   breakStack []asm.Label
   continueStack []asm.Label
-//jumpMap make(map[string]*JumpEntry)
+  jumpMap map[string]*jumpEntry
+}
+
+type jumpEntry struct {
+  label asm.Label
+  numRefered int
+  isDefined bool
+  location core.Location
+}
+
+func newJumpEntry(label asm.Label) *jumpEntry {
+  loc := core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
+  return &jumpEntry { label, 0, false, loc }
 }
 
 func NewIRGenerator(errorHandler *core.ErrorHandler, table *typesys.TypeTable) *IRGenerator {
@@ -25,7 +38,8 @@ func NewIRGenerator(errorHandler *core.ErrorHandler, table *typesys.TypeTable) *
   scopeStack := []*entity.LocalScope { }
   breakStack := []asm.Label { }
   continueStack := []asm.Label { }
-  return &IRGenerator { errorHandler, table, 0, stmts, scopeStack, breakStack, continueStack }
+  jumpMap := make(map[string]*jumpEntry)
+  return &IRGenerator { errorHandler, table, 0, stmts, scopeStack, breakStack, continueStack, jumpMap }
 }
 
 func (self *IRGenerator) Generate(a *ast.AST) *ir.IR {
@@ -47,9 +61,9 @@ func (self *IRGenerator) compileFunctionBody(f *entity.DefinedFunction) []core.I
   self.scopeStack = []*entity.LocalScope { }
   self.breakStack = []asm.Label { }
   self.continueStack = []asm.Label { }
-//self.jumpMap = make(map[string]*JumpEntry)
-//self.transformStmt(f.GetBody())
-//self.checkJumpLinks(jumpMap)
+  self.jumpMap = make(map[string]*jumpEntry)
+  self.transformStmt(f.GetBody())
+  self.checkJumpLinks(self.jumpMap)
   return self.stmts
 }
 
@@ -77,10 +91,63 @@ func (self *IRGenerator) assign(loc core.Location, lhs core.IExpr, rhs core.IExp
 }
 
 func (self *IRGenerator) tmpVar(t core.IType) *entity.DefinedVariable {
-  last := len(self.scopeStack)-1
   ref := self.typeTable.GetTypeRef(t)
   typeNode := ast.NewTypeNode(core.NewLocation("[builtin:ir_generator]", 0, 0), ref)
-  return self.scopeStack[last].AllocateTmp(typeNode)
+  return self.currentScope().AllocateTmp(typeNode)
+}
+
+func (self *IRGenerator) label(label asm.Label) {
+  loc := core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
+  self.stmts = append(self.stmts, ir.NewLabelStmt(loc, label))
+}
+
+func (self *IRGenerator) jump(target asm.Label) {
+  loc := core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
+  self.stmts = append(self.stmts, ir.NewJump(loc, target))
+}
+
+func (self *IRGenerator) cjump(loc core.Location, cond core.IExpr, thenLabel asm.Label, elseLabel asm.Label) {
+  self.stmts = append(self.stmts, ir.NewCJump(loc, cond, thenLabel, elseLabel))
+}
+
+func (self *IRGenerator) pushBreak(label asm.Label) {
+  self.breakStack = append(self.breakStack, label)
+}
+
+func (self *IRGenerator) popBreak() asm.Label {
+  if len(self.breakStack) < 1 {
+    panic("unmatched push/pop for break stack")
+  }
+  label := self.currentBreakTarget()
+  self.breakStack = self.breakStack[0:len(self.breakStack)-1]
+  return label
+}
+
+func (self *IRGenerator) currentBreakTarget() asm.Label {
+  if len(self.breakStack) < 1 {
+    panic("break from out of loop")
+  }
+  return self.breakStack[len(self.breakStack)-1]
+}
+
+func (self *IRGenerator) pushContinue(label asm.Label) {
+  self.continueStack = append(self.continueStack, label)
+}
+
+func (self *IRGenerator) popContinue() asm.Label {
+  if len(self.continueStack) < 1 {
+    panic("unmatched push/pop for continue stack")
+  }
+  label := self.currentContinueTarget()
+  self.continueStack = self.continueStack[0:len(self.continueStack)-1]
+  return label
+}
+
+func (self *IRGenerator) currentContinueTarget() asm.Label {
+  if len(self.continueStack) < 1 {
+    panic("continue from out of loop")
+  }
+  return self.continueStack[len(self.continueStack)-1]
 }
 
 func (self *IRGenerator) transformIndex(node *ast.ArefNode) core.IExpr {
@@ -223,46 +290,238 @@ func (self *IRGenerator) ptrdiff_t() int {
   return asm.TypeGet(self.typeTable.GetLongSize())
 }
 
+func (self *IRGenerator) currentScope() *entity.LocalScope {
+  return self.scopeStack[len(self.scopeStack)-1]
+}
+
+func (self *IRGenerator) pushScope(scope *entity.LocalScope) {
+  self.scopeStack = append(self.scopeStack, scope)
+}
+
+func (self *IRGenerator) popScope() *entity.LocalScope {
+  scope := self.currentScope()
+  self.scopeStack = self.scopeStack[0:len(self.scopeStack)-1]
+  return scope
+}
+
+func (self *IRGenerator) defineLabel(name string, loc core.Location) asm.Label {
+  ent := self.getJumpEntry(name)
+  if ent.isDefined {
+    panic(fmt.Errorf("duplicated jump label in %s(): %s", name, name))
+  }
+  ent.isDefined = true
+  ent.location = loc
+  return ent.label
+}
+
+func (self *IRGenerator) referLabel(name string) asm.Label {
+  ent := self.getJumpEntry(name)
+  ent.numRefered++
+  return ent.label
+}
+
+func (self *IRGenerator) getJumpEntry(name string) *jumpEntry {
+  ent := self.jumpMap[name]
+  if ent == nil {
+    ent = newJumpEntry(asm.NewUnnamedLabel())
+    self.jumpMap[name] = ent
+  }
+  return ent
+}
+
+func (self *IRGenerator) checkJumpLinks(jumpMap map[string]*jumpEntry) {
+  for name, jump := range jumpMap {
+    if jump.isDefined {
+      self.errorHandler.Errorf("%s undefined label: %s\n", jump.location, name)
+    }
+    if jump.numRefered == 0 {
+      self.errorHandler.Warnf("%s useless label: %s\n", jump.location, name)
+    }
+  }
+}
+
 func (self *IRGenerator) VisitNode(unknown core.INode) interface{} {
   switch node := unknown.(type) {
-//  case *ast.BlockNode: {
-//  }
-//  case *ast.ExprStmtNode: {
-//    e := ast.VisitExpr(self, node.GetExpr())
-//    if e != nil {
-//      self.errorHandler.Warnf("%s useless expression\n", node.GetLocation())
-//    }
-//    return nil
-//  }
-//  case *ast.IfNode: {
-//  }
-//  case *ast.SwitchNode: {
-//  }
+    case *ast.BlockNode: {
+      self.pushScope(node.GetScope())
+      vs := node.GetVariables()
+      for i := range vs {
+        if vs[i].HasInitializer() {
+          if vs[i].IsPrivate() {
+            vs[i].SetIR(self.transformExpr(vs[i].GetInitializer()))
+          } else {
+            self.assign(node.GetLocation(), self.ref(vs[i]), self.transformExpr(vs[i].GetInitializer()))
+          }
+        }
+      }
+      stmts := node.GetStmts()
+      for i := range stmts {
+        self.transformStmt(stmts[i])
+      }
+      self.popScope()
+    }
+    case *ast.ExprStmtNode: {
+      e := ast.VisitExpr(self, node.GetExpr())
+      if e != nil {
+        self.errorHandler.Warnf("%s useless expression\n", node.GetLocation())
+      }
+      return nil
+    }
+    case *ast.IfNode: {
+      thenLabel := asm.NewUnnamedLabel()
+      elseLabel := asm.NewUnnamedLabel()
+      endLabel := asm.NewUnnamedLabel()
+      cond := self.transformExpr(node.GetCond())
+      if node.GetElseBody() == nil {
+        self.cjump(node.GetLocation(), cond, thenLabel, endLabel)
+        self.label(thenLabel)
+        self.transformStmt(node.GetThenBody())
+        self.label(endLabel)
+      } else {
+        self.cjump(node.GetLocation(), cond, thenLabel, endLabel)
+        self.label(thenLabel)
+        self.transformStmt(node.GetThenBody())
+        self.jump(endLabel)
+        self.label(elseLabel)
+        self.transformStmt(node.GetElseBody())
+        self.label(endLabel)
+      }
+      return nil
+    }
+    case *ast.SwitchNode: {
+      panic("not implemented yet")
+    }
     case *ast.CaseNode: {
       panic("must not happen")
     }
-//  case *ast.WhileNode: {
-//  }
-//  case *ast.DoWhileNode: {
-//  }
-//  case *ast.ForNode: {
-//  }
-//  case *ast.BreakNode: {
-//  }
-//  case *ast.ContinueNode: {
-//  }
-//  case *ast.LabelNode: {
-//  }
-//  case *ast.GotoNode: {
-//  }
-//  case *ast.ReturnNode: {
-//  }
-//  case *ast.CondExprNode: {
-//  }
-//  case *ast.LogicalAndNode: {
-//  }
-//  case *ast.LogicalOrNode: {
-//  }
+    case *ast.WhileNode: {
+      begLabel := asm.NewUnnamedLabel()
+      bodyLabel := asm.NewUnnamedLabel()
+      endLabel := asm.NewUnnamedLabel()
+      self.label(begLabel)
+      self.cjump(node.GetLocation(), self.transformExpr(node.GetCond()), bodyLabel, endLabel)
+      self.label(bodyLabel)
+      self.pushContinue(begLabel)
+      self.pushBreak(endLabel)
+      self.transformStmt(node.GetBody())
+      self.popBreak()
+      self.popContinue()
+      self.jump(begLabel)
+      self.label(endLabel)
+      return nil
+    }
+    case *ast.DoWhileNode: {
+      begLabel := asm.NewUnnamedLabel()
+      contLabel := asm.NewUnnamedLabel()
+      endLabel := asm.NewUnnamedLabel()
+      self.pushContinue(contLabel)
+      self.pushBreak(endLabel)
+      self.label(begLabel)
+      self.transformStmt(node.GetBody())
+      self.popBreak()
+      self.popContinue()
+      self.label(contLabel)
+      self.cjump(node.GetLocation(), self.transformExpr(node.GetCond()), begLabel, endLabel)
+      self.label(endLabel)
+      return nil
+    }
+    case *ast.ForNode: {
+      begLabel := asm.NewUnnamedLabel()
+      bodyLabel := asm.NewUnnamedLabel()
+      contLabel := asm.NewUnnamedLabel()
+      endLabel := asm.NewUnnamedLabel()
+      self.transformStmtExpr(node.GetInit())
+      self.label(begLabel)
+      self.cjump(node.GetLocation(), self.transformExpr(node.GetCond()), bodyLabel, endLabel)
+      self.label(bodyLabel)
+      self.pushContinue(contLabel)
+      self.pushBreak(endLabel)
+      self.transformStmt(node.GetBody())
+      self.popBreak()
+      self.popContinue()
+      self.label(contLabel)
+      self.transformStmtExpr(node.GetIncr())
+      self.jump(begLabel)
+      self.label(endLabel)
+      return nil
+    }
+    case *ast.BreakNode: {
+      self.jump(self.currentBreakTarget())
+      return nil
+    }
+    case *ast.ContinueNode: {
+      self.jump(self.currentContinueTarget())
+      return nil
+    }
+    case *ast.LabelNode: {
+      stmt := ir.NewLabelStmt(node.GetLocation(), self.defineLabel(node.GetName(), node.GetLocation()))
+      self.stmts = append(self.stmts, stmt)
+      if node.GetStmt() != nil {
+        self.transformStmt(node.GetStmt())
+      }
+      return nil
+    }
+    case *ast.GotoNode: {
+      self.jump(self.referLabel(node.GetTarget()))
+    }
+    case *ast.ReturnNode: {
+      var expr core.IExpr
+      if node.GetExpr() != nil {
+        expr = self.transformExpr(node.GetExpr())
+      }
+      self.stmts = append(self.stmts, ir.NewReturn(node.GetLocation(), expr))
+      return nil
+    }
+    case *ast.CondExprNode: {
+      thenLabel := asm.NewUnnamedLabel()
+      elseLabel := asm.NewUnnamedLabel()
+      endLabel := asm.NewUnnamedLabel()
+      v := self.tmpVar(node.GetType())
+      cond := self.transformExpr(node.GetCond())
+      self.cjump(node.GetLocation(), cond, thenLabel, elseLabel)
+      self.label(thenLabel)
+      self.assign(node.GetThenExpr().GetLocation(), self.ref(v), self.transformExpr(node.GetThenExpr()))
+      self.jump(endLabel)
+      self.label(elseLabel)
+      self.assign(node.GetElseExpr().GetLocation(), self.ref(v), self.transformExpr(node.GetElseExpr()))
+      self.jump(endLabel)
+      self.label(endLabel)
+      if self.isStatement() {
+        return nil
+      } else {
+        return self.ref(v)
+      }
+    }
+    case *ast.LogicalAndNode: {
+      rightLabel := asm.NewUnnamedLabel()
+      endLabel := asm.NewUnnamedLabel()
+      v := self.tmpVar(node.GetType())
+      self.assign(node.GetLeft().GetLocation(), self.ref(v), self.transformExpr(node.GetLeft()))
+      self.cjump(node.GetLocation(), self.ref(v), rightLabel, endLabel)
+      self.label(rightLabel)
+      self.assign(node.GetRight().GetLocation(), self.ref(v), self.transformExpr(node.GetRight()))
+      self.label(endLabel)
+      if self.isStatement() {
+        return nil
+      } else {
+        return self.ref(v)
+      }
+    }
+    case *ast.LogicalOrNode: {
+      rightLabel := asm.NewUnnamedLabel()
+      endLabel := asm.NewUnnamedLabel()
+      v := self.tmpVar(node.GetType())
+      self.assign(node.GetLeft().GetLocation(), self.ref(v), self.transformExpr(node.GetLeft()))
+      self.cjump(node.GetLocation(), self.ref(v), endLabel, rightLabel)
+      self.label(rightLabel)
+      self.assign(node.GetRight().GetLocation(), self.ref(v), self.transformExpr(node.GetRight()))
+      self.label(endLabel)
+      if self.isStatement() {
+        return nil
+      } else {
+        return self.ref(v)
+      }
+    }
     case *ast.AssignNode: {
       lloc := node.GetLHS().GetLocation()
       rloc := node.GetRHS().GetLocation()

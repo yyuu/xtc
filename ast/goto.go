@@ -27,3 +27,7 @@ func (self *GotoNode) AsStmtNode() core.IStmtNode {
 func (self GotoNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self GotoNode) GetTarget() string {
+  return self.Target
+}
