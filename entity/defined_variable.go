@@ -26,6 +26,12 @@ func NewDefinedVariables(xs...*DefinedVariable) []*DefinedVariable {
   }
 }
 
+var tmpSeq int = 0
+func temporaryDefinedVariable(t core.ITypeNode) *DefinedVariable {
+  tmpSeq++
+  return NewDefinedVariable(false, t, fmt.Sprintf("@tmp%d", tmpSeq), nil)
+}
+
 func (self DefinedVariable) String() string {
   return fmt.Sprintf("<entity.DefinedVariable Name=%s Private=%v TypeNode=%s NumRefered=%d Initializer=%s>", self.Name, self.Private, self.TypeNode, self.numRefered, self.Initializer)
 }

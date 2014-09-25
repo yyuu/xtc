@@ -64,3 +64,9 @@ func (self *LocalScope) CheckReferences(errorHandler *core.ErrorHandler) {
     scope.CheckReferences(errorHandler)
   }
 }
+
+func (self *LocalScope) AllocateTmp(typeNode core.ITypeNode) *DefinedVariable {
+  v := temporaryDefinedVariable(typeNode)
+  self.DefineVariable(v)
+  return v
+}
