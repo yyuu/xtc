@@ -128,3 +128,7 @@ func (self ArrayType) IsCastableTo(target core.IType) bool {
 func (self ArrayType) GetBaseType() core.IType {
   return self.BaseType
 }
+
+func (self ArrayType) GetLength() int {
+  return self.Length
+}
