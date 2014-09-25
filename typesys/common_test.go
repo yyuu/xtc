@@ -24,8 +24,8 @@ func (self typeNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self typeNode) IsTypeNode() bool {
-  return true
+func (self *typeNode) AsTypeNode() core.ITypeNode {
+  return self
 }
 
 func (self typeNode) GetTypeRef() core.ITypeRef {

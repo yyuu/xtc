@@ -46,7 +46,7 @@ type IStmtNode interface {
 
 type ITypeNode interface {
   INode
-  IsTypeNode() bool
+  AsTypeNode() ITypeNode
   GetTypeRef() ITypeRef
   IsResolved() bool
   GetType() IType
