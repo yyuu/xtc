@@ -41,7 +41,7 @@ type IUnaryArithmeticOpNode interface {
 
 type IStmtNode interface {
   INode
-  IsStmtNode() bool
+  AsStmtNode() IStmtNode
 }
 
 type ITypeNode interface {

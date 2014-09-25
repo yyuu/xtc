@@ -37,8 +37,8 @@ func (self SwitchNode) String() string {
   }
 }
 
-func (self SwitchNode) IsStmtNode() bool {
-  return true
+func (self *SwitchNode) AsStmtNode() core.IStmtNode {
+  return self
 }
 
 func (self SwitchNode) GetLocation() core.Location {

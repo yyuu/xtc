@@ -20,8 +20,8 @@ func (self GotoNode) String() string {
   return fmt.Sprintf("(goto %s)", self.Target)
 }
 
-func (self GotoNode) IsStmtNode() bool {
-  return true
+func (self *GotoNode) AsStmtNode() core.IStmtNode {
+  return self
 }
 
 func (self GotoNode) GetLocation() core.Location {

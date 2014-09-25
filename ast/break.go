@@ -18,8 +18,8 @@ func (self BreakNode) String() string {
   return "(break)"
 }
 
-func (self BreakNode) IsStmtNode() bool {
-  return true
+func (self *BreakNode) AsStmtNode() core.IStmtNode {
+  return self
 }
 
 func (self BreakNode) GetLocation() core.Location {

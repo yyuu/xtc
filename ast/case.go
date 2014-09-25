@@ -31,8 +31,8 @@ func (self CaseNode) String() string {
   }
 }
 
-func (self CaseNode) IsStmtNode() bool {
-  return true
+func (self *CaseNode) AsStmtNode() core.IStmtNode {
+  return self
 }
 
 func (self CaseNode) GetLocation() core.Location {

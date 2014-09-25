@@ -21,8 +21,8 @@ func (self ExprStmtNode) String() string {
   return fmt.Sprintf("%s", self.Expr)
 }
 
-func (self ExprStmtNode) IsStmtNode() bool {
-  return true
+func (self *ExprStmtNode) AsStmtNode() core.IStmtNode {
+  return self
 }
 
 func (self ExprStmtNode) GetLocation() core.Location {

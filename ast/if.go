@@ -24,8 +24,8 @@ func (self IfNode) String() string {
   return fmt.Sprintf("(if %s %s %s)", self.Cond, self.ThenBody, self.ElseBody)
 }
 
-func (self IfNode) IsStmtNode() bool {
-  return true
+func (self *IfNode) AsStmtNode() core.IStmtNode {
+  return self
 }
 
 func (self IfNode) GetLocation() core.Location {

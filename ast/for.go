@@ -27,8 +27,8 @@ func (self ForNode) String() string {
   return fmt.Sprintf("(let for-loop (%s) (if %s (begin %s (for-loop %s))))", self.Init, self.Cond, self.Body, self.Incr)
 }
 
-func (self ForNode) IsStmtNode() bool {
-  return true
+func (self *ForNode) AsStmtNode() core.IStmtNode {
+  return self
 }
 
 func (self ForNode) GetLocation() core.Location {

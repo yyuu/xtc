@@ -18,8 +18,8 @@ func (self ContinueNode) String() string {
   return "(continue)"
 }
 
-func (self ContinueNode) IsStmtNode() bool {
-  return true
+func (self *ContinueNode) AsStmtNode() core.IStmtNode {
+  return self
 }
 
 func (self ContinueNode) GetLocation() core.Location {

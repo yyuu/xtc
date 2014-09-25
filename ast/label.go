@@ -21,8 +21,8 @@ func (self LabelNode) String() string {
   panic("not implemented")
 }
 
-func (self LabelNode) IsStmtNode() bool {
-  return true
+func (self *LabelNode) AsStmtNode() core.IStmtNode {
+  return self
 }
 
 func (self LabelNode) GetLocation() core.Location {

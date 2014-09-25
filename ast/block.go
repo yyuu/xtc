@@ -44,8 +44,8 @@ func (self BlockNode) String() string {
   }
 }
 
-func (self BlockNode) IsStmtNode() bool {
-  return true
+func (self *BlockNode) AsStmtNode() core.IStmtNode {
+  return self
 }
 
 func (self BlockNode) GetLocation() core.Location {

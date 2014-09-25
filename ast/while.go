@@ -23,8 +23,8 @@ func (self WhileNode) String() string {
   return fmt.Sprintf("(let while-loop ((while-cond %s)) (if while-cond (begin %s (while-loop %s))))", self.Cond, self.Body, self.Cond)
 }
 
-func (self WhileNode) IsStmtNode() bool {
-  return true
+func (self *WhileNode) AsStmtNode() core.IStmtNode {
+  return self
 }
 
 func (self WhileNode) GetLocation() core.Location {

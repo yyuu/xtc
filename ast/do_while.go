@@ -23,8 +23,8 @@ func (self DoWhileNode) String() string {
   return fmt.Sprintf("(let do-while-loop () (begin %s (if %s (do-while-loop))))", self.Body, self.Cond)
 }
 
-func (self DoWhileNode) IsStmtNode() bool {
-  return true
+func (self *DoWhileNode) AsStmtNode() core.IStmtNode {
+  return self
 }
 
 func (self DoWhileNode) GetLocation() core.Location {
