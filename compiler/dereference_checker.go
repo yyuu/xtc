@@ -67,7 +67,7 @@ func (self *DereferenceChecker) checkMemberRef(loc core.Location, t core.IType, 
   }
 }
 
-func (self *DereferenceChecker) VisitNode(unknown core.INode) {
+func (self *DereferenceChecker) VisitNode(unknown core.INode) interface{} {
   switch node := unknown.(type) {
     case *ast.BlockNode: {
       vs := node.GetVariables()
@@ -162,4 +162,5 @@ func (self *DereferenceChecker) VisitNode(unknown core.INode) {
       visitNode(self, unknown)
     }
   }
+  return nil
 }

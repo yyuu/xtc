@@ -308,7 +308,7 @@ func (self *TypeChecker) expectsSameInteger(node core.IBinaryOpNode) {
   self.arithmeticImplicitCast(node)
 }
 
-func (self *TypeChecker) VisitNode(unknown core.INode) {
+func (self *TypeChecker) VisitNode(unknown core.INode) interface{} {
   switch node := unknown.(type) {
     case *ast.BlockNode: {
       vars := node.GetVariables()
@@ -354,33 +354,33 @@ func (self *TypeChecker) VisitNode(unknown core.INode) {
     case *ast.AssignNode: {
       visitAssignNode(self, node)
       if ! self.checkLHS(node.GetLHS()) {
-        return
+        return nil
       }
       if ! self.checkRHS(node.GetRHS()) {
-        return
+        return nil
       }
       node.SetRHS(self.implicitCast(node.GetLHS().GetType(), node.GetRHS()))
     }
     case *ast.OpAssignNode: {
       visitOpAssignNode(self, node)
       if ! self.checkLHS(node.GetLHS()) {
-        return
+        return nil
       }
       if ! self.checkRHS(node.GetRHS()) {
-        return
+        return nil
       }
       if node.GetOperator() == "+" || node.GetOperator() == "-" {
         if node.GetLHS().GetType().IsPointer() {
           self.mustBeInteger(node.GetRHS(), node.GetOperator())
           node.SetRHS(self.integralPromotedExpr(node.GetRHS()))
-          return
+          return nil
         }
       }
       if ! self.mustBeInteger(node.GetLHS(), node.GetOperator()) {
-        return
+        return nil
       }
       if ! self.mustBeInteger(node.GetRHS(), node.GetOperator()) {
-        return
+        return nil
       }
       l := self.integralPromotion(node.GetLHS().GetType())
       r := self.integralPromotion(node.GetRHS().GetType())
@@ -463,7 +463,7 @@ func (self *TypeChecker) VisitNode(unknown core.INode) {
       t := node.GetFunctionType()
       if ! t.AcceptsArgc(node.NumArgs()) {
         self.errorHandler.Errorf("%s wrong number of arguments: %d\n", node.NumArgs())
-        return
+        return nil
       }
       self.errorHandler.Infoln("FIXME: TypeChecker: implicit cast for function arguments have not yet implemented")
     }
@@ -481,4 +481,5 @@ func (self *TypeChecker) VisitNode(unknown core.INode) {
       visitNode(self, unknown)
     }
   }
+  return nil
 }
