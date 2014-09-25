@@ -7,9 +7,9 @@ type IStmt interface {
 
 type IExpr interface {
   AsExpr() IExpr
-  GetType() IType
+  GetTypeId() int
   IsVar() bool
   IsAddr() bool
   IsConstant() bool
-  GetAddressNode(IType) IExpr
+  GetAddressNode(int) IExpr
 }

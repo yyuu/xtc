@@ -1,6 +1,7 @@
 package compiler
 
 import (
+  "bitbucket.org/yyuu/bs/asm"
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/entity"
@@ -14,15 +15,17 @@ type IRGenerator struct {
   exprNestLevel int
   stmts []core.IStmt
   scopeStack []*entity.LocalScope
-//breakStack []*Label { }
-//continueStack []*Label { }
+  breakStack []asm.Label
+  continueStack []asm.Label
 //jumpMap make(map[string]*JumpEntry)
 }
 
 func NewIRGenerator(errorHandler *core.ErrorHandler, table *typesys.TypeTable) *IRGenerator {
   stmts := []core.IStmt { }
   scopeStack := []*entity.LocalScope { }
-  return &IRGenerator { errorHandler, table, 0, stmts, scopeStack }
+  breakStack := []asm.Label { }
+  continueStack := []asm.Label { }
+  return &IRGenerator { errorHandler, table, 0, stmts, scopeStack, breakStack, continueStack }
 }
 
 func (self *IRGenerator) Generate(a *ast.AST) *ir.IR {
@@ -42,8 +45,8 @@ func (self *IRGenerator) Generate(a *ast.AST) *ir.IR {
 func (self *IRGenerator) compileFunctionBody(f *entity.DefinedFunction) []core.IStmt {
   self.stmts = []core.IStmt { }
   self.scopeStack = []*entity.LocalScope { }
-//self.breakStack = []*Label { }
-//self.continueStack = []*Label { }
+  self.breakStack = []asm.Label { }
+  self.continueStack = []asm.Label { }
 //self.jumpMap = make(map[string]*JumpEntry)
 //self.transformStmt(f.GetBody())
 //self.checkJumpLinks(jumpMap)
@@ -115,12 +118,12 @@ func (self *IRGenerator) transformOpAssign(loc core.Location, op int, lhsType co
 
 func (self *IRGenerator) bin(op int, leftType core.IType, left core.IExpr, right core.IExpr) *ir.Bin {
   if self.isPointerArithmetic(op, leftType) {
-    return ir.NewBin(left.GetType(), op, left,
-                     ir.NewBin(right.GetType(), ir.OP_MUL,
+    return ir.NewBin(left.GetTypeId(), op, left,
+                     ir.NewBin(right.GetTypeId(), ir.OP_MUL,
                                right,
                                self.ptrBaseSize(leftType)))
   } else {
-    return ir.NewBin(left.GetType(), op, left, right)
+    return ir.NewBin(left.GetTypeId(), op, left, right)
   }
 }
 
@@ -188,28 +191,36 @@ func (self *IRGenerator) pointerTo(t core.IType) core.IType {
   return self.typeTable.PointerTo(t)
 }
 
-func (self *IRGenerator) asmType(t core.IType) core.IType {
-  return t // FIXME: asm type
+func (self *IRGenerator) asmType(t core.IType) int {
+  if t.IsVoid() {
+    return self.int_t()
+  } else {
+    return asm.TypeGet(t.Size())
+  }
 }
 
-func (self *IRGenerator) varType(t core.IType) core.IType {
-  return t // FIXME: asm type
+func (self *IRGenerator) varType(t core.IType) int {
+  if ! t.IsScalar() {
+    return 0
+  } else {
+    return asm.TypeGet(t.Size())
+  }
 }
 
-func (self *IRGenerator) int_t() core.IType {
-  return self.typeTable.UnsignedInt() // FIXME: asm type
+func (self *IRGenerator) int_t() int {
+  return asm.TypeGet(self.typeTable.GetIntSize())
 }
 
-func (self *IRGenerator) size_t() core.IType {
-  return self.typeTable.UnsignedLong() // FIXME: asm type
+func (self *IRGenerator) size_t() int {
+  return asm.TypeGet(self.typeTable.GetLongSize())
 }
 
-func (self *IRGenerator) ptr_t() core.IType {
-  return self.typeTable.UnsignedLong() // FIXME: asm type
+func (self *IRGenerator) ptr_t() int {
+  return asm.TypeGet(self.typeTable.GetPointerSize())
 }
 
-func (self *IRGenerator) ptrdiff_t() core.IType {
-  return self.typeTable.PtrDiffType() // FIXME: asm type
+func (self *IRGenerator) ptrdiff_t() int {
+  return asm.TypeGet(self.typeTable.GetLongSize())
 }
 
 func (self *IRGenerator) VisitNode(unknown core.INode) interface{} {

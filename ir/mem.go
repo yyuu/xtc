@@ -6,11 +6,11 @@ import (
 
 type Mem struct {
   ClassName string
-  Type core.IType
+  TypeId int
   Expr core.IExpr
 }
 
-func NewMem(t core.IType, expr core.IExpr) *Mem {
+func NewMem(t int, expr core.IExpr) *Mem {
   return &Mem { "ir.Mem", t, expr }
 }
 
@@ -18,8 +18,8 @@ func (self Mem) AsExpr() core.IExpr {
   return self
 }
 
-func (self Mem) GetType() core.IType {
-  return self.Type
+func (self Mem) GetTypeId() int {
+  return self.TypeId
 }
 
 func (self Mem) IsAddr() bool {
@@ -34,6 +34,6 @@ func (self Mem) IsVar() bool {
   return false
 }
 
-func (self Mem) GetAddressNode(t core.IType) core.IExpr {
+func (self Mem) GetAddressNode(t int) core.IExpr {
   return self.Expr
 }

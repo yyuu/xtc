@@ -4,8 +4,6 @@ import (
   "fmt"
 )
 
-type AsmType int
-
 const (
   TYPE_INT8 = iota
   TYPE_INT16
@@ -13,7 +11,7 @@ const (
   TYPE_INT64
 )
 
-func TypeGet(size int) AsmType {
+func TypeGet(size int) int {
   switch size {
     case 1: return TYPE_INT8
     case 2: return TYPE_INT16
@@ -25,7 +23,7 @@ func TypeGet(size int) AsmType {
   }
 }
 
-func TypeSize(t AsmType) int {
+func TypeSize(t int) int {
   switch t {
     case TYPE_INT8:  return 1
     case TYPE_INT16: return 2

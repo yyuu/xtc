@@ -6,12 +6,12 @@ import (
 
 type Uni struct {
   ClassName string
-  Type core.IType
+  TypeId int
   Op int
   Expr core.IExpr
 }
 
-func NewUni(t core.IType, op int, expr core.IExpr) *Uni {
+func NewUni(t int, op int, expr core.IExpr) *Uni {
   return &Uni { "ir.Uni", t, op, expr }
 }
 
@@ -19,8 +19,8 @@ func (self Uni) AsExpr() core.IExpr {
   return self
 }
 
-func (self Uni) GetType() core.IType {
-  return self.Type
+func (self Uni) GetTypeId() int {
+  return self.TypeId
 }
 
 func (self Uni) IsAddr() bool {
@@ -35,6 +35,6 @@ func (self Uni) IsVar() bool {
   return false
 }
 
-func (self Uni) GetAddressNode(t core.IType) core.IExpr {
+func (self Uni) GetAddressNode(t int) core.IExpr {
   panic("unexpected node for LHS")
 }

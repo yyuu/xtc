@@ -6,11 +6,11 @@ import (
 
 type Addr struct {
   ClassName string
-  Type core.IType
+  TypeId int
   Entity core.IEntity
 }
 
-func NewAddr(t core.IType, e core.IEntity) *Addr {
+func NewAddr(t int, e core.IEntity) *Addr {
   return &Addr { "ir.Addr", t, e }
 }
 
@@ -18,8 +18,8 @@ func (self Addr) AsExpr() core.IExpr {
   return self
 }
 
-func (self Addr) GetType() core.IType {
-  return self.Type
+func (self Addr) GetTypeId() int {
+  return self.TypeId
 }
 
 func (self Addr) IsAddr() bool {
@@ -34,6 +34,6 @@ func (self Addr) IsVar() bool {
   return false
 }
 
-func (self Addr) GetAddressNode(t core.IType) core.IExpr {
+func (self Addr) GetAddressNode(t int) core.IExpr {
   panic("unexpected node for LHS")
 }
