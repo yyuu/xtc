@@ -1,16 +1,17 @@
 package ir
 
 import (
+  "bitbucket.org/yyuu/bs/asm"
   "bitbucket.org/yyuu/bs/core"
 )
 
 type LabelStmt struct {
   ClassName string
   Location core.Location
-  Label string // FIXME:
+  Label asm.Label
 }
 
-func NewLabelStmt(loc core.Location, label string) *LabelStmt {
+func NewLabelStmt(loc core.Location, label asm.Label) *LabelStmt {
   return &LabelStmt { "ir.LabelStmt", loc, label }
 }
 

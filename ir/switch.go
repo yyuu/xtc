@@ -1,6 +1,7 @@
 package ir
 
 import (
+  "bitbucket.org/yyuu/bs/asm"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -9,11 +10,11 @@ type Switch struct {
   Location core.Location
   Cond core.IExpr
   Cases []*Case
-  DefaultLabel string // FIXME
-  EndLabel string // FIXME
+  DefaultLabel asm.Label
+  EndLabel asm.Label
 }
 
-func NewSwitch(loc core.Location, cond core.IExpr, cases []*Case, defaultLabel string, endLabel string) *Switch {
+func NewSwitch(loc core.Location, cond core.IExpr, cases []*Case, defaultLabel asm.Label, endLabel asm.Label) *Switch {
   return &Switch { "ir.Switch", loc, cond, cases, defaultLabel, endLabel }
 }
 

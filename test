@@ -23,8 +23,11 @@ go test -v ./ast
 go test -i ./parser
 go test -v ./parser
 
-go test -i ./compiler
-go test -v ./compiler
-
 go test -i ./ir
 go test -v ./ir
+
+go test -i ./asm
+go test -v ./asm
+
+go test -i ./compiler
+go test -v ./compiler

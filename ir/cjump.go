@@ -1,6 +1,7 @@
 package ir
 
 import (
+  "bitbucket.org/yyuu/bs/asm"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -8,11 +9,11 @@ type CJump struct {
   ClassName string
   Location core.Location
   Cond core.IExpr
-  ThenLabel string // FIXME:
-  ElseLabel string // FIXME:
+  ThenLabel asm.Label
+  ElseLabel asm.Label
 }
 
-func NewCJump(loc core.Location, cond core.IExpr, thenLabel string, elseLabel string) *CJump {
+func NewCJump(loc core.Location, cond core.IExpr, thenLabel asm.Label, elseLabel asm.Label) *CJump {
   return &CJump { "ir.CJump", loc, cond, thenLabel, elseLabel }
 }
 
