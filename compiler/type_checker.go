@@ -353,44 +353,36 @@ func (self *TypeChecker) VisitNode(unknown core.INode) interface{} {
     }
     case *ast.AssignNode: {
       visitAssignNode(self, node)
-      if ! self.checkLHS(node.GetLHS()) {
-        return nil
+      if self.checkLHS(node.GetLHS()) {
+        if self.checkRHS(node.GetRHS()) {
+          node.SetRHS(self.implicitCast(node.GetLHS().GetType(), node.GetRHS()))
+        }
       }
-      if ! self.checkRHS(node.GetRHS()) {
-        return nil
-      }
-      node.SetRHS(self.implicitCast(node.GetLHS().GetType(), node.GetRHS()))
     }
     case *ast.OpAssignNode: {
       visitOpAssignNode(self, node)
-      if ! self.checkLHS(node.GetLHS()) {
-        return nil
-      }
-      if ! self.checkRHS(node.GetRHS()) {
-        return nil
-      }
-      if node.GetOperator() == "+" || node.GetOperator() == "-" {
-        if node.GetLHS().GetType().IsPointer() {
-          self.mustBeInteger(node.GetRHS(), node.GetOperator())
-          node.SetRHS(self.integralPromotedExpr(node.GetRHS()))
-          return nil
+      if self.checkLHS(node.GetLHS()) {
+        if self.checkRHS(node.GetRHS()) {
+          if node.GetLHS().GetType().IsPointer() {
+            self.mustBeInteger(node.GetRHS(), node.GetOperator())
+            node.SetRHS(self.integralPromotedExpr(node.GetRHS()))
+          } else {
+            if self.mustBeInteger(node.GetLHS(), node.GetOperator()) {
+              if self.mustBeInteger(node.GetRHS(), node.GetOperator()) {
+                l := self.integralPromotion(node.GetLHS().GetType())
+                r := self.integralPromotion(node.GetRHS().GetType())
+                opType := self.usualArithmeticConversion(l, r)
+                if ! opType.IsCompatible(l) && self.isSafeIntegerCast(node.GetRHS(), opType) {
+                  self.errorHandler.Warnf("%s incompatible implicit cast from %s to %s\n", node.GetLocation(), opType, l)
+                }
+                if ! r.IsSameType(opType) {
+                  typeNode := ast.NewTypeNode(node.GetLocation(), typesys.NewVoidTypeRef(node.GetLocation()))
+                  node.SetRHS(ast.NewCastNode(node.GetLocation(), typeNode, node.GetRHS()))
+                }
+              }
+            }
+          }
         }
-      }
-      if ! self.mustBeInteger(node.GetLHS(), node.GetOperator()) {
-        return nil
-      }
-      if ! self.mustBeInteger(node.GetRHS(), node.GetOperator()) {
-        return nil
-      }
-      l := self.integralPromotion(node.GetLHS().GetType())
-      r := self.integralPromotion(node.GetRHS().GetType())
-      opType := self.usualArithmeticConversion(l, r)
-      if ! opType.IsCompatible(l) && self.isSafeIntegerCast(node.GetRHS(), opType) {
-        self.errorHandler.Warnf("%s incompatible implicit cast from %s to %s\n", node.GetLocation(), opType, l)
-      }
-      if ! r.IsSameType(opType) {
-        typeNode := ast.NewTypeNode(node.GetLocation(), typesys.NewVoidTypeRef(node.GetLocation()))
-        node.SetRHS(ast.NewCastNode(node.GetLocation(), typeNode, node.GetRHS()))
       }
     }
     case *ast.CondExprNode: {
@@ -463,9 +455,9 @@ func (self *TypeChecker) VisitNode(unknown core.INode) interface{} {
       t := node.GetFunctionType()
       if ! t.AcceptsArgc(node.NumArgs()) {
         self.errorHandler.Errorf("%s wrong number of arguments: %d\n", node.NumArgs())
-        return nil
+      } else {
+        self.errorHandler.Infoln("FIXME: TypeChecker: implicit cast for function arguments have not yet implemented")
       }
-      self.errorHandler.Infoln("FIXME: TypeChecker: implicit cast for function arguments have not yet implemented")
     }
     case *ast.ArefNode: {
       visitArefNode(self, node)
