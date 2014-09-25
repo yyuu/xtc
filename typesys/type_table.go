@@ -12,12 +12,13 @@ type TypeTable struct {
   intSize int
   longSize int
   pointerSize int
-  table map[string]core.IType
+  typeTable map[string]core.IType
+  refTable map[string]core.ITypeRef
 }
 
 func NewTypeTable(charSize, shortSize, intSize, longSize, ptrSize int) *TypeTable {
   loc := core.NewLocation("[builtin:typesys]", 0, 0)
-  tt := TypeTable { charSize, shortSize, intSize, longSize, ptrSize, make(map[string]core.IType) }
+  tt := TypeTable { charSize, shortSize, intSize, longSize, ptrSize, make(map[string]core.IType), make(map[string]core.ITypeRef) }
   tt.PutType(NewVoidTypeRef(loc), NewVoidType())
   tt.PutType(NewCharTypeRef(loc), NewCharType(charSize))
   tt.PutType(NewShortTypeRef(loc), NewShortType(shortSize))
@@ -54,11 +55,12 @@ func NewTypeTableFor(platform string) *TypeTable {
 }
 
 func (self *TypeTable) PutType(ref core.ITypeRef, t core.IType) {
-  self.table[ref.Key()] = t
+  self.typeTable[ref.Key()] = t
+  self.refTable[ref.Key()] = ref
 }
 
 func (self TypeTable) GetType(ref core.ITypeRef) core.IType {
-  t := self.table[ref.Key()]
+  t := self.typeTable[ref.Key()]
   if t == nil {
     switch typed := ref.(type) {
       case *UserTypeRef: {
@@ -93,6 +95,15 @@ func (self TypeTable) GetType(ref core.ITypeRef) core.IType {
   return t
 }
 
+func (self TypeTable) GetTypeRef(target core.IType) core.ITypeRef {
+  for key, t := range self.typeTable {
+    if t == target {
+      return self.refTable[key]
+    }
+  }
+  return nil
+}
+
 func (self TypeTable) GetCharSize() int {
   return self.charSize
 }
@@ -118,15 +129,15 @@ func (self TypeTable) IsTypeTable() bool {
 }
 
 func (self TypeTable) String() string {
-  xs := make([]string, len(self.table))
-  for key, _ := range self.table {
+  xs := make([]string, len(self.typeTable))
+  for key, _ := range self.typeTable {
     xs = append(xs, fmt.Sprintf("%s", key))
   }
   return fmt.Sprintf("(%s)", strings.Join(xs, "\n"))
 }
 
 func (self TypeTable) IsDefined(ref core.ITypeRef) bool {
-  _, ok := self.table[ref.Key()]
+  _, ok := self.typeTable[ref.Key()]
   return ok
 }
 
@@ -144,12 +155,12 @@ func (self TypeTable) GetParamType(ref core.ITypeRef) core.IType {
 }
 
 func (self TypeTable) NumTypes() int {
-  return len(self.table)
+  return len(self.typeTable)
 }
 
 func (self TypeTable) GetTypes() []core.IType {
   ts := []core.IType { }
-  for _, t := range self.table {
+  for _, t := range self.typeTable {
     ts = append(ts, t)
   }
   return ts
