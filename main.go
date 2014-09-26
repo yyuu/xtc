@@ -90,9 +90,6 @@ func ep(ast *bs_ast.AST, err error) {
   if (*dump & DUMP_ASM) != 0 {
     dumpAsm(asm)
   }
-
-  // TODO: remove this
-  fmt.Fprintln(os.Stdout, ast)
 }
 
 func semanticAnalyze(ast *bs_ast.AST, types *bs_typesys.TypeTable) *bs_ast.AST {
@@ -113,8 +110,8 @@ func dumpAST(ast *bs_ast.AST) {
   if err != nil {
     panic(err)
   }
-  fmt.Fprintln(os.Stderr, "// AST")
-  fmt.Fprintln(os.Stderr, string(cs))
+  fmt.Println("// AST")
+  fmt.Println(string(cs))
 }
 
 func dumpSemant(ast *bs_ast.AST) {
@@ -122,8 +119,8 @@ func dumpSemant(ast *bs_ast.AST) {
   if err != nil {
     panic(err)
   }
-  fmt.Fprintln(os.Stderr, "// Semantics")
-  fmt.Fprintln(os.Stderr, string(cs))
+  fmt.Println("// Semantics")
+  fmt.Println(string(cs))
 }
 
 func dumpIR(ir *bs_ir.IR) {
@@ -131,8 +128,8 @@ func dumpIR(ir *bs_ir.IR) {
   if err != nil {
     panic(err)
   }
-  fmt.Fprintln(os.Stderr, "// IR")
-  fmt.Fprintln(os.Stderr, string(cs))
+  fmt.Println("// IR")
+  fmt.Println(string(cs))
 }
 
 func dumpAsm(asm *bs_sysdep.AssemblyCode) {
@@ -140,6 +137,6 @@ func dumpAsm(asm *bs_sysdep.AssemblyCode) {
   if err != nil {
     panic(err)
   }
-  fmt.Fprintln(os.Stderr, "// Asm")
-  fmt.Fprintln(os.Stderr, string(cs))
+  fmt.Println("// Asm")
+  fmt.Println(string(cs))
 }
