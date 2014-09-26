@@ -93,6 +93,7 @@ func (self *IRGenerator) assign(loc core.Location, lhs core.IExpr, rhs core.IExp
 func (self *IRGenerator) tmpVar(t core.IType) *entity.DefinedVariable {
   ref := self.typeTable.GetTypeRef(t)
   typeNode := ast.NewTypeNode(core.NewLocation("[builtin:ir_generator]", 0, 0), ref)
+  typeNode.SetType(t)
   return self.currentScope().AllocateTmp(typeNode)
 }
 
