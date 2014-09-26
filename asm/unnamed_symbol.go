@@ -4,8 +4,8 @@ type UnnamedSymbol struct {
   ClassName string
 }
 
-func NewUnnamedSymbol() UnnamedSymbol {
-  return UnnamedSymbol { "asm.UnnamedSymbol" }
+func NewUnnamedSymbol() *UnnamedSymbol {
+  return &UnnamedSymbol { "asm.UnnamedSymbol" }
 }
 
 func (self UnnamedSymbol) IsZero() bool {

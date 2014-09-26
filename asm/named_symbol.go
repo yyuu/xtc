@@ -5,8 +5,8 @@ type NamedSymbol struct {
   Name string
 }
 
-func NewNamedSymbol(name string) NamedSymbol {
-  return NamedSymbol { "asm.NamedSymbol", name }
+func NewNamedSymbol(name string) *NamedSymbol {
+  return &NamedSymbol { "asm.NamedSymbol", name }
 }
 
 func (self NamedSymbol) IsZero() bool {
