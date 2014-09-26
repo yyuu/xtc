@@ -54,7 +54,7 @@ func (self *LogicalAndNode) SetRight(expr core.IExprNode) {
 
 func (self LogicalAndNode) GetType() core.IType {
   if self.Type == nil {
-    panic(fmt.Errorf("%s type is nil", self.Location))
+    self.Type = self.Left.GetType()
   }
   return self.Type
 }
