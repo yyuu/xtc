@@ -26,31 +26,31 @@ func NewUndefinedFunctions(xs...*UndefinedFunction) []*UndefinedFunction {
   }
 }
 
-func (self UndefinedFunction) String() string {
+func (self *UndefinedFunction) String() string {
   return fmt.Sprintf("<entity.UndefinedFunction Name=%s TypeNode=%s Params=%s>", self.Name, self.TypeNode, self.Params)
 }
 
-func (self UndefinedFunction) IsDefined() bool {
+func (self *UndefinedFunction) IsDefined() bool {
   return false
 }
 
-func (self UndefinedFunction) IsConstant() bool {
+func (self *UndefinedFunction) IsConstant() bool {
   return false
 }
 
-func (self UndefinedFunction) IsPrivate() bool {
+func (self *UndefinedFunction) IsPrivate() bool {
   return true
 }
 
-func (self UndefinedFunction) IsParameter() bool {
+func (self *UndefinedFunction) IsParameter() bool {
   return false
 }
 
-func (self UndefinedFunction) GetNumRefered() int {
+func (self *UndefinedFunction) GetNumRefered() int {
   return self.numRefered
 }
 
-func (self UndefinedFunction) IsRefered() bool {
+func (self *UndefinedFunction) IsRefered() bool {
   return 0 < self.numRefered
 }
 
@@ -58,39 +58,39 @@ func (self *UndefinedFunction) Refered() {
   self.numRefered++
 }
 
-func (self UndefinedFunction) GetTypeNode() core.ITypeNode {
+func (self *UndefinedFunction) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
-func (self UndefinedFunction) GetTypeRef() core.ITypeRef {
+func (self *UndefinedFunction) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
-func (self UndefinedFunction) GetType() core.IType {
+func (self *UndefinedFunction) GetType() core.IType {
   return self.TypeNode.GetType()
 }
 
-func (self UndefinedFunction) GetName() string {
+func (self *UndefinedFunction) GetName() string {
   return self.Name
 }
 
-func (self UndefinedFunction) GetParams() *Params {
+func (self *UndefinedFunction) GetParams() *Params {
   return self.Params
 }
 
-func (self UndefinedFunction) GetParameters() []*Parameter {
+func (self *UndefinedFunction) GetParameters() []*Parameter {
   return self.Params.ParamDescs
 }
 
-func (self UndefinedFunction) GetReturnType() core.IType {
+func (self *UndefinedFunction) GetReturnType() core.IType {
   t := self.GetType().(*typesys.FunctionType)
   return t.GetReturnType()
 }
 
-func (self UndefinedFunction) IsVoid() bool {
+func (self *UndefinedFunction) IsVoid() bool {
   return self.GetReturnType().IsVoid()
 }
 
-func (self UndefinedFunction) GetValue() core.IExprNode {
+func (self *UndefinedFunction) GetValue() core.IExprNode {
   panic("UndefinedFunction#GetValue called")
 }

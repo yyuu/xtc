@@ -25,31 +25,31 @@ func NewUndefinedVariables(xs...*UndefinedVariable) []*UndefinedVariable {
   }
 }
 
-func (self UndefinedVariable) String() string {
+func (self *UndefinedVariable) String() string {
   return fmt.Sprintf("<entity.UndefinedVariable Name=%s Private=%v TypeNode=%s>", self.Name, self.Private, self.TypeNode)
 }
 
-func (self UndefinedVariable) IsDefined() bool {
+func (self *UndefinedVariable) IsDefined() bool {
   return false
 }
 
-func (self UndefinedVariable) IsConstant() bool {
+func (self *UndefinedVariable) IsConstant() bool {
   return false
 }
 
-func (self UndefinedVariable) IsPrivate() bool {
+func (self *UndefinedVariable) IsPrivate() bool {
   return true
 }
 
-func (self UndefinedVariable) IsParameter() bool {
+func (self *UndefinedVariable) IsParameter() bool {
   return false
 }
 
-func (self UndefinedVariable) GetNumRefered() int {
+func (self *UndefinedVariable) GetNumRefered() int {
   return self.numRefered
 }
 
-func (self UndefinedVariable) IsRefered() bool {
+func (self *UndefinedVariable) IsRefered() bool {
   return 0 < self.numRefered
 }
 
@@ -57,22 +57,22 @@ func (self *UndefinedVariable) Refered() {
   self.numRefered++
 }
 
-func (self UndefinedVariable) GetName() string {
+func (self *UndefinedVariable) GetName() string {
   return self.Name
 }
 
-func (self UndefinedVariable) GetTypeNode() core.ITypeNode {
+func (self *UndefinedVariable) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
-func (self UndefinedVariable) GetTypeRef() core.ITypeRef {
+func (self *UndefinedVariable) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
-func (self UndefinedVariable) GetType() core.IType {
+func (self *UndefinedVariable) GetType() core.IType {
   return self.TypeNode.GetType()
 }
 
-func (self UndefinedVariable) GetValue() core.IExprNode {
+func (self *UndefinedVariable) GetValue() core.IExprNode {
   panic("UndefinedVariable#GetValue called")
 }

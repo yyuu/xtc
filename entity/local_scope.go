@@ -23,7 +23,7 @@ func (self *LocalScope) GetToplevel() core.IScope {
   return self.Parent.GetToplevel()
 }
 
-func (self LocalScope) GetParent() core.IScope {
+func (self *LocalScope) GetParent() core.IScope {
   return self.Parent
 }
 

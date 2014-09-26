@@ -33,51 +33,51 @@ func temporaryDefinedVariable(t core.ITypeNode) *DefinedVariable {
   return NewDefinedVariable(false, t, fmt.Sprintf("@tmp%d", tmpSeq), nil)
 }
 
-func (self DefinedVariable) String() string {
+func (self *DefinedVariable) String() string {
   return fmt.Sprintf("<entity.DefinedVariable Name=%s Private=%v TypeNode=%s NumRefered=%d Initializer=%s>", self.Name, self.Private, self.TypeNode, self.numRefered, self.Initializer)
 }
 
-func (self DefinedVariable) IsDefined() bool {
+func (self *DefinedVariable) IsDefined() bool {
   return true
 }
 
-func (self DefinedVariable) HasInitializer() bool {
+func (self *DefinedVariable) HasInitializer() bool {
   return self.Initializer != nil
 }
 
-func (self DefinedVariable) IsPrivate() bool {
+func (self *DefinedVariable) IsPrivate() bool {
   return self.Private
 }
 
-func (self DefinedVariable) IsConstant() bool {
+func (self *DefinedVariable) IsConstant() bool {
   return false
 }
 
-func (self DefinedVariable) IsParameter() bool {
+func (self *DefinedVariable) IsParameter() bool {
   return false
 }
 
-func (self DefinedVariable) GetName() string {
+func (self *DefinedVariable) GetName() string {
   return self.Name
 }
 
-func (self DefinedVariable) GetTypeNode() core.ITypeNode {
+func (self *DefinedVariable) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
-func (self DefinedVariable) GetTypeRef() core.ITypeRef {
+func (self *DefinedVariable) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
-func (self DefinedVariable) GetType() core.IType {
+func (self *DefinedVariable) GetType() core.IType {
   return self.TypeNode.GetType()
 }
 
-func (self DefinedVariable) GetNumRefered() int {
+func (self *DefinedVariable) GetNumRefered() int {
   return self.numRefered
 }
 
-func (self DefinedVariable) IsRefered() bool {
+func (self *DefinedVariable) IsRefered() bool {
   return 0 < self.numRefered
 }
 
@@ -85,7 +85,7 @@ func (self *DefinedVariable) Refered() {
   self.numRefered++
 }
 
-func (self DefinedVariable) GetInitializer() core.IExprNode {
+func (self *DefinedVariable) GetInitializer() core.IExprNode {
   return self.Initializer
 }
 
@@ -93,11 +93,11 @@ func (self *DefinedVariable) SetInitializer(init core.IExprNode) {
   self.Initializer = init
 }
 
-func (self DefinedVariable) GetValue() core.IExprNode {
+func (self *DefinedVariable) GetValue() core.IExprNode {
   panic("DefinedVariable#GetValue called")
 }
 
-func (self DefinedVariable) GetIR() core.IExpr {
+func (self *DefinedVariable) GetIR() core.IExpr {
   return self.IR
 }
 

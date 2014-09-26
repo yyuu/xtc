@@ -17,7 +17,7 @@ func (self *ConstantTable) Intern(s string) *ConstantEntry {
   return ent
 }
 
-func (self ConstantTable) GetEntries() []*ConstantEntry {
+func (self *ConstantTable) GetEntries() []*ConstantEntry {
   entries := []*ConstantEntry { }
   for _, ent := range self.table {
     entries = append(entries, ent)

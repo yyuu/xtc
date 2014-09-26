@@ -30,47 +30,47 @@ func NewDefinedFunctions(xs...*DefinedFunction) []*DefinedFunction {
   }
 }
 
-func (self DefinedFunction) String() string {
+func (self *DefinedFunction) String() string {
   return fmt.Sprintf("<entity.DefinedFunction Name=%s Private=%v TypeNode=%s Params=%s Body=%s>", self.Name, self.Private, self.TypeNode, self.Params, self.Body)
 }
 
-func (self DefinedFunction) IsPrivate() bool {
+func (self *DefinedFunction) IsPrivate() bool {
   return self.Private
 }
 
-func (self DefinedFunction) GetTypeNode() core.ITypeNode {
+func (self *DefinedFunction) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
-func (self DefinedFunction) GetTypeRef() core.ITypeRef {
+func (self *DefinedFunction) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
-func (self DefinedFunction) GetType() core.IType {
+func (self *DefinedFunction) GetType() core.IType {
   return self.TypeNode.GetType()
 }
 
-func (self DefinedFunction) GetName() string {
+func (self *DefinedFunction) GetName() string {
   return self.Name
 }
 
-func (self DefinedFunction) IsDefined() bool {
+func (self *DefinedFunction) IsDefined() bool {
   return true
 }
 
-func (self DefinedFunction) IsConstant() bool {
+func (self *DefinedFunction) IsConstant() bool {
   return false
 }
 
-func (self DefinedFunction) IsParameter() bool {
+func (self *DefinedFunction) IsParameter() bool {
   return false
 }
 
-func (self DefinedFunction) GetNumRefered() int {
+func (self *DefinedFunction) GetNumRefered() int {
   return self.numRefered
 }
 
-func (self DefinedFunction) IsRefered() bool {
+func (self *DefinedFunction) IsRefered() bool {
   return 0 < self.numRefered
 }
 
@@ -78,15 +78,15 @@ func (self *DefinedFunction) Refered() {
   self.numRefered++
 }
 
-func (self DefinedFunction) GetParams() *Params {
+func (self *DefinedFunction) GetParams() *Params {
   return self.Params
 }
 
-func (self DefinedFunction) GetParameters() []*Parameter {
+func (self *DefinedFunction) GetParameters() []*Parameter {
   return self.Params.ParamDescs
 }
 
-func (self DefinedFunction) ListParameters() []*DefinedVariable {
+func (self *DefinedFunction) ListParameters() []*DefinedVariable {
   xs := self.Params.GetParamDescs()
   ys := make([]*DefinedVariable, len(xs))
   for i := range xs {
@@ -95,7 +95,7 @@ func (self DefinedFunction) ListParameters() []*DefinedVariable {
   return ys
 }
 
-func (self DefinedFunction) GetBody() core.IStmtNode {
+func (self *DefinedFunction) GetBody() core.IStmtNode {
   return self.Body
 }
 
@@ -103,7 +103,7 @@ func (self *DefinedFunction) SetBody(body core.IStmtNode) {
   self.Body = body
 }
 
-func (self DefinedFunction) GetScope() *LocalScope {
+func (self *DefinedFunction) GetScope() *LocalScope {
   return self.scope
 }
 
@@ -111,20 +111,20 @@ func (self *DefinedFunction) SetScope(scope *LocalScope) {
   self.scope = scope
 }
 
-func (self DefinedFunction) GetReturnType() core.IType {
+func (self *DefinedFunction) GetReturnType() core.IType {
   t := self.GetType().(*typesys.FunctionType)
   return t.GetReturnType()
 }
 
-func (self DefinedFunction) IsVoid() bool {
+func (self *DefinedFunction) IsVoid() bool {
   return self.GetReturnType().IsVoid()
 }
 
-func (self DefinedFunction) GetValue() core.IExprNode {
+func (self *DefinedFunction) GetValue() core.IExprNode {
   panic("DefinedFunction#GetValue called")
 }
 
-func (self DefinedFunction) GetIR() []core.IStmt {
+func (self *DefinedFunction) GetIR() []core.IStmt {
   return self.IR
 }
 

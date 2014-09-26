@@ -25,31 +25,31 @@ func NewConstants(xs...*Constant) []*Constant {
   }
 }
 
-func (self Constant) String() string {
+func (self *Constant) String() string {
   return fmt.Sprintf("<entity.Constant Name=%s TypeNode=%s Value=%s>", self.Name, self.TypeNode, self.Value)
 }
 
-func (self Constant) IsConstant() bool {
+func (self *Constant) IsConstant() bool {
   return true
 }
 
-func (self Constant) IsDefined() bool {
+func (self *Constant) IsDefined() bool {
   return true
 }
 
-func (self Constant) IsPrivate() bool {
+func (self *Constant) IsPrivate() bool {
   return false
 }
 
-func (self Constant) IsParameter() bool {
+func (self *Constant) IsParameter() bool {
   return false
 }
 
-func (self Constant) GetNumRefered() int {
+func (self *Constant) GetNumRefered() int {
   return self.numRefered
 }
 
-func (self Constant) IsRefered() bool {
+func (self *Constant) IsRefered() bool {
   return 0 < self.numRefered
 }
 
@@ -57,23 +57,23 @@ func (self *Constant) Refered() {
   self.numRefered++
 }
 
-func (self Constant) GetName() string {
+func (self *Constant) GetName() string {
   return self.Name
 }
 
-func (self Constant) GetTypeNode() core.ITypeNode {
+func (self *Constant) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
-func (self Constant) GetTypeRef() core.ITypeRef {
+func (self *Constant) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
-func (self Constant) GetType() core.IType {
+func (self *Constant) GetType() core.IType {
   return self.TypeNode.GetType()
 }
 
-func (self Constant) GetValue() core.IExprNode {
+func (self *Constant) GetValue() core.IExprNode {
   return self.Value
 }
 

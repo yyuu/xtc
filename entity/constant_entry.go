@@ -8,6 +8,6 @@ func NewConstantEntry(value string) *ConstantEntry {
   return &ConstantEntry { value }
 }
 
-func (self ConstantEntry) GetValue() string {
+func (self *ConstantEntry) GetValue() string {
   return self.value
 }

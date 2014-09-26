@@ -15,7 +15,7 @@ func NewToplevelScope() *ToplevelScope {
   return &ToplevelScope { []*LocalScope { }, make(map[string]core.IEntity), []*DefinedVariable { } }
 }
 
-func (self ToplevelScope) IsToplevel() bool {
+func (self *ToplevelScope) IsToplevel() bool {
   return true
 }
 
@@ -23,7 +23,7 @@ func (self *ToplevelScope) GetToplevel() core.IScope {
   return self
 }
 
-func (self ToplevelScope) GetParent() core.IScope {
+func (self *ToplevelScope) GetParent() core.IScope {
   return nil
 }
 
