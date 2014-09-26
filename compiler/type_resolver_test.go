@@ -293,3 +293,90 @@ func TestTypeResolverWithFunctionWithArguments(t *testing.T) {
   // TODO: add asserts
   assertTypeResolved(t, "function w/ args", a)
 }
+
+func TestTypeResolverWithFunctionArguments(t *testing.T) {
+/*
+  int f(int x) {
+    return x;
+  }
+  int g(int x) {
+    return f(x*2);
+  }
+ */
+  loc := core.NewLocation("", 0, 0)
+  a := ast.NewAST(loc,
+    ast.NewDeclaration(
+      entity.NewDefinedVariables(),
+      entity.NewUndefinedVariables(),
+      entity.NewDefinedFunctions(
+        entity.NewDefinedFunction(
+          false,
+          ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)),
+          "f",
+          entity.NewParams(loc,
+            entity.NewParameters(
+              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "x"),
+            ),
+            false,
+          ),
+          ast.NewBlockNode(loc,
+            entity.NewDefinedVariables(),
+            []core.IStmtNode {
+              ast.NewReturnNode(loc, ast.NewVariableNode(loc, "x")),
+            },
+          ),
+        ),
+        entity.NewDefinedFunction(
+          false,
+          ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)),
+          "g",
+          entity.NewParams(loc,
+            entity.NewParameters(
+              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "x"),
+            ),
+            false,
+          ),
+          ast.NewBlockNode(loc,
+            entity.NewDefinedVariables(),
+            []core.IStmtNode {
+              ast.NewExprStmtNode(loc,
+                ast.NewFuncallNode(loc,
+                  ast.NewVariableNode(loc, "f"),
+                  []core.IExprNode {
+                    ast.NewBinaryOpNode(loc,
+                      "*",
+                      ast.NewVariableNode(loc, "x"),
+                      ast.NewIntegerLiteralNode(loc, "2"),
+                    ),
+                  },
+                ),
+              ),
+            },
+          ),
+        ),
+      ),
+      entity.NewUndefinedFunctions(),
+      entity.NewConstants(),
+      ast.NewStructNodes(),
+      ast.NewUnionNodes(),
+      ast.NewTypedefNodes(),
+    ),
+  )
+  table := typesys.NewTypeTableFor("x86-linux")
+  errorHandler := core.NewErrorHandler(core.LOG_DEBUG)
+
+  localResolver := NewLocalResolver(core.NewErrorHandler(core.LOG_DEBUG))
+  localResolver.Resolve(a)
+  typeResolver := NewTypeResolver(errorHandler, table)
+  typeResolver.Resolve(a)
+
+  assertTypeResolved(t, "function args", a)
+  defer func() {
+    if r := recover(); r != nil {
+      t.Error(r)
+      t.Error("one (or more) of type has not been resolved")
+      t.Error(xt.JSON(a))
+      t.Fail()
+    }
+  }()
+}
