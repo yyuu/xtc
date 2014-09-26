@@ -9,10 +9,11 @@ type Params struct {
   ClassName string
   Location core.Location
   ParamDescs []*Parameter
+  Vararg bool
 }
 
-func NewParams(loc core.Location, paramDescs []*Parameter) *Params {
-  return &Params { "entity.Params", loc, paramDescs }
+func NewParams(loc core.Location, paramDescs []*Parameter, vararg bool) *Params {
+  return &Params { "entity.Params", loc, paramDescs, vararg }
 }
 
 func (self Params) String() string {
@@ -41,6 +42,10 @@ func (self Params) GetNumRefered() int {
 
 func (self Params) IsRefered() bool {
   return false
+}
+
+func (self Params) IsVararg() bool {
+  return self.Vararg
 }
 
 func (self *Params) Refered() {

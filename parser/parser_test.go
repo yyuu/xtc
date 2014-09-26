@@ -38,10 +38,11 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
           ),
           "f",
           entity.NewParams(loc(2,10),
-            []*entity.Parameter { },
+            entity.NewParameters(),
+            false,
           ),
           ast.NewBlockNode(loc(2,13),
-            []*entity.DefinedVariable { },
+            entity.NewDefinedVariables(),
             []core.IStmtNode {
               ast.NewReturnNode(loc(3,7),
                 ast.NewFuncallNode(loc(3,14),
@@ -94,17 +95,18 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
           ),
           "f",
           entity.NewParams(loc(2,12),
-            []*entity.Parameter {
+            entity.NewParameters(
               entity.NewParameter(
                 ast.NewTypeNode(loc(2,12),
                   typesys.NewIntTypeRef(loc(2,12)),
                 ),
                 "n",
               ),
-            },
+            ),
+            false,
           ),
           ast.NewBlockNode(loc(2,19),
-            []*entity.DefinedVariable { },
+            entity.NewDefinedVariables(),
             []core.IStmtNode {
               ast.NewExprStmtNode(loc(3,7),
                 ast.NewFuncallNode(loc(3,7),
@@ -132,7 +134,7 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
 //xt.AssertDeepEquals(t, "", y, x)
 }
 
-func TestParseFuncallWithMultipleArguments(t *testing.T) {
+func TestParseDefunWithMultipleArguments(t *testing.T) {
   s := `
 
     int g(int x, int y) {
@@ -161,7 +163,7 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
           ),
           "g",
           entity.NewParams(loc(3,11),
-            []*entity.Parameter {
+            entity.NewParameters(
               entity.NewParameter(
                 ast.NewTypeNode(loc(3,11),
                   typesys.NewIntTypeRef(loc(3,11)),
@@ -174,10 +176,11 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
                 ),
                 "y",
               ),
-            },
+            ),
+            false,
           ),
           ast.NewBlockNode(loc(3,25),
-            []*entity.DefinedVariable {
+            entity.NewDefinedVariables(
               entity.NewDefinedVariable(
                 true,
                 ast.NewTypeNode(loc(4,7),
@@ -190,7 +193,7 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
                   ast.NewVariableNode(loc(4,19), "y"),
                 ),
               ),
-            },
+            ),
             []core.IStmtNode {
               ast.NewReturnNode(loc(5,7),
                 ast.NewVariableNode(loc(5,14), "n"),
@@ -208,7 +211,71 @@ func TestParseFuncallWithMultipleArguments(t *testing.T) {
   )
   y, err := ParseExpr(s)
   xt.AssertNil(t, "", err)
-  xt.AssertStringEqualsDiff(t, "funcall w/ multiple arguments", xt.JSON(y), xt.JSON(x))
+  xt.AssertStringEqualsDiff(t, "defun w/ multiple arguments", xt.JSON(y), xt.JSON(x))
+//xt.AssertDeepEquals(t, "", y, x)
+}
+
+func TestParseDefunWithVariableArguments(t *testing.T) {
+  s := `
+    void myPrintf(char* fmt, ...) {
+      _printf(fmt);
+    }
+  `
+  x := ast.NewAST(loc(1,1),
+    ast.NewDeclaration(
+      entity.NewDefinedVariables(),
+      entity.NewUndefinedVariables(),
+      entity.NewDefinedFunctions(
+        entity.NewDefinedFunction(
+          true,
+          ast.NewTypeNode(loc(2,5),
+            typesys.NewFunctionTypeRef(
+              typesys.NewVoidTypeRef(loc(2,5)),
+              typesys.NewParamTypeRefs(loc(2,19),
+                []core.ITypeRef {
+                  typesys.NewPointerTypeRef(typesys.NewCharTypeRef(loc(2,19))),
+                },
+                true,
+              ),
+            ),
+          ),
+          "myPrintf",
+          entity.NewParams(loc(2,19),
+            entity.NewParameters(
+              entity.NewParameter(
+                ast.NewTypeNode(loc(2,19),
+                  typesys.NewPointerTypeRef(typesys.NewCharTypeRef(loc(2,19))),
+                ),
+                "fmt",
+              ),
+            ),
+            true,
+          ),
+          ast.NewBlockNode(loc(2,35),
+            entity.NewDefinedVariables(),
+            []core.IStmtNode {
+              ast.NewExprStmtNode(loc(3,7),
+                ast.NewFuncallNode(loc(3,7),
+                  ast.NewVariableNode(loc(3,7), "_printf"),
+                  []core.IExprNode {
+                    ast.NewVariableNode(loc(3,15), "fmt"),
+                  },
+                ),
+              ),
+            },
+          ),
+        ),
+      ),
+      entity.NewUndefinedFunctions(),
+      entity.NewConstants(),
+      ast.NewStructNodes(),
+      ast.NewUnionNodes(),
+      ast.NewTypedefNodes(),
+    ),
+  )
+  y, err := ParseExpr(s)
+  xt.AssertNil(t, "", err)
+  xt.AssertStringEqualsDiff(t, "defun w/ variable arguments", xt.JSON(y), xt.JSON(x))
 //xt.AssertDeepEquals(t, "", y, x)
 }
 
@@ -241,17 +308,18 @@ func TestFor1(t *testing.T) {
           ),
           "f",
           entity.NewParams(loc(2,12),
-            []*entity.Parameter {
+            entity.NewParameters(
               entity.NewParameter(
                 ast.NewTypeNode(loc(2,12),
                   typesys.NewIntTypeRef(loc(2,12)),
                 ),
                 "n",
               ),
-            },
+            ),
+            false,
           ),
           ast.NewBlockNode(loc(2,19),
-            []*entity.DefinedVariable { },
+            entity.NewDefinedVariables(),
             []core.IStmtNode {
               ast.NewForNode(loc(3,7),
                 ast.NewAssignNode(loc(3,12),
@@ -268,7 +336,7 @@ func TestFor1(t *testing.T) {
                   ast.NewVariableNode(loc(3,22), "i"),
                 ),
                 ast.NewBlockNode(loc(3,27),
-                  []*entity.DefinedVariable { },
+                  entity.NewDefinedVariables(),
                   []core.IStmtNode {
                     ast.NewExprStmtNode(loc(4,9),
                       ast.NewAssignNode(loc(4,9),

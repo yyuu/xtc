@@ -262,6 +262,7 @@ func TestLocalResolverWithFunctions1(t *testing.T) {
             entity.NewParameters(
               entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "n"),
             ),
+            false,
           ),
           ast.NewBlockNode(loc,
             entity.NewDefinedVariables(),
@@ -284,6 +285,7 @@ func TestLocalResolverWithFunctions1(t *testing.T) {
             entity.NewParameters(
               entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "m"),
             ),
+            false,
           ),
           ast.NewBlockNode(loc,
             entity.NewDefinedVariables(),

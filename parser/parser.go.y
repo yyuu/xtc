@@ -314,7 +314,7 @@ defconst: CONST typeref_name '=' expr ';'
 
 defun: typeref_name '(' ')' block
      {
-       ps := entity.NewParams($2._token.location, entity.NewParameters())
+       ps := entity.NewParams($2._token.location, entity.NewParameters(), false)
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
        $$._entity = entity.NewDefinedFunction(true,
          ast.NewTypeNode(t.GetLocation(), t),
@@ -331,7 +331,7 @@ defun: typeref_name '(' ')' block
      }
      | static_typeref_name '(' ')' block
      {
-       ps := entity.NewParams($2._token.location, entity.NewParameters())
+       ps := entity.NewParams($2._token.location, entity.NewParameters(), false)
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
        $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, asStmtNode($4._node))
      }
@@ -351,22 +351,21 @@ storage:
 
 params: fixedparams
       {
-        $$._entity = entity.NewParams($1._token.location, asParams($1._entity).GetParamDescs())
+        $$._entity = entity.NewParams($1._token.location, asParams($1._entity).GetParamDescs(), false)
       }
       | fixedparams ',' DOTDOTDOT
       {
-        $$._entity = entity.NewParams($1._token.location, asParams($1._entity).GetParamDescs())
-//      $$._entity.AcceptVarArgs()
+        $$._entity = entity.NewParams($1._token.location, asParams($1._entity).GetParamDescs(), true)
       }
       ;
 
 fixedparams: param
            {
-             $$._entity = entity.NewParams($1._token.location, entity.NewParameters(asParameter($1._entity)))
+             $$._entity = entity.NewParams($1._token.location, entity.NewParameters(asParameter($1._entity)), false)
            }
            | fixedparams ',' param
            {
-             $$._entity = entity.NewParams($1._token.location, append(asParams($1._entity).GetParamDescs(), asParameter($3._entity)))
+             $$._entity = entity.NewParams($1._token.location, append(asParams($1._entity).GetParamDescs(), asParameter($3._entity)), false)
            }
            ;
 
@@ -432,7 +431,7 @@ extern_typeref_name: EXTERN typeref_name
 
 funcdecl: extern_typeref_name '(' ')' ';'
         {
-          ps := entity.NewParams($1._typeref.GetLocation(), entity.NewParameters())
+          ps := entity.NewParams($1._typeref.GetLocation(), entity.NewParameters(), false)
           ref := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
           $$._entity = entity.NewUndefinedFunction(
             ast.NewTypeNode(ref.GetLocation(), ref),
