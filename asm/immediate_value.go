@@ -9,8 +9,8 @@ type ImmediateValue struct {
   Expr core.ILiteral
 }
 
-func NewImmediateValue(val core.ILiteral) ImmediateValue {
-  return ImmediateValue { "asm.ImmediateValue", val }
+func NewImmediateValue(val core.ILiteral) *ImmediateValue {
+  return &ImmediateValue { "asm.ImmediateValue", val }
 }
 
 func (self ImmediateValue) GetExpr() core.ILiteral {

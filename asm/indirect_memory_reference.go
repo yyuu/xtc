@@ -11,8 +11,8 @@ type IndirectMemoryReference struct {
   Fixed bool
 }
 
-func NewIndirectMemoryReference(offset core.ILiteral, base core.IRegister) IndirectMemoryReference {
-  return IndirectMemoryReference { "asm.IndirectMemoryReference", offset, base, true }
+func NewIndirectMemoryReference(offset core.ILiteral, base core.IRegister) *IndirectMemoryReference {
+  return &IndirectMemoryReference { "asm.IndirectMemoryReference", offset, base, true }
 }
 
 func (self IndirectMemoryReference) IsRegister() bool {

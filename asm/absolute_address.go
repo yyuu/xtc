@@ -9,8 +9,8 @@ type AbsoluteAddress struct {
   Register core.IRegister
 }
 
-func NewAbsoluteAddress(reg core.IRegister) AbsoluteAddress {
-  return AbsoluteAddress { "asm.AbsoluteAddress", reg }
+func NewAbsoluteAddress(reg core.IRegister) *AbsoluteAddress {
+  return &AbsoluteAddress { "asm.AbsoluteAddress", reg }
 }
 
 func (self AbsoluteAddress) GetRegister() core.IOperand {

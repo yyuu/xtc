@@ -6,8 +6,8 @@ type Comment struct {
   IndentLevel int
 }
 
-func NewComment(s string) Comment {
-  return Comment { "asm.Comment", s, 0 }
+func NewComment(s string) *Comment {
+  return &Comment { "asm.Comment", s, 0 }
 }
 
 func (self Comment) IsComment() bool {

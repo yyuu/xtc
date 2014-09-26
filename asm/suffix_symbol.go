@@ -10,8 +10,8 @@ type SuffixSymbol struct {
   Suffix string
 }
 
-func NewSuffixSymbol(base core.ISymbol, suffix string) SuffixSymbol {
-  return SuffixSymbol { "asm.SuffixSymbol", base, suffix }
+func NewSuffixSymbol(base core.ISymbol, suffix string) *SuffixSymbol {
+  return &SuffixSymbol { "asm.SuffixSymbol", base, suffix }
 }
 
 func (self SuffixSymbol) IsZero() bool {

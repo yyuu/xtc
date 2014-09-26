@@ -9,8 +9,8 @@ type DirectMemoryReference struct {
   Value core.ILiteral
 }
 
-func NewDirectMemoryReference(val core.ILiteral) DirectMemoryReference {
-  return DirectMemoryReference { "asm.DirectMemoryReference", val}
+func NewDirectMemoryReference(val core.ILiteral) *DirectMemoryReference {
+  return &DirectMemoryReference { "asm.DirectMemoryReference", val}
 }
 
 func (self DirectMemoryReference) IsRegister() bool {

@@ -12,8 +12,8 @@ type Instruction struct {
   NeedRelocation bool
 }
 
-func NewInstruction(mnemonic string, suffix string, operands []core.IOperand, reloc bool) Instruction {
-  return Instruction { "asm.Instruction", mnemonic, suffix, operands, reloc }
+func NewInstruction(mnemonic string, suffix string, operands []core.IOperand, reloc bool) *Instruction {
+  return &Instruction { "asm.Instruction", mnemonic, suffix, operands, reloc }
 }
 
 func (self Instruction) IsInstruction() bool {
