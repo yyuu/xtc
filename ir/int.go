@@ -37,3 +37,7 @@ func (self Int) IsVar() bool {
 func (self Int) GetAddressNode(t int) core.IExpr {
   panic("unexpected node for LHS")
 }
+
+func (self Int) GetValue() int64 {
+  return self.Value
+}

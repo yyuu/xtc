@@ -389,7 +389,33 @@ func (self *IRGenerator) VisitNode(unknown core.INode) interface{} {
       return nil
     }
     case *ast.SwitchNode: {
-      panic("not implemented yet")
+      caseNodes := node.GetCases()
+      cases := make([]*ir.Case, len(caseNodes))
+      endLabel := asm.NewUnnamedLabel()
+      defaultLabel := endLabel
+      cond := self.transformExpr(node.GetCond())
+      for i := range caseNodes {
+        c := caseNodes[i].(*ast.CaseNode)
+        if c.IsDefault() {
+          defaultLabel = c.GetLabel()
+        } else {
+          values := c.GetValues()
+          for j := range values {
+            v := self.transformExpr(values[j])
+            cases[i] = ir.NewCase(v.(*ir.Int).GetValue(), c.GetLabel())
+          }
+        }
+      }
+      self.stmts = append(self.stmts, ir.NewSwitch(node.GetLocation(), cond, cases, defaultLabel, endLabel))
+      self.pushBreak(endLabel)
+      for i := range caseNodes {
+        c := caseNodes[i].(*ast.CaseNode)
+        self.label(c.GetLabel())
+        self.transformStmt(c.GetBody())
+      }
+      self.popBreak()
+      self.label(endLabel)
+      return nil
     }
     case *ast.CaseNode: {
       panic("must not happen")
