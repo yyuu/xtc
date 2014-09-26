@@ -48,6 +48,7 @@ func TestSwitch(t *testing.T) {
     {
       "ClassName": "ast.CaseNode",
       "Location": "[:0,0]",
+      "Label": null,
       "Values": [
         {
           "ClassName": "ast.IntegerLiteralNode",
@@ -92,6 +93,7 @@ func TestSwitch(t *testing.T) {
     {
       "ClassName": "ast.CaseNode",
       "Location": "[:0,0]",
+      "Label": null,
       "Values": [
         {
           "ClassName": "ast.IntegerLiteralNode",
@@ -136,6 +138,7 @@ func TestSwitch(t *testing.T) {
     {
       "ClassName": "ast.CaseNode",
       "Location": "[:0,0]",
+      "Label": null,
       "Values": [],
       "Body": {
         "ClassName": "ast.ExprStmtNode",

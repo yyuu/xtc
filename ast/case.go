@@ -11,14 +11,14 @@ import (
 type CaseNode struct {
   ClassName string
   Location core.Location
-//Label *asm.Label
+  Label *asm.Label
   Values []core.IExprNode
   Body core.IStmtNode
 }
 
 func NewCaseNode(loc core.Location, values []core.IExprNode, body core.IStmtNode) *CaseNode {
   if body == nil { panic("body is nil") }
-  return &CaseNode { "ast.CaseNode", loc, values, body }
+  return &CaseNode { "ast.CaseNode", loc, nil, values, body }
 }
 
 func (self CaseNode) String() string {
@@ -42,8 +42,11 @@ func (self CaseNode) GetLocation() core.Location {
 }
 
 func (self CaseNode) GetLabel() *asm.Label {
-  // FIXME: return proper label
-  return asm.NewUnnamedLabel()
+  return self.Label
+}
+
+func (self *CaseNode) SetLabel(label *asm.Label) {
+  self.Label = label
 }
 
 func (self CaseNode) GetValues() []core.IExprNode {
