@@ -71,7 +71,7 @@ func (self FuncallNode) GetType() core.IType {
 }
 
 func (self *FuncallNode) SetType(t core.IType) {
-  panic("FuncallNode#SetType called")
+  panic("#SetType called")
 }
 
 func (self FuncallNode) GetOrigType() core.IType {

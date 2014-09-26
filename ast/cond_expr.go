@@ -62,6 +62,9 @@ func (self CondExprNode) GetType() core.IType {
 }
 
 func (self *CondExprNode) SetType(t core.IType) {
+  if self.Type != nil {
+    panic("#SetType called twice")
+  }
   self.Type = t
 }
 

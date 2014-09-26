@@ -47,6 +47,9 @@ func (self MemberNode) GetType() core.IType {
 }
 
 func (self *MemberNode) SetType(t core.IType) {
+  if self.Type != nil {
+    panic("#SetType called twice")
+  }
   self.Type = t
 }
 

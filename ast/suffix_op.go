@@ -69,7 +69,7 @@ func (self SuffixOpNode) GetType() core.IType {
 }
 
 func (self *SuffixOpNode) SetType(t core.IType) {
-  panic("SuffixOpNode#SetType called")
+  panic("#SetType called")
 }
 
 func (self SuffixOpNode) GetOrigType() core.IType {

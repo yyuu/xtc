@@ -61,6 +61,9 @@ func (self SizeofTypeNode) GetType() core.IType {
 }
 
 func (self *SizeofTypeNode) SetType(t core.IType) {
+  if self.Type != nil {
+    panic("#SetType called twice")
+  }
   self.Type = t
 }
 

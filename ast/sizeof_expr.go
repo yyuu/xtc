@@ -52,6 +52,9 @@ func (self SizeofExprNode) GetType() core.IType {
 }
 
 func (self *SizeofExprNode) SetType(t core.IType) {
+  if self.Type != nil {
+    panic("#SetType called twice")
+  }
   self.Type = t
 }
 

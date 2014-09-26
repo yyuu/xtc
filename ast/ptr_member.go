@@ -48,6 +48,9 @@ func (self PtrMemberNode) GetType() core.IType {
 }
 
 func (self *PtrMemberNode) SetType(t core.IType) {
+  if self.Type != nil {
+    panic("#SetType called twice")
+  }
   self.Type = t
 }
 

@@ -56,7 +56,7 @@ func (self *VariableNode) SetType(t core.IType) {
 //if ! self.GetEntity().GetType().IsCompatible(t) {
 //  panic(fmt.Sprintf("type mismatch: %s != %s", self.GetEntity().GetType(), t))
 //}
-  panic("VariableNode#SetType called")
+  panic("#SetType called")
 }
 
 func (self VariableNode) GetOrigType() core.IType {

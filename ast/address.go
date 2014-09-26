@@ -46,6 +46,9 @@ func (self AddressNode) GetOrigType() core.IType {
 }
 
 func (self *AddressNode) SetType(t core.IType) {
+  if self.Type != nil {
+    panic("#SetType called twice")
+  }
   self.Type = t
 }
 

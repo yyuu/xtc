@@ -49,6 +49,9 @@ func (self ArefNode) GetType() core.IType {
 }
 
 func (self *ArefNode) SetType(t core.IType) {
+  if self.Type != nil {
+    panic("#SetType called twice")
+  }
   self.Type = t
 }
 

@@ -52,6 +52,9 @@ func (self CastNode) GetType() core.IType {
 }
 
 func (self *CastNode) SetType(t core.IType) {
+  if self.Type != nil {
+    panic("#SetType called twice")
+  }
   self.Type = t
 }
 

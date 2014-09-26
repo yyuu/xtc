@@ -69,7 +69,7 @@ func (self PrefixOpNode) GetType() core.IType {
 }
 
 func (self *PrefixOpNode) SetType(t core.IType) {
-  panic("PrefixOpNode#SetType called")
+  panic("#SetType called")
 }
 
 func (self PrefixOpNode) GetOrigType() core.IType {

@@ -55,7 +55,7 @@ func (self UnaryOpNode) GetType() core.IType {
 }
 
 func (self *UnaryOpNode) SetType(t core.IType) {
-  panic("UnaryOpNode#SetType called")
+  panic("#SetType called")
 }
 
 func (self UnaryOpNode) GetOrigType() core.IType {

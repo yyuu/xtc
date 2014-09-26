@@ -80,7 +80,7 @@ func (self IntegerLiteralNode) GetType() core.IType {
 }
 
 func (self *IntegerLiteralNode) SetType(t core.IType) {
-  panic("IntegerLiteralNode#SetType called")
+  panic("#SetType called")
 }
 
 func (self IntegerLiteralNode) GetOrigType() core.IType {

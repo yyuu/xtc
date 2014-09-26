@@ -58,7 +58,7 @@ func (self StringLiteralNode) GetType() core.IType {
 }
 
 func (self *StringLiteralNode) SetType(t core.IType) {
-  panic("StringLiteralNode#SetType called")
+  panic("#SetType called")
 }
 
 func (self StringLiteralNode) GetOrigType() core.IType {

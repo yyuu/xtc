@@ -61,6 +61,9 @@ func (self OpAssignNode) GetType() core.IType {
 }
 
 func (self *OpAssignNode) SetType(t core.IType) {
+  if self.Type != nil {
+    panic("#SetType called twice")
+  }
   self.Type = t
 }
 

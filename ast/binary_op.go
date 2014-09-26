@@ -70,6 +70,9 @@ func (self BinaryOpNode) GetType() core.IType {
 }
 
 func (self *BinaryOpNode) SetType(t core.IType) {
+  if self.Type != nil {
+    panic("#SetType called twice")
+  }
   self.Type = t
 }
 

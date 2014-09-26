@@ -60,6 +60,9 @@ func (self LogicalOrNode) GetType() core.IType {
 }
 
 func (self *LogicalOrNode) SetType(t core.IType) {
+  if self.Type != nil {
+    panic("#SetType called twice")
+  }
   self.Type = t
 }
 

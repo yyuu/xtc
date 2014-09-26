@@ -42,6 +42,9 @@ func (self DereferenceNode) GetType() core.IType {
 }
 
 func (self *DereferenceNode) SetType(t core.IType) {
+  if self.Type != nil {
+    panic("#SetType called twice")
+  }
   self.Type = t
 }
 
