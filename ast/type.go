@@ -39,6 +39,9 @@ func (self TypeNode) IsResolved() bool {
 }
 
 func (self TypeNode) GetType() core.IType {
+  if self.Type == nil {
+    panic(fmt.Errorf("%s type not resolved", self.Location))
+  }
   return self.Type
 }
 

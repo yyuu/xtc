@@ -120,6 +120,9 @@ func (self FunctionType) IsCastableTo(target core.IType) bool {
 }
 
 func (self FunctionType) GetReturnType() core.IType {
+  if self.ReturnType == nil {
+    panic("type is nil")
+  }
   return self.ReturnType
 }
 
