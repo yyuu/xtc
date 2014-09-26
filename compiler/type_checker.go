@@ -75,6 +75,24 @@ func (self *TypeChecker) implicitCast(t core.IType, expr core.IExprNode) core.IE
   }
 }
 
+func (self *TypeChecker) castOptionalArg(arg core.IExprNode) core.IExprNode {
+  if ! arg.GetType().IsInteger() {
+    return arg
+  } else {
+    var t core.IType
+    if arg.GetType().IsSigned() {
+      t = self.typeTable.SignedStackType()
+    } else {
+      t = self.typeTable.UnsignedStackType()
+    }
+    if arg.GetType().Size() < t.Size() {
+      return self.implicitCast(t, arg)
+    } else {
+      return arg
+    }
+  }
+}
+
 func (self *TypeChecker) isSafeIntegerCast(node core.INode, t core.IType) bool {
   if ! t.IsInteger() {
     return false
@@ -454,9 +472,30 @@ func (self *TypeChecker) VisitNode(unknown core.INode) interface{} {
       visitFuncallNode(self, node)
       t := node.GetFunctionType()
       if ! t.AcceptsArgc(node.NumArgs()) {
-        self.errorHandler.Errorf("%s wrong number of arguments: %d\n", node.NumArgs())
+        self.errorHandler.Errorf("%s wrong number of arguments: %d\n", node.GetLocation(), node.NumArgs())
       } else {
-        self.errorHandler.Infoln("FIXME: TypeChecker: implicit cast for function arguments have not yet implemented")
+        args := node.GetArgs()
+        paramDescs := t.GetParamTypes().GetParamDescs()
+        if len(args) < len(paramDescs) {
+          panic(fmt.Errorf("%s missing argument: %d for %d", node.GetLocation(), len(args), len(paramDescs)))
+        }
+        newArgs := []core.IExprNode { }
+        for i := range args {
+          arg := args[i]
+          if i < len(paramDescs) {
+            // mandatory args
+            if self.checkRHS(arg) {
+              arg = self.implicitCast(paramDescs[i], arg)
+            }
+          } else {
+            // optionary args
+            if self.checkRHS(arg) {
+              arg = self.castOptionalArg(arg)
+            }
+          }
+          newArgs = append(newArgs, arg)
+        }
+        node.SetArgs(newArgs)
       }
     }
     case *ast.ArefNode: {

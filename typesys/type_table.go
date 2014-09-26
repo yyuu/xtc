@@ -298,3 +298,11 @@ func (self TypeTable) PtrDiffTypeName() string {
     }
   }
 }
+
+func (self TypeTable) SignedStackType() *IntegerType {
+  return self.SignedLong()
+}
+
+func (self TypeTable) UnsignedStackType() *IntegerType {
+  return self.UnsignedLong()
+}

@@ -125,7 +125,7 @@ func parametersTypeRef(params *entity.Params) *typesys.ParamTypeRefs {
   for i := range paramDescs {
     ps[i] = paramDescs[i].GetTypeNode().GetTypeRef()
   }
-  return typesys.NewParamTypeRefs(params.GetLocation(), ps, false)
+  return typesys.NewParamTypeRefs(params.GetLocation(), ps, params.IsVararg())
 }
 
 func newNodes(xs...core.INode) []core.INode {

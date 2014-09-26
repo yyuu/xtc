@@ -52,6 +52,10 @@ func (self FuncallNode) GetArgs() []core.IExprNode {
   return self.Args
 }
 
+func (self *FuncallNode) SetArgs(args []core.IExprNode) {
+  self.Args = args
+}
+
 func (self FuncallNode) NumArgs() int {
   return len(self.Args)
 }
