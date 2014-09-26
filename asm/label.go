@@ -1,11 +1,15 @@
 package asm
 
+import (
+  "bitbucket.org/yyuu/bs/core"
+)
+
 type Label struct {
   ClassName string
-  Symbol ISymbol
+  Symbol core.ISymbol
 }
 
-func NewLabel(sym ISymbol) Label {
+func NewLabel(sym core.ISymbol) Label {
   return Label { "asm.Label", sym }
 }
 
@@ -17,6 +21,6 @@ func (self Label) IsLabel() bool {
   return true
 }
 
-func (self Label) GetSymbol() ISymbol {
+func (self Label) GetSymbol() core.ISymbol {
   return self.Symbol
 }

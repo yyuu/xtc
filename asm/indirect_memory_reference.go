@@ -1,13 +1,17 @@
 package asm
 
+import (
+  "bitbucket.org/yyuu/bs/core"
+)
+
 type IndirectMemoryReference struct {
   ClassName string
-  Offset ILiteral
-  Base IRegister
+  Offset core.ILiteral
+  Base core.IRegister
   Fixed bool
 }
 
-func NewIndirectMemoryReference(offset ILiteral, base IRegister) IndirectMemoryReference {
+func NewIndirectMemoryReference(offset core.ILiteral, base core.IRegister) IndirectMemoryReference {
   return IndirectMemoryReference { "asm.IndirectMemoryReference", offset, base, true }
 }
 

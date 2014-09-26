@@ -2,20 +2,21 @@ package asm
 
 import (
   "strconv"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 type SymbolTable struct {
   ClassName string
   Base string
-  Map map[ISymbol]string
+  Map map[core.ISymbol]string
   Seq int
 }
 
 func NewSymbolTable(base string) *SymbolTable {
-  return &SymbolTable { "asm.SymbolTable", base, make(map[ISymbol]string), 0 }
+  return &SymbolTable { "asm.SymbolTable", base, make(map[core.ISymbol]string), 0 }
 }
 
-func (self *SymbolTable) newSymbol() ISymbol {
+func (self *SymbolTable) newSymbol() core.ISymbol {
   return NewNamedSymbol(self.newString())
 }
 

@@ -1,14 +1,18 @@
 package asm
 
+import (
+  "bitbucket.org/yyuu/bs/core"
+)
+
 type Instruction struct {
   ClassName string
   Mnemonic string
   Suffix string
-  Operands []IOperand
+  Operands []core.IOperand
   NeedRelocation bool
 }
 
-func NewInstruction(mnemonic string, suffix string, operands []IOperand, reloc bool) Instruction {
+func NewInstruction(mnemonic string, suffix string, operands []core.IOperand, reloc bool) Instruction {
   return Instruction { "asm.Instruction", mnemonic, suffix, operands, reloc }
 }
 
@@ -28,15 +32,15 @@ func (self Instruction) NumOperands() int {
   return len(self.Operands)
 }
 
-func (self Instruction) Operand1() IOperand {
+func (self Instruction) Operand1() core.IOperand {
   return self.Operands[0]
 }
 
-func (self Instruction) Operand2() IOperand {
+func (self Instruction) Operand2() core.IOperand {
   return self.Operands[1]
 }
 
-func (self Instruction) JumpDestination() ISymbol {
+func (self Instruction) JumpDestination() core.ISymbol {
   ref := self.Operand1().(DirectMemoryReference)
-  return ref.GetValue().(ISymbol)
+  return ref.GetValue().(core.ISymbol)
 }
