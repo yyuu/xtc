@@ -211,3 +211,14 @@ func TestOperator2(t *testing.T) {
 //assertToken(t, lex.getNextToken(), SPACES, "\n")
   assertTokenNull(t, lex.getNextToken())
 }
+
+func TestIdentifierStartsWithKeyword(t *testing.T) {
+  lex := newLexer("test.txt", "format = \"%d:%d\"\n")
+  assertToken(t, lex.getNextToken(), IDENTIFIER, "format")
+//assertToken(t, lex.getNextToken(), SPACES, " ")
+  assertToken(t, lex.getNextToken(), '=', "=")
+//assertToken(t, lex.getNextToken(), SPACES, " ")
+  assertToken(t, lex.getNextToken(), STRING, "\"%d:%d\"")
+//assertToken(t, lex.getNextToken(), SPACES, "\n")
+  assertTokenNull(t, lex.getNextToken())
+}
