@@ -68,7 +68,8 @@ func (self DereferenceNode) IsAssignable() bool {
 }
 
 func (self DereferenceNode) IsLoadable() bool {
-  return false
+  t := self.GetOrigType()
+  return !t.IsArray() && !t.IsFunction()
 }
 
 func (self DereferenceNode) IsCallable() bool {

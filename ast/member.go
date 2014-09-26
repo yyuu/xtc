@@ -74,7 +74,8 @@ func (self MemberNode) IsAssignable() bool {
 }
 
 func (self MemberNode) IsLoadable() bool {
-  return false
+  t := self.GetOrigType()
+  return !t.IsArray() && !t.IsFunction()
 }
 
 func (self MemberNode) IsCallable() bool {

@@ -75,7 +75,8 @@ func (self PtrMemberNode) IsAssignable() bool {
 }
 
 func (self PtrMemberNode) IsLoadable() bool {
-  return false
+  t := self.GetOrigType()
+  return !t.IsArray() && !t.IsFunction()
 }
 
 func (self PtrMemberNode) IsCallable() bool {

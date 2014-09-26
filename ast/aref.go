@@ -76,7 +76,8 @@ func (self ArefNode) IsAssignable() bool {
 }
 
 func (self ArefNode) IsLoadable() bool {
-  return false
+  t := self.GetOrigType()
+  return !t.IsArray() && !t.IsFunction()
 }
 
 func (self ArefNode) IsCallable() bool {

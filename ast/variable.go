@@ -53,10 +53,10 @@ func (self VariableNode) GetType() core.IType {
 }
 
 func (self *VariableNode) SetType(t core.IType) {
-//if ! self.GetEntity().GetType().IsCompatible(t) {
+//// FIXME: uncomment following causes "type mismatch: int != int*"
+//if ! self.GetType().IsCompatible(t) {
 //  panic(fmt.Sprintf("type mismatch: %s != %s", self.GetEntity().GetType(), t))
 //}
-  panic("#SetType called")
 }
 
 func (self VariableNode) GetOrigType() core.IType {
@@ -80,7 +80,8 @@ func (self VariableNode) IsAssignable() bool {
 }
 
 func (self VariableNode) IsLoadable() bool {
-  return false
+  t := self.GetOrigType()
+  return !t.IsArray() && !t.IsFunction()
 }
 
 func (self VariableNode) IsCallable() bool {

@@ -50,6 +50,7 @@ func (self *DereferenceChecker) handleImplicitAddress(node core.IExprNode) {
   if ! node.IsLoadable() {
     t := node.GetType()
     if t.IsArray() {
+      // int[4] ary; ary; should generate int*
       node.SetType(self.typeTable.PointerTo(t.GetBaseType()))
     } else {
       node.SetType(self.typeTable.PointerTo(t))
@@ -150,7 +151,7 @@ func (self *DereferenceChecker) VisitNode(unknown core.INode) interface{} {
       if node.GetEntity().IsConstant() {
         self.checkConstant(node.GetEntity().(*entity.Constant).GetValue())
       }
-//    self.handleImplicitAddress(node)
+      self.handleImplicitAddress(node)
     }
     case *ast.CastNode: {
       visitCastNode(self, node)
