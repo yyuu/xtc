@@ -34,15 +34,15 @@ func (self UnaryOpNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self UnaryOpNode) GetOperator() string {
+func (self *UnaryOpNode) GetOperator() string {
   return self.Operator
 }
 
-func (self UnaryOpNode) GetExpr() core.IExprNode {
+func (self *UnaryOpNode) GetExpr() core.IExprNode {
   return self.Expr
 }
 
-func (self UnaryOpNode) GetOpType() core.IType {
+func (self *UnaryOpNode) GetOpType() core.IType {
   return self.Type
 }
 
@@ -50,7 +50,7 @@ func (self *UnaryOpNode) SetOpType(t core.IType) {
   self.Type = t
 }
 
-func (self UnaryOpNode) GetType() core.IType {
+func (self *UnaryOpNode) GetType() core.IType {
   return self.Expr.GetType()
 }
 
@@ -58,34 +58,34 @@ func (self *UnaryOpNode) SetType(t core.IType) {
   panic("#SetType called")
 }
 
-func (self UnaryOpNode) GetOrigType() core.IType {
+func (self *UnaryOpNode) GetOrigType() core.IType {
   return self.GetType()
 }
 
-func (self UnaryOpNode) IsConstant() bool {
+func (self *UnaryOpNode) IsConstant() bool {
   return false
 }
 
-func (self UnaryOpNode) IsParameter() bool {
+func (self *UnaryOpNode) IsParameter() bool {
   return false
 }
 
-func (self UnaryOpNode) IsLvalue() bool {
+func (self *UnaryOpNode) IsLvalue() bool {
   return false
 }
 
-func (self UnaryOpNode) IsAssignable() bool {
+func (self *UnaryOpNode) IsAssignable() bool {
   return false
 }
 
-func (self UnaryOpNode) IsLoadable() bool {
+func (self *UnaryOpNode) IsLoadable() bool {
   return false
 }
 
-func (self UnaryOpNode) IsCallable() bool {
+func (self *UnaryOpNode) IsCallable() bool {
   return self.GetType().IsCallable()
 }
 
-func (self UnaryOpNode) IsPointer() bool {
+func (self *UnaryOpNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }

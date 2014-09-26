@@ -33,7 +33,7 @@ func (self TypedefNode) String() string {
   return fmt.Sprintf("(typedef %s %s)", self.Name, self.RealTypeNode)
 }
 
-func (self TypedefNode) IsTypeDefinition() bool {
+func (self *TypedefNode) IsTypeDefinition() bool {
   return true
 }
 
@@ -41,26 +41,26 @@ func (self TypedefNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self TypedefNode) GetName() string {
+func (self *TypedefNode) GetName() string {
   return self.Name
 }
 
-func (self TypedefNode) GetTypeNode() core.ITypeNode {
+func (self *TypedefNode) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
-func (self TypedefNode) GetTypeRef() core.ITypeRef {
+func (self *TypedefNode) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
-func (self TypedefNode) GetRealTypeNode() core.ITypeNode {
+func (self *TypedefNode) GetRealTypeNode() core.ITypeNode {
   return self.RealTypeNode
 }
 
-func (self TypedefNode) GetRealTypeRef() core.ITypeRef {
+func (self *TypedefNode) GetRealTypeRef() core.ITypeRef {
   return self.RealTypeNode.GetTypeRef()
 }
 
-func (self TypedefNode) DefiningType() core.IType {
+func (self *TypedefNode) DefiningType() core.IType {
   return typesys.NewUserType(self.Name, self.RealTypeNode, self.Location)
 }

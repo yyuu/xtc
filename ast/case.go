@@ -41,7 +41,7 @@ func (self CaseNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self CaseNode) GetLabel() *asm.Label {
+func (self *CaseNode) GetLabel() *asm.Label {
   return self.Label
 }
 
@@ -49,14 +49,14 @@ func (self *CaseNode) SetLabel(label *asm.Label) {
   self.Label = label
 }
 
-func (self CaseNode) GetValues() []core.IExprNode {
+func (self *CaseNode) GetValues() []core.IExprNode {
   return self.Values
 }
 
-func (self CaseNode) GetBody() core.IStmtNode {
+func (self *CaseNode) GetBody() core.IStmtNode {
   return self.Body
 }
 
-func (self CaseNode) IsDefault() bool {
+func (self *CaseNode) IsDefault() bool {
   return len(self.Values) == 0
 }

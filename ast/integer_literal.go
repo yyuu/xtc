@@ -71,11 +71,11 @@ func (self IntegerLiteralNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self IntegerLiteralNode) GetTypeNode() core.ITypeNode {
+func (self *IntegerLiteralNode) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
-func (self IntegerLiteralNode) GetType() core.IType {
+func (self *IntegerLiteralNode) GetType() core.IType {
   return self.TypeNode.GetType()
 }
 
@@ -83,38 +83,38 @@ func (self *IntegerLiteralNode) SetType(t core.IType) {
   panic("#SetType called")
 }
 
-func (self IntegerLiteralNode) GetOrigType() core.IType {
+func (self *IntegerLiteralNode) GetOrigType() core.IType {
   return self.GetType()
 }
 
-func (self IntegerLiteralNode) IsConstant() bool {
+func (self *IntegerLiteralNode) IsConstant() bool {
   return true
 }
 
-func (self IntegerLiteralNode) IsParameter() bool {
+func (self *IntegerLiteralNode) IsParameter() bool {
   return false
 }
 
-func (self IntegerLiteralNode) IsLvalue() bool {
+func (self *IntegerLiteralNode) IsLvalue() bool {
   return false
 }
 
-func (self IntegerLiteralNode) IsAssignable() bool {
+func (self *IntegerLiteralNode) IsAssignable() bool {
   return false
 }
 
-func (self IntegerLiteralNode) IsLoadable() bool {
+func (self *IntegerLiteralNode) IsLoadable() bool {
   return false
 }
 
-func (self IntegerLiteralNode) IsCallable() bool {
+func (self *IntegerLiteralNode) IsCallable() bool {
   return self.GetType().IsCallable()
 }
 
-func (self IntegerLiteralNode) IsPointer() bool {
+func (self *IntegerLiteralNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }
 
-func (self IntegerLiteralNode) GetValue() int64 {
+func (self *IntegerLiteralNode) GetValue() int64 {
   return self.Value
 }

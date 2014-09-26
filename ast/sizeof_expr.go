@@ -32,19 +32,19 @@ func (self SizeofExprNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self SizeofExprNode) GetTypeNode() core.ITypeNode {
+func (self *SizeofExprNode) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
-func (self SizeofExprNode) GetTypeRef() core.ITypeRef {
+func (self *SizeofExprNode) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
-func (self SizeofExprNode) GetExpr() core.IExprNode {
+func (self *SizeofExprNode) GetExpr() core.IExprNode {
   return self.Expr
 }
 
-func (self SizeofExprNode) GetType() core.IType {
+func (self *SizeofExprNode) GetType() core.IType {
   if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
@@ -58,34 +58,34 @@ func (self *SizeofExprNode) SetType(t core.IType) {
   self.Type = t
 }
 
-func (self SizeofExprNode) GetOrigType() core.IType {
+func (self *SizeofExprNode) GetOrigType() core.IType {
   return self.GetType()
 }
 
-func (self SizeofExprNode) IsConstant() bool {
+func (self *SizeofExprNode) IsConstant() bool {
   return false
 }
 
-func (self SizeofExprNode) IsParameter() bool {
+func (self *SizeofExprNode) IsParameter() bool {
   return false
 }
 
-func (self SizeofExprNode) IsLvalue() bool {
+func (self *SizeofExprNode) IsLvalue() bool {
   return false
 }
 
-func (self SizeofExprNode) IsAssignable() bool {
+func (self *SizeofExprNode) IsAssignable() bool {
   return false
 }
 
-func (self SizeofExprNode) IsLoadable() bool {
+func (self *SizeofExprNode) IsLoadable() bool {
   return false
 }
 
-func (self SizeofExprNode) IsCallable() bool {
+func (self *SizeofExprNode) IsCallable() bool {
   return self.GetType().IsCallable()
 }
 
-func (self SizeofExprNode) IsPointer() bool {
+func (self *SizeofExprNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }

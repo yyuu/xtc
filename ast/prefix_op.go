@@ -36,11 +36,11 @@ func (self PrefixOpNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self PrefixOpNode) GetOperator() string {
+func (self *PrefixOpNode) GetOperator() string {
   return self.Operator
 }
 
-func (self PrefixOpNode) GetExpr() core.IExprNode {
+func (self *PrefixOpNode) GetExpr() core.IExprNode {
   return self.Expr
 }
 
@@ -48,7 +48,7 @@ func (self *PrefixOpNode) SetExpr(expr core.IExprNode) {
   self.Expr = expr
 }
 
-func (self PrefixOpNode) GetAmount() int {
+func (self *PrefixOpNode) GetAmount() int {
   return self.Amount
 }
 
@@ -56,7 +56,7 @@ func (self *PrefixOpNode) SetAmount(i int) {
   self.Amount = i
 }
 
-func (self PrefixOpNode) GetOpType() core.IType {
+func (self *PrefixOpNode) GetOpType() core.IType {
   return self.Type
 }
 
@@ -64,7 +64,7 @@ func (self *PrefixOpNode) SetOpType(t core.IType) {
   self.Type = t
 }
 
-func (self PrefixOpNode) GetType() core.IType {
+func (self *PrefixOpNode) GetType() core.IType {
   return self.Expr.GetType()
 }
 
@@ -72,34 +72,34 @@ func (self *PrefixOpNode) SetType(t core.IType) {
   panic("#SetType called")
 }
 
-func (self PrefixOpNode) GetOrigType() core.IType {
+func (self *PrefixOpNode) GetOrigType() core.IType {
   return self.GetType()
 }
 
-func (self PrefixOpNode) IsConstant() bool {
+func (self *PrefixOpNode) IsConstant() bool {
   return false
 }
 
-func (self PrefixOpNode) IsParameter() bool {
+func (self *PrefixOpNode) IsParameter() bool {
   return false
 }
 
-func (self PrefixOpNode) IsLvalue() bool {
+func (self *PrefixOpNode) IsLvalue() bool {
   return false
 }
 
-func (self PrefixOpNode) IsAssignable() bool {
+func (self *PrefixOpNode) IsAssignable() bool {
   return false
 }
 
-func (self PrefixOpNode) IsLoadable() bool {
+func (self *PrefixOpNode) IsLoadable() bool {
   return false
 }
 
-func (self PrefixOpNode) IsCallable() bool {
+func (self *PrefixOpNode) IsCallable() bool {
   return self.GetType().IsCallable()
 }
 
-func (self PrefixOpNode) IsPointer() bool {
+func (self *PrefixOpNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }

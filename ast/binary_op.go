@@ -42,11 +42,11 @@ func (self BinaryOpNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self BinaryOpNode) GetOperator() string {
+func (self *BinaryOpNode) GetOperator() string {
   return self.Operator
 }
 
-func (self BinaryOpNode) GetLeft() core.IExprNode {
+func (self *BinaryOpNode) GetLeft() core.IExprNode {
   return self.Left
 }
 
@@ -54,7 +54,7 @@ func (self *BinaryOpNode) SetLeft(expr core.IExprNode) {
   self.Left = expr
 }
 
-func (self BinaryOpNode) GetRight() core.IExprNode {
+func (self *BinaryOpNode) GetRight() core.IExprNode {
   return self.Right
 }
 
@@ -62,7 +62,7 @@ func (self *BinaryOpNode) SetRight(expr core.IExprNode) {
   self.Right = expr
 }
 
-func (self BinaryOpNode) GetType() core.IType {
+func (self *BinaryOpNode) GetType() core.IType {
   if self.Type == nil {
     self.Type = self.Left.GetType()
   }
@@ -76,34 +76,34 @@ func (self *BinaryOpNode) SetType(t core.IType) {
   self.Type = t
 }
 
-func (self BinaryOpNode) GetOrigType() core.IType {
+func (self *BinaryOpNode) GetOrigType() core.IType {
   return self.GetType()
 }
 
-func (self BinaryOpNode) IsConstant() bool {
+func (self *BinaryOpNode) IsConstant() bool {
   return false
 }
 
-func (self BinaryOpNode) IsParameter() bool {
+func (self *BinaryOpNode) IsParameter() bool {
   return false
 }
 
-func (self BinaryOpNode) IsLvalue() bool {
+func (self *BinaryOpNode) IsLvalue() bool {
   return false
 }
 
-func (self BinaryOpNode) IsAssignable() bool {
+func (self *BinaryOpNode) IsAssignable() bool {
   return false
 }
 
-func (self BinaryOpNode) IsLoadable() bool {
+func (self *BinaryOpNode) IsLoadable() bool {
   return false
 }
 
-func (self BinaryOpNode) IsCallable() bool {
+func (self *BinaryOpNode) IsCallable() bool {
   return self.GetType().IsCallable()
 }
 
-func (self BinaryOpNode) IsPointer() bool {
+func (self *BinaryOpNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }

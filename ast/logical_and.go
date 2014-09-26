@@ -32,11 +32,11 @@ func (self LogicalAndNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self LogicalAndNode) GetOperator() string {
+func (self *LogicalAndNode) GetOperator() string {
   return "&&"
 }
 
-func (self LogicalAndNode) GetLeft() core.IExprNode {
+func (self *LogicalAndNode) GetLeft() core.IExprNode {
   return self.Left
 }
 
@@ -44,7 +44,7 @@ func (self *LogicalAndNode) SetLeft(expr core.IExprNode) {
   self.Left = expr
 }
 
-func (self LogicalAndNode) GetRight() core.IExprNode {
+func (self *LogicalAndNode) GetRight() core.IExprNode {
   return self.Right
 }
 
@@ -52,7 +52,7 @@ func (self *LogicalAndNode) SetRight(expr core.IExprNode) {
   self.Right = expr
 }
 
-func (self LogicalAndNode) GetType() core.IType {
+func (self *LogicalAndNode) GetType() core.IType {
   if self.Type == nil {
     self.Type = self.Left.GetType()
   }
@@ -66,34 +66,34 @@ func (self *LogicalAndNode) SetType(t core.IType) {
   self.Type = t
 }
 
-func (self LogicalAndNode) GetOrigType() core.IType {
+func (self *LogicalAndNode) GetOrigType() core.IType {
   return self.GetType()
 }
 
-func (self LogicalAndNode) IsConstant() bool {
+func (self *LogicalAndNode) IsConstant() bool {
   return false
 }
 
-func (self LogicalAndNode) IsParameter() bool {
+func (self *LogicalAndNode) IsParameter() bool {
   return false
 }
 
-func (self LogicalAndNode) IsLvalue() bool {
+func (self *LogicalAndNode) IsLvalue() bool {
   return false
 }
 
-func (self LogicalAndNode) IsAssignable() bool {
+func (self *LogicalAndNode) IsAssignable() bool {
   return false
 }
 
-func (self LogicalAndNode) IsLoadable() bool {
+func (self *LogicalAndNode) IsLoadable() bool {
   return false
 }
 
-func (self LogicalAndNode) IsCallable() bool {
+func (self *LogicalAndNode) IsCallable() bool {
   return self.GetType().IsCallable()
 }
 
-func (self LogicalAndNode) IsPointer() bool {
+func (self *LogicalAndNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }

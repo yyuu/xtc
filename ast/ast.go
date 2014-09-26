@@ -27,11 +27,11 @@ func (self AST) GetLocation() core.Location {
   return self.Location
 }
 
-func (self AST) GetDeclaration() *Declaration {
+func (self *AST) GetDeclaration() *Declaration {
   return self.Declaration
 }
 
-func (self AST) ListTypes() []core.ITypeDefinition {
+func (self *AST) ListTypes() []core.ITypeDefinition {
   var result []core.ITypeDefinition
   decl := self.Declaration
   for i := range decl.Defstructs {
@@ -46,7 +46,7 @@ func (self AST) ListTypes() []core.ITypeDefinition {
   return result
 }
 
-func (self AST) ListEntities() []core.IEntity {
+func (self *AST) ListEntities() []core.IEntity {
   var result []core.IEntity
   decl := self.Declaration
   for i := range decl.Funcdecls {
@@ -67,7 +67,7 @@ func (self AST) ListEntities() []core.IEntity {
   return result
 }
 
-func (self AST) ListDeclarations() []core.IEntity {
+func (self *AST) ListDeclarations() []core.IEntity {
   var result []core.IEntity
   decl := self.Declaration
   for i := range decl.Funcdecls {
@@ -79,7 +79,7 @@ func (self AST) ListDeclarations() []core.IEntity {
   return result
 }
 
-func (self AST) ListDefinitions() []core.IEntity {
+func (self *AST) ListDefinitions() []core.IEntity {
   var result []core.IEntity
   decl := self.Declaration
   for i := range decl.Defvars {
@@ -94,7 +94,7 @@ func (self AST) ListDefinitions() []core.IEntity {
   return result
 }
 
-func (self AST) GetDefinedVariables() []*entity.DefinedVariable {
+func (self *AST) GetDefinedVariables() []*entity.DefinedVariable {
   return self.Declaration.Defvars
 }
 
@@ -102,7 +102,7 @@ func (self *AST) SetDefinedVariables(xs []*entity.DefinedVariable) {
   self.Declaration.Defvars = xs
 }
 
-func (self AST) GetDefinedFunctions() []*entity.DefinedFunction {
+func (self *AST) GetDefinedFunctions() []*entity.DefinedFunction {
   return self.Declaration.Defuns
 }
 
@@ -110,7 +110,7 @@ func (self *AST) SetDefinedFunctions(xs []*entity.DefinedFunction) {
   self.Declaration.Defuns = xs
 }
 
-func (self AST) GetConstants() []*entity.Constant {
+func (self *AST) GetConstants() []*entity.Constant {
   return self.Declaration.Constants
 }
 
@@ -118,7 +118,7 @@ func (self *AST) SetConstants(xs []*entity.Constant) {
   self.Declaration.Constants = xs
 }
 
-func (self AST) GetScope() *entity.ToplevelScope {
+func (self *AST) GetScope() *entity.ToplevelScope {
   return self.scope
 }
 
@@ -126,7 +126,7 @@ func (self *AST) SetScope(scope *entity.ToplevelScope) {
   self.scope = scope
 }
 
-func (self AST) GetConstantTable() *entity.ConstantTable {
+func (self *AST) GetConstantTable() *entity.ConstantTable {
   return self.constantTable
 }
 

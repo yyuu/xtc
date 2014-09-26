@@ -29,6 +29,6 @@ func (self ExprStmtNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self ExprStmtNode) GetExpr() core.IExprNode {
+func (self *ExprStmtNode) GetExpr() core.IExprNode {
   return self.Expr
 }

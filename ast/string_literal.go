@@ -33,11 +33,11 @@ func (self StringLiteralNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self StringLiteralNode) GetValue() string {
+func (self *StringLiteralNode) GetValue() string {
   return self.Value
 }
 
-func (self StringLiteralNode) GetEntry() *entity.ConstantEntry {
+func (self *StringLiteralNode) GetEntry() *entity.ConstantEntry {
   return self.entry
 }
 
@@ -45,15 +45,15 @@ func (self *StringLiteralNode) SetEntry(e *entity.ConstantEntry) {
   self.entry = e
 }
 
-func (self StringLiteralNode) GetTypeNode() core.ITypeNode {
+func (self *StringLiteralNode) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
-func (self StringLiteralNode) GetTypeRef() core.ITypeRef {
+func (self *StringLiteralNode) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
-func (self StringLiteralNode) GetType() core.IType {
+func (self *StringLiteralNode) GetType() core.IType {
   return self.TypeNode.GetType()
 }
 
@@ -61,34 +61,34 @@ func (self *StringLiteralNode) SetType(t core.IType) {
   panic("#SetType called")
 }
 
-func (self StringLiteralNode) GetOrigType() core.IType {
+func (self *StringLiteralNode) GetOrigType() core.IType {
   return self.GetType()
 }
 
-func (self StringLiteralNode) IsConstant() bool {
+func (self *StringLiteralNode) IsConstant() bool {
   return true
 }
 
-func (self StringLiteralNode) IsParameter() bool {
+func (self *StringLiteralNode) IsParameter() bool {
   return false
 }
 
-func (self StringLiteralNode) IsLvalue() bool {
+func (self *StringLiteralNode) IsLvalue() bool {
   return false
 }
 
-func (self StringLiteralNode) IsAssignable() bool {
+func (self *StringLiteralNode) IsAssignable() bool {
   return false
 }
 
-func (self StringLiteralNode) IsLoadable() bool {
+func (self *StringLiteralNode) IsLoadable() bool {
   return false
 }
 
-func (self StringLiteralNode) IsCallable() bool {
+func (self *StringLiteralNode) IsCallable() bool {
   return self.GetType().IsCallable()
 }
 
-func (self StringLiteralNode) IsPointer() bool {
+func (self *StringLiteralNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }

@@ -28,6 +28,6 @@ func (self GotoNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self GotoNode) GetTarget() string {
+func (self *GotoNode) GetTarget() string {
   return self.Target
 }

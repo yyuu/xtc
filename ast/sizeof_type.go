@@ -33,27 +33,27 @@ func (self SizeofTypeNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self SizeofTypeNode) GetTypeNode() core.ITypeNode {
+func (self *SizeofTypeNode) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
-func (self SizeofTypeNode) GetTypeRef() core.ITypeRef {
+func (self *SizeofTypeNode) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
-func (self SizeofTypeNode) GetOperandTypeNode() core.ITypeNode {
+func (self *SizeofTypeNode) GetOperandTypeNode() core.ITypeNode {
   return self.OperandTypeNode
 }
 
-func (self SizeofTypeNode) GetOperandTypeRef() core.ITypeRef {
+func (self *SizeofTypeNode) GetOperandTypeRef() core.ITypeRef {
   return self.OperandTypeNode.GetTypeRef()
 }
 
-func (self SizeofTypeNode) GetOperandType() core.IType {
+func (self *SizeofTypeNode) GetOperandType() core.IType {
   return self.OperandTypeNode.GetType()
 }
 
-func (self SizeofTypeNode) GetType() core.IType {
+func (self *SizeofTypeNode) GetType() core.IType {
   if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
@@ -67,34 +67,34 @@ func (self *SizeofTypeNode) SetType(t core.IType) {
   self.Type = t
 }
 
-func (self SizeofTypeNode) GetOrigType() core.IType {
+func (self *SizeofTypeNode) GetOrigType() core.IType {
   return self.GetType()
 }
 
-func (self SizeofTypeNode) IsConstant() bool {
+func (self *SizeofTypeNode) IsConstant() bool {
   return false
 }
 
-func (self SizeofTypeNode) IsParameter() bool {
+func (self *SizeofTypeNode) IsParameter() bool {
   return false
 }
 
-func (self SizeofTypeNode) IsLvalue() bool {
+func (self *SizeofTypeNode) IsLvalue() bool {
   return false
 }
 
-func (self SizeofTypeNode) IsAssignable() bool {
+func (self *SizeofTypeNode) IsAssignable() bool {
   return false
 }
 
-func (self SizeofTypeNode) IsLoadable() bool {
+func (self *SizeofTypeNode) IsLoadable() bool {
   return false
 }
 
-func (self SizeofTypeNode) IsCallable() bool {
+func (self *SizeofTypeNode) IsCallable() bool {
   return self.GetType().IsCallable()
 }
 
-func (self SizeofTypeNode) IsPointer() bool {
+func (self *SizeofTypeNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }

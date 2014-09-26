@@ -31,10 +31,10 @@ func (self WhileNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self WhileNode) GetCond() core.IExprNode {
+func (self *WhileNode) GetCond() core.IExprNode {
   return self.Cond
 }
 
-func (self WhileNode) GetBody() core.IStmtNode {
+func (self *WhileNode) GetBody() core.IStmtNode {
   return self.Body
 }

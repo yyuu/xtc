@@ -29,11 +29,11 @@ func (self DereferenceNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self DereferenceNode) GetExpr() core.IExprNode {
+func (self *DereferenceNode) GetExpr() core.IExprNode {
   return self.Expr
 }
 
-func (self DereferenceNode) GetType() core.IType {
+func (self *DereferenceNode) GetType() core.IType {
   if self.Type == nil {
     self.Type = self.GetOrigType()
   }
@@ -47,35 +47,35 @@ func (self *DereferenceNode) SetType(t core.IType) {
   self.Type = t
 }
 
-func (self DereferenceNode) GetOrigType() core.IType {
+func (self *DereferenceNode) GetOrigType() core.IType {
   return self.Expr.GetType().GetBaseType()
 }
 
-func (self DereferenceNode) IsConstant() bool {
+func (self *DereferenceNode) IsConstant() bool {
   return false
 }
 
-func (self DereferenceNode) IsParameter() bool {
+func (self *DereferenceNode) IsParameter() bool {
   return false
 }
 
-func (self DereferenceNode) IsLvalue() bool {
+func (self *DereferenceNode) IsLvalue() bool {
   return true
 }
 
-func (self DereferenceNode) IsAssignable() bool {
+func (self *DereferenceNode) IsAssignable() bool {
   return true
 }
 
-func (self DereferenceNode) IsLoadable() bool {
+func (self *DereferenceNode) IsLoadable() bool {
   t := self.GetOrigType()
   return !t.IsArray() && !t.IsFunction()
 }
 
-func (self DereferenceNode) IsCallable() bool {
+func (self *DereferenceNode) IsCallable() bool {
   return self.GetType().IsCallable()
 }
 
-func (self DereferenceNode) IsPointer() bool {
+func (self *DereferenceNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }

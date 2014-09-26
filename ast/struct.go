@@ -32,11 +32,11 @@ func (self StructNode) String() string {
   return fmt.Sprintf("<ast.StructNode Name=%s location=%s typeNode=%s members=%s>", self.Name, self.Location, self.TypeNode, self.Members)
 }
 
-func (self StructNode) IsTypeDefinition() bool {
+func (self *StructNode) IsTypeDefinition() bool {
   return true
 }
 
-func (self StructNode) IsCompositeType() bool {
+func (self *StructNode) IsCompositeType() bool {
   return true
 }
 
@@ -44,23 +44,23 @@ func (self StructNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self StructNode) GetName() string {
+func (self *StructNode) GetName() string {
   return self.Name
 }
 
-func (self StructNode) GetTypeNode() core.ITypeNode {
+func (self *StructNode) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
-func (self StructNode) GetTypeRef() core.ITypeRef {
+func (self *StructNode) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
-func (self StructNode) GetMembers() []core.ISlot {
+func (self *StructNode) GetMembers() []core.ISlot {
   return self.Members
 }
 
-func (self StructNode) DefiningType() core.IType {
+func (self *StructNode) DefiningType() core.IType {
   membs := make([]core.ISlot, len(self.Members))
   for i := range self.Members {
     membs[i] = self.Members[i]

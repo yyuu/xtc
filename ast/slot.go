@@ -22,11 +22,11 @@ func (self Slot) String() string {
   return fmt.Sprintf("<ast.Slot Name=%s TypeNode=%s Offset=%d>", self.Name, self.TypeNode, self.Offset)
 }
 
-func (self Slot) GetName() string {
+func (self *Slot) GetName() string {
   return self.Name
 }
 
-func (self Slot) GetOffset() int {
+func (self *Slot) GetOffset() int {
   return self.Offset
 }
 
@@ -34,14 +34,14 @@ func (self Slot) GetLocation() core.Location {
   panic("Slot#GetLocation called")
 }
 
-func (self Slot) GetTypeNode() core.ITypeNode {
+func (self *Slot) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
-func (self Slot) GetTypeRef() core.ITypeRef {
+func (self *Slot) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
-func (self Slot) GetType() core.IType {
+func (self *Slot) GetType() core.IType {
   return self.TypeNode.GetType()
 }

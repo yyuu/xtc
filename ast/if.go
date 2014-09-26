@@ -32,14 +32,14 @@ func (self IfNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self IfNode) GetCond() core.IExprNode {
+func (self *IfNode) GetCond() core.IExprNode {
   return self.Cond
 }
 
-func (self IfNode) GetThenBody() core.IStmtNode {
+func (self *IfNode) GetThenBody() core.IStmtNode {
   return self.ThenBody
 }
 
-func (self IfNode) GetElseBody() core.IStmtNode {
+func (self *IfNode) GetElseBody() core.IStmtNode {
   return self.ElseBody
 }

@@ -40,15 +40,15 @@ func (self FuncallNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self FuncallNode) GetExpr() core.IExprNode {
+func (self *FuncallNode) GetExpr() core.IExprNode {
   return self.Expr
 }
 
-func (self FuncallNode) GetArg(i int) core.IExprNode {
+func (self *FuncallNode) GetArg(i int) core.IExprNode {
   return self.Args[i]
 }
 
-func (self FuncallNode) GetArgs() []core.IExprNode {
+func (self *FuncallNode) GetArgs() []core.IExprNode {
   return self.Args
 }
 
@@ -56,17 +56,17 @@ func (self *FuncallNode) SetArgs(args []core.IExprNode) {
   self.Args = args
 }
 
-func (self FuncallNode) NumArgs() int {
+func (self *FuncallNode) NumArgs() int {
   return len(self.Args)
 }
 
-func (self FuncallNode) GetFunctionType() *typesys.FunctionType {
+func (self *FuncallNode) GetFunctionType() *typesys.FunctionType {
 //pt := self.Expr.GetType().(*typesys.PointerType)
 //return pt.GetBaseType().(*typesys.FunctionType)
   return self.Expr.GetType().(*typesys.FunctionType)
 }
 
-func (self FuncallNode) GetType() core.IType {
+func (self *FuncallNode) GetType() core.IType {
   return self.GetFunctionType().GetReturnType()
 }
 
@@ -74,34 +74,34 @@ func (self *FuncallNode) SetType(t core.IType) {
   panic("#SetType called")
 }
 
-func (self FuncallNode) GetOrigType() core.IType {
+func (self *FuncallNode) GetOrigType() core.IType {
   return self.GetType()
 }
 
-func (self FuncallNode) IsConstant() bool {
+func (self *FuncallNode) IsConstant() bool {
   return false
 }
 
-func (self FuncallNode) IsParameter() bool {
+func (self *FuncallNode) IsParameter() bool {
   return false
 }
 
-func (self FuncallNode) IsLvalue() bool {
+func (self *FuncallNode) IsLvalue() bool {
   return false
 }
 
-func (self FuncallNode) IsAssignable() bool {
+func (self *FuncallNode) IsAssignable() bool {
   return false
 }
 
-func (self FuncallNode) IsLoadable() bool {
+func (self *FuncallNode) IsLoadable() bool {
   return false
 }
 
-func (self FuncallNode) IsCallable() bool {
+func (self *FuncallNode) IsCallable() bool {
   return self.GetType().IsCallable()
 }
 
-func (self FuncallNode) IsPointer() bool {
+func (self *FuncallNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }

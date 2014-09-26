@@ -52,15 +52,15 @@ func (self BlockNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self BlockNode) GetVariables() []*entity.DefinedVariable {
+func (self *BlockNode) GetVariables() []*entity.DefinedVariable {
   return self.Variables
 }
 
-func (self BlockNode) GetStmts() []core.IStmtNode {
+func (self *BlockNode) GetStmts() []core.IStmtNode {
   return self.Stmts
 }
 
-func (self BlockNode) GetScope() *entity.LocalScope {
+func (self *BlockNode) GetScope() *entity.LocalScope {
   return self.scope
 }
 

@@ -45,10 +45,10 @@ func (self SwitchNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self SwitchNode) GetCond() core.IExprNode {
+func (self *SwitchNode) GetCond() core.IExprNode {
   return self.Cond
 }
 
-func (self SwitchNode) GetCases() []core.IStmtNode {
+func (self *SwitchNode) GetCases() []core.IStmtNode {
   return self.Cases
 }

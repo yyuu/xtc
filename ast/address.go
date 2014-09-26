@@ -30,18 +30,18 @@ func (self AddressNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self AddressNode) GetExpr() core.IExprNode {
+func (self *AddressNode) GetExpr() core.IExprNode {
   return self.Expr
 }
 
-func (self AddressNode) GetType() core.IType {
+func (self *AddressNode) GetType() core.IType {
   if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
   return self.Type
 }
 
-func (self AddressNode) GetOrigType() core.IType {
+func (self *AddressNode) GetOrigType() core.IType {
   return self.GetType()
 }
 
@@ -52,30 +52,30 @@ func (self *AddressNode) SetType(t core.IType) {
   self.Type = t
 }
 
-func (self AddressNode) IsConstant() bool {
+func (self *AddressNode) IsConstant() bool {
   return false
 }
 
-func (self AddressNode) IsParameter() bool {
+func (self *AddressNode) IsParameter() bool {
   return false
 }
 
-func (self AddressNode) IsLvalue() bool {
+func (self *AddressNode) IsLvalue() bool {
   return false
 }
 
-func (self AddressNode) IsAssignable() bool {
+func (self *AddressNode) IsAssignable() bool {
   return false
 }
 
-func (self AddressNode) IsLoadable() bool {
+func (self *AddressNode) IsLoadable() bool {
   return false
 }
 
-func (self AddressNode) IsCallable() bool {
+func (self *AddressNode) IsCallable() bool {
   return self.GetType().IsCallable()
 }
 
-func (self AddressNode) IsPointer() bool {
+func (self *AddressNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }

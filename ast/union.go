@@ -32,11 +32,11 @@ func (self UnionNode) String() string {
   return fmt.Sprintf("<ast.UnionNode name=%s location=%s typeNode=%s members=%s>", self.Name, self.Location, self.TypeNode, self.Members)
 }
 
-func (self UnionNode) IsTypeDefinition() bool {
+func (self *UnionNode) IsTypeDefinition() bool {
   return true
 }
 
-func (self UnionNode) IsCompositeType() bool {
+func (self *UnionNode) IsCompositeType() bool {
   return true
 }
 
@@ -44,23 +44,23 @@ func (self UnionNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self UnionNode) GetName() string {
+func (self *UnionNode) GetName() string {
   return self.Name
 }
 
-func (self UnionNode) GetTypeNode() core.ITypeNode {
+func (self *UnionNode) GetTypeNode() core.ITypeNode {
   return self.TypeNode
 }
 
-func (self UnionNode) GetTypeRef() core.ITypeRef {
+func (self *UnionNode) GetTypeRef() core.ITypeRef {
   return self.TypeNode.GetTypeRef()
 }
 
-func (self UnionNode) GetMembers() []core.ISlot {
+func (self *UnionNode) GetMembers() []core.ISlot {
   return self.Members
 }
 
-func (self UnionNode) DefiningType() core.IType {
+func (self *UnionNode) DefiningType() core.IType {
   membs := make([]core.ISlot, len(self.Members))
   for i := range self.Members {
     membs[i] = self.Members[i]

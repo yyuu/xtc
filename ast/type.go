@@ -22,7 +22,7 @@ func (self TypeNode) String() string {
   return fmt.Sprintf("(type %s)", self.TypeRef)
 }
 
-func (self TypeNode) GetTypeRef() core.ITypeRef {
+func (self *TypeNode) GetTypeRef() core.ITypeRef {
   return self.TypeRef
 }
 
@@ -34,11 +34,11 @@ func (self TypeNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self TypeNode) IsResolved() bool {
+func (self *TypeNode) IsResolved() bool {
   return self.Type != nil
 }
 
-func (self TypeNode) GetType() core.IType {
+func (self *TypeNode) GetType() core.IType {
   if self.Type == nil {
     panic(fmt.Errorf("%s type not resolved", self.Location))
   }

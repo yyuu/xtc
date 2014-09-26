@@ -32,11 +32,11 @@ func (self LogicalOrNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self LogicalOrNode) GetOperator() string {
+func (self *LogicalOrNode) GetOperator() string {
   return "||"
 }
 
-func (self LogicalOrNode) GetLeft() core.IExprNode {
+func (self *LogicalOrNode) GetLeft() core.IExprNode {
   return self.Left
 }
 
@@ -44,7 +44,7 @@ func (self *LogicalOrNode) SetLeft(expr core.IExprNode) {
   self.Left = expr
 }
 
-func (self LogicalOrNode) GetRight() core.IExprNode {
+func (self *LogicalOrNode) GetRight() core.IExprNode {
   return self.Right
 }
 
@@ -52,7 +52,7 @@ func (self *LogicalOrNode) SetRight(expr core.IExprNode) {
   self.Right = expr
 }
 
-func (self LogicalOrNode) GetType() core.IType {
+func (self *LogicalOrNode) GetType() core.IType {
   if self.Type == nil {
     self.Type = self.Left.GetType()
   }
@@ -66,34 +66,34 @@ func (self *LogicalOrNode) SetType(t core.IType) {
   self.Type = t
 }
 
-func (self LogicalOrNode) GetOrigType() core.IType {
+func (self *LogicalOrNode) GetOrigType() core.IType {
   return self.GetType()
 }
 
-func (self LogicalOrNode) IsConstant() bool {
+func (self *LogicalOrNode) IsConstant() bool {
   return false
 }
 
-func (self LogicalOrNode) IsParameter() bool {
+func (self *LogicalOrNode) IsParameter() bool {
   return false
 }
 
-func (self LogicalOrNode) IsLvalue() bool {
+func (self *LogicalOrNode) IsLvalue() bool {
   return false
 }
 
-func (self LogicalOrNode) IsAssignable() bool {
+func (self *LogicalOrNode) IsAssignable() bool {
   return false
 }
 
-func (self LogicalOrNode) IsLoadable() bool {
+func (self *LogicalOrNode) IsLoadable() bool {
   return false
 }
 
-func (self LogicalOrNode) IsCallable() bool {
+func (self *LogicalOrNode) IsCallable() bool {
   return self.GetType().IsCallable()
 }
 
-func (self LogicalOrNode) IsPointer() bool {
+func (self *LogicalOrNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }

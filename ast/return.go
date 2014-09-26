@@ -29,7 +29,7 @@ func (self ReturnNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self ReturnNode) GetExpr() core.IExprNode {
+func (self *ReturnNode) GetExpr() core.IExprNode {
   return self.Expr
 }
 

@@ -31,15 +31,15 @@ func (self MemberNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self MemberNode) GetExpr() core.IExprNode {
+func (self *MemberNode) GetExpr() core.IExprNode {
   return self.Expr
 }
 
-func (self MemberNode) GetMember() string {
+func (self *MemberNode) GetMember() string {
   return self.Member
 }
 
-func (self MemberNode) GetType() core.IType {
+func (self *MemberNode) GetType() core.IType {
   if self.Type == nil {
     self.Type = self.GetOrigType()
   }
@@ -53,44 +53,44 @@ func (self *MemberNode) SetType(t core.IType) {
   self.Type = t
 }
 
-func (self MemberNode) GetOrigType() core.IType {
+func (self *MemberNode) GetOrigType() core.IType {
   return self.GetBaseType().GetMemberType(self.Member)
 }
 
-func (self MemberNode) IsConstant() bool {
+func (self *MemberNode) IsConstant() bool {
   return false
 }
 
-func (self MemberNode) IsParameter() bool {
+func (self *MemberNode) IsParameter() bool {
   return false
 }
 
-func (self MemberNode) IsLvalue() bool {
+func (self *MemberNode) IsLvalue() bool {
   return true
 }
 
-func (self MemberNode) IsAssignable() bool {
+func (self *MemberNode) IsAssignable() bool {
   return true
 }
 
-func (self MemberNode) IsLoadable() bool {
+func (self *MemberNode) IsLoadable() bool {
   t := self.GetOrigType()
   return !t.IsArray() && !t.IsFunction()
 }
 
-func (self MemberNode) IsCallable() bool {
+func (self *MemberNode) IsCallable() bool {
   return self.GetType().IsCallable()
 }
 
-func (self MemberNode) IsPointer() bool {
+func (self *MemberNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }
 
-func (self MemberNode) GetBaseType() core.ICompositeType {
+func (self *MemberNode) GetBaseType() core.ICompositeType {
   t := self.Expr.GetType()
   return t.(core.ICompositeType)
 }
 
-func (self MemberNode) GetOffset() int {
+func (self *MemberNode) GetOffset() int {
   return self.GetBaseType().GetMemberOffset(self.Member)
 }

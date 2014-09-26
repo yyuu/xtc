@@ -117,35 +117,35 @@ func (self *Declaration) AddTypedefs(ts []*TypedefNode) {
   }
 }
 
-func (self Declaration) GetDefvars() []*entity.DefinedVariable {
+func (self *Declaration) GetDefvars() []*entity.DefinedVariable {
   return self.Defvars
 }
 
-func (self Declaration) GetVardecls() []*entity.UndefinedVariable {
+func (self *Declaration) GetVardecls() []*entity.UndefinedVariable {
   return self.Vardecls
 }
 
-func (self Declaration) GetDefuns() []*entity.DefinedFunction {
+func (self *Declaration) GetDefuns() []*entity.DefinedFunction {
   return self.Defuns
 }
 
-func (self Declaration) GetFuncdecls() []*entity.UndefinedFunction {
+func (self *Declaration) GetFuncdecls() []*entity.UndefinedFunction {
   return self.Funcdecls
 }
 
-func (self Declaration) GetConstants() []*entity.Constant {
+func (self *Declaration) GetConstants() []*entity.Constant {
   return self.Constants
 }
 
-func (self Declaration) GetDefstructs() []*StructNode {
+func (self *Declaration) GetDefstructs() []*StructNode {
   return self.Defstructs
 }
 
-func (self Declaration) GetDefunions() []*UnionNode {
+func (self *Declaration) GetDefunions() []*UnionNode {
   return self.Defunions
 }
 
-func (self Declaration) GetTypedefs() []*TypedefNode {
+func (self *Declaration) GetTypedefs() []*TypedefNode {
   return self.Typedefs
 }
 

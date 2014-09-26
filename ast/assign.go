@@ -32,7 +32,7 @@ func (self AssignNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self AssignNode) GetLHS() core.IExprNode {
+func (self *AssignNode) GetLHS() core.IExprNode {
   return self.LHS
 }
 
@@ -40,7 +40,7 @@ func (self *AssignNode) SetLHS(expr core.IExprNode) {
   self.LHS = expr
 }
 
-func (self AssignNode) GetRHS() core.IExprNode {
+func (self *AssignNode) GetRHS() core.IExprNode {
   return self.RHS
 }
 
@@ -48,7 +48,7 @@ func (self *AssignNode) SetRHS(expr core.IExprNode) {
   self.RHS = expr
 }
 
-func (self AssignNode) GetType() core.IType {
+func (self *AssignNode) GetType() core.IType {
   if self.Type == nil {
     panic(fmt.Errorf("%s type is nil", self.Location))
   }
@@ -62,34 +62,34 @@ func (self *AssignNode) SetType(t core.IType) {
   self.Type = t
 }
 
-func (self AssignNode) GetOrigType() core.IType {
+func (self *AssignNode) GetOrigType() core.IType {
   return self.GetType()
 }
 
-func (self AssignNode) IsConstant() bool {
+func (self *AssignNode) IsConstant() bool {
   return false
 }
 
-func (self AssignNode) IsParameter() bool {
+func (self *AssignNode) IsParameter() bool {
   return false
 }
 
-func (self AssignNode) IsLvalue() bool {
+func (self *AssignNode) IsLvalue() bool {
   return false
 }
 
-func (self AssignNode) IsAssignable() bool {
+func (self *AssignNode) IsAssignable() bool {
   return false
 }
 
-func (self AssignNode) IsLoadable() bool {
+func (self *AssignNode) IsLoadable() bool {
   return false
 }
 
-func (self AssignNode) IsCallable() bool {
+func (self *AssignNode) IsCallable() bool {
   return self.GetType().IsCallable()
 }
 
-func (self AssignNode) IsPointer() bool {
+func (self *AssignNode) IsPointer() bool {
   return self.GetType().IsPointer()
 }
