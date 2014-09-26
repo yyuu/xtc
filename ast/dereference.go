@@ -1,7 +1,6 @@
 package ast
 
 import (
-  "fmt"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -36,7 +35,7 @@ func (self DereferenceNode) GetExpr() core.IExprNode {
 
 func (self DereferenceNode) GetType() core.IType {
   if self.Type == nil {
-    panic(fmt.Errorf("%s type is nil", self.Location))
+    self.Type = self.GetOrigType()
   }
   return self.Type
 }
@@ -49,7 +48,7 @@ func (self *DereferenceNode) SetType(t core.IType) {
 }
 
 func (self DereferenceNode) GetOrigType() core.IType {
-  return self.GetType().GetBaseType()
+  return self.Expr.GetType().GetBaseType()
 }
 
 func (self DereferenceNode) IsConstant() bool {

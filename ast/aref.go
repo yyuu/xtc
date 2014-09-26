@@ -43,7 +43,7 @@ func (self ArefNode) GetIndex() core.IExprNode {
 
 func (self ArefNode) GetType() core.IType {
   if self.Type == nil {
-    panic(fmt.Errorf("%s type is nil", self.Location))
+    self.Type = self.GetOrigType()
   }
   return self.Type
 }

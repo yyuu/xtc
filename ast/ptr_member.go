@@ -42,7 +42,7 @@ func (self PtrMemberNode) GetMember() string {
 
 func (self PtrMemberNode) GetType() core.IType {
   if self.Type == nil {
-    panic(fmt.Errorf("%s type is nil", self.Location))
+    self.Type = self.GetOrigType()
   }
   return self.Type
 }

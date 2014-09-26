@@ -49,7 +49,7 @@ func (self VariableNode) GetEntity() core.IEntity {
 }
 
 func (self VariableNode) GetType() core.IType {
-  return self.GetEntity().GetType()
+  return self.GetOrigType()
 }
 
 func (self *VariableNode) SetType(t core.IType) {
