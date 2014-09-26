@@ -16,19 +16,19 @@ type IRGenerator struct {
   exprNestLevel int
   stmts []core.IStmt
   scopeStack []*entity.LocalScope
-  breakStack []asm.Label
-  continueStack []asm.Label
+  breakStack []*asm.Label
+  continueStack []*asm.Label
   jumpMap map[string]*jumpEntry
 }
 
 type jumpEntry struct {
-  label asm.Label
+  label *asm.Label
   numRefered int
   isDefined bool
   location core.Location
 }
 
-func newJumpEntry(label asm.Label) *jumpEntry {
+func newJumpEntry(label *asm.Label) *jumpEntry {
   loc := core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
   return &jumpEntry { label, 0, false, loc }
 }
@@ -36,8 +36,8 @@ func newJumpEntry(label asm.Label) *jumpEntry {
 func NewIRGenerator(errorHandler *core.ErrorHandler, table *typesys.TypeTable) *IRGenerator {
   stmts := []core.IStmt { }
   scopeStack := []*entity.LocalScope { }
-  breakStack := []asm.Label { }
-  continueStack := []asm.Label { }
+  breakStack := []*asm.Label { }
+  continueStack := []*asm.Label { }
   jumpMap := make(map[string]*jumpEntry)
   return &IRGenerator { errorHandler, table, 0, stmts, scopeStack, breakStack, continueStack, jumpMap }
 }
@@ -59,8 +59,8 @@ func (self *IRGenerator) Generate(a *ast.AST) *ir.IR {
 func (self *IRGenerator) compileFunctionBody(f *entity.DefinedFunction) []core.IStmt {
   self.stmts = []core.IStmt { }
   self.scopeStack = []*entity.LocalScope { }
-  self.breakStack = []asm.Label { }
-  self.continueStack = []asm.Label { }
+  self.breakStack = []*asm.Label { }
+  self.continueStack = []*asm.Label { }
   self.jumpMap = make(map[string]*jumpEntry)
   self.transformStmt(f.GetBody())
   self.checkJumpLinks(self.jumpMap)
@@ -96,25 +96,25 @@ func (self *IRGenerator) tmpVar(t core.IType) *entity.DefinedVariable {
   return self.currentScope().AllocateTmp(typeNode)
 }
 
-func (self *IRGenerator) label(label asm.Label) {
+func (self *IRGenerator) label(label *asm.Label) {
   loc := core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
   self.stmts = append(self.stmts, ir.NewLabelStmt(loc, label))
 }
 
-func (self *IRGenerator) jump(target asm.Label) {
+func (self *IRGenerator) jump(target *asm.Label) {
   loc := core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
   self.stmts = append(self.stmts, ir.NewJump(loc, target))
 }
 
-func (self *IRGenerator) cjump(loc core.Location, cond core.IExpr, thenLabel asm.Label, elseLabel asm.Label) {
+func (self *IRGenerator) cjump(loc core.Location, cond core.IExpr, thenLabel *asm.Label, elseLabel *asm.Label) {
   self.stmts = append(self.stmts, ir.NewCJump(loc, cond, thenLabel, elseLabel))
 }
 
-func (self *IRGenerator) pushBreak(label asm.Label) {
+func (self *IRGenerator) pushBreak(label *asm.Label) {
   self.breakStack = append(self.breakStack, label)
 }
 
-func (self *IRGenerator) popBreak() asm.Label {
+func (self *IRGenerator) popBreak() *asm.Label {
   if len(self.breakStack) < 1 {
     panic("unmatched push/pop for break stack")
   }
@@ -123,18 +123,18 @@ func (self *IRGenerator) popBreak() asm.Label {
   return label
 }
 
-func (self *IRGenerator) currentBreakTarget() asm.Label {
+func (self *IRGenerator) currentBreakTarget() *asm.Label {
   if len(self.breakStack) < 1 {
     panic("break from out of loop")
   }
   return self.breakStack[len(self.breakStack)-1]
 }
 
-func (self *IRGenerator) pushContinue(label asm.Label) {
+func (self *IRGenerator) pushContinue(label *asm.Label) {
   self.continueStack = append(self.continueStack, label)
 }
 
-func (self *IRGenerator) popContinue() asm.Label {
+func (self *IRGenerator) popContinue() *asm.Label {
   if len(self.continueStack) < 1 {
     panic("unmatched push/pop for continue stack")
   }
@@ -143,7 +143,7 @@ func (self *IRGenerator) popContinue() asm.Label {
   return label
 }
 
-func (self *IRGenerator) currentContinueTarget() asm.Label {
+func (self *IRGenerator) currentContinueTarget() *asm.Label {
   if len(self.continueStack) < 1 {
     panic("continue from out of loop")
   }
@@ -304,7 +304,7 @@ func (self *IRGenerator) popScope() *entity.LocalScope {
   return scope
 }
 
-func (self *IRGenerator) defineLabel(name string, loc core.Location) asm.Label {
+func (self *IRGenerator) defineLabel(name string, loc core.Location) *asm.Label {
   ent := self.getJumpEntry(name)
   if ent.isDefined {
     panic(fmt.Errorf("duplicated jump label in %s(): %s", name, name))
@@ -314,7 +314,7 @@ func (self *IRGenerator) defineLabel(name string, loc core.Location) asm.Label {
   return ent.label
 }
 
-func (self *IRGenerator) referLabel(name string) asm.Label {
+func (self *IRGenerator) referLabel(name string) *asm.Label {
   ent := self.getJumpEntry(name)
   ent.numRefered++
   return ent.label

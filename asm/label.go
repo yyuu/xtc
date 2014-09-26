@@ -9,11 +9,11 @@ type Label struct {
   Symbol core.ISymbol
 }
 
-func NewLabel(sym core.ISymbol) Label {
-  return Label { "asm.Label", sym }
+func NewLabel(sym core.ISymbol) *Label {
+  return &Label { "asm.Label", sym }
 }
 
-func NewUnnamedLabel() Label {
+func NewUnnamedLabel() *Label {
   return NewLabel(NewUnnamedSymbol())
 }
 

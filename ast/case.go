@@ -11,7 +11,7 @@ import (
 type CaseNode struct {
   ClassName string
   Location core.Location
-//Label asm.Label
+//Label *asm.Label
   Values []core.IExprNode
   Body core.IStmtNode
 }
@@ -41,7 +41,7 @@ func (self CaseNode) GetLocation() core.Location {
   return self.Location
 }
 
-func (self CaseNode) GetLabel() asm.Label {
+func (self CaseNode) GetLabel() *asm.Label {
   // FIXME: return proper label
   return asm.NewUnnamedLabel()
 }

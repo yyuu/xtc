@@ -10,11 +10,11 @@ type Switch struct {
   Location core.Location
   Cond core.IExpr
   Cases []*Case
-  DefaultLabel asm.Label
-  EndLabel asm.Label
+  DefaultLabel *asm.Label
+  EndLabel *asm.Label
 }
 
-func NewSwitch(loc core.Location, cond core.IExpr, cases []*Case, defaultLabel asm.Label, endLabel asm.Label) *Switch {
+func NewSwitch(loc core.Location, cond core.IExpr, cases []*Case, defaultLabel *asm.Label, endLabel *asm.Label) *Switch {
   return &Switch { "ir.Switch", loc, cond, cases, defaultLabel, endLabel }
 }
 

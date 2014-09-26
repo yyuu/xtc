@@ -8,10 +8,10 @@ import (
 type LabelStmt struct {
   ClassName string
   Location core.Location
-  Label asm.Label
+  Label *asm.Label
 }
 
-func NewLabelStmt(loc core.Location, label asm.Label) *LabelStmt {
+func NewLabelStmt(loc core.Location, label *asm.Label) *LabelStmt {
   return &LabelStmt { "ir.LabelStmt", loc, label }
 }
 

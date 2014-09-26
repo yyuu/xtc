@@ -8,10 +8,10 @@ import (
 type Jump struct {
   ClassName string
   Location core.Location
-  Label asm.Label
+  Label *asm.Label
 }
 
-func NewJump(loc core.Location, label asm.Label) *Jump {
+func NewJump(loc core.Location, label *asm.Label) *Jump {
   return &Jump { "ir.Jump", loc, label }
 }
 

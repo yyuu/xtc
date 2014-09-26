@@ -9,11 +9,11 @@ type CJump struct {
   ClassName string
   Location core.Location
   Cond core.IExpr
-  ThenLabel asm.Label
-  ElseLabel asm.Label
+  ThenLabel *asm.Label
+  ElseLabel *asm.Label
 }
 
-func NewCJump(loc core.Location, cond core.IExpr, thenLabel asm.Label, elseLabel asm.Label) *CJump {
+func NewCJump(loc core.Location, cond core.IExpr, thenLabel *asm.Label, elseLabel *asm.Label) *CJump {
   return &CJump { "ir.CJump", loc, cond, thenLabel, elseLabel }
 }
 
