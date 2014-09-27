@@ -18,6 +18,7 @@ func NewLocalResolver(errorHandler *core.ErrorHandler) *LocalResolver {
 }
 
 func (self *LocalResolver) Resolve(a *ast.AST) {
+  self.errorHandler.Debugln("starting local resolver.")
   toplevel := entity.NewToplevelScope()
   self.scopeStack = append(self.scopeStack, toplevel)
 
@@ -38,6 +39,7 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
 
   a.SetScope(toplevel)
   a.SetConstantTable(self.constantTable)
+  self.errorHandler.Debugln("finished local resolver.")
 }
 
 func (self *LocalResolver) resolveGvarInitializers(a *ast.AST) {

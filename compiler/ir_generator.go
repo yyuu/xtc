@@ -43,6 +43,7 @@ func NewIRGenerator(errorHandler *core.ErrorHandler, table *typesys.TypeTable) *
 }
 
 func (self *IRGenerator) Generate(a *ast.AST) *ir.IR {
+  self.errorHandler.Debugln("starting IR generator.")
   vs := a.GetDefinedVariables()
   for i := range vs {
     if vs[i].HasInitializer() {
@@ -53,7 +54,9 @@ func (self *IRGenerator) Generate(a *ast.AST) *ir.IR {
   for i := range fs {
     fs[i].SetIR(self.compileFunctionBody(fs[i]))
   }
-  return a.GenerateIR()
+  x := a.GenerateIR()
+  self.errorHandler.Debugln("finished IR generator.")
+  return x
 }
 
 func (self *IRGenerator) compileFunctionBody(f *entity.DefinedFunction) []core.IStmt {

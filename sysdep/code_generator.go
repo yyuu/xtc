@@ -22,8 +22,11 @@ func NewCodeGeneratorFor(errorHandler *core.ErrorHandler, platform string) *Code
 }
 
 func (self *CodeGenerator) Generate(ir *bs_ir.IR) *AssemblyCode {
+  self.errorHandler.Debugln("starting code generator.")
   self.locateSymbols(ir)
-  return self.generateAssemblyCode(ir)
+  x := self.generateAssemblyCode(ir)
+  self.errorHandler.Debugln("finished code generator.")
+  return x
 }
 
 func (self *CodeGenerator) locateSymbols(ir *bs_ir.IR) {

@@ -19,6 +19,7 @@ func NewTypeChecker(errorHandler *core.ErrorHandler, table *typesys.TypeTable) *
 }
 
 func (self *TypeChecker) Check(a *ast.AST) {
+  self.errorHandler.Debugln("starting type checker.")
   vs := a.GetDefinedVariables()
   for i := range vs {
     self.checkVariable(vs[i])
@@ -30,6 +31,7 @@ func (self *TypeChecker) Check(a *ast.AST) {
     self.checkParamTypes(fs[i])
     ast.VisitStmt(self, fs[i].GetBody())
   }
+  self.errorHandler.Debugln("finished type checker.")
 }
 
 func (self *TypeChecker) checkVariable(v *entity.DefinedVariable) {

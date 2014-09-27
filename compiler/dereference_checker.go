@@ -17,6 +17,7 @@ func NewDereferenceChecker(errorHandler *core.ErrorHandler, table *typesys.TypeT
 }
 
 func (self *DereferenceChecker) Check(a *ast.AST) {
+  self.errorHandler.Debugln("starting dereference checker.")
   vs := a.GetDefinedVariables()
   for i := range vs {
     self.checkToplevelVariable(vs[i])
@@ -25,6 +26,7 @@ func (self *DereferenceChecker) Check(a *ast.AST) {
   for i := range fs {
     ast.VisitStmt(self, fs[i].GetBody())
   }
+  self.errorHandler.Debugln("finished dereference checker.")
 }
 
 func (self *DereferenceChecker) checkToplevelVariable(v *entity.DefinedVariable) {
