@@ -963,3 +963,12 @@ func doParse(name string, source string) (*ast.AST, error) {
     return nil, lex.error
   }
 }
+
+func parametersTypeRef(params *entity.Params) *typesys.ParamTypeRefs {
+  paramDescs := params.GetParamDescs()
+  newParamDescs := make([]core.ITypeRef, len(paramDescs))
+  for i := range paramDescs {
+    newParamDescs[i] = paramDescs[i].GetTypeNode().GetTypeRef()
+  }
+  return typesys.NewParamTypeRefs(params.GetLocation(), newParamDescs, params.IsVararg())
+}
