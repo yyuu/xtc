@@ -29,6 +29,10 @@ func NewTypedefNodes(xs...*TypedefNode) []*TypedefNode {
   }
 }
 
+func AsTypedefNode(x core.INode) *TypedefNode {
+  return x.(*TypedefNode)
+}
+
 func (self TypedefNode) String() string {
   return fmt.Sprintf("(typedef %s %s)", self.Name, self.RealTypeNode)
 }

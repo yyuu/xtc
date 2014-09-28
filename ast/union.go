@@ -28,6 +28,10 @@ func NewUnionNodes(xs...*UnionNode) []*UnionNode {
   }
 }
 
+func AsUnionNode(x core.INode) *UnionNode {
+  return x.(*UnionNode)
+}
+
 func (self UnionNode) String() string {
   return fmt.Sprintf("<ast.UnionNode name=%s location=%s typeNode=%s members=%s>", self.Name, self.Location, self.TypeNode, self.Members)
 }

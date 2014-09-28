@@ -18,6 +18,18 @@ func NewTypeNode(loc core.Location, ref core.ITypeRef) *TypeNode {
   return &TypeNode { "ast.TypeNode", loc, ref, nil }
 }
 
+func AsTypeNode(x core.INode) core.ITypeNode {
+  return x.(core.ITypeNode)
+}
+
+func AsTypeNodes(xs []core.INode) []core.ITypeNode {
+  ys := make([]core.ITypeNode, len(xs))
+  for i := range xs {
+    ys[i] = xs[i].(core.ITypeNode)
+  }
+  return ys
+}
+
 func (self TypeNode) String() string {
   return fmt.Sprintf("(type %s)", self.TypeRef)
 }

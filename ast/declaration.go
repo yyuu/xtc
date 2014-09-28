@@ -22,6 +22,10 @@ func NewDeclaration(defvars []*entity.DefinedVariable, vardecls []*entity.Undefi
   return &Declaration { "ast.Declaration", defvars, vardecls, defuns, funcdecls, constants, defstructs, defunions, typedefs }
 }
 
+func AsDeclaration(x core.INode) *Declaration {
+  return x.(*Declaration)
+}
+
 func (self Declaration) String() string {
   return fmt.Sprintf("(begin (define defvars %s)\n" +
                      "       (define vardecls %s)\n" +

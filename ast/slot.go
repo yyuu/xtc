@@ -18,6 +18,18 @@ func NewSlot(t core.ITypeNode, n string) *Slot {
   return &Slot { "ast.Slot", t, n, -1 }
 }
 
+func AsSlot(x core.INode) core.ISlot {
+  return x.(core.ISlot)
+}
+
+func AsSlots(xs []core.INode) []core.ISlot {
+  ys := make([]core.ISlot, len(xs))
+  for i := range xs {
+    ys[i] = xs[i].(core.ISlot)
+  }
+  return ys
+}
+
 func (self Slot) String() string {
   return fmt.Sprintf("<ast.Slot Name=%s TypeNode=%s Offset=%d>", self.Name, self.TypeNode, self.Offset)
 }

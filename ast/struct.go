@@ -28,6 +28,10 @@ func NewStructNodes(xs...*StructNode) []*StructNode {
   }
 }
 
+func AsStructNode(x core.INode) *StructNode {
+  return x.(*StructNode)
+}
+
 func (self StructNode) String() string {
   return fmt.Sprintf("<ast.StructNode Name=%s location=%s typeNode=%s members=%s>", self.Name, self.Location, self.TypeNode, self.Members)
 }
