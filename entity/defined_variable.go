@@ -27,6 +27,18 @@ func NewDefinedVariables(xs...*DefinedVariable) []*DefinedVariable {
   }
 }
 
+func AsDefinedVariable(x core.IEntity) *DefinedVariable {
+  return x.(*DefinedVariable)
+}
+
+func AsDefinedVariables(xs []core.IEntity) []*DefinedVariable {
+  ys := make([]*DefinedVariable, len(xs))
+  for i := range xs {
+    ys[i] = xs[i].(*DefinedVariable)
+  }
+  return ys
+}
+
 var tmpSeq int = 0
 func temporaryDefinedVariable(t core.ITypeNode) *DefinedVariable {
   tmpSeq++

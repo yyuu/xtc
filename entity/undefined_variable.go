@@ -25,6 +25,10 @@ func NewUndefinedVariables(xs...*UndefinedVariable) []*UndefinedVariable {
   }
 }
 
+func AsUndefinedVariable(x core.IEntity) *UndefinedVariable {
+  return x.(*UndefinedVariable)
+}
+
 func (self *UndefinedVariable) String() string {
   return fmt.Sprintf("<entity.UndefinedVariable Name=%s Private=%v TypeNode=%s>", self.Name, self.Private, self.TypeNode)
 }

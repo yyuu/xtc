@@ -16,6 +16,10 @@ func NewParams(loc core.Location, paramDescs []*Parameter, vararg bool) *Params 
   return &Params { "entity.Params", loc, paramDescs, vararg }
 }
 
+func AsParams(x core.IEntity) *Params {
+  return x.(*Params)
+}
+
 func (self *Params) String() string {
   return fmt.Sprintf("<entity.Params Location=%s ParamDescs=%s>", self.Location, self.ParamDescs)
 }

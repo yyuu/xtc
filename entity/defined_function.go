@@ -30,6 +30,10 @@ func NewDefinedFunctions(xs...*DefinedFunction) []*DefinedFunction {
   }
 }
 
+func AsDefinedFunction(x core.IEntity) *DefinedFunction {
+  return x.(*DefinedFunction)
+}
+
 func (self *DefinedFunction) String() string {
   return fmt.Sprintf("<entity.DefinedFunction Name=%s Private=%v TypeNode=%s Params=%s Body=%s>", self.Name, self.Private, self.TypeNode, self.Params, self.Body)
 }

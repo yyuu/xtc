@@ -26,6 +26,10 @@ func NewUndefinedFunctions(xs...*UndefinedFunction) []*UndefinedFunction {
   }
 }
 
+func AsUndefinedFunction(x core.IEntity) *UndefinedFunction {
+  return x.(*UndefinedFunction)
+}
+
 func (self *UndefinedFunction) String() string {
   return fmt.Sprintf("<entity.UndefinedFunction Name=%s TypeNode=%s Params=%s>", self.Name, self.TypeNode, self.Params)
 }

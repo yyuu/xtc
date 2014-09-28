@@ -130,7 +130,7 @@ top_defs: defun
           $$._node = ast.NewDeclaration(
             entity.NewDefinedVariables(),
             entity.NewUndefinedVariables(),
-            entity.NewDefinedFunctions(asDefinedFunction($1._entity)),
+            entity.NewDefinedFunctions(entity.AsDefinedFunction($1._entity)),
             entity.NewUndefinedFunctions(),
             entity.NewConstants(),
             ast.NewStructNodes(),
@@ -144,7 +144,7 @@ top_defs: defun
             entity.NewDefinedVariables(),
             entity.NewUndefinedVariables(),
             entity.NewDefinedFunctions(),
-            entity.NewUndefinedFunctions(asUndefinedFunction($1._entity)),
+            entity.NewUndefinedFunctions(entity.AsUndefinedFunction($1._entity)),
             entity.NewConstants(),
             ast.NewStructNodes(),
             ast.NewUnionNodes(),
@@ -154,7 +154,7 @@ top_defs: defun
         | defvars
         {
           $$._node = ast.NewDeclaration(
-            entity.NewDefinedVariables(asDefinedVariable($1._entity)),
+            entity.NewDefinedVariables(entity.AsDefinedVariable($1._entity)),
             entity.NewUndefinedVariables(),
             entity.NewDefinedFunctions(),
             entity.NewUndefinedFunctions(),
@@ -168,7 +168,7 @@ top_defs: defun
         {
           $$._node = ast.NewDeclaration(
             entity.NewDefinedVariables(),
-            entity.NewUndefinedVariables(asUndefinedVariable($1._entity)),
+            entity.NewUndefinedVariables(entity.AsUndefinedVariable($1._entity)),
             entity.NewDefinedFunctions(),
             entity.NewUndefinedFunctions(),
             entity.NewConstants(),
@@ -184,7 +184,7 @@ top_defs: defun
             entity.NewUndefinedVariables(),
             entity.NewDefinedFunctions(),
             entity.NewUndefinedFunctions(),
-            entity.NewConstants(asConstant($1._entity)),
+            entity.NewConstants(entity.AsConstant($1._entity)),
             ast.NewStructNodes(),
             ast.NewUnionNodes(),
             ast.NewTypedefNodes(),
@@ -232,31 +232,31 @@ top_defs: defun
         | top_defs defun
         {
           decl := ast.AsDeclaration($1._node)
-          decl.AddDefun(asDefinedFunction($2._entity))
+          decl.AddDefun(entity.AsDefinedFunction($2._entity))
           $$._node = decl
         }
         | top_defs funcdecl
         {
           decl := ast.AsDeclaration($1._node)
-          decl.AddFuncdecl(asUndefinedFunction($2._entity))
+          decl.AddFuncdecl(entity.AsUndefinedFunction($2._entity))
           $$._node = decl
         }
         | top_defs defvars
         {
           decl := ast.AsDeclaration($1._node)
-          decl.AddDefvar(asDefinedVariable($2._entity))
+          decl.AddDefvar(entity.AsDefinedVariable($2._entity))
           $$._node = decl
         }
         | top_defs vardecl
         {
           decl := ast.AsDeclaration($1._node)
-          decl.AddVardecl(asUndefinedVariable($2._entity))
+          decl.AddVardecl(entity.AsUndefinedVariable($2._entity))
           $$._node = decl
         }
         | top_defs defconst
         {
           decl := ast.AsDeclaration($1._node)
-          decl.AddConstant(asConstant($2._entity))
+          decl.AddConstant(entity.AsConstant($2._entity))
           $$._node = decl
         }
         | top_defs defstruct
@@ -325,7 +325,7 @@ defun: typeref_name '(' ')' block
      }
      | typeref_name '(' params ')' block
      {
-       ps := asParams($3._entity)
+       ps := entity.AsParams($3._entity)
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
        $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, ast.AsStmtNode($5._node))
      }
@@ -337,7 +337,7 @@ defun: typeref_name '(' ')' block
      }
      | static_typeref_name '(' params ')' block
      {
-       ps := asParams($3._entity)
+       ps := entity.AsParams($3._entity)
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
        $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, ast.AsStmtNode($5._node))
      }
@@ -351,21 +351,21 @@ storage:
 
 params: fixedparams
       {
-        $$._entity = entity.NewParams($1._token.location, asParams($1._entity).GetParamDescs(), false)
+        $$._entity = entity.NewParams($1._token.location, entity.AsParams($1._entity).GetParamDescs(), false)
       }
       | fixedparams ',' DOTDOTDOT
       {
-        $$._entity = entity.NewParams($1._token.location, asParams($1._entity).GetParamDescs(), true)
+        $$._entity = entity.NewParams($1._token.location, entity.AsParams($1._entity).GetParamDescs(), true)
       }
       ;
 
 fixedparams: param
            {
-             $$._entity = entity.NewParams($1._token.location, entity.NewParameters(asParameter($1._entity)), false)
+             $$._entity = entity.NewParams($1._token.location, entity.NewParameters(entity.AsParameter($1._entity)), false)
            }
            | fixedparams ',' param
            {
-             $$._entity = entity.NewParams($1._token.location, append(asParams($1._entity).GetParamDescs(), asParameter($3._entity)), false)
+             $$._entity = entity.NewParams($1._token.location, append(entity.AsParams($1._entity).GetParamDescs(), entity.AsParameter($3._entity)), false)
            }
            ;
 
@@ -377,7 +377,7 @@ param: type name
 
 block: '{' defvar_list stmts '}'
      {
-       $$._node = ast.NewBlockNode($1._token.location, asDefinedVariables($2._entities), ast.AsStmtNodes($3._nodes))
+       $$._node = ast.NewBlockNode($1._token.location, entity.AsDefinedVariables($2._entities), ast.AsStmtNodes($3._nodes))
      }
      ;
 
@@ -441,7 +441,7 @@ funcdecl: extern_typeref_name '(' ')' ';'
         }
         | extern_typeref_name '(' params ')' ';'
         {
-          ps := asParams($3._entity)
+          ps := entity.AsParams($3._entity)
           ref := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
           $$._entity = entity.NewUndefinedFunction(ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ps)
         }

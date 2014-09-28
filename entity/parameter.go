@@ -21,6 +21,10 @@ func NewParameters(xs...*Parameter) []*Parameter {
   }
 }
 
+func AsParameter(x core.IEntity) *Parameter {
+  return x.(*Parameter)
+}
+
 func (self *Parameter) String() string {
   return fmt.Sprintf("<entity.Parameter Name=%s TypeNode=%s>", self.DefinedVariable.Name, self.DefinedVariable.TypeNode)
 }

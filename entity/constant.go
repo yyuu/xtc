@@ -25,6 +25,10 @@ func NewConstants(xs...*Constant) []*Constant {
   }
 }
 
+func AsConstant(x core.IEntity) *Constant {
+  return x.(*Constant)
+}
+
 func (self *Constant) String() string {
   return fmt.Sprintf("<entity.Constant Name=%s TypeNode=%s Value=%s>", self.Name, self.TypeNode, self.Value)
 }
