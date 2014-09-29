@@ -5,45 +5,49 @@ import (
 )
 
 const (
-  X86_AX = iota
-  X86_BX
-  X86_CX
-  X86_DX
-  X86_SI
-  X86_DI
-  X86_SP
-  X86_BP
+  x86_ax = iota
+  x86_bx
+  x86_cx
+  x86_dx
+  x86_si
+  x86_di
+  x86_sp
+  x86_bp
 )
 
-type X86Register struct {
+type x86Register struct {
   Class int
   Type int
 }
 
-func NewX86Register(klass int, t int) *X86Register {
-  return &X86Register { klass, t }
+func newX86Register(klass int, t int) *x86Register {
+  return &x86Register { klass, t }
 }
 
-func (self X86Register) IsRegister() bool {
+func (self x86Register) IsRegister() bool {
   return true
 }
 
-func (self X86Register) IsMemoryReference() bool {
+func (self x86Register) IsMemoryReference() bool {
   return false
 }
 
-func (self X86Register) GetBaseName() string {
+func (self x86Register) GetBaseName() string {
   switch self.Class {
-    case X86_AX: return "ax"
-    case X86_BX: return "bx"
-    case X86_CX: return "cx"
-    case X86_DX: return "dx"
-    case X86_SI: return "si"
-    case X86_DI: return "di"
-    case X86_SP: return "sp"
-    case X86_BP: return "bp"
+    case x86_ax: return "ax"
+    case x86_bx: return "bx"
+    case x86_cx: return "cx"
+    case x86_dx: return "dx"
+    case x86_si: return "si"
+    case x86_di: return "di"
+    case x86_sp: return "sp"
+    case x86_bp: return "bp"
     default: {
       panic(fmt.Errorf("unknown register class: %d", self.Class))
     }
   }
+}
+
+func (self x86Register) GetType() int {
+  return self.Type
 }

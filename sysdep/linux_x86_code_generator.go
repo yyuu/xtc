@@ -8,8 +8,30 @@ import (
   bs_ir "bitbucket.org/yyuu/bs/ir"
 )
 
-const LABEL_SYMBOL_BASE = ".L"
-const CONST_SYMBOL_BASE = ".LC"
+const (
+  LABEL_SYMBOL_BASE = ".L"
+  CONST_SYMBOL_BASE = ".LC"
+
+// Flags
+  SectionFlag_allocatable = "a"
+  SectionFlag_writable = "w"
+  SectionFlag_executable = "x"
+  SectionFlag_sectiongroup = "G"
+  SectionFlag_strings = "S"
+  SectionFlag_threadlocalstorage = "T"
+
+// argument of "G" flag
+  Linkage_linkonce = "comdat"
+
+// Types
+  SectionType_bits = "@progbits"
+  SectionType_nobits = "@nobits"
+  SectionType_note = "@note"
+
+  SymbolType_function = "@function"
+
+  PICThunkSectionFlags = SectionFlag_allocatable + SectionFlag_executable + SectionFlag_sectiongroup
+)
 
 type LinuxX86CodeGenerator struct {
   errorHandler *bs_core.ErrorHandler
@@ -212,11 +234,11 @@ func (self *LinuxX86CodeGenerator) generateCommonSymbols(file *LinuxX86AssemblyC
 //
 // PIC/PIE related constants and codes
 //
-func (self *LinuxX86CodeGenerator) loadGOTBaseAddress(file *LinuxX86AssemblyCode, reg bs_core.IRegister) {
+func (self *LinuxX86CodeGenerator) loadGOTBaseAddress(file *LinuxX86AssemblyCode, reg *x86Register) {
   // FIXME:
 }
 
-func (self *LinuxX86CodeGenerator) gotBaseReg() bs_core.IRegister {
+func (self *LinuxX86CodeGenerator) gotBaseReg() *x86Register {
   return self.bx()
 }
 
@@ -232,93 +254,101 @@ func (self *LinuxX86CodeGenerator) pltSymbol(base bs_core.ISymbol) bs_core.ISymb
   return bs_asm.NewSuffixedSymbol(base, "@PLT")
 }
 
-func (self *LinuxX86CodeGenerator) picThunkSymbol(reg bs_core.IRegister) bs_core.ISymbol {
-  return bs_asm.NewNamedSymbol("__i686.get_pc_thunk." + reg.(*X86Register).GetBaseName())
+func (self *LinuxX86CodeGenerator) picThunkSymbol(reg *x86Register) bs_core.ISymbol {
+  return bs_asm.NewNamedSymbol("__i686.get_pc_thunk." + reg.GetBaseName())
 }
 
-func (self *LinuxX86CodeGenerator) picThunk(file *LinuxX86AssemblyCode, reg bs_core.IRegister) {
-//sym := self.picThunkSymbol(reg)
-  panic("not implemented")
+func (self *LinuxX86CodeGenerator) picThunk(file *LinuxX86AssemblyCode, reg *x86Register) {
+  sym := self.picThunkSymbol(reg)
+  file._section2(fmt.Sprintf(".text.%s", sym),
+                 fmt.Sprintf("\"%s\"", PICThunkSectionFlags),
+                 SectionType_bits, fmt.Sprint(sym), Linkage_linkonce)
+  file._globl(sym)
+  file._hidden(sym)
+  file._type(sym, "@function")
+  file.label(bs_asm.NewLabel(sym))
+  file.mov2(self.mem2(self.sp()), reg)
+  file.ret()
 }
 
 func (self *LinuxX86CodeGenerator) compileFunctionBody(file *LinuxX86AssemblyCode, fun *bs_entity.DefinedFunction) {
   self.errorHandler.Warnf("FIXME: CodeGenerator#compileFunctionBody not implemented: %s", fun.GetName())
 }
 
-func (self *LinuxX86CodeGenerator) loadConstant(node bs_core.IExpr, reg bs_core.IRegister) {
+func (self *LinuxX86CodeGenerator) loadConstant(node bs_core.IExpr, reg *x86Register) {
   panic("not implemented")
 }
 
-func (self *LinuxX86CodeGenerator) loadVariable(v *bs_ir.Var, dest bs_core.IRegister) {
+func (self *LinuxX86CodeGenerator) loadVariable(v *bs_ir.Var, dest *x86Register) {
   panic("not implemented")
 }
 
-func (self *LinuxX86CodeGenerator) loadAddress(v bs_core.IEntity, dest bs_core.IRegister) {
+func (self *LinuxX86CodeGenerator) loadAddress(v bs_core.IEntity, dest *x86Register) {
   panic("not implemented")
 }
 
-func (self *LinuxX86CodeGenerator) ax() bs_core.IRegister {
-  return NewX86Register(X86_AX, self.naturalType)
+func (self *LinuxX86CodeGenerator) ax() *x86Register {
+  return newX86Register(x86_ax, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) axT(t int) bs_core.IRegister {
-  return NewX86Register(X86_AX, t)
+func (self *LinuxX86CodeGenerator) axT(t int) *x86Register {
+  return newX86Register(x86_ax, t)
 }
 
-func (self *LinuxX86CodeGenerator) bx() bs_core.IRegister {
-  return NewX86Register(X86_BX, self.naturalType)
+func (self *LinuxX86CodeGenerator) bx() *x86Register {
+  return newX86Register(x86_bx, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) bxT(t int) bs_core.IRegister {
-  return NewX86Register(X86_BX, t)
+func (self *LinuxX86CodeGenerator) bxT(t int) *x86Register {
+  return newX86Register(x86_bx, t)
 }
 
-func (self *LinuxX86CodeGenerator) cx() bs_core.IRegister {
-  return NewX86Register(X86_CX, self.naturalType)
+func (self *LinuxX86CodeGenerator) cx() *x86Register {
+  return newX86Register(x86_cx, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) cxT(t int) bs_core.IRegister {
-  return NewX86Register(X86_CX, t)
+func (self *LinuxX86CodeGenerator) cxT(t int) *x86Register {
+  return newX86Register(x86_cx, t)
 }
 
-func (self *LinuxX86CodeGenerator) dx() bs_core.IRegister {
-  return NewX86Register(X86_DX, self.naturalType)
+func (self *LinuxX86CodeGenerator) dx() *x86Register {
+  return newX86Register(x86_dx, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) dxT(t int) bs_core.IRegister {
-  return NewX86Register(X86_DX, t)
+func (self *LinuxX86CodeGenerator) dxT(t int) *x86Register {
+  return newX86Register(x86_dx, t)
 }
 
-func (self *LinuxX86CodeGenerator) si() bs_core.IRegister {
-  return NewX86Register(X86_SI, self.naturalType)
+func (self *LinuxX86CodeGenerator) si() *x86Register {
+  return newX86Register(x86_si, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) di() bs_core.IRegister {
-  return NewX86Register(X86_DI, self.naturalType)
+func (self *LinuxX86CodeGenerator) di() *x86Register {
+  return newX86Register(x86_di, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) bp() bs_core.IRegister {
-  return NewX86Register(X86_BP, self.naturalType)
+func (self *LinuxX86CodeGenerator) bp() *x86Register {
+  return newX86Register(x86_bp, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) sp() bs_core.IRegister {
-  return NewX86Register(X86_SP, self.naturalType)
+func (self *LinuxX86CodeGenerator) sp() *x86Register {
+  return newX86Register(x86_sp, self.naturalType)
 }
 
 func (self *LinuxX86CodeGenerator) mem1(sym bs_core.ISymbol) *bs_asm.DirectMemoryReference {
   return bs_asm.NewDirectMemoryReference(sym)
 }
 
-func (self *LinuxX86CodeGenerator) mem2(reg bs_core.IRegister) *bs_asm.IndirectMemoryReference {
-  return bs_asm.NewIndirectMemoryReference(bs_asm.NewIntegerLiteral(0), reg)
+func (self *LinuxX86CodeGenerator) mem2(reg *x86Register) *bs_asm.IndirectMemoryReference {
+  return bs_asm.NewIndirectMemoryReference(bs_asm.NewIntegerLiteral(0), reg, true)
 }
 
-func (self *LinuxX86CodeGenerator) mem3(offset int64, reg bs_core.IRegister) *bs_asm.IndirectMemoryReference {
-  return bs_asm.NewIndirectMemoryReference(bs_asm.NewIntegerLiteral(offset), reg)
+func (self *LinuxX86CodeGenerator) mem3(offset int64, reg *x86Register) *bs_asm.IndirectMemoryReference {
+  return bs_asm.NewIndirectMemoryReference(bs_asm.NewIntegerLiteral(offset), reg, true)
 }
 
-func (self *LinuxX86CodeGenerator) mem4(offset bs_core.ISymbol, reg bs_core.IRegister) *bs_asm.IndirectMemoryReference {
-  return bs_asm.NewIndirectMemoryReference(offset, reg)
+func (self *LinuxX86CodeGenerator) mem4(offset bs_core.ISymbol, reg *x86Register) *bs_asm.IndirectMemoryReference {
+  return bs_asm.NewIndirectMemoryReference(offset, reg, true)
 }
 
 func (self *LinuxX86CodeGenerator) imm1(n int64) *bs_asm.ImmediateValue {
