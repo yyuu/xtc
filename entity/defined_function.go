@@ -70,6 +70,10 @@ func (self *DefinedFunction) IsParameter() bool {
   return false
 }
 
+func (self *DefinedFunction) IsVariable() bool {
+  return false
+}
+
 func (self *DefinedFunction) GetNumRefered() int {
   return self.numRefered
 }
@@ -134,4 +138,8 @@ func (self *DefinedFunction) GetIR() []core.IStmt {
 
 func (self *DefinedFunction) SetIR(stmts []core.IStmt) {
   self.IR = stmts
+}
+
+func (self *DefinedFunction) SymbolString() string {
+  return self.Name
 }

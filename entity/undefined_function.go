@@ -50,6 +50,10 @@ func (self *UndefinedFunction) IsParameter() bool {
   return false
 }
 
+func (self *UndefinedFunction) IsVariable() bool {
+  return false
+}
+
 func (self *UndefinedFunction) GetNumRefered() int {
   return self.numRefered
 }
@@ -97,4 +101,8 @@ func (self *UndefinedFunction) IsVoid() bool {
 
 func (self *UndefinedFunction) GetValue() core.IExprNode {
   panic("UndefinedFunction#GetValue called")
+}
+
+func (self *UndefinedFunction) SymbolString() string {
+  return self.Name
 }

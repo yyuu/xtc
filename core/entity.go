@@ -7,6 +7,7 @@ type IEntity interface {
   IsPrivate() bool
   IsConstant() bool
   IsParameter() bool
+  IsVariable() bool
   Refered()
   IsRefered() bool
   GetNumRefered() int
@@ -14,6 +15,7 @@ type IEntity interface {
   GetTypeRef() ITypeRef
   GetType() IType
   GetValue() IExprNode
+  SymbolString() string
 }
 
 type IFunction interface {

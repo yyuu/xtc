@@ -62,20 +62,54 @@ func (self *ToplevelScope) DefineEntity(entity core.IEntity) {
   }
 }
 
-/*
-func (self *ToplevelScope) AllGlobalVariables() {
+func (self *ToplevelScope) AllGlobalVariables() []core.IVariable {
+  variables := []core.IVariable { }
+  for _, v := range self.Entities {
+    if v.IsVariable() {
+      variables = append(variables, v)
+    }
+  }
+  staticLocalVariables := self.GetStaticLocalVariables()
+  for i := range staticLocalVariables {
+    var v core.IVariable = staticLocalVariables[i]
+    variables = append(variables, v)
+  }
+  return variables
 }
- */
 
-/*
-func (self *ToplevelScope) DefinedGlobalScopeVariables() {
+func (self *ToplevelScope) GetDefinedGlobalScopeVariables() []*DefinedVariable {
+  result := []*DefinedVariable { }
+  for _, ent := range self.Entities {
+    v, ok := ent.(*DefinedVariable)
+    if ok {
+      result = append(result, v)
+    }
+  }
+  result = append(result, self.GetStaticLocalVariables()...)
+  return result
 }
- */
 
-/*
-func (self *ToplevelScope) StaticLocalVariables() {
+func (self *ToplevelScope) GetStaticLocalVariables() []*DefinedVariable {
+  if len(self.StaticLocalVariables) < 1 {
+    for i := range self.Children {
+      s := self.Children[i]
+      self.StaticLocalVariables = append(self.StaticLocalVariables, s.GetStaticLocalVariables()...)
+    }
+    seqTable := make(map[string]int)
+    vars := self.StaticLocalVariables
+    for i := range vars {
+      seq, ok := seqTable[vars[i].GetName()]
+      if ! ok {
+        vars[i].SetSequence(0)
+        seqTable[vars[i].GetName()] = 1
+      } else {
+        vars[i].SetSequence(seq)
+        seqTable[vars[i].GetName()] = seq + 1
+      }
+    }
+  }
+  return self.StaticLocalVariables
 }
- */
 
 func (self *ToplevelScope) CheckReferences(errorHandler *core.ErrorHandler) {
   for _, ent := range self.Entities {

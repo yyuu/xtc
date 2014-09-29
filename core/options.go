@@ -5,41 +5,50 @@ import (
 )
 
 type assemblerOptions struct {
-  verbose bool
 }
 
-func newAssemblerOptions() *assemblerOptions {
-  return &assemblerOptions { true }
+func newAssemblerOptions(flagSet *flag.FlagSet) *assemblerOptions {
+  return &assemblerOptions {
+  }
 }
 
 type codeGeneratorOptions struct {
-  optimizeLevel int
-  generatePIC bool
-  generatePIE bool
-  verboseAsm bool
+  optimizeLevel *int
+  generatePIC *bool
+  generatePIE *bool
+  verboseAsm *bool
 }
 
-func newCodeGeneratorOptions() *codeGeneratorOptions {
-  return &codeGeneratorOptions { 0, false, false, true }
+func newCodeGeneratorOptions(flagSet *flag.FlagSet) *codeGeneratorOptions {
+  return &codeGeneratorOptions {
+    flagSet.Int("O", 0, "O"),
+    flagSet.Bool("fpic", false, "fpic"),
+    flagSet.Bool("fpie", false, "fpie"),
+    flagSet.Bool("fverbose-asm", false, "fverbose-asm"),
+  }
 }
 
 type linkerOptions struct {
-  generateSharedLibrary bool
-  generatePID bool
-  noStartFiles bool
-  noDefaultLibs bool
-  verbose bool
+  generateSharedLibrary *bool
+  generatePIE *bool
+  noStartFiles *bool
+  noDefaultLibs *bool
 }
 
-func newLinkerOptions() *linkerOptions {
-  return &linkerOptions { false, false, false, false, true }
+func newLinkerOptions(flagSet *flag.FlagSet) *linkerOptions {
+  return &linkerOptions {
+    flagSet.Bool("shared", false, "shared"),
+    flagSet.Bool("pie", false, "pie"),
+    flagSet.Bool("nostartfiles", false, "nostartfiles"),
+    flagSet.Bool("nodefaultlibs", false, "nodefaultlibs"),
+  }
 }
 
 type Options struct {
+  flagSet *flag.FlagSet
   *assemblerOptions
   *codeGeneratorOptions
   *linkerOptions
-  flagSet *flag.FlagSet
   checkSyntax *bool
   dumpTokens *bool
   dumpAST *bool
@@ -56,10 +65,10 @@ type Options struct {
 func NewOptions(name string) *Options {
   flagSet := flag.NewFlagSet(name, 1)
   return &Options {
-    newAssemblerOptions(),
-    newCodeGeneratorOptions(),
-    newLinkerOptions(),
     flagSet,
+    newAssemblerOptions(flagSet),
+    newCodeGeneratorOptions(flagSet),
+    newLinkerOptions(flagSet),
     flagSet.Bool("check-syntax", false, "check syntax"),
     flagSet.Bool("dump-tokens", false, "dump tokens"),
     flagSet.Bool("dump-ast", false, "dump ast"),
@@ -104,7 +113,7 @@ func (self *Options) TargetPlatform() int {
 }
 
 func (self *Options) IsGenratingSharedLibrary() bool {
-  return self.linkerOptions.generateSharedLibrary
+  return *self.linkerOptions.generateSharedLibrary
 }
 
 func (self *Options) SourceFiles() []string {
@@ -149,4 +158,16 @@ func (self *Options) DumpAsm() bool {
 
 func (self *Options) PrintAsm() bool {
   return *self.printAsm
+}
+
+func (self *Options) IsPositionIndependent() bool {
+  return *self.codeGeneratorOptions.generatePIC || *self.codeGeneratorOptions.generatePIE
+}
+
+func (self *Options) IsPICRequired() bool {
+  return *self.codeGeneratorOptions.generatePIC
+}
+
+func (self *Options) IsPIERequired() bool {
+  return *self.codeGeneratorOptions.generatePIE
 }

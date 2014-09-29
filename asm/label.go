@@ -17,8 +17,20 @@ func NewUnnamedLabel() *Label {
   return NewLabel(NewUnnamedSymbol())
 }
 
+func (self Label) IsInstruction() bool {
+  return false
+}
+
 func (self Label) IsLabel() bool {
   return true
+}
+
+func (self Label) IsDirective() bool {
+  return false
+}
+
+func (self Label) IsComment() bool {
+  return false
 }
 
 func (self Label) GetSymbol() core.ISymbol {

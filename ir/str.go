@@ -38,3 +38,7 @@ func (self Str) IsVar() bool {
 func (self Str) GetAddressNode(t int) core.IExpr {
   panic("unexpected node for LHS")
 }
+
+func (self Str) GetSymbol() core.ISymbol {
+  return self.Entry.GetSymbol()
+}

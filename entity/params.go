@@ -40,6 +40,10 @@ func (self *Params) IsParameter() bool {
   return false
 }
 
+func (self *Params) IsVariable() bool {
+  return false
+}
+
 func (self *Params) GetNumRefered() int {
   return -1
 }
@@ -82,4 +86,8 @@ func (self *Params) GetType() core.IType {
 
 func (self *Params) GetValue() core.IExprNode {
   panic("Params#GetValue called")
+}
+
+func (self *Params) SymbolString() string {
+  panic("Params#SymbolString called")
 }

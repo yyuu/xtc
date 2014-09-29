@@ -49,6 +49,10 @@ func (self *Constant) IsParameter() bool {
   return false
 }
 
+func (self *Constant) IsVariable() bool {
+  return false
+}
+
 func (self *Constant) GetNumRefered() int {
   return self.numRefered
 }
@@ -83,4 +87,8 @@ func (self *Constant) GetValue() core.IExprNode {
 
 func (self *Constant) SetValue(val core.IExprNode) {
   self.Value = val
+}
+
+func (self *Constant) SymbolString() string {
+  return self.Name
 }

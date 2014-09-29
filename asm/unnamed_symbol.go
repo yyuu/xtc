@@ -15,3 +15,7 @@ func (self UnnamedSymbol) IsZero() bool {
 func (self UnnamedSymbol) GetName() string {
   panic("unnamed symbol")
 }
+
+func (self UnnamedSymbol) String() string {
+  panic("UnnamedSymbol#String() called")
+}

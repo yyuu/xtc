@@ -49,6 +49,10 @@ func (self *UndefinedVariable) IsParameter() bool {
   return false
 }
 
+func (self *UndefinedVariable) IsVariable() bool {
+  return true
+}
+
 func (self *UndefinedVariable) GetNumRefered() int {
   return self.numRefered
 }
@@ -79,4 +83,8 @@ func (self *UndefinedVariable) GetType() core.IType {
 
 func (self *UndefinedVariable) GetValue() core.IExprNode {
   panic("UndefinedVariable#GetValue called")
+}
+
+func (self *UndefinedVariable) SymbolString() string {
+  return self.Name
 }

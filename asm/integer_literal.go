@@ -1,5 +1,9 @@
 package asm
 
+import (
+  "fmt"
+)
+
 type IntegerLiteral struct {
   ClassName string
   Value int64
@@ -15,4 +19,8 @@ func (self IntegerLiteral) IsZero() bool {
 
 func (self IntegerLiteral) GetValue() int64 {
   return self.Value
+}
+
+func (self IntegerLiteral) String() string {
+  return fmt.Sprintf("%d", self.Value)
 }

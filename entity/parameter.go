@@ -10,7 +10,9 @@ type Parameter struct {
 }
 
 func NewParameter(t core.ITypeNode, name string) *Parameter {
-  return &Parameter { &DefinedVariable { "entity.Parameter", true, name, t, nil, 0, nil } }
+  definedVariable := NewDefinedVariable(true, t, name, nil)
+  definedVariable.ClassName = "entity.Parameter"
+  return &Parameter { definedVariable }
 }
 
 func NewParameters(xs...*Parameter) []*Parameter {
@@ -38,6 +40,10 @@ func (self *Parameter) IsConstant() bool {
 }
 
 func (self *Parameter) IsParameter() bool {
+  return true
+}
+
+func (self *Parameter) IsVariable() bool {
   return true
 }
 
@@ -87,4 +93,8 @@ func (self *Parameter) GetName() string {
 
 func (self *Parameter) GetValue() core.IExprNode {
   panic("Parameter#GetValue called")
+}
+
+func (self *Parameter) SymbolString() string {
+  return self.DefinedVariable.SymbolString()
 }

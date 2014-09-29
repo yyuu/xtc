@@ -11,12 +11,13 @@ type DefinedVariable struct {
   Name string
   TypeNode core.ITypeNode
   Initializer core.IExprNode
-  numRefered int
   IR core.IExpr
+  numRefered int
+  sequence int
 }
 
 func NewDefinedVariable(isPrivate bool, t core.ITypeNode, name string, init core.IExprNode) *DefinedVariable {
-  return &DefinedVariable { "entity.DefinedVariable", isPrivate, name, t, init, 0, nil }
+  return &DefinedVariable { "entity.DefinedVariable", isPrivate, name, t, init, nil, 0, -1 }
 }
 
 func NewDefinedVariables(xs...*DefinedVariable) []*DefinedVariable {
@@ -69,6 +70,10 @@ func (self *DefinedVariable) IsParameter() bool {
   return false
 }
 
+func (self *DefinedVariable) IsVariable() bool {
+  return true
+}
+
 func (self *DefinedVariable) GetName() string {
   return self.Name
 }
@@ -115,4 +120,16 @@ func (self *DefinedVariable) GetIR() core.IExpr {
 
 func (self *DefinedVariable) SetIR(expr core.IExpr) {
   self.IR = expr
+}
+
+func (self *DefinedVariable) SetSequence(seq int) {
+  self.sequence = seq
+}
+
+func (self *DefinedVariable) SymbolString() string {
+  if self.sequence < 0 {
+    return self.Name
+  } else {
+    return fmt.Sprintf("%s.%d", self.Name, self.sequence)
+  }
 }

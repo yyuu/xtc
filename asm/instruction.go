@@ -20,6 +20,18 @@ func (self Instruction) IsInstruction() bool {
   return true
 }
 
+func (self Instruction) IsLabel() bool {
+  return false
+}
+
+func (self Instruction) IsDirective() bool {
+  return false
+}
+
+func (self Instruction) IsComment() bool {
+  return false
+}
+
 func (self Instruction) IsJumpInstruction() bool {
   return self.Mnemonic == "jmp" || self.Mnemonic == "jz" || self.Mnemonic == "jne" || self.Mnemonic == "je" || self.Mnemonic == "jne"
 }

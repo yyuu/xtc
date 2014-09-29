@@ -16,3 +16,7 @@ func (self NamedSymbol) IsZero() bool {
 func (self NamedSymbol) GetName() string {
   return self.Name
 }
+
+func (self NamedSymbol) String() string {
+  return self.Name
+}

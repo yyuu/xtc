@@ -70,3 +70,24 @@ func (self *LocalScope) AllocateTmp(typeNode core.ITypeNode) *DefinedVariable {
   self.DefineVariable(v)
   return v
 }
+
+func (self *LocalScope) GetStaticLocalVariables() []*DefinedVariable {
+  result := []*DefinedVariable { }
+  scopes := self.allLocalScopes()
+  for i := range scopes {
+    for _, v := range scopes[i].Variables {
+      if v.IsPrivate() {
+        result = append(result, v)
+      }
+    }
+  }
+  return result
+}
+
+func (self *LocalScope) allLocalScopes() []*LocalScope {
+  result := []*LocalScope { self }
+  for i := range self.Children {
+    result = append(result, self.Children[i].allLocalScopes()...)
+  }
+  return result
+}

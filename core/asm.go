@@ -13,7 +13,12 @@ type IMemoryReference interface {
   IOperand
 }
 
+type IImmediateValue interface {
+  IOperand
+}
+
 type ILiteral interface {
+  String() string
   IsZero() bool
 }
 
