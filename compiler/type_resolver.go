@@ -10,11 +10,12 @@ import (
 
 type TypeResolver struct {
   errorHandler *core.ErrorHandler
+  options *core.Options
   typeTable *typesys.TypeTable
 }
 
-func NewTypeResolver(errorHandler *core.ErrorHandler, table *typesys.TypeTable) *TypeResolver {
-  return &TypeResolver { errorHandler, table }
+func NewTypeResolver(errorHandler *core.ErrorHandler, options *core.Options, table *typesys.TypeTable) *TypeResolver {
+  return &TypeResolver { errorHandler, options, table }
 }
 
 func (self *TypeResolver) Resolve(a *ast.AST) {

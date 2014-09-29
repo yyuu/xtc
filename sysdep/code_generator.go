@@ -6,14 +6,14 @@ import (
   bs_ir "bitbucket.org/yyuu/bs/ir"
 )
 
-type ICodeGenerator interface {
-  Generate(ir *bs_ir.IR) IAssemblyCode
+type CodeGenerator interface {
+  Generate(ir *bs_ir.IR) AssemblyCode
 }
 
-func NewCodeGeneratorFor(errorHandler *bs_core.ErrorHandler, platformId int) ICodeGenerator {
+func NewCodeGeneratorFor(errorHandler *bs_core.ErrorHandler, options *bs_core.Options, platformId int) CodeGenerator {
   switch platformId {
-    case bs_core.PLATFORM_X86_LINUX: {
-      return NewX86CodeGenerator(errorHandler)
+    case bs_core.PLATFORM_LINUX_X86: {
+      return NewLinuxX86CodeGenerator(errorHandler, options)
     }
     default: {
       panic(fmt.Errorf("unknown platformId %d", platformId))

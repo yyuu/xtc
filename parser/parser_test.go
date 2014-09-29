@@ -9,8 +9,12 @@ import (
   "bitbucket.org/yyuu/bs/xt"
 )
 
+func testParseExpr(source string) (*ast.AST, error) {
+  return ParseExpr(source, core.NewErrorHandler(core.LOG_DEBUG), core.NewOptions("parser_test.go"))
+}
+
 func TestParseEmpty(t *testing.T) {
-  _, err := ParseExpr("")
+  _, err := testParseExpr("")
   xt.AssertNil(t, "", err)
 }
 
@@ -63,7 +67,7 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  y, err := ParseExpr(s)
+  y, err := testParseExpr(s)
   xt.AssertNil(t, "", err)
   xt.AssertStringEqualsDiff(t, "parse funcall w/o arguments", xt.JSON(y), xt.JSON(x))
 //xt.AssertDeepEquals(t, "", y, x)
@@ -128,7 +132,7 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  y, err := ParseExpr(s)
+  y, err := testParseExpr(s)
   xt.AssertNil(t, "", err)
   xt.AssertStringEqualsDiff(t, "parse funcall w/ single argument", xt.JSON(y), xt.JSON(x))
 //xt.AssertDeepEquals(t, "", y, x)
@@ -209,7 +213,7 @@ func TestParseDefunWithMultipleArguments(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  y, err := ParseExpr(s)
+  y, err := testParseExpr(s)
   xt.AssertNil(t, "", err)
   xt.AssertStringEqualsDiff(t, "defun w/ multiple arguments", xt.JSON(y), xt.JSON(x))
 //xt.AssertDeepEquals(t, "", y, x)
@@ -273,7 +277,7 @@ func TestParseDefunWithVariableArguments(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  y, err := ParseExpr(s)
+  y, err := testParseExpr(s)
   xt.AssertNil(t, "", err)
   xt.AssertStringEqualsDiff(t, "defun w/ variable arguments", xt.JSON(y), xt.JSON(x))
 //xt.AssertDeepEquals(t, "", y, x)
@@ -372,7 +376,7 @@ func TestFor1(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  y, err := ParseExpr(s)
+  y, err := testParseExpr(s)
   xt.AssertNil(t, "", err)
   xt.AssertStringEqualsDiff(t, "for1", xt.JSON(y), xt.JSON(x))
 //xt.AssertDeepEquals(t, "", y, x)

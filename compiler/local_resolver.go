@@ -9,12 +9,13 @@ import (
 
 type LocalResolver struct {
   errorHandler *core.ErrorHandler
+  options *core.Options
   scopeStack []core.IScope
   constantTable *entity.ConstantTable
 }
 
-func NewLocalResolver(errorHandler *core.ErrorHandler) *LocalResolver {
-  return &LocalResolver { errorHandler, []core.IScope { }, entity.NewConstantTable() }
+func NewLocalResolver(errorHandler *core.ErrorHandler, options *core.Options) *LocalResolver {
+  return &LocalResolver { errorHandler, options, []core.IScope { }, entity.NewConstantTable() }
 }
 
 func (self *LocalResolver) Resolve(a *ast.AST) {
@@ -97,8 +98,6 @@ func (self *LocalResolver) popScope() core.IScope {
   self.scopeStack = self.scopeStack[0:len(self.scopeStack)-1]
   return scope
 }
-
-var Verbose = 0
 
 func (self *LocalResolver) VisitNode(unknown core.INode) interface{} {
   switch node := unknown.(type) {

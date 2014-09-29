@@ -3,7 +3,6 @@ package main
 import (
   "bufio"
   "encoding/json"
-  "flag"
   "fmt"
   "os"
   "strings"
@@ -16,51 +15,40 @@ import (
   bs_typesys "bitbucket.org/yyuu/bs/typesys"
 )
 
-var flagSet = flag.NewFlagSet(os.Args[0], 1)
-var dump = flagSet.Int("d", 0, "dump mode")
-var verbose = flagSet.Int("v", 0, "verbose mode")
 var errorHandler = bs_core.NewErrorHandler(bs_core.LOG_DEBUG)
 
-const (
-  DUMP_AST = 1<<iota
-  DUMP_SEMANT
-  DUMP_IR
-  DUMP_ASM
-)
-
 func main() {
-  flagSet.Parse(os.Args[1:])
-  bs_parser.Verbose = *verbose
-  bs_compiler.Verbose = *verbose
-
-  files := flagSet.Args()
+  options := bs_core.ParseOptions(os.Args[0], os.Args[1:])
+  files := options.SourceFiles()
   if 0 < len(files) {
     for i := range files {
-      ep(bs_parser.ParseFile(files[i]))
+      ast, err := bs_parser.ParseFile(files[i], errorHandler, options)
+      ep(ast, err, options)
     }
   } else {
-    repl()
+    repl(options)
   }
 }
 
-func repl() {
+func repl(options *bs_core.Options) {
   defer func() {
     if s := recover(); s != nil {
       fmt.Fprintf(os.Stderr, "recovered: %s\n", s)
-      repl()
+      repl(options)
     }
   }()
   in  := bufio.NewReader(os.Stdin)
   out := bufio.NewWriter(os.Stdout)
   for {
-    s := r(in, out)
+    s := r(in, out, options)
     if s != "" {
-      ep(bs_parser.ParseExpr(s))
+      ast, err := bs_parser.ParseExpr(s, errorHandler, options)
+      ep(ast, err, options)
     }
   }
 }
 
-func r(in *bufio.Reader, out *bufio.Writer) string {
+func r(in *bufio.Reader, out *bufio.Writer, options *bs_core.Options) string {
   out.WriteString("> ")
   out.Flush()
   s, err := in.ReadString('\n')
@@ -70,39 +58,39 @@ func r(in *bufio.Reader, out *bufio.Writer) string {
   return strings.TrimSpace(s)
 }
 
-func ep(ast *bs_ast.AST, err error) {
+func ep(ast *bs_ast.AST, err error, options *bs_core.Options) {
   if err != nil {
     panic(err)
   }
-  if (*dump & DUMP_AST) != 0 {
+  if options.DumpAST() {
     dumpAST(ast)
   }
-  types := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_X86_LINUX)
-  sem := semanticAnalyze(ast, types)
-  if (*dump & DUMP_SEMANT) != 0 {
+  types := bs_typesys.NewTypeTableFor(options.TargetPlatform())
+  sem := semanticAnalyze(ast, types, options)
+  if options.DumpSemantic() {
     dumpSemant(sem)
   }
-  ir := bs_compiler.NewIRGenerator(errorHandler, types).Generate(sem)
-  if (*dump & DUMP_IR) != 0 {
+  ir := bs_compiler.NewIRGenerator(errorHandler, options, types).Generate(sem)
+  if options.DumpIR() {
     dumpIR(ir)
   }
-  asm := generateAssembly(ir)
-  if (*dump & DUMP_ASM) != 0 {
+  asm := generateAssembly(ir, options)
+  if options.DumpAsm() {
     dumpAsm(asm)
   }
 }
 
-func semanticAnalyze(ast *bs_ast.AST, types *bs_typesys.TypeTable) *bs_ast.AST {
-  bs_compiler.NewLocalResolver(errorHandler).Resolve(ast)
-  bs_compiler.NewTypeResolver(errorHandler, types).Resolve(ast)
+func semanticAnalyze(ast *bs_ast.AST, types *bs_typesys.TypeTable, options *bs_core.Options) *bs_ast.AST {
+  bs_compiler.NewLocalResolver(errorHandler, options).Resolve(ast)
+  bs_compiler.NewTypeResolver(errorHandler, options, types).Resolve(ast)
   types.SemanticCheck(errorHandler)
-  bs_compiler.NewDereferenceChecker(errorHandler, types).Check(ast)
-  bs_compiler.NewTypeChecker(errorHandler, types).Check(ast)
+  bs_compiler.NewDereferenceChecker(errorHandler, options, types).Check(ast)
+  bs_compiler.NewTypeChecker(errorHandler, options, types).Check(ast)
   return ast
 }
 
-func generateAssembly(ir *bs_ir.IR) bs_sysdep.IAssemblyCode {
-  code_generator := bs_sysdep.NewCodeGeneratorFor(errorHandler, bs_core.PLATFORM_X86_LINUX)
+func generateAssembly(ir *bs_ir.IR, options *bs_core.Options) bs_sysdep.AssemblyCode {
+  code_generator := bs_sysdep.NewCodeGeneratorFor(errorHandler, options, options.TargetPlatform())
   return code_generator.Generate(ir)
 }
 
@@ -133,7 +121,7 @@ func dumpIR(ir *bs_ir.IR) {
   fmt.Println(string(cs))
 }
 
-func dumpAsm(asm bs_sysdep.IAssemblyCode) {
+func dumpAsm(asm bs_sysdep.AssemblyCode) {
   cs, err := json.MarshalIndent(asm, "", "  ")
   if err != nil {
     panic(err)

@@ -9,11 +9,12 @@ import (
 
 type DereferenceChecker struct {
   errorHandler *core.ErrorHandler
+  options *core.Options
   typeTable *typesys.TypeTable
 }
 
-func NewDereferenceChecker(errorHandler *core.ErrorHandler, table *typesys.TypeTable) *DereferenceChecker {
-  return &DereferenceChecker { errorHandler, table }
+func NewDereferenceChecker(errorHandler *core.ErrorHandler, options *core.Options, table *typesys.TypeTable) *DereferenceChecker {
+  return &DereferenceChecker { errorHandler, options, table }
 }
 
 func (self *DereferenceChecker) Check(a *ast.AST) {

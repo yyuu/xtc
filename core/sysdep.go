@@ -1,5 +1,6 @@
 package core
 
 const (
-  PLATFORM_X86_LINUX = iota
+  PLATFORM_LINUX_X86 = iota
+  PLATFORM_LINUX_AMD64
 )

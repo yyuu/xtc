@@ -114,7 +114,8 @@ import_stmts:
 
 import_stmt: IMPORT import_name ';'
            {
-             $$._node = loadLibrary($2._token.literal)
+             lex := yylex.(*lexer)
+             $$._node = loadLibrary($2._token.literal, lex.errorHandler, lex.options)
            }
            ;
 
@@ -915,10 +916,11 @@ primary: INTEGER
 
 %%
 
-var Verbose = 0
-
 func (self *lexer) Lex(lval *yySymType) int {
   t := self.getNextToken()
+  if self.options.DumpTokens() {
+    self.errorHandler.Debug(t)
+  }
   if t == nil {
     if self.isEOF {
       return 0
@@ -937,23 +939,25 @@ func (self *lexer) Error(s string) {
   panic(fmt.Errorf("%s: %s", self, s))
 }
 
-func ParseExpr(s string) (*ast.AST, error) {
-  return doParse("", s)
+func ParseExpr(s string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
+  return doParse("", s, errorHandler, options)
 }
 
-func ParseFile(path string) (*ast.AST, error) {
+func ParseFile(path string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
   cs, err := ioutil.ReadFile(path)
   if err != nil {
     panic(err)
     fmt.Fprintln(os.Stderr, err)
     os.Exit(1)
   }
-  return doParse(path, string(cs))
+  return doParse(path, string(cs), errorHandler, options)
 }
 
-func doParse(name string, source string) (*ast.AST, error) {
-  yyDebug = Verbose
-  lex := newLexer(name, source)
+func doParse(name string, source string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
+  if options.IsVerboseMode() {
+    yyDebug = 4 // TODO: configurable
+  }
+  lex := newLexer(name, source, errorHandler, options)
   if yyParse(lex) == 0 {
     return lex.ast, nil // success
   } else {

@@ -12,6 +12,7 @@ import (
 
 type IRGenerator struct {
   errorHandler *core.ErrorHandler
+  options *core.Options
   typeTable *typesys.TypeTable
   exprNestLevel int
   stmts []core.IStmt
@@ -33,13 +34,13 @@ func newJumpEntry(label *asm.Label) *jumpEntry {
   return &jumpEntry { label, 0, false, loc }
 }
 
-func NewIRGenerator(errorHandler *core.ErrorHandler, table *typesys.TypeTable) *IRGenerator {
+func NewIRGenerator(errorHandler *core.ErrorHandler, options *core.Options, table *typesys.TypeTable) *IRGenerator {
   stmts := []core.IStmt { }
   scopeStack := []*entity.LocalScope { }
   breakStack := []*asm.Label { }
   continueStack := []*asm.Label { }
   jumpMap := make(map[string]*jumpEntry)
-  return &IRGenerator { errorHandler, table, 0, stmts, scopeStack, breakStack, continueStack, jumpMap }
+  return &IRGenerator { errorHandler, options, table, 0, stmts, scopeStack, breakStack, continueStack, jumpMap }
 }
 
 func (self *IRGenerator) Generate(a *ast.AST) *ir.IR {

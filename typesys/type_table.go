@@ -49,7 +49,7 @@ func NewTypeTableLLP64() *TypeTable {
 
 func NewTypeTableFor(platformId int) *TypeTable {
   switch platformId {
-    case core.PLATFORM_X86_LINUX: {
+    case core.PLATFORM_LINUX_X86: {
       return NewTypeTableILP32()
     }
     default: {

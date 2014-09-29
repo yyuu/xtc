@@ -10,12 +10,13 @@ import (
 
 type TypeChecker struct {
   errorHandler *core.ErrorHandler
+  options *core.Options
   typeTable *typesys.TypeTable
   currentFunction *entity.DefinedFunction
 }
 
-func NewTypeChecker(errorHandler *core.ErrorHandler, table *typesys.TypeTable) *TypeChecker {
-  return &TypeChecker { errorHandler, table, nil }
+func NewTypeChecker(errorHandler *core.ErrorHandler, options *core.Options, table *typesys.TypeTable) *TypeChecker {
+  return &TypeChecker { errorHandler, options, table, nil }
 }
 
 func (self *TypeChecker) Check(a *ast.AST) {

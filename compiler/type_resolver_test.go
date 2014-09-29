@@ -10,7 +10,7 @@ import (
 )
 
 func setupTypeResolver(a *ast.AST, table *typesys.TypeTable) (int, *TypeResolver) {
-  resolver := NewTypeResolver(core.NewErrorHandler(core.LOG_DEBUG), table)
+  resolver := NewTypeResolver(core.NewErrorHandler(core.LOG_DEBUG), core.NewOptions("type_resolver_test.go"), table)
   numTypes := resolver.typeTable.NumTypes()
   resolver.defineTypes(a.ListTypes())
   return numTypes, resolver
@@ -30,7 +30,7 @@ func TestTypeResolverVisitNodeEmpty(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
+  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   numTypes, resolver := setupTypeResolver(a, table)
 
   types := a.ListTypes()
@@ -70,7 +70,7 @@ func TestTypeResolverWithStruct(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
+  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   numTypes, resolver := setupTypeResolver(a, table)
 
   types := a.ListTypes()
@@ -119,7 +119,7 @@ func TestTypeResolverWithUnion(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
+  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   numTypes, resolver := setupTypeResolver(a, table)
 
   types := a.ListTypes()
@@ -152,7 +152,7 @@ func TestTypeResolverWithTypedef(t *testing.T) {
       ),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
+  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   numTypes, resolver := setupTypeResolver(a, table)
 
   types := a.ListTypes()
@@ -176,7 +176,7 @@ func TestTypeResolverVisitEntity(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
+  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   _, resolver := setupTypeResolver(a, table)
 
   entities := a.ListEntities()
@@ -228,7 +228,7 @@ func TestTypeResolverWithFunctionWithoutArguments(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
+  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   _, resolver := setupTypeResolver(a, table)
 
   entities := a.ListEntities()
@@ -283,7 +283,7 @@ func TestTypeResolverWithFunctionWithArguments(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
+  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   _, resolver := setupTypeResolver(a, table)
 
   entities := a.ListEntities()
@@ -362,12 +362,13 @@ func TestTypeResolverWithFunctionArguments(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
+  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   errorHandler := core.NewErrorHandler(core.LOG_DEBUG)
+  options := core.NewOptions("type_resolver_test.go")
 
-  localResolver := NewLocalResolver(core.NewErrorHandler(core.LOG_DEBUG))
+  localResolver := NewLocalResolver(core.NewErrorHandler(core.LOG_DEBUG), options)
   localResolver.Resolve(a)
-  typeResolver := NewTypeResolver(errorHandler, table)
+  typeResolver := NewTypeResolver(errorHandler, options, table)
   typeResolver.Resolve(a)
 
   assertTypeResolved(t, "function args", a)

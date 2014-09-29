@@ -22,6 +22,8 @@ type lexer struct {
   knownTypedefs []string
   isEOF bool
   error error
+  errorHandler *core.ErrorHandler
+  options *core.Options
 }
 
 func (self lexer) String() string {
@@ -40,7 +42,7 @@ func (self token) String() string {
   return fmt.Sprintf("#<token:%d %s %q>", self.id, self.location, self.literal)
 }
 
-func newLexer(filename string, source string) *lexer {
+func newLexer(filename string, source string, errorHandler *core.ErrorHandler, options *core.Options) *lexer {
   return &lexer {
     scanner: strscan.New(source),
     sourceName: filename,
@@ -53,6 +55,8 @@ func newLexer(filename string, source string) *lexer {
     knownTypedefs: []string { },
     isEOF: false,
     error: nil,
+    errorHandler: errorHandler,
+    options: options,
   }
 }
 

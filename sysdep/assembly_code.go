@@ -1,4 +1,4 @@
 package sysdep
 
-type IAssemblyCode interface {
+type AssemblyCode interface {
 }
