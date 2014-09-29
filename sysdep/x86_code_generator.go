@@ -14,15 +14,15 @@ func NewX86CodeGenerator(errorHandler *bs_core.ErrorHandler) *X86CodeGenerator {
 }
 
 func (self *X86CodeGenerator) Generate(ir *bs_ir.IR) IAssemblyCode {
-  self.errorHandler.Debugln("starting code generator.")
+  self.errorHandler.Debug("starting code generator.")
   self.locateSymbols(ir)
   x := self.generateAssemblyCode(ir)
-  self.errorHandler.Debugln("finished code generator.")
+  self.errorHandler.Debug("finished code generator.")
   return x
 }
 
 func (self *X86CodeGenerator) locateSymbols(ir *bs_ir.IR) {
-  self.errorHandler.Warnln("FIXME* X86CodeGenerater#localSymbols not implemented")
+  self.errorHandler.Warn("FIXME* X86CodeGenerater#localSymbols not implemented")
 }
 
 func (self *X86CodeGenerator) generateAssemblyCode(ir *bs_ir.IR) IAssemblyCode {
