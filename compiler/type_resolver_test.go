@@ -30,7 +30,7 @@ func TestTypeResolverVisitNodeEmpty(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor("x86-linux")
+  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
   numTypes, resolver := setupTypeResolver(a, table)
 
   types := a.ListTypes()
@@ -70,7 +70,7 @@ func TestTypeResolverWithStruct(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor("x86-linux")
+  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
   numTypes, resolver := setupTypeResolver(a, table)
 
   types := a.ListTypes()
@@ -119,7 +119,7 @@ func TestTypeResolverWithUnion(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor("x86-linux")
+  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
   numTypes, resolver := setupTypeResolver(a, table)
 
   types := a.ListTypes()
@@ -152,7 +152,7 @@ func TestTypeResolverWithTypedef(t *testing.T) {
       ),
     ),
   )
-  table := typesys.NewTypeTableFor("x86-linux")
+  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
   numTypes, resolver := setupTypeResolver(a, table)
 
   types := a.ListTypes()
@@ -176,7 +176,7 @@ func TestTypeResolverVisitEntity(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor("x86-linux")
+  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
   _, resolver := setupTypeResolver(a, table)
 
   entities := a.ListEntities()
@@ -228,7 +228,7 @@ func TestTypeResolverWithFunctionWithoutArguments(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor("x86-linux")
+  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
   _, resolver := setupTypeResolver(a, table)
 
   entities := a.ListEntities()
@@ -283,7 +283,7 @@ func TestTypeResolverWithFunctionWithArguments(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor("x86-linux")
+  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
   _, resolver := setupTypeResolver(a, table)
 
   entities := a.ListEntities()
@@ -362,7 +362,7 @@ func TestTypeResolverWithFunctionArguments(t *testing.T) {
       ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor("x86-linux")
+  table := typesys.NewTypeTableFor(core.PLATFORM_X86_LINUX)
   errorHandler := core.NewErrorHandler(core.LOG_DEBUG)
 
   localResolver := NewLocalResolver(core.NewErrorHandler(core.LOG_DEBUG))

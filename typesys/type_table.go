@@ -47,10 +47,14 @@ func NewTypeTableLLP64() *TypeTable {
   return NewTypeTable(1, 2, 4, 4, 8)
 }
 
-func NewTypeTableFor(platform string) *TypeTable {
-  switch platform {
-    case "x86-linux": return NewTypeTableILP32()
-    default: panic(fmt.Errorf("unknown platform: %s", platform))
+func NewTypeTableFor(platformId int) *TypeTable {
+  switch platformId {
+    case core.PLATFORM_X86_LINUX: {
+      return NewTypeTableILP32()
+    }
+    default: {
+      panic(fmt.Errorf("unknown platformId: %d", platformId))
+    }
   }
 }
 

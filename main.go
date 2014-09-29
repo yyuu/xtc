@@ -77,7 +77,7 @@ func ep(ast *bs_ast.AST, err error) {
   if (*dump & DUMP_AST) != 0 {
     dumpAST(ast)
   }
-  types := bs_typesys.NewTypeTableFor("x86-linux")
+  types := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_X86_LINUX)
   sem := semanticAnalyze(ast, types)
   if (*dump & DUMP_SEMANT) != 0 {
     dumpSemant(sem)
@@ -101,8 +101,9 @@ func semanticAnalyze(ast *bs_ast.AST, types *bs_typesys.TypeTable) *bs_ast.AST {
   return ast
 }
 
-func generateAssembly(ir *bs_ir.IR) *bs_sysdep.AssemblyCode {
-  return bs_sysdep.NewCodeGeneratorFor(errorHandler, "x86-linux").Generate(ir)
+func generateAssembly(ir *bs_ir.IR) bs_sysdep.IAssemblyCode {
+  code_generator := bs_sysdep.NewCodeGeneratorFor(errorHandler, bs_core.PLATFORM_X86_LINUX)
+  return code_generator.Generate(ir)
 }
 
 func dumpAST(ast *bs_ast.AST) {
@@ -132,7 +133,7 @@ func dumpIR(ir *bs_ir.IR) {
   fmt.Println(string(cs))
 }
 
-func dumpAsm(asm *bs_sysdep.AssemblyCode) {
+func dumpAsm(asm bs_sysdep.IAssemblyCode) {
   cs, err := json.MarshalIndent(asm, "", "  ")
   if err != nil {
     panic(err)
