@@ -18,7 +18,7 @@ func NewTypeResolver(errorHandler *core.ErrorHandler, table *typesys.TypeTable) 
 }
 
 func (self *TypeResolver) Resolve(a *ast.AST) {
-  self.errorHandler.Debugln("starting type resolver.")
+  self.errorHandler.Debug("starting type resolver.")
   types := a.ListTypes()
   entities := a.ListEntities()
 
@@ -29,7 +29,7 @@ func (self *TypeResolver) Resolve(a *ast.AST) {
   for i := range entities {
     entity.VisitEntity(self, entities[i])
   }
-  self.errorHandler.Debugln("finished type resolver.")
+  self.errorHandler.Debug("finished type resolver.")
 }
 
 func (self *TypeResolver) defineTypes(deftypes []core.ITypeDefinition) {

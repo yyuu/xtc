@@ -187,14 +187,14 @@ func (self TypeTable) checkCompositeVoidMembers(t core.ICompositeType, errorHand
   for i := range members {
     slot := members[i]
     if slot.GetType().IsVoid() {
-      errorHandler.Errorln("struct/union cannot contain void")
+      errorHandler.Fatal("struct/union cannot contain void")
     }
   }
 }
 
 func (self TypeTable) checkArrayVoidMembers(t *ArrayType, errorHandler *core.ErrorHandler) {
   if t.GetBaseType().IsVoid() {
-    errorHandler.Errorln("array cannot contain void")
+    errorHandler.Fatal("array cannot contain void")
   }
 }
 
@@ -206,14 +206,14 @@ func (self TypeTable) checkDuplicatedMembers(t core.ICompositeType, errorHandler
     name := slot.GetName()
     _, found := seen[name]
     if found {
-      errorHandler.Errorf("%s has duplicated member: %s", t.GetName(), name)
+      errorHandler.Fatalf("%s has duplicated member: %s", t.GetName(), name)
     }
     seen[name] = slot
   }
 }
 
 func (self TypeTable) checkRecursiveDefinition(t core.IType, errorHandler *core.ErrorHandler) {
-  errorHandler.Warnf("typesys.TypeTable#checkRecursiveDefinition: not implemented: %s\n", t)
+  errorHandler.Warnf("FIXME: TypeTable#checkRecursiveDefinition: not implemented for %q", t)
 }
 
 func (self TypeTable) VoidType() *VoidType {

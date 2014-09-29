@@ -56,7 +56,7 @@ func (self *LocalScope) IsDefinedLocally(name string) bool {
 func (self *LocalScope) CheckReferences(errorHandler *core.ErrorHandler) {
   for _, ent := range self.Variables {
     if !ent.IsRefered() {
-      errorHandler.Warnf("unused variable: %s\n", ent.GetName())
+      errorHandler.Warnf("unused variable: %s", ent.GetName())
     }
   }
   for i := range self.Children {

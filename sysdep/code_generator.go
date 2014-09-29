@@ -22,15 +22,15 @@ func NewCodeGeneratorFor(errorHandler *core.ErrorHandler, platform string) *Code
 }
 
 func (self *CodeGenerator) Generate(ir *bs_ir.IR) *AssemblyCode {
-  self.errorHandler.Debugln("starting code generator.")
+  self.errorHandler.Debug("starting code generator.")
   self.locateSymbols(ir)
   x := self.generateAssemblyCode(ir)
-  self.errorHandler.Debugln("finished code generator.")
+  self.errorHandler.Debug("finished code generator.")
   return x
 }
 
 func (self *CodeGenerator) locateSymbols(ir *bs_ir.IR) {
-  self.errorHandler.Warnln("FIXME* CodeGenerate#localSymbols not implemented")
+  self.errorHandler.Warn("FIXME: CodeGenerate#localSymbols not implemented")
 }
 
 func (self *CodeGenerator) generateAssemblyCode(ir *bs_ir.IR) *AssemblyCode {

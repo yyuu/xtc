@@ -80,7 +80,7 @@ func (self *ToplevelScope) StaticLocalVariables() {
 func (self *ToplevelScope) CheckReferences(errorHandler *core.ErrorHandler) {
   for _, ent := range self.Entities {
     if ent.IsDefined() && ent.IsPrivate() && !ent.IsConstant() && !ent.IsRefered() {
-      errorHandler.Warnf("unused variable: %s\n", ent.GetName())
+      errorHandler.Warnf("unused variable: %s", ent.GetName())
     }
   }
   for i := range self.Children {

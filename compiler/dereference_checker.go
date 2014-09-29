@@ -17,7 +17,7 @@ func NewDereferenceChecker(errorHandler *core.ErrorHandler, table *typesys.TypeT
 }
 
 func (self *DereferenceChecker) Check(a *ast.AST) {
-  self.errorHandler.Debugln("starting dereference checker.")
+  self.errorHandler.Debug("starting dereference checker.")
   vs := a.GetDefinedVariables()
   for i := range vs {
     self.checkToplevelVariable(vs[i])
@@ -26,7 +26,7 @@ func (self *DereferenceChecker) Check(a *ast.AST) {
   for i := range fs {
     ast.VisitStmt(self, fs[i].GetBody())
   }
-  self.errorHandler.Debugln("finished dereference checker.")
+  self.errorHandler.Debug("finished dereference checker.")
 }
 
 func (self *DereferenceChecker) checkToplevelVariable(v *entity.DefinedVariable) {
@@ -38,7 +38,7 @@ func (self *DereferenceChecker) checkToplevelVariable(v *entity.DefinedVariable)
 
 func (self *DereferenceChecker) checkConstant(expr core.IExprNode) {
   if ! expr.IsConstant() {
-    self.errorHandler.Errorf("%s not a constant\n", expr.GetLocation())
+    self.errorHandler.Fatalf("%s not a constant", expr.GetLocation())
   }
 }
 
@@ -62,11 +62,11 @@ func (self *DereferenceChecker) handleImplicitAddress(node core.IExprNode) {
 
 func (self *DereferenceChecker) checkMemberRef(loc core.Location, t core.IType, memb string) {
   if ! t.IsCompositeType() {
-    self.errorHandler.Errorf("%s accessing member `%s' for non-struct/union: %s\n", loc, t, memb)
+    self.errorHandler.Fatalf("%s accessing member `%s' for non-struct/union: %s", loc, t, memb)
   }
   ct := t.(core.ICompositeType)
   if ! ct.HasMember(memb) {
-    self.errorHandler.Errorf("%s %s does not have member: %s\n", loc, t, memb)
+    self.errorHandler.Fatalf("%s %s does not have member: %s", loc, t, memb)
   }
 }
 
@@ -82,37 +82,37 @@ func (self *DereferenceChecker) VisitNode(unknown core.INode) interface{} {
     case *ast.AssignNode: {
       visitAssignNode(self, node)
       if ! node.GetLHS().IsAssignable() {
-        self.errorHandler.Fatalf("%s invalid lhs expression\n", node.GetLocation())
+        self.errorHandler.Fatalf("%s invalid lhs expression", node.GetLocation())
       }
     }
     case *ast.OpAssignNode: {
       visitOpAssignNode(self, node)
       if ! node.GetLHS().IsAssignable() {
-        self.errorHandler.Fatalf("%s invalid lhs expression\n", node.GetLocation())
+        self.errorHandler.Fatalf("%s invalid lhs expression", node.GetLocation())
       }
     }
     case *ast.PrefixOpNode: {
       visitPrefixOpNode(self, node)
       if ! node.GetExpr().IsAssignable() {
-        self.errorHandler.Fatalf("%s cannot increment/decrement\n", node.GetExpr().GetLocation())
+        self.errorHandler.Fatalf("%s cannot increment/decrement", node.GetExpr().GetLocation())
       }
     }
     case *ast.SuffixOpNode: {
       visitSuffixOpNode(self, node)
       if ! node.GetExpr().IsAssignable() {
-        self.errorHandler.Fatalf("%s cannot increment/decrement\n", node.GetExpr().GetLocation())
+        self.errorHandler.Fatalf("%s cannot increment/decrement", node.GetExpr().GetLocation())
       }
     }
     case *ast.FuncallNode: {
       visitFuncallNode(self, node)
       if ! node.GetExpr().IsCallable() {
-        self.errorHandler.Fatalf("%s calling object is not a function\n", node.GetLocation())
+        self.errorHandler.Fatalf("%s calling object is not a function", node.GetLocation())
       }
     }
     case *ast.ArefNode: {
       visitArefNode(self, node)
       if ! node.GetExpr().IsPointer() {
-        self.errorHandler.Fatalf("%s indexing non-array/pointer expression\n", node.GetLocation())
+        self.errorHandler.Fatalf("%s indexing non-array/pointer expression", node.GetLocation())
       }
       self.handleImplicitAddress(node)
     }
@@ -124,7 +124,7 @@ func (self *DereferenceChecker) VisitNode(unknown core.INode) interface{} {
     case *ast.PtrMemberNode: {
       visitPtrMemberNode(self, node)
       if ! node.GetExpr().IsPointer() {
-        self.errorHandler.Fatalf("%s undereferable error\n", node.GetLocation())
+        self.errorHandler.Fatalf("%s undereferable error", node.GetLocation())
       }
       self.checkMemberRef(node.GetLocation(), node.GetDereferedType(), node.GetMember())
       self.handleImplicitAddress(node)
@@ -132,14 +132,14 @@ func (self *DereferenceChecker) VisitNode(unknown core.INode) interface{} {
     case *ast.DereferenceNode: {
       visitDereferenceNode(self, node)
       if ! node.GetExpr().IsPointer() {
-        self.errorHandler.Fatalf("%s undereferable error\n", node.GetLocation())
+        self.errorHandler.Fatalf("%s undereferable error", node.GetLocation())
       }
       self.handleImplicitAddress(node)
     }
     case *ast.AddressNode: {
       visitAddressNode(self, node)
       if ! node.GetExpr().IsLvalue() {
-        self.errorHandler.Fatalf("%s invalid expression for &\n", node.GetLocation())
+        self.errorHandler.Fatalf("%s invalid expression for &", node.GetLocation())
       }
       base := node.GetExpr().GetType()
       if ! node.GetExpr().IsLoadable() {
@@ -158,7 +158,7 @@ func (self *DereferenceChecker) VisitNode(unknown core.INode) interface{} {
     case *ast.CastNode: {
       visitCastNode(self, node)
       if node.GetType().IsArray() {
-        self.errorHandler.Fatalf("%s cast specifies array type\n", node.GetLocation())
+        self.errorHandler.Fatalf("%s cast specifies array type", node.GetLocation())
       }
     }
     default: {

@@ -43,7 +43,7 @@ func NewIRGenerator(errorHandler *core.ErrorHandler, table *typesys.TypeTable) *
 }
 
 func (self *IRGenerator) Generate(a *ast.AST) *ir.IR {
-  self.errorHandler.Debugln("starting IR generator.")
+  self.errorHandler.Debug("starting IR generator.")
   vs := a.GetDefinedVariables()
   for i := range vs {
     if vs[i].HasInitializer() {
@@ -55,7 +55,7 @@ func (self *IRGenerator) Generate(a *ast.AST) *ir.IR {
     fs[i].SetIR(self.compileFunctionBody(fs[i]))
   }
   x := a.GenerateIR()
-  self.errorHandler.Debugln("finished IR generator.")
+  self.errorHandler.Debug("finished IR generator.")
   return x
 }
 
@@ -336,10 +336,10 @@ func (self *IRGenerator) getJumpEntry(name string) *jumpEntry {
 func (self *IRGenerator) checkJumpLinks(jumpMap map[string]*jumpEntry) {
   for name, jump := range jumpMap {
     if jump.isDefined {
-      self.errorHandler.Errorf("%s undefined label: %s\n", jump.location, name)
+      self.errorHandler.Fatalf("%s undefined label: %s", jump.location, name)
     }
     if jump.numRefered == 0 {
-      self.errorHandler.Warnf("%s useless label: %s\n", jump.location, name)
+      self.errorHandler.Fatalf("%s useless label: %s", jump.location, name)
     }
   }
 }
@@ -367,7 +367,7 @@ func (self *IRGenerator) VisitNode(unknown core.INode) interface{} {
     case *ast.ExprStmtNode: {
       e := ast.VisitExpr(self, node.GetExpr())
       if e != nil {
-        self.errorHandler.Warnf("%s useless expression\n", node.GetLocation())
+        self.errorHandler.Warnf("%s useless expression", node.GetLocation())
       }
       return nil
     }
