@@ -15,7 +15,7 @@ func NewUni(t int, op int, expr core.IExpr) *Uni {
   return &Uni { "ir.Uni", t, op, expr }
 }
 
-func (self Uni) AsExpr() core.IExpr {
+func (self *Uni) AsExpr() core.IExpr {
   return self
 }
 
@@ -33,6 +33,18 @@ func (self Uni) IsConstant() bool {
 
 func (self Uni) IsVar() bool {
   return false
+}
+
+func (self *Uni) GetAddress() core.IOperand {
+  panic("#GetAddress called")
+}
+
+func (self *Uni) GetAsmValue() core.IImmediateValue {
+  panic("#GetAsmValue called")
+}
+
+func (self *Uni) GetMemref() core.IMemoryReference {
+  panic("#GetMemref called")
 }
 
 func (self Uni) GetAddressNode(t int) core.IExpr {

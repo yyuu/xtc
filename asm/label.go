@@ -17,6 +17,10 @@ func NewUnnamedLabel() *Label {
   return NewLabel(NewUnnamedSymbol())
 }
 
+func (self *Label) AsAssembly() core.IAssembly {
+  return self
+}
+
 func (self Label) IsInstruction() bool {
   return false
 }
@@ -35,4 +39,8 @@ func (self Label) IsComment() bool {
 
 func (self Label) GetSymbol() core.ISymbol {
   return self.Symbol
+}
+
+func (self *Label) CollectStatistics(stats core.IStatistics) {
+  // does nothing by default
 }

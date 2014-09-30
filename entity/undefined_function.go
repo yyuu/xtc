@@ -12,10 +12,21 @@ type UndefinedFunction struct {
   Name string
   Params *Params
   numRefered int
+  memref core.IMemoryReference
+  address core.IOperand
+  callingSymbol core.ISymbol
 }
 
 func NewUndefinedFunction(t core.ITypeNode, name string, params *Params) *UndefinedFunction {
-  return &UndefinedFunction { "entity.UndefinedFunction", t, name, params, 0 }
+  return &UndefinedFunction {
+    ClassName: "entity.UndefinedFunction",
+    TypeNode: t,
+    Name: name,
+    Params: params,
+    numRefered: 0,
+    memref: nil,
+    address: nil,
+  }
 }
 
 func NewUndefinedFunctions(xs...*UndefinedFunction) []*UndefinedFunction {
@@ -105,4 +116,34 @@ func (self *UndefinedFunction) GetValue() core.IExprNode {
 
 func (self *UndefinedFunction) SymbolString() string {
   return self.Name
+}
+
+func (self *UndefinedFunction) GetMemref() core.IMemoryReference {
+  return self.memref
+}
+
+func (self *UndefinedFunction) SetMemref(memref core.IMemoryReference) {
+  self.memref = memref
+}
+
+func (self *UndefinedFunction) GetAddress() core.IOperand {
+  return self.address
+}
+
+func (self *UndefinedFunction) SetAddress(address core.IOperand) {
+  self.address = address
+}
+
+func (self *UndefinedFunction) GetCallingSymbol() core.ISymbol {
+  if self.callingSymbol == nil {
+    panic("must not happen: Function#callingSymbol called but nil")
+  }
+  return self.callingSymbol
+}
+
+func (self *UndefinedFunction) SetCallingSymbol(sym core.ISymbol) {
+  if self.callingSymbol != nil {
+    panic("must not happen: Function#callingSymbol called twice")
+  }
+  self.callingSymbol = sym
 }

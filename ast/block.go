@@ -60,7 +60,7 @@ func (self *BlockNode) GetStmts() []core.IStmtNode {
   return self.Stmts
 }
 
-func (self *BlockNode) GetScope() *entity.LocalScope {
+func (self *BlockNode) GetScope() core.IScope {
   return self.scope
 }
 

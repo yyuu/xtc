@@ -14,7 +14,7 @@ func NewReturn(loc core.Location, expr core.IExpr) *Return {
   return &Return { "ir.Return", loc, expr }
 }
 
-func (self Return) AsStmt() core.IStmt {
+func (self *Return) AsStmt() core.IStmt {
   return self
 }
 

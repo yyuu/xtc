@@ -43,3 +43,7 @@ func (self *IfNode) GetThenBody() core.IStmtNode {
 func (self *IfNode) GetElseBody() core.IStmtNode {
   return self.ElseBody
 }
+
+func (self IfNode) GetScope() core.IScope {
+  panic("#GetScope called")
+}

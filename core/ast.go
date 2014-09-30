@@ -43,6 +43,7 @@ type IUnaryArithmeticOpNode interface {
 type IStmtNode interface {
   INode
   AsStmtNode() IStmtNode
+  GetScope() IScope
 }
 
 type ITypeNode interface {

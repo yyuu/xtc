@@ -52,3 +52,7 @@ func (self *SwitchNode) GetCond() core.IExprNode {
 func (self *SwitchNode) GetCases() []core.IStmtNode {
   return self.Cases
 }
+
+func (self SwitchNode) GetScope() core.IScope {
+  panic("#GetScope called")
+}

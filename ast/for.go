@@ -50,3 +50,7 @@ func (self *ForNode) GetIncr() core.IExprNode {
 func (self *ForNode) GetBody() core.IStmtNode {
   return self.Body
 }
+
+func (self ForNode) GetScope() core.IScope {
+  panic("#GetScope called")
+}

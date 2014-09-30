@@ -104,6 +104,10 @@ func (self *Options) IsVerboseMode() bool {
   return *self.verbose
 }
 
+func (self *Options) IsVerboseAsm() bool {
+  return *self.verbose
+}
+
 func (self *Options) NewLibraryLoader() {
   panic("not implemented")
 }

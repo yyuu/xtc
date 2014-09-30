@@ -32,3 +32,7 @@ func (self ExprStmtNode) GetLocation() core.Location {
 func (self *ExprStmtNode) GetExpr() core.IExprNode {
   return self.Expr
 }
+
+func (self ExprStmtNode) GetScope() core.IScope {
+  panic("#GetScope called")
+}

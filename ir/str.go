@@ -15,7 +15,7 @@ func NewStr(t int, entry *entity.ConstantEntry) *Str {
   return &Str { "ir.Str", t, entry }
 }
 
-func (self Str) AsExpr() core.IExpr {
+func (self *Str) AsExpr() core.IExpr {
   return self
 }
 
@@ -33,6 +33,18 @@ func (self Str) IsConstant() bool {
 
 func (self Str) IsVar() bool {
   return false
+}
+
+func (self *Str) GetAddress() core.IOperand {
+  return self.Entry.GetAddress()
+}
+
+func (self *Str) GetAsmValue() core.IImmediateValue {
+  return self.Entry.GetAddress().(core.IImmediateValue)
+}
+
+func (self *Str) GetMemref() core.IMemoryReference {
+  return self.Entry.GetMemref()
 }
 
 func (self Str) GetAddressNode(t int) core.IExpr {

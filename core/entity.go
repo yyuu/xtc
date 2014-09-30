@@ -16,12 +16,18 @@ type IEntity interface {
   GetType() IType
   GetValue() IExprNode
   SymbolString() string
+  GetMemref() IMemoryReference
+  SetMemref(IMemoryReference)
+  GetAddress() IOperand
+  SetAddress(IOperand)
 }
 
 type IFunction interface {
   IEntity
   GetReturnType() IType
   IsVoid() bool
+  GetCallingSymbol() ISymbol
+  SetCallingSymbol(ISymbol)
 }
 
 type IVariable interface {

@@ -60,3 +60,7 @@ func (self *CaseNode) GetBody() core.IStmtNode {
 func (self *CaseNode) IsDefault() bool {
   return len(self.Values) == 0
 }
+
+func (self CaseNode) GetScope() core.IScope {
+  panic("#GetScope called")
+}

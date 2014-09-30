@@ -14,7 +14,7 @@ func NewMem(t int, expr core.IExpr) *Mem {
   return &Mem { "ir.Mem", t, expr }
 }
 
-func (self Mem) AsExpr() core.IExpr {
+func (self *Mem) AsExpr() core.IExpr {
   return self
 }
 
@@ -32,6 +32,18 @@ func (self Mem) IsConstant() bool {
 
 func (self Mem) IsVar() bool {
   return false
+}
+
+func (self *Mem) GetAddress() core.IOperand {
+  panic("#GetAddress called")
+}
+
+func (self *Mem) GetAsmValue() core.IImmediateValue {
+  panic("#GetAsmValue called")
+}
+
+func (self *Mem) GetMemref() core.IMemoryReference {
+  panic("#GetMemref called")
 }
 
 func (self Mem) GetAddressNode(t int) core.IExpr {

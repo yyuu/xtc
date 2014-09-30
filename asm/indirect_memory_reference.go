@@ -15,6 +15,14 @@ func NewIndirectMemoryReference(offset core.ILiteral, base core.IRegister, fixed
   return &IndirectMemoryReference { "asm.IndirectMemoryReference", offset, base, fixed }
 }
 
+func (self *IndirectMemoryReference) AsOperand() core.IOperand {
+  return self
+}
+
+func (self *IndirectMemoryReference) AsMemoryReference() core.IMemoryReference {
+  return self
+}
+
 func (self IndirectMemoryReference) IsRegister() bool {
   return false
 }
@@ -30,4 +38,8 @@ func (self *IndirectMemoryReference) FixOffset(diff int64) {
   curr := self.Offset.(*IntegerLiteral).GetValue()
   self.Offset = NewIntegerLiteral(int64(curr + diff))
   self.Fixed = true
+}
+
+func (self *IndirectMemoryReference) CollectStatistics(stats core.IStatistics) {
+  self.Base.CollectStatistics(stats)
 }

@@ -1,11 +1,23 @@
 package asm
 
+import (
+  "bitbucket.org/yyuu/bs/core"
+)
+
 type UnnamedSymbol struct {
   ClassName string
 }
 
 func NewUnnamedSymbol() *UnnamedSymbol {
   return &UnnamedSymbol { "asm.UnnamedSymbol" }
+}
+
+func (self *UnnamedSymbol) AsLiteral() core.ILiteral {
+  return self
+}
+
+func (self *UnnamedSymbol) AsSymbol() core.ISymbol {
+  return self
 }
 
 func (self UnnamedSymbol) IsZero() bool {
@@ -18,4 +30,8 @@ func (self UnnamedSymbol) GetName() string {
 
 func (self UnnamedSymbol) String() string {
   panic("UnnamedSymbol#String() called")
+}
+
+func (self *UnnamedSymbol) CollectStatistics(stats core.IStatistics) {
+  stats.SymbolUsed(self)
 }

@@ -91,3 +91,19 @@ func (self *Params) GetValue() core.IExprNode {
 func (self *Params) SymbolString() string {
   panic("Params#SymbolString called")
 }
+
+func (self *Params) GetMemref() core.IMemoryReference {
+  panic("Params#GetMemref called")
+}
+
+func (self *Params) SetMemref(memref core.IMemoryReference) {
+  panic("Params#SetMemref called")
+}
+
+func (self *Params) GetAddress() core.IOperand {
+  panic("Params#GetAddress called")
+}
+
+func (self *Params) SetAddress(address core.IOperand) {
+  panic("Params#SetAddress called")
+}

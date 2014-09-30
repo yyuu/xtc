@@ -15,7 +15,7 @@ func NewCall(t int, expr core.IExpr, args []core.IExpr) *Call {
   return &Call { "ir.Call", t, expr, args }
 }
 
-func (self Call) AsExpr() core.IExpr {
+func (self *Call) AsExpr() core.IExpr {
   return self
 }
 
@@ -33,6 +33,18 @@ func (self Call) IsConstant() bool {
 
 func (self Call) IsVar() bool {
   return false
+}
+
+func (self *Call) GetAddress() core.IOperand {
+  panic("#GetAddress called")
+}
+
+func (self *Call) GetAsmValue() core.IImmediateValue {
+  panic("#GetAsmValue called")
+}
+
+func (self *Call) GetMemref() core.IMemoryReference {
+  panic("#GetMemref called")
 }
 
 func (self Call) GetAddressNode(t int) core.IExpr {

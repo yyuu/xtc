@@ -14,10 +14,23 @@ type DefinedVariable struct {
   IR core.IExpr
   numRefered int
   sequence int
+  memref core.IMemoryReference
+  address core.IOperand
 }
 
 func NewDefinedVariable(isPrivate bool, t core.ITypeNode, name string, init core.IExprNode) *DefinedVariable {
-  return &DefinedVariable { "entity.DefinedVariable", isPrivate, name, t, init, nil, 0, -1 }
+  return &DefinedVariable {
+    ClassName: "entity.DefinedVariable",
+    Private: isPrivate,
+    Name: name,
+    TypeNode: t,
+    Initializer: init,
+    IR: nil,
+    numRefered: 0,
+    sequence: -1,
+    memref: nil,
+    address: nil,
+  }
 }
 
 func NewDefinedVariables(xs...*DefinedVariable) []*DefinedVariable {
@@ -132,4 +145,20 @@ func (self *DefinedVariable) SymbolString() string {
   } else {
     return fmt.Sprintf("%s.%d", self.Name, self.sequence)
   }
+}
+
+func (self *DefinedVariable) GetMemref() core.IMemoryReference {
+  return self.memref
+}
+
+func (self *DefinedVariable) SetMemref(memref core.IMemoryReference) {
+  self.memref = memref
+}
+
+func (self *DefinedVariable) GetAddress() core.IOperand {
+  return self.address
+}
+
+func (self *DefinedVariable) SetAddress(address core.IOperand) {
+  self.address = address
 }

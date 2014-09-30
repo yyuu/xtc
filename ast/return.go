@@ -36,3 +36,7 @@ func (self *ReturnNode) GetExpr() core.IExprNode {
 func (self *ReturnNode) SetExpr(expr core.IExprNode) {
   self.Expr = expr
 }
+
+func (self ReturnNode) GetScope() core.IScope {
+  panic("#GetScope called")
+}

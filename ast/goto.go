@@ -31,3 +31,7 @@ func (self GotoNode) GetLocation() core.Location {
 func (self *GotoNode) GetTarget() string {
   return self.Target
 }
+
+func (self GotoNode) GetScope() core.IScope {
+  panic("#GetScope called")
+}

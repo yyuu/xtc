@@ -14,7 +14,7 @@ func NewExprStmt(loc core.Location, expr core.IExpr) *ExprStmt {
   return &ExprStmt { "ir.ExprStmt", loc, expr }
 }
 
-func (self ExprStmt) AsStmt() core.IStmt {
+func (self *ExprStmt) AsStmt() core.IStmt {
   return self
 }
 

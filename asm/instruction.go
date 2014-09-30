@@ -16,6 +16,10 @@ func NewInstruction(mnemonic string, suffix string, operands []core.IOperand, re
   return &Instruction { "asm.Instruction", mnemonic, suffix, operands, reloc }
 }
 
+func (self *Instruction) AsAssembly() core.IAssembly {
+  return self
+}
+
 func (self Instruction) IsInstruction() bool {
   return true
 }
@@ -53,6 +57,13 @@ func (self Instruction) Operand2() core.IOperand {
 }
 
 func (self Instruction) JumpDestination() core.ISymbol {
-  ref := self.Operand1().(DirectMemoryReference)
+  ref := self.Operand1().(*DirectMemoryReference)
   return ref.GetValue().(core.ISymbol)
+}
+
+func (self *Instruction) CollectStatistics(stats core.IStatistics) {
+  stats.InstructionUsed(self.Mnemonic)
+  for i := range self.Operands {
+    self.Operands[i].CollectStatistics(stats)
+  }
 }

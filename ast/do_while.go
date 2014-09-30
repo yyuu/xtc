@@ -38,3 +38,7 @@ func (self *DoWhileNode) GetBody() core.IStmtNode {
 func (self *DoWhileNode) GetCond() core.IExprNode {
   return self.Cond
 }
+
+func (self DoWhileNode) GetScope() core.IScope {
+  panic("#GetScope called")
+}

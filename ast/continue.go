@@ -25,3 +25,7 @@ func (self *ContinueNode) AsStmtNode() core.IStmtNode {
 func (self ContinueNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self ContinueNode) GetScope() core.IScope {
+  panic("#GetScope called")
+}

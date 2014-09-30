@@ -36,3 +36,7 @@ func (self *LabelNode) GetName() string {
 func (self *LabelNode) GetStmt() core.IStmtNode {
   return self.Stmt
 }
+
+func (self LabelNode) GetScope() core.IScope {
+  panic("#GetScope called")
+}

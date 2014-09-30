@@ -15,7 +15,7 @@ func NewJump(loc core.Location, label *asm.Label) *Jump {
   return &Jump { "ir.Jump", loc, label }
 }
 
-func (self Jump) AsStmt() core.IStmt {
+func (self *Jump) AsStmt() core.IStmt {
   return self
 }
 

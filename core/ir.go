@@ -11,5 +11,8 @@ type IExpr interface {
   IsVar() bool
   IsAddr() bool
   IsConstant() bool
+  GetAsmValue() IImmediateValue
+  GetAddress() IOperand
+  GetMemref() IMemoryReference
   GetAddressNode(int) IExpr
 }

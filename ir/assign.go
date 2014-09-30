@@ -15,7 +15,7 @@ func NewAssign(loc core.Location, lhs core.IExpr, rhs core.IExpr) *Assign {
   return &Assign { "ir.Assign", loc, lhs, rhs }
 }
 
-func (self Assign) AsStmt() core.IStmt {
+func (self *Assign) AsStmt() core.IStmt {
   return self
 }
 

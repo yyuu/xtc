@@ -18,7 +18,7 @@ func NewSwitch(loc core.Location, cond core.IExpr, cases []*Case, defaultLabel *
   return &Switch { "ir.Switch", loc, cond, cases, defaultLabel, endLabel }
 }
 
-func (self Switch) AsStmt() core.IStmt {
+func (self *Switch) AsStmt() core.IStmt {
   return self
 }
 

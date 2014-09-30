@@ -15,7 +15,7 @@ func NewLabelStmt(loc core.Location, label *asm.Label) *LabelStmt {
   return &LabelStmt { "ir.LabelStmt", loc, label }
 }
 
-func (self LabelStmt) AsStmt() core.IStmt {
+func (self *LabelStmt) AsStmt() core.IStmt {
   return self
 }
 

@@ -2,6 +2,7 @@ package asm
 
 import (
   "fmt"
+  "bitbucket.org/yyuu/bs/core"
 )
 
 type IntegerLiteral struct {
@@ -11,6 +12,10 @@ type IntegerLiteral struct {
 
 func NewIntegerLiteral(n int64) *IntegerLiteral {
   return &IntegerLiteral { "asm.IntegerLiteral", n }
+}
+
+func (self *IntegerLiteral) AsLiteral() core.ILiteral {
+  return self
 }
 
 func (self IntegerLiteral) IsZero() bool {
@@ -23,4 +28,8 @@ func (self IntegerLiteral) GetValue() int64 {
 
 func (self IntegerLiteral) String() string {
   return fmt.Sprintf("%d", self.Value)
+}
+
+func (self *IntegerLiteral) CollectStatistics(stats core.IStatistics) {
+  // does nothing
 }

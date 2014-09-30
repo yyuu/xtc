@@ -13,13 +13,28 @@ type DefinedFunction struct {
   Name string
   Params *Params
   Body core.IStmtNode
+  IR []core.IStmt
   scope *LocalScope
   numRefered int
-  IR []core.IStmt
+  memref core.IMemoryReference
+  address core.IOperand
+  callingSymbol core.ISymbol
 }
 
 func NewDefinedFunction(priv bool, t core.ITypeNode, name string, params *Params, body core.IStmtNode) *DefinedFunction {
-  return &DefinedFunction { "entity.DefinedFunction", priv, t, name, params, body, nil, 0, []core.IStmt { } }
+  return &DefinedFunction {
+    ClassName: "entity.DefinedFunction",
+    Private: priv,
+    TypeNode: t,
+    Name: name,
+    Params: params,
+    Body: body,
+    IR: []core.IStmt { },
+    scope: nil,
+    numRefered: 0,
+    memref: nil,
+    address: nil,
+  }
 }
 
 func NewDefinedFunctions(xs...*DefinedFunction) []*DefinedFunction {
@@ -119,6 +134,14 @@ func (self *DefinedFunction) SetScope(scope *LocalScope) {
   self.scope = scope
 }
 
+func (self *DefinedFunction) LocalVariableScope() *LocalScope {
+  return self.Body.GetScope().(*LocalScope)
+}
+
+func (self *DefinedFunction) GetLocalVariables() []*DefinedVariable {
+  return self.scope.AllLocalVariables()
+}
+
 func (self *DefinedFunction) GetReturnType() core.IType {
   t := self.GetType().(*typesys.FunctionType)
   return t.GetReturnType()
@@ -142,4 +165,34 @@ func (self *DefinedFunction) SetIR(stmts []core.IStmt) {
 
 func (self *DefinedFunction) SymbolString() string {
   return self.Name
+}
+
+func (self *DefinedFunction) GetMemref() core.IMemoryReference {
+  return self.memref
+}
+
+func (self *DefinedFunction) SetMemref(memref core.IMemoryReference) {
+  self.memref = memref
+}
+
+func (self *DefinedFunction) GetAddress() core.IOperand {
+  return self.address
+}
+
+func (self *DefinedFunction) SetAddress(address core.IOperand) {
+  self.address = address
+}
+
+func (self *DefinedFunction) GetCallingSymbol() core.ISymbol {
+  if self.callingSymbol == nil {
+    panic("must not happen: Function#callingSymbol called but nil")
+  }
+  return self.callingSymbol
+}
+
+func (self *DefinedFunction) SetCallingSymbol(sym core.ISymbol) {
+  if self.callingSymbol != nil {
+    panic("must not happen: Function#callingSymbol called twice")
+  }
+  self.callingSymbol = sym
 }

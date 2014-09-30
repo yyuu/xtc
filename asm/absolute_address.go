@@ -13,6 +13,10 @@ func NewAbsoluteAddress(reg core.IRegister) *AbsoluteAddress {
   return &AbsoluteAddress { "asm.AbsoluteAddress", reg }
 }
 
+func (self *AbsoluteAddress) AsOperand() core.IOperand {
+  return self
+}
+
 func (self AbsoluteAddress) IsRegister() bool {
   return false
 }
@@ -23,4 +27,8 @@ func (self AbsoluteAddress) IsMemoryReference() bool {
 
 func (self AbsoluteAddress) GetRegister() core.IOperand {
   return self.Register
+}
+
+func (self *AbsoluteAddress) CollectStatistics(stats core.IStatistics) {
+  self.Register.CollectStatistics(stats)
 }

@@ -11,10 +11,20 @@ type UndefinedVariable struct {
   Name string
   TypeNode core.ITypeNode
   numRefered int
+  memref core.IMemoryReference
+  address core.IOperand
 }
 
 func NewUndefinedVariable(t core.ITypeNode, name string) *UndefinedVariable {
-  return &UndefinedVariable { "entity.UndefinedVariable", false, name, t, 0 }
+  return &UndefinedVariable {
+    ClassName: "entity.UndefinedVariable",
+    Private: false,
+    Name: name,
+    TypeNode: t,
+    numRefered: 0,
+    memref: nil,
+    address: nil,
+  }
 }
 
 func NewUndefinedVariables(xs...*UndefinedVariable) []*UndefinedVariable {
@@ -87,4 +97,20 @@ func (self *UndefinedVariable) GetValue() core.IExprNode {
 
 func (self *UndefinedVariable) SymbolString() string {
   return self.Name
+}
+
+func (self *UndefinedVariable) GetMemref() core.IMemoryReference {
+  return self.memref
+}
+
+func (self *UndefinedVariable) SetMemref(memref core.IMemoryReference) {
+  self.memref = memref
+}
+
+func (self *UndefinedVariable) GetAddress() core.IOperand {
+  return self.address
+}
+
+func (self *UndefinedVariable) SetAddress(address core.IOperand) {
+  self.address = address
 }

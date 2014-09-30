@@ -17,7 +17,7 @@ func NewCJump(loc core.Location, cond core.IExpr, thenLabel *asm.Label, elseLabe
   return &CJump { "ir.CJump", loc, cond, thenLabel, elseLabel }
 }
 
-func (self CJump) AsStmt() core.IStmt {
+func (self *CJump) AsStmt() core.IStmt {
   return self
 }
 

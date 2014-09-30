@@ -25,3 +25,7 @@ func (self *BreakNode) AsStmtNode() core.IStmtNode {
 func (self BreakNode) GetLocation() core.Location {
   return self.Location
 }
+
+func (self BreakNode) GetScope() core.IScope {
+  panic("#GetScope called")
+}

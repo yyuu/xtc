@@ -348,7 +348,7 @@ func (self *IRGenerator) checkJumpLinks(jumpMap map[string]*jumpEntry) {
 func (self *IRGenerator) VisitNode(unknown core.INode) interface{} {
   switch node := unknown.(type) {
     case *ast.BlockNode: {
-      self.pushScope(node.GetScope())
+      self.pushScope(node.GetScope().(*entity.LocalScope))
       vs := node.GetVariables()
       for i := range vs {
         if vs[i].HasInitializer() {

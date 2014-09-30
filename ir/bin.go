@@ -16,7 +16,7 @@ func NewBin(t int, op int, left core.IExpr, right core.IExpr) *Bin {
   return &Bin { "ir.Bin", t, op, left, right }
 }
 
-func (self Bin) AsExpr() core.IExpr {
+func (self *Bin) AsExpr() core.IExpr {
   return self
 }
 
@@ -34,6 +34,18 @@ func (self Bin) IsConstant() bool {
 
 func (self Bin) IsVar() bool {
   return false
+}
+
+func (self *Bin) GetAddress() core.IOperand {
+  panic("#GetAddress called")
+}
+
+func (self *Bin) GetAsmValue() core.IImmediateValue {
+  panic("#GetAsmValue called")
+}
+
+func (self *Bin) GetMemref() core.IMemoryReference {
+  panic("#GetMemref called")
 }
 
 func (self Bin) GetAddressNode(t int) core.IExpr {

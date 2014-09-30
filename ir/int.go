@@ -1,6 +1,7 @@
 package ir
 
 import (
+  "bitbucket.org/yyuu/bs/asm"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -14,7 +15,7 @@ func NewInt(t int, value int64) *Int {
   return &Int { "ir.Int", t, value }
 }
 
-func (self Int) AsExpr() core.IExpr {
+func (self *Int) AsExpr() core.IExpr {
   return self
 }
 
@@ -32,6 +33,18 @@ func (self Int) IsConstant() bool {
 
 func (self Int) IsVar() bool {
   return false
+}
+
+func (self *Int) GetAddress() core.IOperand {
+  panic("#GetAddress called")
+}
+
+func (self *Int) GetAsmValue() core.IImmediateValue {
+  return asm.NewImmediateValue(asm.NewIntegerLiteral(self.Value))
+}
+
+func (self *Int) GetMemref() core.IMemoryReference {
+  panic("#GetMemref called")
 }
 
 func (self Int) GetAddressNode(t int) core.IExpr {

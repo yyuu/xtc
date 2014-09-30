@@ -6,15 +6,14 @@ import (
 
 type x86VirtualStack struct {
   naturalType int
-  stackWordSize int64
   offset int64
   max int64
   memrefs []*bs_asm.IndirectMemoryReference
 }
 
-func newX86VirtualStack(naturalType int, stackWordSize int64) *x86VirtualStack {
+func newX86VirtualStack(naturalType int) *x86VirtualStack {
   memrefs := []*bs_asm.IndirectMemoryReference { }
-  return &x86VirtualStack { naturalType, stackWordSize, 0, 0, memrefs }
+  return &x86VirtualStack { naturalType, 0, 0, memrefs }
 }
 
 func (self *x86VirtualStack) reset() {

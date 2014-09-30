@@ -8,33 +8,75 @@ import (
 
 type LinuxX86AssemblyCode struct {
   NaturalType int
-  StackWordSize int64
   LabelSymbols *bs_asm.SymbolTable
   virtualStack *x86VirtualStack
   Assemblies []bs_core.IAssembly
-  commentIndentLevel int
+  CommentIndentLevel int
+  Statistics *bs_asm.Statistics
 }
 
-func NewLinuxX86AssemblyCode(naturalType int, stackWordSize int64, labelSymbols *bs_asm.SymbolTable) *LinuxX86AssemblyCode {
-  virtualStack := newX86VirtualStack(naturalType, stackWordSize)
-  assemblies := []bs_core.IAssembly { }
-  return &LinuxX86AssemblyCode { naturalType, stackWordSize, labelSymbols, virtualStack, assemblies, 0 }
+func NewLinuxX86AssemblyCode(naturalType int, labelSymbols *bs_asm.SymbolTable) *LinuxX86AssemblyCode {
+  return &LinuxX86AssemblyCode {
+    NaturalType: naturalType,
+    LabelSymbols: labelSymbols,
+    virtualStack: newX86VirtualStack(naturalType),
+    Assemblies: []bs_core.IAssembly { },
+    CommentIndentLevel: 0,
+    Statistics: nil,
+  }
+}
+
+func (self *LinuxX86AssemblyCode) GetAssemblies() []bs_core.IAssembly {
+  return self.Assemblies
+}
+
+func (self *LinuxX86AssemblyCode) addAll(assemblies []bs_core.IAssembly) {
+  self.Assemblies = append(self.Assemblies, assemblies...)
+}
+
+func (self *LinuxX86AssemblyCode) GetStatistics() *bs_asm.Statistics {
+  if self.Statistics == nil {
+    self.Statistics = bs_asm.CollectStatistics(self.Assemblies)
+  }
+  return self.Statistics
+}
+
+func (self *LinuxX86AssemblyCode) doesUses(reg *x86Register) bool {
+  return self.GetStatistics().DoesRegisterUsed(reg)
 }
 
 func (self *LinuxX86AssemblyCode) comment(str string) {
-  self.Assemblies = append(self.Assemblies, bs_asm.NewComment(str, self.commentIndentLevel))
+  self.Assemblies = append(self.Assemblies, bs_asm.NewComment(str, self.CommentIndentLevel))
 }
 
 func (self *LinuxX86AssemblyCode) indentComment() {
-  self.commentIndentLevel++
+  self.CommentIndentLevel++
 }
 
 func (self *LinuxX86AssemblyCode) unindentComment() {
-  self.commentIndentLevel--
+  self.CommentIndentLevel--
 }
 
-func (self *LinuxX86AssemblyCode) label(label *bs_asm.Label) {
+func (self *LinuxX86AssemblyCode) label1(label *bs_asm.Label) {
   self.Assemblies = append(self.Assemblies, label)
+}
+
+func (self *LinuxX86AssemblyCode) label2(sym bs_core.ISymbol) {
+  self.label1(bs_asm.NewLabel(sym))
+}
+
+func (self *LinuxX86AssemblyCode) reduceLabels() {
+  stats := self.GetStatistics()
+  result := []bs_core.IAssembly { }
+  for i := range self.Assemblies {
+    asm := self.Assemblies[i]
+    if asm.IsLabel() && !stats.DoesSymbolUsed(asm.(*bs_asm.Label).GetSymbol()) {
+      // noop
+    } else {
+      result = append(result, asm)
+    }
+  }
+  self.Assemblies = result
 }
 
 func (self *LinuxX86AssemblyCode) directive(direc string) {
@@ -156,13 +198,13 @@ func (self *LinuxX86AssemblyCode) _string(str string) {
 }
 
 func (self *LinuxX86AssemblyCode) virtualPush(reg *x86Register) {
-  self.virtualStack.extend(self.StackWordSize)
+  self.virtualStack.extend(STACK_WORD_SIZE)
   self.mov3(reg, self.virtualStack.top())
 }
 
 func (self *LinuxX86AssemblyCode) virtualPop(reg *x86Register) {
   self.mov2(self.virtualStack.top(), reg)
-  self.virtualStack.rewind(self.StackWordSize)
+  self.virtualStack.rewind(STACK_WORD_SIZE)
 }
 
 func (self *LinuxX86AssemblyCode) jmp(label *bs_asm.Label) {
@@ -178,7 +220,7 @@ func (self *LinuxX86AssemblyCode) je(label *bs_asm.Label) {
 }
 
 func (self *LinuxX86AssemblyCode) cmp(a bs_core.IOperand, b *x86Register) {
-  self.insn6(b.GetType(), "cmp", a, b)
+  self.insn6(b.GetTypeId(), "cmp", a, b)
 }
 
 func (self *LinuxX86AssemblyCode) sete(reg *x86Register) {
@@ -222,7 +264,7 @@ func (self *LinuxX86AssemblyCode) setle(reg *x86Register) {
 }
 
 func (self *LinuxX86AssemblyCode) test(a *x86Register, b *x86Register) {
-  self.insn6(b.GetType(), "test", a, b)
+  self.insn6(b.GetTypeId(), "test", a, b)
 }
 
 func (self *LinuxX86AssemblyCode) push(reg *x86Register) {
@@ -253,12 +295,12 @@ func (self *LinuxX86AssemblyCode) mov1(src *x86Register, dest *x86Register) {
 
 // load
 func (self *LinuxX86AssemblyCode) mov2(src bs_core.IOperand, dest *x86Register) {
-  self.insn6(dest.GetType(), "mov", src, dest)
+  self.insn6(dest.GetTypeId(), "mov", src, dest)
 }
 
 // save
 func (self *LinuxX86AssemblyCode) mov3(src *x86Register, dest bs_core.IOperand) {
-  self.insn6(src.GetType(), "mov", src, dest)
+  self.insn6(src.GetTypeId(), "mov", src, dest)
 }
 
 // for stack access
@@ -268,15 +310,15 @@ func (self *LinuxX86AssemblyCode) relocatableMov(src bs_core.IOperand, dest bs_c
 }
 
 func (self *LinuxX86AssemblyCode) movsx(src *x86Register, dest *x86Register) {
-  self.insn5("movs", self.typeSuffix2(src.GetType(), dest.GetType()), src, dest)
+  self.insn5("movs", self.typeSuffix2(src.GetTypeId(), dest.GetTypeId()), src, dest)
 }
 
 func (self *LinuxX86AssemblyCode) movzx(src *x86Register, dest *x86Register) {
-  self.insn5("movz", self.typeSuffix2(src.GetType(), dest.GetType()), src, dest)
+  self.insn5("movz", self.typeSuffix2(src.GetTypeId(), dest.GetTypeId()), src, dest)
 }
 
 func (self *LinuxX86AssemblyCode) movzb(src *x86Register, dest *x86Register) {
-  self.insn5("movz", "b"+self.typeSuffix(dest.GetType()), src, dest)
+  self.insn5("movz", "b"+self.typeSuffix(dest.GetTypeId()), src, dest)
 }
 
 func (self *LinuxX86AssemblyCode) lea(src bs_core.IOperand, dest *x86Register) {
@@ -284,19 +326,19 @@ func (self *LinuxX86AssemblyCode) lea(src bs_core.IOperand, dest *x86Register) {
 }
 
 func (self *LinuxX86AssemblyCode) neg(reg *x86Register) {
-  self.insn4(reg.GetType(), "neg", reg)
+  self.insn4(reg.GetTypeId(), "neg", reg)
 }
 
 func (self *LinuxX86AssemblyCode) add(diff bs_core.IOperand, base *x86Register) {
-  self.insn6(base.GetType(), "add", diff, base)
+  self.insn6(base.GetTypeId(), "add", diff, base)
 }
 
 func (self *LinuxX86AssemblyCode) sub(diff bs_core.IOperand, base *x86Register) {
-  self.insn6(base.GetType(), "sub", diff, base)
+  self.insn6(base.GetTypeId(), "sub", diff, base)
 }
 
 func (self *LinuxX86AssemblyCode) imul(m bs_core.IOperand, base *x86Register) {
-  self.insn6(base.GetType(), "imul", m, base)
+  self.insn6(base.GetTypeId(), "imul", m, base)
 }
 
 func (self *LinuxX86AssemblyCode) cltd() {
@@ -304,37 +346,37 @@ func (self *LinuxX86AssemblyCode) cltd() {
 }
 
 func (self *LinuxX86AssemblyCode) div(base *x86Register) {
-  self.insn4(base.GetType(), "div", base)
+  self.insn4(base.GetTypeId(), "div", base)
 }
 
 func (self *LinuxX86AssemblyCode) idiv(base *x86Register) {
-  self.insn4(base.GetType(), "idiv", base)
+  self.insn4(base.GetTypeId(), "idiv", base)
 }
 
 func (self *LinuxX86AssemblyCode) not(reg *x86Register) {
-  self.insn4(reg.GetType(), "not", reg)
+  self.insn4(reg.GetTypeId(), "not", reg)
 }
 
 func (self *LinuxX86AssemblyCode) and(bits bs_core.IOperand, base *x86Register) {
-  self.insn6(base.GetType(), "and", bits, base)
+  self.insn6(base.GetTypeId(), "and", bits, base)
 }
 
 func (self *LinuxX86AssemblyCode) or(bits bs_core.IOperand, base *x86Register) {
-  self.insn6(base.GetType(), "or", bits, base)
+  self.insn6(base.GetTypeId(), "or", bits, base)
 }
 
 func (self *LinuxX86AssemblyCode) xor(bits bs_core.IOperand, base *x86Register) {
-  self.insn6(base.GetType(), "xor", bits, base)
+  self.insn6(base.GetTypeId(), "xor", bits, base)
 }
 
 func (self *LinuxX86AssemblyCode) sar(bits *x86Register, base *x86Register) {
-  self.insn6(base.GetType(), "sar", bits, base)
+  self.insn6(base.GetTypeId(), "sar", bits, base)
 }
 
 func (self *LinuxX86AssemblyCode) sal(bits *x86Register, base *x86Register) {
-  self.insn6(base.GetType(), "sal", bits, base)
+  self.insn6(base.GetTypeId(), "sal", bits, base)
 }
 
 func (self *LinuxX86AssemblyCode) shr(bits *x86Register, base *x86Register) {
-  self.insn6(base.GetType(), "shr", bits, base)
+  self.insn6(base.GetTypeId(), "shr", bits, base)
 }

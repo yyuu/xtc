@@ -98,3 +98,19 @@ func (self *Parameter) GetValue() core.IExprNode {
 func (self *Parameter) SymbolString() string {
   return self.DefinedVariable.SymbolString()
 }
+
+func (self *Parameter) GetMemref() core.IMemoryReference {
+  return self.DefinedVariable.GetMemref()
+}
+
+func (self *Parameter) SetMemref(memref core.IMemoryReference) {
+  self.DefinedVariable.SetMemref(memref)
+}
+
+func (self *Parameter) GetAddress() core.IOperand {
+  return self.DefinedVariable.GetAddress()
+}
+
+func (self *Parameter) SetAddress(address core.IOperand) {
+  self.DefinedVariable.SetAddress(address)
+}

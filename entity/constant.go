@@ -11,10 +11,20 @@ type Constant struct {
   TypeNode core.ITypeNode
   Value core.IExprNode
   numRefered int
+  memref core.IMemoryReference
+  address core.IOperand
 }
 
 func NewConstant(t core.ITypeNode, name string, value core.IExprNode) *Constant {
-  return &Constant { "entity.Constant", name, t, value, 0 }
+  return &Constant {
+    ClassName: "entity.Constant",
+    Name: name,
+    TypeNode: t,
+    Value: value,
+    numRefered: 0,
+    memref: nil,
+    address: nil,
+  }
 }
 
 func NewConstants(xs...*Constant) []*Constant {
@@ -91,4 +101,20 @@ func (self *Constant) SetValue(val core.IExprNode) {
 
 func (self *Constant) SymbolString() string {
   return self.Name
+}
+
+func (self *Constant) GetMemref() core.IMemoryReference {
+  return self.memref
+}
+
+func (self *Constant) SetMemref(memref core.IMemoryReference) {
+  self.memref = memref
+}
+
+func (self *Constant) GetAddress() core.IOperand {
+  return self.address
+}
+
+func (self *Constant) SetAddress(address core.IOperand) {
+  self.address = address
 }

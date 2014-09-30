@@ -2,6 +2,7 @@ package sysdep
 
 import (
   "fmt"
+  bs_core "bitbucket.org/yyuu/bs/core"
 )
 
 const (
@@ -17,11 +18,19 @@ const (
 
 type x86Register struct {
   Class int
-  Type int
+  TypeId int
 }
 
 func newX86Register(klass int, t int) *x86Register {
   return &x86Register { klass, t }
+}
+
+func (self *x86Register) AsOperand() bs_core.IOperand {
+  return self
+}
+
+func (self *x86Register) AsRegister() bs_core.IRegister {
+  return self
 }
 
 func (self x86Register) IsRegister() bool {
@@ -48,6 +57,14 @@ func (self x86Register) GetBaseName() string {
   }
 }
 
-func (self x86Register) GetType() int {
-  return self.Type
+func (self x86Register) GetTypeId() int {
+  return self.TypeId
+}
+
+func (self x86Register) ForType(t int) *x86Register {
+  return newX86Register(self.Class, t)
+}
+
+func (self *x86Register) CollectStatistics(stats bs_core.IStatistics) {
+  stats.RegisterUsed(self)
 }

@@ -27,6 +27,10 @@ func (self *LocalScope) GetParent() core.IScope {
   return self.Parent
 }
 
+func (self *LocalScope) GetChildren() []*LocalScope {
+  return self.Children
+}
+
 func (self *LocalScope) AddChild(scope *LocalScope) {
   self.Children = append(self.Children, scope)
 }
@@ -69,6 +73,35 @@ func (self *LocalScope) AllocateTmp(typeNode core.ITypeNode) *DefinedVariable {
   v := temporaryDefinedVariable(typeNode)
   self.DefineVariable(v)
   return v
+}
+
+/**
+ * Returns all local variables in this scope.
+ * The result DOES includes all nested local variables.
+ * while it does NOT include static local variables.
+ */
+func (self *LocalScope) AllLocalVariables() []*DefinedVariable {
+  result := []*DefinedVariable { }
+  scopes := self.allLocalScopes()
+  for i := range scopes {
+    result = append(result, scopes[i].GetLocalVariables()...)
+  }
+  return result
+}
+
+/**
+ * Returns local variables defined in this scope.
+ * Does not includes children&s local variables.
+ * Does NOT include static local variables.
+ */
+func (self *LocalScope) GetLocalVariables() []*DefinedVariable {
+  result := []*DefinedVariable { }
+  for _, v := range self.Variables {
+    if ! v.IsPrivate() {
+      result = append(result, v)
+    }
+  }
+  return result
 }
 
 func (self *LocalScope) GetStaticLocalVariables() []*DefinedVariable {
