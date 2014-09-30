@@ -56,3 +56,7 @@ func (self *IndirectMemoryReference) ToSource(table core.ISymbolTable) string {
     }
   }
 }
+
+func (self *IndirectMemoryReference) String() string {
+  return self.ToSource(DummySymbolTable)
+}

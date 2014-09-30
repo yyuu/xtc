@@ -17,6 +17,9 @@ func NewSymbolTable(base string) *SymbolTable {
   return &SymbolTable { "asm.SymbolTable", base, 0, table }
 }
 
+var DUMMY_SYMBOL_BASE = "L"
+var DummySymbolTable = NewSymbolTable(DUMMY_SYMBOL_BASE)
+
 func (self *SymbolTable) AsSymbolTable() core.ISymbolTable {
   return self
 }

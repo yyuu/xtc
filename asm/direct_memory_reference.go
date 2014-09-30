@@ -44,3 +44,7 @@ func (self *DirectMemoryReference) CollectStatistics(stats core.IStatistics) {
 func (self *DirectMemoryReference) ToSource(table core.ISymbolTable) string {
   return self.Value.ToSource(table)
 }
+
+func (self *DirectMemoryReference) String() string {
+  return self.ToSource(DummySymbolTable)
+}

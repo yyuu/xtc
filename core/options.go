@@ -105,7 +105,7 @@ func (self *Options) IsVerboseMode() bool {
 }
 
 func (self *Options) IsVerboseAsm() bool {
-  return *self.verbose
+  return *self.codeGeneratorOptions.verboseAsm
 }
 
 func (self *Options) NewLibraryLoader() {
