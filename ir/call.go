@@ -23,6 +23,18 @@ func (self Call) GetTypeId() int {
   return self.TypeId
 }
 
+func (self Call) GetExpr() core.IExpr {
+  return self.Expr
+}
+
+func (self Call) GetArgs() []core.IExpr {
+  return self.Args
+}
+
+func (self Call) NumArgs() int {
+  return len(self.Args)
+}
+
 func (self Call) IsAddr() bool {
   return false
 }
@@ -49,4 +61,26 @@ func (self *Call) GetMemref() core.IMemoryReference {
 
 func (self Call) GetAddressNode(t int) core.IExpr {
   panic("unexpected node for LHS")
+}
+
+func (self Call) GetEntityForce() core.IEntity {
+  return nil
+}
+
+func (self Call) IsStaticCall() bool {
+  ent := self.Expr.GetEntityForce()
+  if ent == nil {
+    return false
+  } else {
+    _, ok := ent.(core.IFunction)
+    return ok
+  }
+}
+
+func (self Call) GetFunction() core.IFunction {
+  ent := self.Expr.GetEntityForce()
+  if ent == nil {
+    panic("not a static funcall")
+  }
+  return ent.(core.IFunction)
 }

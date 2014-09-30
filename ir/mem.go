@@ -22,6 +22,10 @@ func (self Mem) GetTypeId() int {
   return self.TypeId
 }
 
+func (self Mem) GetExpr() core.IExpr {
+  return self.Expr
+}
+
 func (self Mem) IsAddr() bool {
   return false
 }
@@ -48,4 +52,8 @@ func (self *Mem) GetMemref() core.IMemoryReference {
 
 func (self Mem) GetAddressNode(t int) core.IExpr {
   return self.Expr
+}
+
+func (self Mem) GetEntityForce() core.IEntity {
+  return nil
 }

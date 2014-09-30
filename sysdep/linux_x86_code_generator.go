@@ -558,7 +558,7 @@ func (self *LinuxX86CodeGenerator) compileStmt(stmt bs_core.IStmt) {
   if self.options.IsVerboseAsm() {
     as.comment(fmt.Sprint(stmt.GetLocation()))
   }
-//stmt.accept(self) // FIXME:
+  bs_ir.VisitStmt(self, stmt)
 }
 
 //
@@ -570,7 +570,7 @@ func (self *LinuxX86CodeGenerator) compile(n bs_core.IExpr) {
     as.comment(fmt.Sprintf("%s {", n))
     as.indentComment()
   }
-//n.accept(self) // FIXME:
+  bs_ir.VisitExpr(self, n)
   if self.options.IsVerboseAsm() {
     as.unindentComment()
     as.comment("}")
@@ -767,4 +767,174 @@ func (self *LinuxX86CodeGenerator) load(mem bs_core.IMemoryReference, reg *x86Re
 
 func (self *LinuxX86CodeGenerator) store(reg *x86Register, mem bs_core.IMemoryReference) {
   as.mov3(reg, mem)
+}
+
+func (self *LinuxX86CodeGenerator) VisitStmt(unknown bs_core.IStmt) interface{} {
+  switch node := unknown.(type) {
+    case *bs_ir.Assign: {
+      switch {
+        case node.GetLHS().IsAddr() && node.GetLHS().GetMemref() != nil: {
+          self.compile(node.GetRHS())
+          self.store(self.axT(node.GetLHS().GetTypeId()), node.GetLHS().GetMemref())
+        }
+        case node.GetRHS().IsConstant(): {
+          self.compile(node.GetLHS())
+          as.mov1(self.ax(), self.cx())
+          self.loadConstant(node.GetRHS(), self.ax())
+          self.store(self.axT(node.GetLHS().GetTypeId()), self.mem2(self.cx()))
+        }
+        default: {
+          self.compile(node.GetRHS())
+          as.virtualPush(self.ax())
+          self.compile(node.GetLHS())
+          as.mov1(self.ax(), self.cx())
+          as.virtualPop(self.ax())
+          self.store(self.axT(node.GetLHS().GetTypeId()), self.mem2(self.cx()))
+        }
+      }
+    }
+    case *bs_ir.CJump: {
+      self.compile(node.GetCond())
+      t := node.GetCond().GetTypeId()
+      as.test(self.axT(t), self.axT(t))
+      as.jnz(node.GetThenLabel())
+      as.jmp(node.GetElseLabel())
+    }
+    case *bs_ir.ExprStmt: {
+      self.compile(node.GetExpr())
+    }
+    case *bs_ir.Jump: {
+      as.jmp(node.GetLabel())
+    }
+    case *bs_ir.LabelStmt: {
+      as.label1(node.GetLabel())
+    }
+    case *bs_ir.Return: {
+      if node.GetExpr() != nil {
+        self.compile(node.GetExpr())
+      }
+      as.jmp(epilogue)
+    }
+    case *bs_ir.Switch: {
+      self.compile(node.GetCond())
+      t := node.GetCond().GetTypeId()
+      cases := node.GetCases()
+      for i := range cases {
+        c := cases[i]
+        as.mov2(self.imm1(c.GetValue()), self.cx())
+        as.cmp(self.cxT(t), self.axT(t))
+        as.je(c.GetLabel())
+      }
+      as.jmp(node.GetDefaultLabel())
+    }
+    default: {
+      panic(fmt.Errorf("must not happen: unknown IR stmt: %s", unknown))
+    }
+  }
+  return nil
+}
+
+func (self *LinuxX86CodeGenerator) VisitExpr(unknown bs_core.IExpr) interface{} {
+  switch node := unknown.(type) {
+    case *bs_ir.Addr: {
+      self.loadAddress(node.GetEntity(), self.ax())
+    }
+    case *bs_ir.Bin: {
+      op := node.GetOp()
+      t := node.GetTypeId()
+      switch {
+        case node.GetRight().IsConstant() && ! self.doesRequireRegisterOperand(op): {
+          self.compile(node.GetLeft())
+          self.compileBinaryOp(op, self.axT(t), node.GetRight().GetAsmValue())
+        }
+        case node.GetRight().IsConstant(): {
+          self.compile(node.GetLeft())
+          self.loadConstant(node.GetRight(), self.cx())
+          self.compileBinaryOp(op, self.axT(t), self.cxT(t))
+        }
+        case node.GetRight().IsVar(): {
+          self.compile(node.GetLeft())
+          self.loadVariable(node.GetRight().(*bs_ir.Var), self.cxT(t))
+          self.compileBinaryOp(op, self.axT(t), self.cxT(t))
+        }
+        case node.GetRight().IsAddr(): {
+          self.compile(node.GetLeft())
+          self.loadAddress(node.GetRight().GetEntityForce(), self.cxT(t))
+          self.compileBinaryOp(op, self.axT(t), self.cxT(t))
+        }
+        case node.GetRight().IsConstant() || node.GetLeft().IsVar() || node.GetLeft().IsAddr(): {
+          self.compile(node.GetRight())
+          as.mov1(self.ax(), self.cx())
+          self.compile(node.GetLeft())
+          self.compileBinaryOp(op, self.axT(t), self.cxT(t))
+        }
+        default: {
+          self.compile(node.GetRight())
+          as.virtualPush(self.ax())
+          self.compile(node.GetLeft())
+          as.virtualPop(self.cx())
+          self.compileBinaryOp(op, self.axT(t), self.cxT(t))
+        }
+      }
+    }
+    case *bs_ir.Call: {
+      args := node.GetArgs()
+      for i := range args {
+        arg := args[len(args)-1-i]
+        self.compile(arg)
+        as.push(self.ax())
+      }
+      if node.IsStaticCall() {
+        as.call(node.GetFunction().GetCallingSymbol())
+      } else {
+        self.compile(node.GetExpr())
+        as.callAbsolute(self.ax())
+      }
+      self.rewindStack(as, self.stackSizeFromWordNum(int64(node.NumArgs())))
+    }
+    case *bs_ir.Int: {
+      as.mov2(self.imm1(node.GetValue()), self.ax())
+    }
+    case *bs_ir.Mem: {
+      self.compile(node.GetExpr())
+      self.load(self.mem2(self.ax()), self.axT(node.GetTypeId()))
+    }
+    case *bs_ir.Str: {
+      self.loadConstant(node, self.ax())
+    }
+    case *bs_ir.Uni: {
+      src := node.GetExpr().GetTypeId()
+      dest := node.GetTypeId()
+      self.compile(node.GetExpr())
+      switch node.GetOp() {
+        case bs_ir.OP_UMINUS: {
+          as.neg(self.axT(src))
+        }
+        case bs_ir.OP_BIT_NOT: {
+          as.not(self.axT(src))
+        }
+        case bs_ir.OP_NOT: {
+          as.test(self.axT(src), self.axT(src))
+          as.sete(self.al())
+          as.movzx(self.al(), self.axT(dest))
+        }
+        case bs_ir.OP_S_CAST: {
+          as.movsx(self.axT(src), self.axT(dest))
+        }
+        case bs_ir.OP_U_CAST: {
+          as.movzx(self.axT(src), self.axT(dest))
+        }
+        default: {
+          panic(fmt.Errorf("unknown unary operator: %d", node.GetOp()))
+        }
+      }
+    }
+    case *bs_ir.Var: {
+      self.loadVariable(node, self.ax())
+    }
+    default: {
+      panic(fmt.Errorf("must not happen: unknown IR expr: %s", unknown))
+    }
+  }
+  return nil
 }

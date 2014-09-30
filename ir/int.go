@@ -54,3 +54,7 @@ func (self Int) GetAddressNode(t int) core.IExpr {
 func (self Int) GetValue() int64 {
   return self.Value
 }
+
+func (self Int) GetEntityForce() core.IEntity {
+  return nil
+}

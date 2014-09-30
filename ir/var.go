@@ -49,3 +49,7 @@ func (self *Var) GetMemref() core.IMemoryReference {
 func (self Var) GetAddressNode(t int) core.IExpr {
   return NewAddr(t, self.Entity)
 }
+
+func (self Var) GetEntityForce() core.IEntity {
+  return self.Entity
+}

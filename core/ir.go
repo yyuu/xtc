@@ -15,4 +15,5 @@ type IExpr interface {
   GetAddress() IOperand
   GetMemref() IMemoryReference
   GetAddressNode(int) IExpr
+  GetEntityForce() IEntity
 }

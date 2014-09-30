@@ -22,3 +22,7 @@ func (self *LabelStmt) AsStmt() core.IStmt {
 func (self LabelStmt) GetLocation() core.Location {
   return self.Location
 }
+
+func (self LabelStmt) GetLabel() *asm.Label {
+  return self.Label
+}

@@ -22,6 +22,10 @@ func (self Addr) GetTypeId() int {
   return self.TypeId
 }
 
+func (self Addr) GetEntity() core.IEntity {
+  return self.Entity
+}
+
 func (self Addr) IsAddr() bool {
   return true
 }
@@ -48,4 +52,8 @@ func (self *Addr) GetMemref() core.IMemoryReference {
 
 func (self Addr) GetAddressNode(t int) core.IExpr {
   panic("unexpected node for LHS")
+}
+
+func (self Addr) GetEntityForce() core.IEntity {
+  return self.Entity
 }

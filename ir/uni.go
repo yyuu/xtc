@@ -23,6 +23,14 @@ func (self Uni) GetTypeId() int {
   return self.TypeId
 }
 
+func (self Uni) GetOp() int {
+  return self.Op
+}
+
+func (self Uni) GetExpr() core.IExpr {
+  return self.Expr
+}
+
 func (self Uni) IsAddr() bool {
   return false
 }
@@ -49,4 +57,8 @@ func (self *Uni) GetMemref() core.IMemoryReference {
 
 func (self Uni) GetAddressNode(t int) core.IExpr {
   panic("unexpected node for LHS")
+}
+
+func (self Uni) GetEntityForce() core.IEntity {
+  return nil
 }

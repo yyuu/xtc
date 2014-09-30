@@ -21,3 +21,7 @@ func (self *Return) AsStmt() core.IStmt {
 func (self Return) GetLocation() core.Location {
   return self.Location
 }
+
+func (self Return) GetExpr() core.IExpr {
+  return self.Expr
+}

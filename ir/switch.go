@@ -25,3 +25,19 @@ func (self *Switch) AsStmt() core.IStmt {
 func (self Switch) GetLocation() core.Location {
   return self.Location
 }
+
+func (self Switch) GetCond() core.IExpr {
+  return self.Cond
+}
+
+func (self Switch) GetCases() []*Case {
+  return self.Cases
+}
+
+func (self Switch) GetDefaultLabel() *asm.Label {
+  return self.DefaultLabel
+}
+
+func (self Switch) GetEndLabel() *asm.Label {
+  return self.EndLabel
+}

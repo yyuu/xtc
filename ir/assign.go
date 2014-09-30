@@ -22,3 +22,11 @@ func (self *Assign) AsStmt() core.IStmt {
 func (self Assign) GetLocation() core.Location {
   return self.Location
 }
+
+func (self Assign) GetLHS() core.IExpr {
+  return self.LHS
+}
+
+func (self Assign) GetRHS() core.IExpr {
+  return self.RHS
+}

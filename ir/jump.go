@@ -22,3 +22,7 @@ func (self *Jump) AsStmt() core.IStmt {
 func (self Jump) GetLocation() core.Location {
   return self.Location
 }
+
+func (self Jump) GetLabel() *asm.Label {
+  return self.Label
+}

@@ -24,3 +24,15 @@ func (self *CJump) AsStmt() core.IStmt {
 func (self CJump) GetLocation() core.Location {
   return self.Location
 }
+
+func (self CJump) GetCond() core.IExpr {
+  return self.Cond
+}
+
+func (self CJump) GetThenLabel() *asm.Label {
+  return self.ThenLabel
+}
+
+func (self CJump) GetElseLabel() *asm.Label {
+  return self.ElseLabel
+}

@@ -24,6 +24,18 @@ func (self Bin) GetTypeId() int {
   return self.TypeId
 }
 
+func (self Bin) GetOp() int {
+  return self.Op
+}
+
+func (self Bin) GetLeft() core.IExpr {
+  return self.Left
+}
+
+func (self Bin) GetRight() core.IExpr {
+  return self.Right
+}
+
 func (self Bin) IsAddr() bool {
   return false
 }
@@ -50,4 +62,8 @@ func (self *Bin) GetMemref() core.IMemoryReference {
 
 func (self Bin) GetAddressNode(t int) core.IExpr {
   panic("unexpected node for LHS")
+}
+
+func (self Bin) GetEntityForce() core.IEntity {
+  return nil
 }
