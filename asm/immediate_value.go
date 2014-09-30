@@ -1,6 +1,7 @@
 package asm
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -35,4 +36,8 @@ func (self ImmediateValue) GetExpr() core.ILiteral {
 
 func (self *ImmediateValue) CollectStatistics(stats core.IStatistics) {
   // does nothing
+}
+
+func (self *ImmediateValue) ToSource(table core.ISymbolTable) string {
+  return fmt.Sprintf("$%s", self.Expr.ToSource(table))
 }

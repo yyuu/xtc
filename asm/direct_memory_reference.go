@@ -40,3 +40,7 @@ func (self *DirectMemoryReference) FixOffset(n int64) {
 func (self *DirectMemoryReference) CollectStatistics(stats core.IStatistics) {
   self.Value.CollectStatistics(stats)
 }
+
+func (self *DirectMemoryReference) ToSource(table core.ISymbolTable) string {
+  return self.Value.ToSource(table)
+}

@@ -2,6 +2,7 @@ package sysdep
 
 import (
   "fmt"
+  bs_asm "bitbucket.org/yyuu/bs/asm"
   bs_core "bitbucket.org/yyuu/bs/core"
 )
 
@@ -67,4 +68,32 @@ func (self x86Register) ForType(t int) *x86Register {
 
 func (self *x86Register) CollectStatistics(stats bs_core.IStatistics) {
   stats.RegisterUsed(self)
+}
+
+func (self *x86Register) ToSource(table bs_core.ISymbolTable) string {
+  return fmt.Sprintf("%%%s", self.GetTypedName())
+}
+
+func (self *x86Register) GetTypedName() string {
+  switch self.TypeId {
+    case bs_asm.TYPE_INT8:  return self.lowerByteRegister()
+    case bs_asm.TYPE_INT16: return self.GetBaseName()
+    case bs_asm.TYPE_INT32: return fmt.Sprintf("e%s", self.GetBaseName())
+    case bs_asm.TYPE_INT64: return fmt.Sprintf("r%s", self.GetBaseName())
+    default: {
+      panic(fmt.Errorf("unknown register type: %d", self.TypeId))
+    }
+  }
+}
+
+func (self *x86Register) lowerByteRegister() string {
+  switch self.Class {
+    case x86_ax: return "al"
+    case x86_bx: return "bl"
+    case x86_cx: return "cl"
+    case x86_dx: return "dl"
+    default: {
+      panic(fmt.Errorf("does not have lower-byte register: %d", self.Class))
+    }
+  }
 }

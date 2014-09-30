@@ -1,6 +1,7 @@
 package asm
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -36,4 +37,12 @@ func (self Comment) IsComment() bool {
 
 func (self *Comment) CollectStatistics(stats core.IStatistics) {
   // does nothing by default
+}
+
+func (self *Comment) ToSource(table core.ISymbolTable) string {
+  var indent string
+  for i := 0; i<self.IndentLevel; i++ {
+    indent += "  "
+  }
+  return fmt.Sprintf("\t%s#%s", indent, self.String)
 }

@@ -2,6 +2,7 @@ package sysdep
 
 import (
   "fmt"
+  "strings"
   bs_asm "bitbucket.org/yyuu/bs/asm"
   bs_core "bitbucket.org/yyuu/bs/core"
 )
@@ -32,6 +33,14 @@ func (self *LinuxX86AssemblyCode) GetAssemblies() []bs_core.IAssembly {
 
 func (self *LinuxX86AssemblyCode) addAll(assemblies []bs_core.IAssembly) {
   self.Assemblies = append(self.Assemblies, assemblies...)
+}
+
+func (self *LinuxX86AssemblyCode) ToSource() string {
+  sources := make([]string, len(self.Assemblies))
+  for i := range self.Assemblies {
+    sources[i] = self.Assemblies[i].ToSource(self.LabelSymbols)
+  }
+  return strings.Join(sources, "\n")
 }
 
 func (self *LinuxX86AssemblyCode) GetStatistics() *bs_asm.Statistics {

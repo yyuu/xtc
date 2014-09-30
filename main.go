@@ -62,22 +62,15 @@ func ep(ast *bs_ast.AST, err error, options *bs_core.Options) {
   if err != nil {
     panic(err)
   }
-  if options.DumpAST() {
-    dumpAST(ast)
-  }
+  dumpAST(ast, options)
   types := bs_typesys.NewTypeTableFor(options.TargetPlatform())
   sem := semanticAnalyze(ast, types, options)
-  if options.DumpSemantic() {
-    dumpSemant(sem)
-  }
+  dumpSemant(sem, options)
   ir := bs_compiler.NewIRGenerator(errorHandler, options, types).Generate(sem)
-  if options.DumpIR() {
-    dumpIR(ir)
-  }
+  dumpIR(ir, options)
   asm := generateAssembly(ir, options)
-  if options.DumpAsm() {
-    dumpAsm(asm)
-  }
+  dumpAsm(asm, options)
+  printAsm(asm, options)
 }
 
 func semanticAnalyze(ast *bs_ast.AST, types *bs_typesys.TypeTable, options *bs_core.Options) *bs_ast.AST {
@@ -94,7 +87,10 @@ func generateAssembly(ir *bs_ir.IR, options *bs_core.Options) bs_sysdep.Assembly
   return code_generator.Generate(ir)
 }
 
-func dumpAST(ast *bs_ast.AST) {
+func dumpAST(ast *bs_ast.AST, options *bs_core.Options) {
+  if ! options.DumpAST() {
+    return
+  }
   cs, err := json.MarshalIndent(ast, "", "  ")
   if err != nil {
     panic(err)
@@ -103,7 +99,10 @@ func dumpAST(ast *bs_ast.AST) {
   fmt.Println(string(cs))
 }
 
-func dumpSemant(ast *bs_ast.AST) {
+func dumpSemant(ast *bs_ast.AST, options *bs_core.Options) {
+  if ! options.DumpSemantic() {
+    return
+  }
   cs, err := json.MarshalIndent(ast, "", "  ")
   if err != nil {
     panic(err)
@@ -112,7 +111,10 @@ func dumpSemant(ast *bs_ast.AST) {
   fmt.Println(string(cs))
 }
 
-func dumpIR(ir *bs_ir.IR) {
+func dumpIR(ir *bs_ir.IR, options *bs_core.Options) {
+  if ! options.DumpIR() {
+    return
+  }
   cs, err := json.MarshalIndent(ir, "", "  ")
   if err != nil {
     panic(err)
@@ -121,11 +123,21 @@ func dumpIR(ir *bs_ir.IR) {
   fmt.Println(string(cs))
 }
 
-func dumpAsm(asm bs_sysdep.AssemblyCode) {
+func dumpAsm(asm bs_sysdep.AssemblyCode, options *bs_core.Options) {
+  if ! options.DumpAsm() {
+    return
+  }
   cs, err := json.MarshalIndent(asm, "", "  ")
   if err != nil {
     panic(err)
   }
   fmt.Println("// Asm")
   fmt.Println(string(cs))
+}
+
+func printAsm(asm bs_sysdep.AssemblyCode, options *bs_core.Options) {
+  if ! options.PrintAsm() {
+    return
+  }
+  fmt.Println(asm.ToSource())
 }

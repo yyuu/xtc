@@ -44,3 +44,7 @@ func (self Label) GetSymbol() core.ISymbol {
 func (self *Label) CollectStatistics(stats core.IStatistics) {
   // does nothing by default
 }
+
+func (self *Label) ToSource(table core.ISymbolTable) string {
+  return self.Symbol.ToSource(table) + ":"
+}

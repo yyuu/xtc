@@ -35,3 +35,7 @@ func (self UnnamedSymbol) String() string {
 func (self *UnnamedSymbol) CollectStatistics(stats core.IStatistics) {
   stats.SymbolUsed(self)
 }
+
+func (self *UnnamedSymbol) ToSource(table core.ISymbolTable) string {
+  return table.SymbolString(self)
+}

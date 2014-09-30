@@ -1,6 +1,7 @@
 package asm
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -42,4 +43,16 @@ func (self *IndirectMemoryReference) FixOffset(diff int64) {
 
 func (self *IndirectMemoryReference) CollectStatistics(stats core.IStatistics) {
   self.Base.CollectStatistics(stats)
+}
+
+func (self *IndirectMemoryReference) ToSource(table core.ISymbolTable) string {
+  if ! self.Fixed {
+    panic("must not happen: writing unfixed variable")
+  } else {
+    if self.Offset.IsZero() {
+      return fmt.Sprintf("%s(%s)", self.Offset.ToSource(table), self.Base.ToSource(table))
+    } else {
+      return fmt.Sprintf("(%s)", self.Base.ToSource(table))
+    }
+  }
 }

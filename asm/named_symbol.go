@@ -36,3 +36,7 @@ func (self NamedSymbol) String() string {
 func (self *NamedSymbol) CollectStatistics(stats core.IStatistics) {
   stats.SymbolUsed(self)
 }
+
+func (self *NamedSymbol) ToSource(table core.ISymbolTable) string {
+  return self.Name
+}

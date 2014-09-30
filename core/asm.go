@@ -5,6 +5,7 @@ type IOperand interface {
   IsRegister() bool
   IsMemoryReference() bool
   CollectStatistics(IStatistics)
+  ToSource(ISymbolTable) string
 }
 
 type IRegister interface {
@@ -28,6 +29,7 @@ type ILiteral interface {
   String() string
   IsZero() bool
   CollectStatistics(IStatistics)
+  ToSource(ISymbolTable) string
 }
 
 type ISymbol interface {
@@ -43,6 +45,12 @@ type IAssembly interface {
   IsDirective() bool
   IsComment() bool
   CollectStatistics(IStatistics)
+  ToSource(ISymbolTable) string
+}
+
+type ISymbolTable interface {
+  AsSymbolTable() ISymbolTable
+  SymbolString(ISymbol) string
 }
 
 type IStatistics interface {

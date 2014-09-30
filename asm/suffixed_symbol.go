@@ -1,6 +1,7 @@
 package asm
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -36,4 +37,8 @@ func (self SuffixedSymbol) String() string {
 
 func (self *SuffixedSymbol) CollectStatistics(stats core.IStatistics) {
   self.Base.CollectStatistics(stats)
+}
+
+func (self *SuffixedSymbol) ToSource(table core.ISymbolTable) string {
+  return fmt.Sprintf("%s%s", self.Base.ToSource(table), self.Suffix)
 }

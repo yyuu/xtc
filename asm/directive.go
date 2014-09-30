@@ -36,3 +36,7 @@ func (self Directive) IsComment() bool {
 func (self *Directive) CollectStatistics(stats core.IStatistics) {
   // does nothing by default
 }
+
+func (self *Directive) ToSource(table core.ISymbolTable) string {
+  return self.Content
+}

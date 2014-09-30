@@ -1,6 +1,8 @@
 package asm
 
 import (
+  "fmt"
+  "strings"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -66,4 +68,12 @@ func (self *Instruction) CollectStatistics(stats core.IStatistics) {
   for i := range self.Operands {
     self.Operands[i].CollectStatistics(stats)
   }
+}
+
+func (self *Instruction) ToSource(table core.ISymbolTable) string {
+  operands := make([]string, len(self.Operands))
+  for i := range self.Operands {
+    operands[i] = self.Operands[i].ToSource(table)
+  }
+  return fmt.Sprintf("\t%s%s\t%s", self.Mnemonic, self.Suffix, strings.Join(operands, ", "))
 }

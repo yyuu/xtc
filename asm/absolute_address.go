@@ -1,6 +1,7 @@
 package asm
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -31,4 +32,8 @@ func (self AbsoluteAddress) GetRegister() core.IOperand {
 
 func (self *AbsoluteAddress) CollectStatistics(stats core.IStatistics) {
   self.Register.CollectStatistics(stats)
+}
+
+func (self *AbsoluteAddress) ToSource(table core.ISymbolTable) string {
+  return fmt.Sprintf("*%s", self.Register.ToSource(table))
 }

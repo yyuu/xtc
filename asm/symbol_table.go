@@ -17,12 +17,17 @@ func NewSymbolTable(base string) *SymbolTable {
   return &SymbolTable { "asm.SymbolTable", base, 0, table }
 }
 
+func (self *SymbolTable) AsSymbolTable() core.ISymbolTable {
+  return self
+}
+
 func (self *SymbolTable) NewSymbol() core.ISymbol {
   return NewNamedSymbol(self.newString())
 }
 
-func (self *SymbolTable) newSymbolString(sym *UnnamedSymbol) string {
-  s, ok := self.table[sym]
+func (self *SymbolTable) SymbolString(sym core.ISymbol) string {
+  unnamed := sym.(*UnnamedSymbol)
+  s, ok := self.table[unnamed]
   if ! ok {
     s = self.newString()
     self.table[sym] = s

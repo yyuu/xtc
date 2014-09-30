@@ -33,3 +33,7 @@ func (self IntegerLiteral) String() string {
 func (self *IntegerLiteral) CollectStatistics(stats core.IStatistics) {
   // does nothing
 }
+
+func (self *IntegerLiteral) ToSource(table core.ISymbolTable) string {
+  return fmt.Sprintf("%d", self.Value)
+}
