@@ -27,6 +27,8 @@ func repl(compiler *bs_compiler.Compiler) {
   }()
   stdin  := bufio.NewReader(os.Stdin)
   stdout := bufio.NewWriter(os.Stdout)
+
+  var sources []string
   for {
     stdout.WriteString("> ")
     stdout.Flush()
@@ -34,8 +36,51 @@ func repl(compiler *bs_compiler.Compiler) {
     if err != nil {
       os.Exit(1)
     }
-    if strings.TrimSpace(source) != "" {
-      compiler.CompileString(source)
+    // FIXME: should not use such a stupid command-line
+    switch strings.TrimSpace(source) {
+      case "": {
+        continue
+      }
+      case "c": fallthrough
+      case "cl": fallthrough
+      case "cle": fallthrough
+      case "clea": fallthrough
+      case "clear": fallthrough
+      case "cls": fallthrough
+      case "re": fallthrough
+      case "res": fallthrough
+      case "rese": fallthrough
+      case "reset": {
+        sources = []string { }
+      }
+      case "e": fallthrough
+      case "ev": fallthrough
+      case "eva": fallthrough
+      case "eval": fallthrough
+      case "r": fallthrough
+      case "ru": fallthrough
+      case "run": {
+        compiler.CompileString(strings.Join(sources, ""))
+      }
+      case "ex": fallthrough
+      case "exi": fallthrough
+      case "exit": {
+        os.Exit(0)
+      }
+      case "l": fallthrough
+      case "li": fallthrough
+      case "lis": fallthrough
+      case "list": fallthrough
+      case "ls": fallthrough
+      case "s": fallthrough
+      case "sh": fallthrough
+      case "sho": fallthrough
+      case "show": {
+        fmt.Print(strings.Join(sources, ""))
+      }
+      default: {
+        sources = append(sources, source)
+      }
     }
   }
 }
