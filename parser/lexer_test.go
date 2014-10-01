@@ -17,7 +17,7 @@ func assertTokenNull(t *testing.T, tok *token) {
 }
 
 func testNewLexer(source string) *lexer {
-  return newLexer("test.txt", source, core.NewErrorHandler(core.LOG_DEBUG), core.NewOptions("lexer_test.go"))
+  return newLexer("test.txt", source, core.NewErrorHandler(core.LOG_WARN), core.NewOptions("lexer_test.go"))
 }
 
 func TestEmpty(t *testing.T) {

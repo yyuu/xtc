@@ -10,7 +10,7 @@ import (
 )
 
 func testParseExpr(source string) (*ast.AST, error) {
-  return ParseExpr(source, core.NewErrorHandler(core.LOG_DEBUG), core.NewOptions("parser_test.go"))
+  return ParseExpr(source, core.NewErrorHandler(core.LOG_WARN), core.NewOptions("parser_test.go"))
 }
 
 func TestParseEmpty(t *testing.T) {

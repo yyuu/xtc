@@ -10,7 +10,7 @@ import (
 )
 
 func setupTypeResolver(a *ast.AST, table *typesys.TypeTable) (int, *TypeResolver) {
-  resolver := NewTypeResolver(core.NewErrorHandler(core.LOG_DEBUG), core.NewOptions("type_resolver_test.go"), table)
+  resolver := NewTypeResolver(core.NewErrorHandler(core.LOG_WARN), core.NewOptions("type_resolver_test.go"), table)
   numTypes := resolver.typeTable.NumTypes()
   resolver.defineTypes(a.ListTypes())
   return numTypes, resolver
@@ -342,10 +342,10 @@ func TestTypeResolverWithFunctionArguments(t *testing.T) {
     ),
   )
   table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
-  errorHandler := core.NewErrorHandler(core.LOG_DEBUG)
+  errorHandler := core.NewErrorHandler(core.LOG_WARN)
   options := core.NewOptions("type_resolver_test.go")
 
-  localResolver := NewLocalResolver(core.NewErrorHandler(core.LOG_DEBUG), options)
+  localResolver := NewLocalResolver(core.NewErrorHandler(core.LOG_WARN), options)
   localResolver.Resolve(a)
   typeResolver := NewTypeResolver(errorHandler, options, table)
   typeResolver.Resolve(a)
