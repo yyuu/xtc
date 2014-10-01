@@ -148,6 +148,7 @@ func (self *DefinedVariable) SymbolString() string {
 }
 
 func (self *DefinedVariable) GetMemref() core.IMemoryReference {
+  checkAddress(self, self.memref, self.address)
   return self.memref
 }
 
@@ -156,6 +157,7 @@ func (self *DefinedVariable) SetMemref(memref core.IMemoryReference) {
 }
 
 func (self *DefinedVariable) GetAddress() core.IOperand {
+  checkAddress(self, self.memref, self.address)
   return self.address
 }
 

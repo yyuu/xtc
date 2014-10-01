@@ -119,6 +119,7 @@ func (self *UndefinedFunction) SymbolString() string {
 }
 
 func (self *UndefinedFunction) GetMemref() core.IMemoryReference {
+  checkAddress(self, self.memref, self.address)
   return self.memref
 }
 
@@ -127,6 +128,7 @@ func (self *UndefinedFunction) SetMemref(memref core.IMemoryReference) {
 }
 
 func (self *UndefinedFunction) GetAddress() core.IOperand {
+  checkAddress(self, self.memref, self.address)
   return self.address
 }
 
