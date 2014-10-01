@@ -216,8 +216,41 @@ func (self TypeTable) checkDuplicatedMembers(t core.ICompositeType, errorHandler
   }
 }
 
-func (self TypeTable) checkRecursiveDefinition(t core.IType, errorHandler *core.ErrorHandler) {
-  errorHandler.Warnf("FIXME: TypeTable#checkRecursiveDefinition: not implemented for %q", t)
+func (self TypeTable) checkRecursiveDefinition(t core.IType, h *core.ErrorHandler) {
+  self._checkRecursiveDefinition(t, make(map[core.IType]int), h)
+}
+
+const (
+  checking = 1 << iota
+  checked
+)
+
+func (self TypeTable) _checkRecursiveDefinition(t core.IType, marks map[core.IType]int, h *core.ErrorHandler) {
+  switch {
+    case marks[t] == checking: {
+      h.Fatalf("recursive type definition: %s", t)
+      return
+    }
+    case marks[t] == checked: {
+      return
+    }
+    default: {
+      marks[t] = checking
+      ct, ok := t.(core.ICompositeType)
+      if ok {
+        members := ct.GetMembers()
+        for i := range members {
+          self._checkRecursiveDefinition(members[i].GetType(), marks, h)
+        }
+      } else {
+        switch xt := t.(type) {
+          case *ArrayType: self._checkRecursiveDefinition(xt.GetBaseType(), marks, h)
+          case *UserType:  self._checkRecursiveDefinition(xt.GetRealType(), marks, h)
+        }
+      }
+      marks[t] = checked
+    }
+  }
 }
 
 func (self TypeTable) VoidType() *VoidType {
