@@ -5,41 +5,43 @@ import (
 )
 
 type INodeVisitor interface {
-  VisitNode(core.INode) interface{}
+  VisitStmtNode(core.IStmtNode) interface{}
+  VisitExprNode(core.IExprNode) interface{}
+  VisitTypeDefinition(core.ITypeDefinition) interface{}
 }
 
-func VisitNode(v INodeVisitor, node core.INode) interface{} {
-  return v.VisitNode(node)
+func VisitStmtNode(v INodeVisitor, stmt core.IStmtNode) interface{} {
+  return v.VisitStmtNode(stmt)
 }
 
-func VisitNodes(v INodeVisitor, nodes []core.INode) interface{} {
-  var x interface{}
-  for i := range nodes {
-    x = VisitNode(v, nodes[i])
-  }
-  return x
-}
-
-func VisitStmt(v INodeVisitor, stmt core.IStmtNode) interface{} {
-  return VisitNode(v, stmt.(core.INode))
-}
-
-func VisitStmts(v INodeVisitor, stmts []core.IStmtNode) interface{} {
+func VisitStmtNodes(v INodeVisitor, stmts []core.IStmtNode) interface{} {
   var x interface{}
   for i := range stmts {
-    x = VisitStmt(v, stmts[i])
+    x = VisitStmtNode(v, stmts[i])
   }
   return x
 }
 
-func VisitExpr(v INodeVisitor, expr core.IExprNode) interface{} {
-  return VisitNode(v, expr.(core.INode))
+func VisitExprNode(v INodeVisitor, expr core.IExprNode) interface{} {
+  return v.VisitExprNode(expr)
 }
 
-func VisitExprs(v INodeVisitor, exprs []core.IExprNode) interface{} {
+func VisitExprNodes(v INodeVisitor, exprs []core.IExprNode) interface{} {
   var x interface{}
   for i := range exprs {
-    x = VisitExpr(v, exprs[i])
+    x = VisitExprNode(v, exprs[i])
+  }
+  return x
+}
+
+func VisitTypeDefinition(v INodeVisitor, typedef core.ITypeDefinition) interface{} {
+  return v.VisitTypeDefinition(typedef)
+}
+
+func VisitTypeDefinitions(v INodeVisitor, typedefs []core.ITypeDefinition) interface{} {
+  var x interface{}
+  for i := range typedefs {
+    x = VisitTypeDefinition(v, typedefs[i])
   }
   return x
 }

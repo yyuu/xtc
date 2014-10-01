@@ -16,7 +16,7 @@ func setupTypeResolver(a *ast.AST, table *typesys.TypeTable) (int, *TypeResolver
   return numTypes, resolver
 }
 
-func TestTypeResolverVisitNodeEmpty(t *testing.T) {
+func TestTypeResolverVisitTypeDefinitionsEmpty(t *testing.T) {
   loc := core.NewLocation("", 0, 0)
   a := ast.NewAST(loc,
     ast.NewDeclaration(
@@ -33,10 +33,7 @@ func TestTypeResolverVisitNodeEmpty(t *testing.T) {
   table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   numTypes, resolver := setupTypeResolver(a, table)
 
-  types := a.ListTypes()
-  for i := range types {
-    ast.VisitNode(resolver, types[i])
-  }
+  ast.VisitTypeDefinitions(resolver, a.ListTypes())
   xt.AssertEquals(t, "empty declaration should not have new types", resolver.typeTable.NumTypes(), numTypes)
 }
 
@@ -73,10 +70,7 @@ func TestTypeResolverWithStruct(t *testing.T) {
   table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   numTypes, resolver := setupTypeResolver(a, table)
 
-  types := a.ListTypes()
-  for i := range types {
-    ast.VisitNode(resolver, types[i])
-  }
+  ast.VisitTypeDefinitions(resolver, a.ListTypes())
   xt.AssertEquals(t, "new struct `foo' should be declared", resolver.typeTable.NumTypes(), numTypes+1)
 }
 
@@ -122,10 +116,7 @@ func TestTypeResolverWithUnion(t *testing.T) {
   table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   numTypes, resolver := setupTypeResolver(a, table)
 
-  types := a.ListTypes()
-  for i := range types {
-    ast.VisitNode(resolver, types[i])
-  }
+  ast.VisitTypeDefinitions(resolver, a.ListTypes())
   xt.AssertEquals(t, "new union `foo' and `bar' should be declared", resolver.typeTable.NumTypes(), numTypes+2)
 }
 
@@ -155,10 +146,7 @@ func TestTypeResolverWithTypedef(t *testing.T) {
   table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   numTypes, resolver := setupTypeResolver(a, table)
 
-  types := a.ListTypes()
-  for i := range types {
-    ast.VisitNode(resolver, types[i])
-  }
+  ast.VisitTypeDefinitions(resolver, a.ListTypes())
   xt.AssertEquals(t, "new typedef `foo', `bar' and `baz' should be declared", resolver.typeTable.NumTypes(), numTypes+3)
 }
 
@@ -179,10 +167,7 @@ func TestTypeResolverVisitEntity(t *testing.T) {
   table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   _, resolver := setupTypeResolver(a, table)
 
-  entities := a.ListEntities()
-  for i := range entities {
-    entity.VisitEntity(resolver, entities[i])
-  }
+  entity.VisitEntities(resolver, a.ListEntities())
   assertTypeResolved(t, "visit entity", a)
 }
 
@@ -231,10 +216,7 @@ func TestTypeResolverWithFunctionWithoutArguments(t *testing.T) {
   table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   _, resolver := setupTypeResolver(a, table)
 
-  entities := a.ListEntities()
-  for i := range entities {
-    entity.VisitEntity(resolver, entities[i])
-  }
+  entity.VisitEntities(resolver, a.ListEntities())
   assertTypeResolved(t, "function w/o args", a)
 }
 
@@ -286,10 +268,7 @@ func TestTypeResolverWithFunctionWithArguments(t *testing.T) {
   table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
   _, resolver := setupTypeResolver(a, table)
 
-  entities := a.ListEntities()
-  for i := range entities {
-    entity.VisitEntity(resolver, entities[i])
-  }
+  entity.VisitEntities(resolver, a.ListEntities())
   // TODO: add asserts
   assertTypeResolved(t, "function w/ args", a)
 }

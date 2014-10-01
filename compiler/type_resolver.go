@@ -24,12 +24,8 @@ func (self *TypeResolver) Resolve(a *ast.AST) {
   entities := a.ListEntities()
 
   self.defineTypes(types)
-  for i := range types {
-    ast.VisitNode(self, types[i])
-  }
-  for i := range entities {
-    entity.VisitEntity(self, entities[i])
-  }
+  ast.VisitTypeDefinitions(self, types)
+  entity.VisitEntities(self, entities)
   self.errorHandler.Debug("finished type resolver.")
 }
 
@@ -73,15 +69,24 @@ func (self *TypeResolver) resolveFunctionHeader(fun core.IFunction, params []*en
   }
 }
 
-func (self *TypeResolver) VisitNode(unknown core.INode) interface{} {
+func (self *TypeResolver) VisitStmtNode(unknown core.IStmtNode) interface{} {
   switch node := unknown.(type) {
     case *ast.BlockNode: {
       variables := node.GetVariables()
       for i := range variables {
         entity.VisitEntity(self, variables[i])
       }
-      ast.VisitStmts(self, node.GetStmts())
+      ast.VisitStmtNodes(self, node.GetStmts())
     }
+    default: {
+      visitStmtNode(self, unknown)
+    }
+  }
+  return nil
+}
+
+func (self *TypeResolver) VisitExprNode(unknown core.IExprNode) interface{} {
+  switch node := unknown.(type) {
     case *ast.CastNode: {
       self.bindType(node.GetTypeNode())
       visitCastNode(self, node)
@@ -101,6 +106,15 @@ func (self *TypeResolver) VisitNode(unknown core.INode) interface{} {
     case *ast.StringLiteralNode: {
       self.bindType(node.GetTypeNode())
     }
+    default: {
+      visitExprNode(self, unknown)
+    }
+  }
+  return nil
+}
+
+func (self *TypeResolver) VisitTypeDefinition(unknown core.ITypeDefinition) interface{} {
+  switch node := unknown.(type) {
     case *ast.StructNode: {
       self.resolveCompositeType(node)
     }
@@ -112,7 +126,7 @@ func (self *TypeResolver) VisitNode(unknown core.INode) interface{} {
       self.resolveCompositeType(node)
     }
     default: {
-      visitNode(self, unknown)
+      visitTypeDefinition(self, unknown)
     }
   }
   return nil
@@ -123,7 +137,7 @@ func (self *TypeResolver) VisitEntity(unknown core.IEntity) interface{} {
     case *entity.DefinedVariable: {
       self.bindType(ent.GetTypeNode())
       if ent.HasInitializer() {
-        ast.VisitNode(self, ent.GetInitializer())
+        ast.VisitExprNode(self, ent.GetInitializer())
       }
     }
     case *entity.UndefinedVariable: {
@@ -131,11 +145,11 @@ func (self *TypeResolver) VisitEntity(unknown core.IEntity) interface{} {
     }
     case *entity.Constant: {
       self.bindType(ent.GetTypeNode())
-      ast.VisitExpr(self, ent.GetValue())
+      ast.VisitExprNode(self, ent.GetValue())
     }
     case *entity.DefinedFunction: {
       self.resolveFunctionHeader(ent, ent.GetParameters())
-      ast.VisitStmt(self, ent.GetBody())
+      ast.VisitStmtNode(self, ent.GetBody())
     }
     case *entity.UndefinedFunction: {
       self.resolveFunctionHeader(ent, ent.GetParameters())

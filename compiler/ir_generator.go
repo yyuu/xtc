@@ -72,16 +72,16 @@ func (self *IRGenerator) compileFunctionBody(f *entity.DefinedFunction) []core.I
 }
 
 func (self *IRGenerator) transformStmt(node core.IStmtNode) {
-  ast.VisitStmt(self, node)
+  ast.VisitStmtNode(self, node)
 }
 
 func (self *IRGenerator) transformStmtExpr(node core.IExprNode) {
-  ast.VisitExpr(self, node)
+  ast.VisitExprNode(self, node)
 }
 
 func (self *IRGenerator) transformExpr(node core.IExprNode) core.IExpr {
   self.exprNestLevel++
-  e := ast.VisitExpr(self, node)
+  e := ast.VisitExprNode(self, node)
   self.exprNestLevel--
   return e.(core.IExpr)
 }
@@ -345,7 +345,7 @@ func (self *IRGenerator) checkJumpLinks(jumpMap map[string]*jumpEntry) {
   }
 }
 
-func (self *IRGenerator) VisitNode(unknown core.INode) interface{} {
+func (self *IRGenerator) VisitStmtNode(unknown core.IStmtNode) interface{} {
   switch node := unknown.(type) {
     case *ast.BlockNode: {
       self.pushScope(node.GetScope().(*entity.LocalScope))
@@ -366,7 +366,7 @@ func (self *IRGenerator) VisitNode(unknown core.INode) interface{} {
       self.popScope()
     }
     case *ast.ExprStmtNode: {
-      e := ast.VisitExpr(self, node.GetExpr())
+      e := ast.VisitExprNode(self, node.GetExpr())
       if e != nil {
         self.errorHandler.Warnf("%s useless expression", node.GetLocation())
       }
@@ -503,6 +503,15 @@ func (self *IRGenerator) VisitNode(unknown core.INode) interface{} {
       self.stmts = append(self.stmts, ir.NewReturn(node.GetLocation(), expr))
       return nil
     }
+    default: {
+      visitStmtNode(self, unknown)
+    }
+  }
+  return nil
+}
+
+func (self *IRGenerator) VisitExprNode(unknown core.IExprNode) interface{} {
+  switch node := unknown.(type) {
     case *ast.CondExprNode: {
       thenLabel := asm.NewUnnamedLabel()
       elseLabel := asm.NewUnnamedLabel()
@@ -742,8 +751,13 @@ func (self *IRGenerator) VisitNode(unknown core.INode) interface{} {
       return ir.NewStr(self.asmType(node.GetType()), node.GetEntry())
     }
     default: {
-      visitNode(self, unknown)
+      visitExprNode(self, unknown)
     }
   }
+  return nil
+}
+
+func (self *IRGenerator) VisitTypeDefinition(unknown core.ITypeDefinition) interface{} {
+  visitTypeDefinition(self, unknown)
   return nil
 }

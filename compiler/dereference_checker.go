@@ -25,7 +25,7 @@ func (self *DereferenceChecker) Check(a *ast.AST) {
   }
   fs := a.GetDefinedFunctions()
   for i := range fs {
-    ast.VisitStmt(self, fs[i].GetBody())
+    ast.VisitStmtNode(self, fs[i].GetBody())
   }
   self.errorHandler.Debug("finished dereference checker.")
 }
@@ -45,7 +45,7 @@ func (self *DereferenceChecker) checkConstant(expr core.IExprNode) {
 
 func (self *DereferenceChecker) checkVariable(v *entity.DefinedVariable) {
   if v.HasInitializer() {
-    ast.VisitExpr(self, v.GetInitializer())
+    ast.VisitExprNode(self, v.GetInitializer())
   }
 }
 
@@ -71,15 +71,24 @@ func (self *DereferenceChecker) checkMemberRef(loc core.Location, t core.IType, 
   }
 }
 
-func (self *DereferenceChecker) VisitNode(unknown core.INode) interface{} {
+func (self *DereferenceChecker) VisitStmtNode(unknown core.IStmtNode) interface{} {
   switch node := unknown.(type) {
     case *ast.BlockNode: {
       vs := node.GetVariables()
       for i := range vs {
         self.checkVariable(vs[i])
       }
-      ast.VisitStmts(self, node.GetStmts())
+      ast.VisitStmtNodes(self, node.GetStmts())
     }
+    default: {
+      visitStmtNode(self, unknown)
+    }
+  }
+  return nil
+}
+
+func (self *DereferenceChecker) VisitExprNode(unknown core.IExprNode) interface{} {
+  switch node := unknown.(type) {
     case *ast.AssignNode: {
       visitAssignNode(self, node)
       if ! node.GetLHS().IsAssignable() {
@@ -163,8 +172,13 @@ func (self *DereferenceChecker) VisitNode(unknown core.INode) interface{} {
       }
     }
     default: {
-      visitNode(self, unknown)
+      visitExprNode(self, unknown)
     }
   }
+  return nil
+}
+
+func (self *DereferenceChecker) VisitTypeDefinition(unknown core.ITypeDefinition) interface{} {
+  visitTypeDefinition(self, unknown)
   return nil
 }

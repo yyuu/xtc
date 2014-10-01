@@ -48,7 +48,7 @@ func (self *LocalResolver) resolveGvarInitializers(a *ast.AST) {
   for i := range variables {
     gvar := variables[i]
     if gvar.HasInitializer() {
-      ast.VisitNode(self, gvar.GetInitializer())
+      ast.VisitExprNode(self, gvar.GetInitializer())
     }
   }
 }
@@ -57,7 +57,7 @@ func (self *LocalResolver) resolveConstantValues(a *ast.AST) {
   constants := a.GetConstants()
   for i := range constants {
     constant := constants[i]
-    ast.VisitNode(self, constant.GetValue())
+    ast.VisitExprNode(self, constant.GetValue())
   }
 }
 
@@ -66,7 +66,7 @@ func (self *LocalResolver) resolveFunctions(a *ast.AST) {
   for i := range functions {
     function := functions[i]
     self.pushScope(function.ListParameters())
-    ast.VisitNode(self, function.GetBody())
+    ast.VisitStmtNode(self, function.GetBody())
     function.SetScope(self.popScope().(*entity.LocalScope))
   }
 }
@@ -99,13 +99,22 @@ func (self *LocalResolver) popScope() core.IScope {
   return scope
 }
 
-func (self *LocalResolver) VisitNode(unknown core.INode) interface{} {
+func (self *LocalResolver) VisitStmtNode(unknown core.IStmtNode) interface{} {
   switch node := unknown.(type) {
     case *ast.BlockNode: {
       self.pushScope(node.GetVariables())
       visitBlockNode(self, node)
       node.SetScope(self.popScope().(*entity.LocalScope))
     }
+    default: {
+      visitStmtNode(self, unknown)
+    }
+  }
+  return nil
+}
+
+func (self *LocalResolver) VisitExprNode(unknown core.IExprNode) interface{} {
+  switch node := unknown.(type) {
     case *ast.StringLiteralNode: {
       ent := self.constantTable.Intern(node.GetValue())
       node.SetEntry(ent)
@@ -119,8 +128,13 @@ func (self *LocalResolver) VisitNode(unknown core.INode) interface{} {
       node.SetEntity(ent)
     }
     default: {
-      visitNode(self, unknown)
+      visitExprNode(self, unknown)
     }
   }
+  return nil
+}
+
+func (self *LocalResolver) VisitTypeDefinition(unknown core.ITypeDefinition) interface{} {
+  visitTypeDefinition(self, unknown)
   return nil
 }

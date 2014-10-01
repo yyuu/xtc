@@ -30,7 +30,7 @@ func (self *TypeChecker) Check(a *ast.AST) {
     self.currentFunction = fs[i]
     self.checkReturnType(fs[i])
     self.checkParamTypes(fs[i])
-    ast.VisitStmt(self, fs[i].GetBody())
+    ast.VisitStmtNode(self, fs[i].GetBody())
   }
   self.errorHandler.Debug("finished type checker.")
 }
@@ -43,7 +43,7 @@ func (self *TypeChecker) checkVariable(v *entity.DefinedVariable) {
     if self.isInvalidLHSType(v.GetType()) {
       self.errorHandler.Fatalf("invalid LHS type: %s", v.GetType())
     }
-    ast.VisitExpr(self, v.GetInitializer())
+    ast.VisitExprNode(self, v.GetInitializer())
     v.SetInitializer(self.implicitCast(v.GetType(), v.GetInitializer()))
   }
 }
@@ -329,17 +329,17 @@ func (self *TypeChecker) expectsSameInteger(node core.IBinaryOpNode) {
   self.arithmeticImplicitCast(node)
 }
 
-func (self *TypeChecker) VisitNode(unknown core.INode) interface{} {
+func (self *TypeChecker) VisitStmtNode(unknown core.IStmtNode) interface{} {
   switch node := unknown.(type) {
     case *ast.BlockNode: {
       vars := node.GetVariables()
       for i := range vars {
         self.checkVariable(vars[i])
       }
-      ast.VisitStmts(self, node.GetStmts())
+      ast.VisitStmtNodes(self, node.GetStmts())
     }
     case *ast.ExprStmtNode: {
-      ast.VisitExpr(self, node.GetExpr())
+      ast.VisitExprNode(self, node.GetExpr())
       if self.isInvalidStatementType(node.GetExpr().GetType()) {
         self.errorHandler.Fatalf("%s invalid statement type: %s", node.GetLocation(), node.GetExpr().GetType())
       }
@@ -372,6 +372,15 @@ func (self *TypeChecker) VisitNode(unknown core.INode) interface{} {
         node.SetExpr(self.implicitCast(self.currentFunction.GetReturnType(), node.GetExpr()))
       }
     }
+    default: {
+      visitStmtNode(self, unknown)
+    }
+  }
+  return nil
+}
+
+func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
+  switch node := unknown.(type) {
     case *ast.AssignNode: {
       visitAssignNode(self, node)
       if self.checkLHS(node.GetLHS()) {
@@ -512,8 +521,13 @@ func (self *TypeChecker) VisitNode(unknown core.INode) interface{} {
       }
     }
     default: {
-      visitNode(self, unknown)
+      visitExprNode(self, unknown)
     }
   }
+  return nil
+}
+
+func (self *TypeChecker) VisitTypeDefinition(unknown core.ITypeDefinition) interface{} {
+  visitTypeDefinition(self, unknown)
   return nil
 }
