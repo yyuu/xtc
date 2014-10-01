@@ -381,14 +381,14 @@ func (self *IRGenerator) VisitStmtNode(unknown core.IStmtNode) interface{} {
         self.cjump(node.GetLocation(), cond, thenLabel, endLabel)
         self.label(thenLabel)
         self.transformStmt(node.GetThenBody())
+        self.jump(endLabel)
+        self.label(elseLabel)
+        self.transformStmt(node.GetElseBody())
         self.label(endLabel)
       } else {
         self.cjump(node.GetLocation(), cond, thenLabel, endLabel)
         self.label(thenLabel)
         self.transformStmt(node.GetThenBody())
-        self.jump(endLabel)
-        self.label(elseLabel)
-        self.transformStmt(node.GetElseBody())
         self.label(endLabel)
       }
       return nil
