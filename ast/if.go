@@ -47,3 +47,7 @@ func (self *IfNode) GetElseBody() core.IStmtNode {
 func (self IfNode) GetScope() core.IScope {
   panic("#GetScope called")
 }
+
+func (self *IfNode) HasElseBody() bool {
+  return self.ElseBody != nil
+}

@@ -576,9 +576,16 @@ labeled_stmt: IDENTIFIER ':' stmt
             }
             ;
 
-if_stmt: IF '(' expr ')' stmt ELSE stmt
+if_stmt: IF '(' expr ')' '{' defvar_list stmts '}'
        {
-         $$._node = ast.NewIfNode($1._token.location, ast.AsExprNode($3._node), ast.AsStmtNode($5._node), ast.AsStmtNode($7._node))
+         thenBody := ast.NewBlockNode($5._token.location, entity.AsDefinedVariables($6._entities), ast.AsStmtNodes($7._nodes))
+         $$._node = ast.NewIfNode($1._token.location, ast.AsExprNode($3._node), thenBody, nil)
+       }
+       | IF '(' expr ')' '{' defvar_list stmts '}' ELSE '{' defvar_list stmts '}'
+       {
+         thenBody := ast.NewBlockNode($5._token.location, entity.AsDefinedVariables($6._entities), ast.AsStmtNodes($7._nodes))
+         elseBody := ast.NewBlockNode($10._token.location, entity.AsDefinedVariables($11._entities), ast.AsStmtNodes($12._nodes))
+         $$._node = ast.NewIfNode($1._token.location, ast.AsExprNode($3._node), thenBody, elseBody)
        }
        ;
 

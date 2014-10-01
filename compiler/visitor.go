@@ -91,7 +91,7 @@ func visitGotoNode(v ast.INodeVisitor, node *ast.GotoNode) {
 func visitIfNode(v ast.INodeVisitor, node *ast.IfNode) {
   ast.VisitExprNode(v, node.GetCond())
   ast.VisitStmtNode(v, node.GetThenBody())
-  if node.GetElseBody() != nil {
+  if node.HasElseBody() {
     ast.VisitStmtNode(v, node.GetElseBody())
   }
 }

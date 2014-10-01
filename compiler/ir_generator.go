@@ -377,7 +377,7 @@ func (self *IRGenerator) VisitStmtNode(unknown core.IStmtNode) interface{} {
       elseLabel := asm.NewUnnamedLabel()
       endLabel := asm.NewUnnamedLabel()
       cond := self.transformExpr(node.GetCond())
-      if node.GetElseBody() == nil {
+      if node.HasElseBody() {
         self.cjump(node.GetLocation(), cond, thenLabel, endLabel)
         self.label(thenLabel)
         self.transformStmt(node.GetThenBody())

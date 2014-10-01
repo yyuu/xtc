@@ -381,3 +381,173 @@ func TestFor1(t *testing.T) {
   xt.AssertStringEqualsDiff(t, "for1", xt.JSON(y), xt.JSON(x))
 //xt.AssertDeepEquals(t, "", y, x)
 }
+
+func TestIfWithElse(t *testing.T) {
+  s := `
+    int even_p(int n) {
+      if (n % 2 == 0) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+`
+  x := ast.NewAST(loc(1,1),
+    ast.NewDeclaration(
+      entity.NewDefinedVariables(),
+      entity.NewUndefinedVariables(),
+      entity.NewDefinedFunctions(
+        entity.NewDefinedFunction(
+          false,
+          ast.NewTypeNode(loc(2,5),
+            typesys.NewFunctionTypeRef(
+              typesys.NewIntTypeRef(loc(2,5)),
+              typesys.NewParamTypeRefs(loc(2,12),
+                typesys.NewTypeRefs(
+                  typesys.NewIntTypeRef(loc(2,12)),
+                ),
+                false,
+              ),
+            ),
+          ),
+          "even_p",
+          entity.NewParams(loc(2,16),
+            entity.NewParameters(
+              entity.NewParameter(
+                ast.NewTypeNode(loc(2,16),
+                  typesys.NewIntTypeRef(loc(2,16)),
+                ),
+                "n",
+              ),
+            ),
+            false,
+          ),
+          ast.NewBlockNode(loc(2,23),
+            entity.NewDefinedVariables(),
+            ast.NewStmtNodes(
+              ast.NewIfNode(loc(3,7),
+                ast.NewBinaryOpNode(loc(3,11),
+                  "==",
+                  ast.NewBinaryOpNode(loc(3,11),
+                    "%",
+                    ast.NewVariableNode(loc(3,11), "n"),
+                    ast.NewIntegerLiteralNode(loc(3,15), "2"),
+                  ),
+                  ast.NewIntegerLiteralNode(loc(3,20), "0"),
+                ),
+                ast.NewBlockNode(loc(3,23),
+                  entity.NewDefinedVariables(),
+                  ast.NewStmtNodes(
+                    ast.NewReturnNode(loc(4,9),
+                      ast.NewIntegerLiteralNode(loc(4,16), "1"),
+                    ),
+                  ),
+                ),
+                ast.NewBlockNode(loc(5,14),
+                  entity.NewDefinedVariables(),
+                  ast.NewStmtNodes(
+                    ast.NewReturnNode(loc(6,9),
+                      ast.NewIntegerLiteralNode(loc(6,16), "0"),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+      entity.NewUndefinedFunctions(),
+      entity.NewConstants(),
+      ast.NewStructNodes(),
+      ast.NewUnionNodes(),
+      ast.NewTypedefNodes(),
+    ),
+  )
+  y, err := testParseExpr(s)
+  xt.AssertNil(t, "", err)
+  xt.AssertStringEqualsDiff(t, "if w/ else", xt.JSON(y), xt.JSON(x))
+//xt.AssertDeepEquals(t, "", y, x)
+}
+
+func TestIfWithoutElse(t *testing.T) {
+  s := `
+    void onEven(int n) {
+      if (n % 2 == 0) {
+        println("even");
+      }
+    }
+`
+  x := ast.NewAST(loc(1,1),
+    ast.NewDeclaration(
+      entity.NewDefinedVariables(),
+      entity.NewUndefinedVariables(),
+      entity.NewDefinedFunctions(
+        entity.NewDefinedFunction(
+          false,
+          ast.NewTypeNode(loc(2,5),
+            typesys.NewFunctionTypeRef(
+              typesys.NewVoidTypeRef(loc(2,5)),
+              typesys.NewParamTypeRefs(loc(2,12),
+                typesys.NewTypeRefs(
+                  typesys.NewIntTypeRef(loc(2,12)),
+                ),
+                false,
+              ),
+            ),
+          ),
+          "onEven",
+          entity.NewParams(loc(2,17),
+            entity.NewParameters(
+              entity.NewParameter(
+                ast.NewTypeNode(loc(2,17),
+                  typesys.NewIntTypeRef(loc(2,17)),
+                ),
+                "n",
+              ),
+            ),
+            false,
+          ),
+          ast.NewBlockNode(loc(2,24),
+            entity.NewDefinedVariables(),
+            ast.NewStmtNodes(
+              ast.NewIfNode(loc(3,7),
+                ast.NewBinaryOpNode(loc(3,11),
+                  "==",
+                  ast.NewBinaryOpNode(loc(3,11),
+                    "%",
+                    ast.NewVariableNode(loc(3,11), "n"),
+                    ast.NewIntegerLiteralNode(loc(3,15), "2"),
+                  ),
+                  ast.NewIntegerLiteralNode(loc(3,20), "0"),
+                ),
+                ast.NewBlockNode(loc(3,23),
+                  entity.NewDefinedVariables(),
+                  ast.NewStmtNodes(
+                    ast.NewExprStmtNode(loc(4,9),
+                      ast.NewFuncallNode(loc(4,9),
+                        ast.NewVariableNode(loc(4,9), "println"),
+                        ast.NewExprNodes(
+                          ast.NewStringLiteralNode(loc(4,17), "\"even\""),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                nil,
+              ),
+            ),
+          ),
+        ),
+      ),
+      entity.NewUndefinedFunctions(),
+      entity.NewConstants(),
+      ast.NewStructNodes(),
+      ast.NewUnionNodes(),
+      ast.NewTypedefNodes(),
+    ),
+  )
+  y, err := testParseExpr(s)
+  xt.AssertNil(t, "", err)
+  xt.AssertStringEqualsDiff(t, "if w/o else", xt.JSON(y), xt.JSON(x))
+//xt.AssertDeepEquals(t, "", y, x)
+}
