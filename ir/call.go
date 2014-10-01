@@ -1,6 +1,8 @@
 package ir
 
 import (
+  "fmt"
+  "strings"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -83,4 +85,12 @@ func (self Call) GetFunction() core.IFunction {
     panic("not a static funcall")
   }
   return ent.(core.IFunction)
+}
+
+func (self Call) String() string {
+  args := make([]string, len(self.Args))
+  for i := range self.Args {
+    args[i] = fmt.Sprint(self.Args[i])
+  }
+  return fmt.Sprintf("Call(%s,%s)", self.Expr, strings.Join(args, ","))
 }

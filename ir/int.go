@@ -1,6 +1,7 @@
 package ir
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/bs/asm"
   "bitbucket.org/yyuu/bs/core"
 )
@@ -57,4 +58,8 @@ func (self Int) GetValue() int64 {
 
 func (self Int) GetEntityForce() core.IEntity {
   return nil
+}
+
+func (self Int) String() string {
+  return fmt.Sprintf("Int(%d)", self.Value)
 }

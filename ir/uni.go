@@ -1,6 +1,7 @@
 package ir
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/bs/core"
 )
 
@@ -61,4 +62,8 @@ func (self Uni) GetAddressNode(t int) core.IExpr {
 
 func (self Uni) GetEntityForce() core.IEntity {
   return nil
+}
+
+func (self Uni) String() string {
+  return fmt.Sprintf("Uni(%d,%s)", self.Op, self.Expr)
 }

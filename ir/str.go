@@ -1,6 +1,7 @@
 package ir
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/entity"
 )
@@ -57,4 +58,8 @@ func (self Str) GetSymbol() core.ISymbol {
 
 func (self Str) GetEntityForce() core.IEntity {
   return nil
+}
+
+func (self Str) String() string {
+  return fmt.Sprintf("Str(%s)", self.Entry.GetValue())
 }
