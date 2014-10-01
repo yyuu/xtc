@@ -30,7 +30,7 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(
         entity.NewDefinedFunction(
-          true,
+          false,
           ast.NewTypeNode(loc(2,5),
             typesys.NewFunctionTypeRef(
               typesys.NewIntTypeRef(loc(2,5)),
@@ -85,7 +85,7 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(
         entity.NewDefinedFunction(
-          true,
+          false,
           ast.NewTypeNode(loc(2,5),
             typesys.NewFunctionTypeRef(
               typesys.NewVoidTypeRef(loc(2,5)),
@@ -152,7 +152,7 @@ func TestParseDefunWithMultipleArguments(t *testing.T) {
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(
         entity.NewDefinedFunction(
-          true,
+          false,
           ast.NewTypeNode(loc(3,5),
             typesys.NewFunctionTypeRef(
               typesys.NewIntTypeRef(loc(3,5)),
@@ -186,7 +186,7 @@ func TestParseDefunWithMultipleArguments(t *testing.T) {
           ast.NewBlockNode(loc(3,25),
             entity.NewDefinedVariables(
               entity.NewDefinedVariable(
-                true,
+                false,
                 ast.NewTypeNode(loc(4,7),
                   typesys.NewIntTypeRef(loc(4,7)),
                 ),
@@ -231,7 +231,7 @@ func TestParseDefunWithVariableArguments(t *testing.T) {
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(
         entity.NewDefinedFunction(
-          true,
+          false,
           ast.NewTypeNode(loc(2,5),
             typesys.NewFunctionTypeRef(
               typesys.NewVoidTypeRef(loc(2,5)),
@@ -298,7 +298,7 @@ func TestFor1(t *testing.T) {
       entity.NewUndefinedVariables(),
       entity.NewDefinedFunctions(
         entity.NewDefinedFunction(
-          true,
+          false,
           ast.NewTypeNode(loc(2,5),
             typesys.NewFunctionTypeRef(
               typesys.NewVoidTypeRef(loc(2,5)),

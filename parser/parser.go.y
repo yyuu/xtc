@@ -297,12 +297,12 @@ static_typeref_name: STATIC typeref_name
 defvars: typeref_name '=' expr ';'
        {
          ref := $1._typeref
-         $$._entity = entity.NewDefinedVariable(true, ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ast.AsExprNode($3._node))
+         $$._entity = entity.NewDefinedVariable(false, ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ast.AsExprNode($3._node))
        }
        | static_typeref_name '=' expr ';'
        {
          ref := $1._typeref
-         $$._entity = entity.NewDefinedVariable(false, ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ast.AsExprNode($3._node))
+         $$._entity = entity.NewDefinedVariable(true, ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ast.AsExprNode($3._node))
        }
        ;
 
@@ -317,30 +317,25 @@ defun: typeref_name '(' ')' block
      {
        ps := entity.NewParams($2._token.location, entity.NewParameters(), false)
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(true,
-         ast.NewTypeNode(t.GetLocation(), t),
-         $1._token.literal,
-         ps,
-         ast.AsStmtNode($4._node),
-       )
+       $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, ast.AsStmtNode($4._node))
      }
      | typeref_name '(' params ')' block
      {
        ps := entity.AsParams($3._entity)
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, ast.AsStmtNode($5._node))
+       $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, ast.AsStmtNode($5._node))
      }
      | static_typeref_name '(' ')' block
      {
        ps := entity.NewParams($2._token.location, entity.NewParameters(), false)
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, ast.AsStmtNode($4._node))
+       $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, ast.AsStmtNode($4._node))
      }
      | static_typeref_name '(' params ')' block
      {
        ps := entity.AsParams($3._entity)
        t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, ast.AsStmtNode($5._node))
+       $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, ast.AsStmtNode($5._node))
      }
      ;
 
