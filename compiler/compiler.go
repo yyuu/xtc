@@ -82,7 +82,7 @@ func (self *Compiler) dumpAST(ast *bs_ast.AST) {
   }
   cs, err := json.MarshalIndent(ast, "", "  ")
   if err != nil {
-    panic(err)
+    self.errorHandler.Fatal(err)
   }
   fmt.Println("// AST")
   fmt.Println(string(cs))
@@ -94,7 +94,7 @@ func (self *Compiler) dumpSemant(ast *bs_ast.AST) {
   }
   cs, err := json.MarshalIndent(ast, "", "  ")
   if err != nil {
-    panic(err)
+    self.errorHandler.Fatal(err)
   }
   fmt.Println("// Semantics")
   fmt.Println(string(cs))
@@ -106,7 +106,7 @@ func (self *Compiler) dumpIR(ir *bs_ir.IR) {
   }
   cs, err := json.MarshalIndent(ir, "", "  ")
   if err != nil {
-    panic(err)
+    self.errorHandler.Fatal(err)
   }
   fmt.Println("// IR")
   fmt.Println(string(cs))
@@ -118,7 +118,7 @@ func (self *Compiler) dumpAsm(asm bs_sysdep.AssemblyCode) {
   }
   cs, err := json.MarshalIndent(asm, "", "  ")
   if err != nil {
-    panic(err)
+    self.errorHandler.Fatal(err)
   }
   fmt.Println("// Asm")
   fmt.Println(string(cs))

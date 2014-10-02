@@ -1,7 +1,6 @@
 package compiler
 
 import (
-  "fmt"
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/entity"
   "bitbucket.org/yyuu/bs/core"
@@ -22,18 +21,21 @@ func (self *TypeResolver) Resolve(a *ast.AST) {
   self.errorHandler.Debug("starting type resolver.")
   types := a.ListTypes()
   entities := a.ListEntities()
-
   self.defineTypes(types)
   ast.VisitTypeDefinitions(self, types)
   entity.VisitEntities(self, entities)
-  self.errorHandler.Debug("finished type resolver.")
+  if self.errorHandler.ErrorOccured() {
+    self.errorHandler.Fatalf("found %d error(s).", self.errorHandler.GetErrors())
+  } else {
+    self.errorHandler.Debug("finished type resolver.")
+  }
 }
 
 func (self *TypeResolver) defineTypes(deftypes []core.ITypeDefinition) {
   for i := range deftypes {
     def := deftypes[i]
     if self.typeTable.IsDefined(def.GetTypeRef()) {
-      panic(fmt.Errorf("duplicated type definition: %s", def.GetTypeRef()))
+      self.errorHandler.Errorf("duplicated type definition: %s", def.GetTypeRef())
     }
     self.typeTable.PutType(def.GetTypeRef(), def.DefiningType())
   }
@@ -51,7 +53,7 @@ func (self *TypeResolver) resolveCompositeType(def core.ICompositeTypeDefinition
   ref := def.GetTypeRef()
   ct, ok := self.typeTable.GetType(ref).(core.ICompositeType)
   if ! ok {
-    panic(fmt.Errorf("cannot intern struct/union: %s", def.GetName()))
+    self.errorHandler.Errorf("cannot intern struct/union: %s", def.GetName())
   }
   members := ct.GetMembers()
   for i := range members {

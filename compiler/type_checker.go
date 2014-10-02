@@ -1,7 +1,6 @@
 package compiler
 
 import (
-  "fmt"
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/entity"
@@ -32,16 +31,20 @@ func (self *TypeChecker) Check(a *ast.AST) {
     self.checkParamTypes(fs[i])
     ast.VisitStmtNode(self, fs[i].GetBody())
   }
-  self.errorHandler.Debug("finished type checker.")
+  if self.errorHandler.ErrorOccured() {
+    self.errorHandler.Fatalf("found %d error(s).", self.errorHandler.GetErrors())
+  } else {
+    self.errorHandler.Debug("finished type checker.")
+  }
 }
 
 func (self *TypeChecker) checkVariable(v *entity.DefinedVariable) {
   if self.isInvalidVariableType(v.GetType()) {
-    self.errorHandler.Fatalf("invalid variable type")
+    self.errorHandler.Errorf("invalid variable type: %s", v.GetType())
   }
   if v.HasInitializer() {
     if self.isInvalidLHSType(v.GetType()) {
-      self.errorHandler.Fatalf("invalid LHS type: %s", v.GetType())
+      self.errorHandler.Errorf("invalid LHS type: %s", v.GetType())
     }
     ast.VisitExprNode(self, v.GetInitializer())
     v.SetInitializer(self.implicitCast(v.GetType(), v.GetInitializer()))
@@ -66,13 +69,13 @@ func (self *TypeChecker) implicitCast(t core.IType, expr core.IExprNode) core.IE
   } else {
     if expr.GetType().IsCastableTo(t) {
       if ! expr.GetType().IsCompatible(t) && ! self.isSafeIntegerCast(expr, t) {
-        self.errorHandler.Warnf("%s incompatible inplicit cast from %s to %s", expr.GetLocation(), expr.GetType(), t)
+        self.errorHandler.Errorf("%s incompatible implicit cast from %s to %s", expr.GetLocation(), expr.GetType(), t)
       }
       typeNode := ast.NewTypeNode(expr.GetLocation(), typesys.NewVoidTypeRef(expr.GetLocation()))
       typeNode.SetType(t)
       return ast.NewCastNode(expr.GetLocation(), typeNode, expr)
     } else {
-      self.errorHandler.Fatalf("invalid cast error: %s to %s", expr.GetType(), t)
+      self.errorHandler.Errorf("invalid cast error: %s to %s", expr.GetType(), t)
       return expr
     }
   }
@@ -114,7 +117,7 @@ func (self *TypeChecker) isSafeIntegerCast(node core.INode, t core.IType) bool {
 
 func (self *TypeChecker) checkReturnType(f *entity.DefinedFunction) {
   if self.isInvalidReturnType(f.GetReturnType()) {
-    self.errorHandler.Fatalf("returns invalid type: %s", f.GetReturnType())
+    self.errorHandler.Errorf("returns invalid type: %s", f.GetReturnType())
   }
 }
 
@@ -127,7 +130,7 @@ func (self *TypeChecker) checkParamTypes(f *entity.DefinedFunction) {
   for i := range params {
     param := params[i]
     if self.isInvalidParameterType(param.GetType()) {
-      self.errorHandler.Fatalf("invalid parameter type: %s", param.GetType())
+      self.errorHandler.Errorf("invalid parameter type: %s", param.GetType())
     }
   }
 }
@@ -142,7 +145,7 @@ func (self *TypeChecker) isInvalidStatementType(t core.IType) bool {
 
 func (self *TypeChecker) mustBeInteger(expr core.IExprNode, op string) bool {
   if ! expr.GetType().IsInteger() {
-    self.errorHandler.Fatalf("%s wrong operand type for %s: %s", expr.GetLocation(), op, expr.GetType())
+    self.errorHandler.Errorf("%s wrong operand type for %s: %s", expr.GetLocation(), op, expr.GetType())
     return false
   } else {
     return true
@@ -151,7 +154,7 @@ func (self *TypeChecker) mustBeInteger(expr core.IExprNode, op string) bool {
 
 func (self *TypeChecker) mustBeScalar(expr core.IExprNode, op string) bool {
   if ! expr.GetType().IsScalar() {
-    self.errorHandler.Fatalf("%s wrong operand type for %s: %s", expr.GetLocation(), op, expr.GetType())
+    self.errorHandler.Errorf("%s wrong operand type for %s: %s", expr.GetLocation(), op, expr.GetType())
     return false
   } else {
     return true
@@ -212,7 +215,7 @@ func (self *TypeChecker) arithmeticImplicitCast(node core.IBinaryOpNode) {
 
 func (self *TypeChecker) integralPromotion(t core.IType) core.IType {
   if ! t.IsInteger() {
-    self.errorHandler.Fatalf("integral promotion for %s", t)
+    self.errorHandler.Errorf("integral promotion for %s", t)
   }
   intType := self.typeTable.SignedInt()
   if t.Size() < intType.Size() {
@@ -261,7 +264,7 @@ func (self *TypeChecker) expectsScalarLHS(node core.IUnaryArithmeticOpNode) {
     // parameter is always a scalar.
   } else {
     if node.GetExpr().GetType().IsArray() {
-      self.errorHandler.Fatalf("%s wrong operand type for %s: %s", node.GetLocation(), node.GetOperator(), node.GetExpr())
+      self.errorHandler.Errorf("%s wrong operand type for %s: %s", node.GetLocation(), node.GetOperator(), node.GetExpr())
       return
     } else {
       self.mustBeScalar(node.GetExpr(), node.GetOperator())
@@ -276,7 +279,7 @@ func (self *TypeChecker) expectsScalarLHS(node core.IUnaryArithmeticOpNode) {
   } else {
     if node.GetExpr().GetType().IsPointer() {
       if node.GetExpr().GetType().GetBaseType().IsVoid() {
-        self.errorHandler.Fatalf("%s wrong operand type for %s: %s", node.GetLocation(), node.GetOperator(), node.GetExpr())
+        self.errorHandler.Errorf("%s wrong operand type for %s: %s", node.GetLocation(), node.GetOperator(), node.GetExpr())
         return
       }
       node.SetAmount(node.GetExpr().GetType().GetBaseType().Size())
@@ -292,7 +295,7 @@ func (self *TypeChecker) checkLHS(lhs core.IExprNode) bool {
     return true
   } else {
     if self.isInvalidLHSType(lhs.GetType()) {
-      self.errorHandler.Fatalf("%s invalid LHS expression type: %s", lhs.GetLocation(), lhs.GetType())
+      self.errorHandler.Errorf("%s invalid LHS expression type: %s", lhs.GetLocation(), lhs.GetType())
       return false
     } else {
       return true
@@ -302,7 +305,7 @@ func (self *TypeChecker) checkLHS(lhs core.IExprNode) bool {
 
 func (self *TypeChecker) checkRHS(rhs core.IExprNode) bool {
   if self.isInvalidRHSType(rhs.GetType()) {
-    self.errorHandler.Fatalf("%s invalid RHS expression type: %s", rhs.GetLocation(), rhs.GetType())
+    self.errorHandler.Errorf("%s invalid RHS expression type: %s", rhs.GetLocation(), rhs.GetType())
     return false
   } else {
     return true
@@ -312,7 +315,7 @@ func (self *TypeChecker) checkRHS(rhs core.IExprNode) bool {
 func (self *TypeChecker) expectsSameIntegerOrPointerDiff(node core.IBinaryOpNode) {
   if node.GetLeft().IsPointer() && node.GetRight().IsPointer() {
     if node.GetOperator() == "+" {
-      self.errorHandler.Fatalf("%s invalid operation: pointer + pointer", node.GetLocation())
+      self.errorHandler.Errorf("%s invalid operation: pointer + pointer", node.GetLocation())
       return
     }
     node.SetType(self.typeTable.PtrDiffType())
@@ -341,7 +344,7 @@ func (self *TypeChecker) VisitStmtNode(unknown core.IStmtNode) interface{} {
     case *ast.ExprStmtNode: {
       ast.VisitExprNode(self, node.GetExpr())
       if self.isInvalidStatementType(node.GetExpr().GetType()) {
-        self.errorHandler.Fatalf("%s invalid statement type: %s", node.GetLocation(), node.GetExpr().GetType())
+        self.errorHandler.Errorf("%s invalid statement type: %s", node.GetLocation(), node.GetExpr().GetType())
       }
     }
     case *ast.IfNode: {
@@ -364,10 +367,10 @@ func (self *TypeChecker) VisitStmtNode(unknown core.IStmtNode) interface{} {
       visitReturnNode(self, node)
       if self.currentFunction.IsVoid() {
         if node.GetExpr() != nil {
-          self.errorHandler.Fatalf("%s returning value from void function", node.GetLocation())
+          self.errorHandler.Errorf("%s returning value from void function", node.GetLocation())
         }
         if node.GetExpr().GetType().IsVoid() {
-          self.errorHandler.Fatalf("%s returning void", node.GetLocation())
+          self.errorHandler.Errorf("%s returning void", node.GetLocation())
         }
         node.SetExpr(self.implicitCast(self.currentFunction.GetReturnType(), node.GetExpr()))
       }
@@ -433,7 +436,7 @@ func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
             cast := ast.NewCastNode(node.GetLocation(), typeNode, node.GetElseExpr())
             node.SetElseExpr(cast)
           } else {
-            self.errorHandler.Fatalf("%s invalid cast from %s to %s", node.GetLocation(), e, t)
+            self.errorHandler.Errorf("%s invalid cast from %s to %s", node.GetLocation(), e, t)
           }
         }
       }
@@ -451,7 +454,7 @@ func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
             self.expectsComparableScalars(node)
           }
           default: {
-            panic(fmt.Errorf("unknown binary operator: %s", node.GetOperator()))
+            self.errorHandler.Errorf("unknown binary operator: %s", node.GetOperator())
           }
         }
       }
@@ -484,12 +487,12 @@ func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
       visitFuncallNode(self, node)
       t := node.GetFunctionType()
       if ! t.AcceptsArgc(node.NumArgs()) {
-        self.errorHandler.Fatalf("%s wrong number of arguments: %d", node.GetLocation(), node.NumArgs())
+        self.errorHandler.Errorf("%s wrong number of arguments: %d", node.GetLocation(), node.NumArgs())
       } else {
         args := node.GetArgs()
         paramDescs := t.GetParamTypes().GetParamDescs()
         if len(args) < len(paramDescs) {
-          panic(fmt.Errorf("%s missing argument: %d for %d", node.GetLocation(), len(args), len(paramDescs)))
+          self.errorHandler.Errorf("%s missing argument: %d for %d", node.GetLocation(), len(args), len(paramDescs))
         }
         newArgs := []core.IExprNode { }
         for i := range args {
@@ -517,7 +520,7 @@ func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
     case *ast.CastNode: {
       visitCastNode(self, node)
       if ! node.GetExpr().GetType().IsCastableTo(node.GetType()) {
-        self.errorHandler.Fatalf("%s invalid cast from %s to %s", node.GetLocation(), node.GetExpr().GetType(), node.GetType())
+        self.errorHandler.Errorf("%s invalid cast from %s to %s", node.GetLocation(), node.GetExpr().GetType(), node.GetType())
       }
     }
     default: {

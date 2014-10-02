@@ -1,7 +1,6 @@
 package compiler
 
 import (
-  "fmt"
   "bitbucket.org/yyuu/bs/asm"
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/core"
@@ -56,7 +55,11 @@ func (self *IRGenerator) Generate(a *ast.AST) *ir.IR {
     fs[i].SetIR(self.compileFunctionBody(fs[i]))
   }
   x := a.GenerateIR()
-  self.errorHandler.Debug("finished IR generator.")
+  if self.errorHandler.ErrorOccured() {
+    self.errorHandler.Fatalf("found %d error(s).", self.errorHandler.GetErrors())
+  } else {
+    self.errorHandler.Debug("finished IR generator.")
+  }
   return x
 }
 
@@ -121,7 +124,7 @@ func (self *IRGenerator) pushBreak(label *asm.Label) {
 
 func (self *IRGenerator) popBreak() *asm.Label {
   if len(self.breakStack) < 1 {
-    panic("unmatched push/pop for break stack")
+    self.errorHandler.Fatal("unmatched push/pop for break stack")
   }
   label := self.currentBreakTarget()
   self.breakStack = self.breakStack[0:len(self.breakStack)-1]
@@ -130,7 +133,7 @@ func (self *IRGenerator) popBreak() *asm.Label {
 
 func (self *IRGenerator) currentBreakTarget() *asm.Label {
   if len(self.breakStack) < 1 {
-    panic("break from out of loop")
+    self.errorHandler.Fatal("break from out of loop")
   }
   return self.breakStack[len(self.breakStack)-1]
 }
@@ -141,7 +144,7 @@ func (self *IRGenerator) pushContinue(label *asm.Label) {
 
 func (self *IRGenerator) popContinue() *asm.Label {
   if len(self.continueStack) < 1 {
-    panic("unmatched push/pop for continue stack")
+    self.errorHandler.Fatal("unmatched push/pop for continue stack")
   }
   label := self.currentContinueTarget()
   self.continueStack = self.continueStack[0:len(self.continueStack)-1]
@@ -150,7 +153,7 @@ func (self *IRGenerator) popContinue() *asm.Label {
 
 func (self *IRGenerator) currentContinueTarget() *asm.Label {
   if len(self.continueStack) < 1 {
-    panic("continue from out of loop")
+    self.errorHandler.Fatal("continue from out of loop")
   }
   return self.continueStack[len(self.continueStack)-1]
 }
@@ -312,7 +315,7 @@ func (self *IRGenerator) popScope() *entity.LocalScope {
 func (self *IRGenerator) defineLabel(name string, loc core.Location) *asm.Label {
   ent := self.getJumpEntry(name)
   if ent.isDefined {
-    panic(fmt.Errorf("duplicated jump label in %s(): %s", name, name))
+    self.errorHandler.Errorf("duplicated jump label in %s(): %s", name, name)
   }
   ent.isDefined = true
   ent.location = loc

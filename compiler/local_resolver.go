@@ -39,9 +39,10 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
 
   a.SetScope(toplevel)
   a.SetConstantTable(self.constantTable)
-  self.errorHandler.Debug("finished local resolver.")
   if self.errorHandler.ErrorOccured() {
-    self.errorHandler.Fatal("local resolver failed")
+    self.errorHandler.Fatalf("found %d error(s).", self.errorHandler.GetErrors())
+  } else {
+    self.errorHandler.Debug("finished local resolver.")
   }
 }
 

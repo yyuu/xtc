@@ -104,3 +104,7 @@ func (self *ErrorHandler) Panic(v...interface{}) {
 func (self *ErrorHandler) ErrorOccured() bool {
   return 0 < self.errors
 }
+
+func (self *ErrorHandler) GetErrors() int {
+  return self.errors
+}
