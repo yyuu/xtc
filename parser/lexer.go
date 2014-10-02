@@ -3,6 +3,7 @@ package parser
 import (
   "fmt"
   "regexp"
+  "strconv"
   "strings"
   "unicode/utf8"
   "bitbucket.org/yyuu/bs/ast"
@@ -294,6 +295,17 @@ func (self *lexer) scanString() (*token, error) {
           case "n":  more += "\n"
           case "r":  more += "\r"
           case "t":  more += "\t"
+          case "u": {
+            a := self.scanner.Scan("[0-9]+")
+            if a == "" {
+              return nil, fmt.Errorf("not a utf8 codepoint")
+            }
+            i, err := strconv.Atoi(a)
+            if err != nil {
+              return nil, err
+            }
+            more += string(rune(i))
+          }
           case "v":  more += "\v"
           case "\"": more += "\""
           case "\\": more += "\\"
