@@ -259,12 +259,15 @@ func (self *lexer) scanCharacter() (*token, error) {
   if s == "" {
     return nil, nil
   }
-  // TODO: handle escape character properly
-  more := self.scanner.ScanUntil("'")
-  if more == "" {
-    return nil, fmt.Errorf("lexer error: %s", self)
+  e := self.scanner.Scan("\\\\([abfnrtv]|u[0-9]+|'|\\\\)'")
+  if e != "" {
+    return self.consume(CHARACTER, s + e), nil
   }
-  return self.consume(CHARACTER, s + more), nil
+  r := self.scanner.Scan(".'")
+  if r != "" {
+    return self.consume(CHARACTER, s + r), nil
+  }
+  return nil, fmt.Errorf("lexer error: %s", self)
 }
 
 func (self *lexer) scanString() (*token, error) {
@@ -272,12 +275,39 @@ func (self *lexer) scanString() (*token, error) {
   if s == "" {
     return nil, nil
   }
-  // TODO: handle escape character properly
-  more := self.scanner.ScanUntil("\"")
-  if more == "" {
-    return nil, fmt.Errorf("lexer error: %s", self)
+  var more string
+  for {
+    if self.scanner.IsEOS() {
+      return nil, fmt.Errorf("EOL while scanning string literal")
+    }
+    r := self.scanner.Scan(".")
+    switch r {
+      case "\"": {
+        return self.consume(STRING, s + more + r), nil
+      }
+      case "\\": {
+        e := self.scanner.Scan(".")
+        switch e {
+          case "a":  more += "\a"
+          case "b":  more += "\b"
+          case "f":  more += "\f"
+          case "n":  more += "\n"
+          case "r":  more += "\r"
+          case "t":  more += "\t"
+          case "v":  more += "\v"
+          case "\"": more += "\""
+          case "\\": more += "\\"
+          default: {
+            return nil, fmt.Errorf("unknown escape character: %q", e)
+          }
+        }
+      }
+      default: {
+        more += r
+      }
+    }
   }
-  return self.consume(STRING, s + more), nil
+  return nil, fmt.Errorf("lexer error: %s", self)
 }
 
 func (self *lexer) scanOperator() (*token, error) {
