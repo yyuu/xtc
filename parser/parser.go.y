@@ -101,7 +101,7 @@ compilation_unit: EOF
                   for i := range $1._nodes {
                     decl.AddDeclaration(ast.AsDeclaration($1._nodes[i]))
                   }
-                  lex.ast = ast.NewAST(lex.firstToken.location, decl)
+                  lex.ast = ast.NewAST(core.NewLocation(lex.sourceName, 1, 1), decl)
                 }
                 ;
 

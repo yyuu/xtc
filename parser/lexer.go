@@ -16,7 +16,6 @@ type lexer struct {
   lineNumber int
   lineOffset int
   ast *ast.AST
-  firstToken *token
   knownTypedefs []string
   isEOF bool
   error error
@@ -48,7 +47,6 @@ func newLexer(filename string, source string, errorHandler *core.ErrorHandler, o
     lineNumber: 1,
     lineOffset: 1,
     ast: nil,
-    firstToken: nil,
     knownTypedefs: []string { },
     isEOF: false,
     error: nil,
@@ -188,10 +186,6 @@ func (self *lexer) consume(id int, literal string) (t *token) {
     id: id,
     literal: literal,
     location: core.NewLocation(self.sourceName, self.lineNumber, self.lineOffset),
-  }
-
-  if self.firstToken == nil {
-    self.firstToken = t
   }
 
   self.lineNumber += strings.Count(literal, "\n")
