@@ -59,7 +59,7 @@ func fixed_sign(s string, n int) key {
   return key { regexp.QuoteMeta(s), n }
 }
 
-var keywords []key = []key {
+var keywords = []key {
   fixed_word("void",     VOID),
   fixed_word("char",     CHAR),
   fixed_word("short",    SHORT),
@@ -90,7 +90,7 @@ var keywords []key = []key {
   fixed_word("sizeof",   SIZEOF),
 }
 
-var operators []key = []key {
+var operators = []key {
   fixed_sign("...",      DOTDOTDOT),
   fixed_sign("<<=",      LSHIFTEQ),
   fixed_sign(">>=",      RSHIFTEQ),
@@ -191,48 +191,50 @@ func (self *lexer) consume(id int, raw, literal string) (t *token) {
 }
 
 func (self *lexer) scanBlockComment() (*token, error) {
-  s := self.scanner.Scan("/\\*")
-  if s == "" {
+  raw := self.scanner.Scan("/\\*")
+  if raw == "" {
     return nil, nil
   }
-  more := self.scanner.ScanUntil("\\*/")
-  if more == "" {
+  val := self.scanner.ScanUntil("\\*/")
+  raw += val
+  if val == "" {
     return nil, fmt.Errorf("lexer error: %s", self)
   }
-  return self.consume(BLOCK_COMMENT, s+more, s+more), nil
+  return self.consume(BLOCK_COMMENT, raw, raw), nil
 }
 
 func (self *lexer) scanLineComment() (*token, error) {
-  s := self.scanner.Scan("//")
-  if s == "" {
+  raw := self.scanner.Scan("//")
+  if raw == "" {
     return nil, nil
   }
-  more := self.scanner.ScanUntil("(\n|\r\n|\r)")
-  if more == "" {
+  val := self.scanner.ScanUntil("(\n|\r\n|\r)")
+  raw += val
+  if val == "" {
     return nil, fmt.Errorf("lexer error: %s", self)
   }
-  return self.consume(LINE_COMMENT, s+more, s+more), nil
+  return self.consume(LINE_COMMENT, raw, raw), nil
 }
 
 func (self *lexer) scanSpaces() (*token, error) {
-  s := self.scanner.Scan("[ \t\n\r\f]+")
-  if s == "" {
+  raw := self.scanner.Scan("[ \t\n\r\f]+")
+  if raw == "" {
     return nil, nil
   }
-  return self.consume(SPACES, s, s), nil
+  return self.consume(SPACES, raw, raw), nil
 }
 
 func (self *lexer) scanIdentifier() (*token, error) {
-  s := self.scanner.Scan("[_A-Za-z][_0-9A-Za-z]*")
-  if s == "" {
+  raw := self.scanner.Scan("[_A-Za-z][_0-9A-Za-z]*")
+  if raw == "" {
     return nil, nil
   }
   for i := range self.knownTypedefs {
-    if self.knownTypedefs[i] == s {
-      return self.consume(TYPENAME, s, s), nil
+    if self.knownTypedefs[i] == raw {
+      return self.consume(TYPENAME, raw, raw), nil
     }
   }
-  return self.consume(IDENTIFIER, s, s), nil
+  return self.consume(IDENTIFIER, raw, raw), nil
 }
 
 func (self *lexer) scanInteger() (*token, error) {
@@ -277,9 +279,9 @@ func (self *lexer) scanInteger() (*token, error) {
 func (self *lexer) scanKeyword() (*token, error) {
   for i := range keywords {
     x := keywords[i]
-    s := self.scanner.Scan(x.re)
-    if s != "" {
-      return self.consume(x.id, s, s), nil
+    raw := self.scanner.Scan(x.re)
+    if raw != "" {
+      return self.consume(x.id, raw, raw), nil
     }
   }
   return nil, nil
@@ -397,17 +399,17 @@ func (self *lexer) scanString() (*token, error) {
 func (self *lexer) scanOperator() (*token, error) {
   for i := range operators {
     x := operators[i]
-    s := self.scanner.Scan(x.re)
-    if s != "" {
-      return self.consume(x.id, s, s), nil
+    raw := self.scanner.Scan(x.re)
+    if raw != "" {
+      return self.consume(x.id, raw, raw), nil
     }
   }
 
   // use next rune as an operator if available
-  s := self.scanner.Scan(".")
-  if s != "" {
-    r, _ := utf8.DecodeRuneInString(s)
-    return self.consume(int(r), s, s), nil
+  raw := self.scanner.Scan(".")
+  if raw != "" {
+    val, _ := utf8.DecodeRuneInString(raw)
+    return self.consume(int(val), raw, string(val)), nil
   }
   return nil, nil
 }
