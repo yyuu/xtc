@@ -61,5 +61,5 @@ func (self Str) GetEntityForce() core.IEntity {
 }
 
 func (self Str) String() string {
-  return fmt.Sprintf("Str(%s)", self.Entry.GetValue())
+  return fmt.Sprintf("Str(%q)", self.Entry.GetValue())
 }

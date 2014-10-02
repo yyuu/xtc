@@ -85,7 +85,7 @@ func TestIf(t *testing.T) {
             "TypeRef": "char*",
             "Type": null
           },
-          "Value": "\"even\""
+          "Value": "even"
         }
       ]
     }
@@ -112,7 +112,7 @@ func TestIf(t *testing.T) {
             "TypeRef": "char*",
             "Type": null
           },
-          "Value": "\"odd\""
+          "Value": "odd"
         }
       ]
     }
@@ -198,7 +198,7 @@ func TestIfWithoutElse(t *testing.T) {
             "TypeRef": "char*",
             "Type": null
           },
-          "Value": "\"even\""
+          "Value": "even"
         }
       ]
     }

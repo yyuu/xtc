@@ -84,7 +84,7 @@ func TestSwitch(t *testing.T) {
                 "TypeRef": "char*",
                 "Type": null
               },
-              "Value": "\"one\""
+              "Value": "one"
             }
           ]
         }
@@ -129,7 +129,7 @@ func TestSwitch(t *testing.T) {
                 "TypeRef": "char*",
                 "Type": null
               },
-              "Value": "\"two\""
+              "Value": "two"
             }
           ]
         }
@@ -162,7 +162,7 @@ func TestSwitch(t *testing.T) {
                 "TypeRef": "char*",
                 "Type": null
               },
-              "Value": "\"plentiful\""
+              "Value": "plentiful"
             }
           ]
         }

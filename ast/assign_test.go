@@ -25,7 +25,7 @@ func TestAssignNode(t *testing.T) {
       "TypeRef": "char*",
       "Type": null
     },
-    "Value": "\"xxx\""
+    "Value": "xxx"
   },
   "Type": null
 }`

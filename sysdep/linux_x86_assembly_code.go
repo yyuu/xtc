@@ -149,7 +149,7 @@ func (self *LinuxX86AssemblyCode) typeSuffix(t int) string {
 }
 
 func (self *LinuxX86AssemblyCode) _file(name string) {
-  self.directive(fmt.Sprintf(".file\t%s", name))
+  self.directive(fmt.Sprintf(".file\t%q", name))
 }
 
 func (self *LinuxX86AssemblyCode) _text() {
@@ -223,7 +223,7 @@ func (self *LinuxX86AssemblyCode) _quad(val bs_core.ILiteral) {
 }
 
 func (self *LinuxX86AssemblyCode) _string(str string) {
-  self.directive(fmt.Sprintf("\t.string\t%s", str))
+  self.directive(fmt.Sprintf("\t.string\t%q", str))
 }
 
 func (self *LinuxX86AssemblyCode) virtualPush(reg *x86Register) {

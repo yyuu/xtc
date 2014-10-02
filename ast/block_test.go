@@ -48,7 +48,7 @@ func TestBlock1(t *testing.T) {
               "TypeRef": "char*",
               "Type": null
             },
-            "Value": "\"hello, world\""
+            "Value": "hello, world"
           }
         ]
       }
@@ -130,7 +130,7 @@ func TestBlock2(t *testing.T) {
               "TypeRef": "char*",
               "Type": null
             },
-            "Value": "\"%d\""
+            "Value": "%d"
           },
           {
             "ClassName": "ast.VariableNode",
@@ -250,7 +250,7 @@ func TestBlock3(t *testing.T) {
               "TypeRef": "char*",
               "Type": null
             },
-            "Value": "\"%d\""
+            "Value": "%d"
           },
           {
             "ClassName": "ast.VariableNode",
@@ -283,7 +283,7 @@ func TestBlock3(t *testing.T) {
               "TypeRef": "char*",
               "Type": null
             },
-            "Value": "\"%d\""
+            "Value": "%d"
           },
           {
             "ClassName": "ast.VariableNode",

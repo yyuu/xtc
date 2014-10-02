@@ -221,10 +221,10 @@ func TestLocalResolverWithConstants1(t *testing.T) {
 
   constants := resolver.constantTable.GetEntries()
   xt.AssertEquals(t, "there should be 2 constants", len(constants), 2)
-  if constants[0].GetValue() != "\"foo\"" {
-    xt.AssertEquals(t, "rest of constant must be \"foo\"", constants[1].GetValue(), "\"foo\"")
+  if constants[0].GetValue() != "foo" {
+    xt.AssertEquals(t, "rest of constant must be \"foo\"", constants[1].GetValue(), "foo")
   } else {
-    xt.AssertEquals(t, "rest of constant must be \"bar\"", constants[1].GetValue(), "\"bar\"")
+    xt.AssertEquals(t, "rest of constant must be \"bar\"", constants[1].GetValue(), "bar")
   }
 
   nodes := a.GetConstants()
