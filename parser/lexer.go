@@ -172,19 +172,19 @@ func (self *lexer) getNextToken() (t *token, err error) {
   return nil, fmt.Errorf("lexer error: %s", self)
 }
 
-func (self *lexer) consume(id int, literal string) (t *token) {
+func (self *lexer) consume(id int, raw, literal string) (t *token) {
   t = &token {
     id: id,
     literal: literal,
     location: core.NewLocation(self.sourceName, self.lineNumber, self.lineOffset),
   }
 
-  self.lineNumber += strings.Count(literal, "\n")
-  i := strings.LastIndex(literal, "\n")
+  self.lineNumber += strings.Count(raw, "\n")
+  i := strings.LastIndex(raw, "\n")
   if i < 0 {
-    self.lineOffset += len(literal)
+    self.lineOffset += len(raw)
   } else {
-    self.lineOffset = len(literal[i:])
+    self.lineOffset = len(raw[i:])
   }
 
   return t
@@ -199,7 +199,7 @@ func (self *lexer) scanBlockComment() (*token, error) {
   if more == "" {
     return nil, fmt.Errorf("lexer error: %s", self)
   }
-  return self.consume(BLOCK_COMMENT, s + more), nil
+  return self.consume(BLOCK_COMMENT, s+more, s+more), nil
 }
 
 func (self *lexer) scanLineComment() (*token, error) {
@@ -211,7 +211,7 @@ func (self *lexer) scanLineComment() (*token, error) {
   if more == "" {
     return nil, fmt.Errorf("lexer error: %s", self)
   }
-  return self.consume(LINE_COMMENT, s + more), nil
+  return self.consume(LINE_COMMENT, s+more, s+more), nil
 }
 
 func (self *lexer) scanSpaces() (*token, error) {
@@ -219,7 +219,7 @@ func (self *lexer) scanSpaces() (*token, error) {
   if s == "" {
     return nil, nil
   }
-  return self.consume(SPACES, s), nil
+  return self.consume(SPACES, s, s), nil
 }
 
 func (self *lexer) scanIdentifier() (*token, error) {
@@ -229,10 +229,10 @@ func (self *lexer) scanIdentifier() (*token, error) {
   }
   for i := range self.knownTypedefs {
     if self.knownTypedefs[i] == s {
-      return self.consume(TYPENAME, s), nil
+      return self.consume(TYPENAME, s, s), nil
     }
   }
-  return self.consume(IDENTIFIER, s), nil
+  return self.consume(IDENTIFIER, s, s), nil
 }
 
 func (self *lexer) scanInteger() (*token, error) {
@@ -240,7 +240,7 @@ func (self *lexer) scanInteger() (*token, error) {
   if s == "" {
     return nil, nil
   }
-  return self.consume(INTEGER, s), nil
+  return self.consume(INTEGER, s, s), nil
 }
 
 func (self *lexer) scanKeyword() (*token, error) {
@@ -248,7 +248,7 @@ func (self *lexer) scanKeyword() (*token, error) {
     x := keywords[i]
     s := self.scanner.Scan(x.re)
     if s != "" {
-      return self.consume(x.id, s), nil
+      return self.consume(x.id, s, s), nil
     }
   }
   return nil, nil
@@ -261,11 +261,11 @@ func (self *lexer) scanCharacter() (*token, error) {
   }
   e := self.scanner.Scan("\\\\([abfnrtv]|u[0-9]+|'|\\\\)'")
   if e != "" {
-    return self.consume(CHARACTER, s + e), nil
+    return self.consume(CHARACTER, s+e, s+e), nil
   }
   r := self.scanner.Scan(".'")
   if r != "" {
-    return self.consume(CHARACTER, s + r), nil
+    return self.consume(CHARACTER, s+r, s+r), nil
   }
   return nil, fmt.Errorf("lexer error: %s", self)
 }
@@ -283,7 +283,7 @@ func (self *lexer) scanString() (*token, error) {
     r := self.scanner.Scan(".")
     switch r {
       case "\"": {
-        return self.consume(STRING, s + more + r), nil
+        return self.consume(STRING, s+more+r, more), nil
       }
       case "\\": {
         e := self.scanner.Scan(".")
@@ -295,8 +295,8 @@ func (self *lexer) scanString() (*token, error) {
           case "r":  more += "\r"
           case "t":  more += "\t"
           case "v":  more += "\v"
-          case "\"": more += r + "\""
-          case "\\": more += r + "\\"
+          case "\"": more += "\""
+          case "\\": more += "\\"
           default: {
             return nil, fmt.Errorf("unknown escape character: %q", e)
           }
@@ -315,7 +315,7 @@ func (self *lexer) scanOperator() (*token, error) {
     x := operators[i]
     s := self.scanner.Scan(x.re)
     if s != "" {
-      return self.consume(x.id, s), nil
+      return self.consume(x.id, s, s), nil
     }
   }
 
@@ -323,7 +323,7 @@ func (self *lexer) scanOperator() (*token, error) {
   s := self.scanner.Scan(".")
   if s != "" {
     r, _ := utf8.DecodeRuneInString(s)
-    return self.consume(int(r), s), nil
+    return self.consume(int(r), s, s), nil
   }
   return nil, nil
 }

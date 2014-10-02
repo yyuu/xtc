@@ -6,7 +6,7 @@ import (
 )
 
 func TestStringLiteral1(t *testing.T) {
-  x := NewStringLiteralNode(loc(0,0), "\"hello, world\"")
+  x := NewStringLiteralNode(loc(0,0), "hello, world")
   s := `{
   "ClassName": "ast.StringLiteralNode",
   "Location": "[:0,0]",
@@ -22,7 +22,7 @@ func TestStringLiteral1(t *testing.T) {
 }
 
 func TestStringLiteral2(t *testing.T) {
-  x := NewStringLiteralNode(loc(0,0), "\"foo\\tbar\\r\\nbaz\\r\\n\"")
+  x := NewStringLiteralNode(loc(0,0), "foo\tbar\r\nbaz\r\n")
   s := `{
   "ClassName": "ast.StringLiteralNode",
   "Location": "[:0,0]",
@@ -38,7 +38,7 @@ func TestStringLiteral2(t *testing.T) {
 }
 
 func TestStringLiteral3(t *testing.T) {
-  x := NewStringLiteralNode(loc(0,0), "\"にほんご\\n日本語\"")
+  x := NewStringLiteralNode(loc(0,0), "にほんご\n日本語")
   s := `{
   "ClassName": "ast.StringLiteralNode",
   "Location": "[:0,0]",

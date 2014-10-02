@@ -203,12 +203,12 @@ func TestLocalResolverWithConstants1(t *testing.T) {
         entity.NewConstant(
           ast.NewTypeNode(loc, typesys.NewArrayTypeRef(typesys.NewCharTypeRef(loc), len("foo"))),
           "foo",
-          ast.NewStringLiteralNode(loc, "\"foo\""),
+          ast.NewStringLiteralNode(loc, "foo"),
         ),
         entity.NewConstant(
           ast.NewTypeNode(loc, typesys.NewArrayTypeRef(typesys.NewCharTypeRef(loc), len("bar"))),
           "bar",
-          ast.NewStringLiteralNode(loc, "\"bar\""),
+          ast.NewStringLiteralNode(loc, "bar"),
         ),
       ),
       ast.NewStructNodes(),

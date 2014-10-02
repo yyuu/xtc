@@ -18,7 +18,7 @@ func TestBlock1(t *testing.T) {
     loc(0,0),
     []*entity.DefinedVariable { },
     []core.IStmtNode {
-      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"hello, world\"") })),
+      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "hello, world") })),
     },
   )
   s := `{
@@ -76,7 +76,7 @@ func TestBlock2(t *testing.T) {
       ),
     },
     []core.IStmtNode {
-      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"%d\""), NewVariableNode(loc(0,0), "n") })),
+      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "%d"), NewVariableNode(loc(0,0), "n") })),
     },
   )
   s := `{
@@ -172,8 +172,8 @@ func TestBlock3(t *testing.T) {
       ),
     },
     []core.IStmtNode {
-      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"%d\""), NewVariableNode(loc(0,0), "n") })),
-      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"%d\""), NewVariableNode(loc(0,0), "m") })),
+      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "%d"), NewVariableNode(loc(0,0), "n") })),
+      NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "printf"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "%d"), NewVariableNode(loc(0,0), "m") })),
     },
   )
   s := `{

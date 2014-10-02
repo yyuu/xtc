@@ -206,13 +206,13 @@ func TestCharacter3(t *testing.T) {
 
 func TestString1(t *testing.T) {
   lex := testNewLexer(`"foo, bar, baz"`)
-  assertToken(t, lex, STRING, `"foo, bar, baz"`)
+  assertToken(t, lex, STRING, `foo, bar, baz`)
   assertTokenNull(t, lex)
 }
 
 func TestString2(t *testing.T) {
   lex := testNewLexer(`"You say \"Yes\", I say \"No\""`)
-  assertToken(t, lex, STRING, `"You say \"Yes\", I say \"No\""`)
+  assertToken(t, lex, STRING, `You say "Yes", I say "No"`)
   assertTokenNull(t, lex)
 }
 
@@ -247,12 +247,12 @@ func TestOperator2(t *testing.T) {
 }
 
 func TestIdentifierStartsWithKeyword(t *testing.T) {
-  lex := testNewLexer("format = \"%d:%d\"\n")
+  lex := testNewLexer(`format = "%d:%d"\n`)
   assertToken(t, lex, IDENTIFIER, "format")
 //assertToken(t, lex, SPACES, " ")
   assertToken(t, lex, '=', "=")
 //assertToken(t, lex, SPACES, " ")
-  assertToken(t, lex, STRING, "\"%d:%d\"")
+  assertToken(t, lex, STRING, "%d:%d")
 //assertToken(t, lex, SPACES, "\n")
   assertTokenNull(t, lex)
 }

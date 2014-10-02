@@ -116,7 +116,7 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
                 ast.NewFuncallNode(loc(3,7),
                   ast.NewVariableNode(loc(3,7), "println"),
                   []core.IExprNode {
-                    ast.NewStringLiteralNode(loc(3,15), "\"hello, %d\""),
+                    ast.NewStringLiteralNode(loc(3,15), "hello, %d"),
                     ast.NewVariableNode(loc(3,28), "n"),
                   },
                 ),
@@ -348,7 +348,7 @@ func TestFor1(t *testing.T) {
                         ast.NewFuncallNode(loc(4,13),
                           ast.NewVariableNode(loc(4,13), "sprintf"),
                           []core.IExprNode {
-                            ast.NewStringLiteralNode(loc(4,21), "\"%d\""),
+                            ast.NewStringLiteralNode(loc(4,21), "%d"),
                             ast.NewVariableNode(loc(4,27), "i"),
                           },
                         ),
@@ -527,7 +527,7 @@ func TestIfWithoutElse(t *testing.T) {
                       ast.NewFuncallNode(loc(4,9),
                         ast.NewVariableNode(loc(4,9), "println"),
                         ast.NewExprNodes(
-                          ast.NewStringLiteralNode(loc(4,17), "\"even\""),
+                          ast.NewStringLiteralNode(loc(4,17), "even"),
                         ),
                       ),
                     ),

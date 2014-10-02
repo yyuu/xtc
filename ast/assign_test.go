@@ -6,7 +6,7 @@ import (
 )
 
 func TestAssignNode(t *testing.T) {
-  x := NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "a"), NewStringLiteralNode(loc(0,0), "\"xxx\""))
+  x := NewAssignNode(loc(0,0), NewVariableNode(loc(0,0), "a"), NewStringLiteralNode(loc(0,0), "xxx"))
   s := `{
   "ClassName": "ast.AssignNode",
   "Location": "[:0,0]",

@@ -21,17 +21,17 @@ func TestSwitch(t *testing.T) {
       NewCaseNode(
         loc(0,0),
         []core.IExprNode { NewIntegerLiteralNode(loc(0,0), "1") },
-        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"one\"") })),
+        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "one") })),
       ),
       NewCaseNode(
         loc(0,0), 
         []core.IExprNode { NewIntegerLiteralNode(loc(0,0), "2") },
-        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"two\"") })),
+        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "two") })),
       ),
       NewCaseNode(
         loc(0,0),
         []core.IExprNode { },
-        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "\"plentiful\"") })),
+        NewExprStmtNode(loc(0,0), NewFuncallNode(loc(0,0), NewVariableNode(loc(0,0), "println"), []core.IExprNode { NewStringLiteralNode(loc(0,0), "plentiful") })),
       ),
     },
   )

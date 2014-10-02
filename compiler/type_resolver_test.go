@@ -198,7 +198,7 @@ func TestTypeResolverWithFunctionWithoutArguments(t *testing.T) {
                 ast.NewFuncallNode(loc,
                   ast.NewVariableNode(loc, "println"),
                   []core.IExprNode {
-                    ast.NewStringLiteralNode(loc, "\"hello, world\""),
+                    ast.NewStringLiteralNode(loc, "hello, world"),
                   },
                 ),
               ),
@@ -250,7 +250,7 @@ func TestTypeResolverWithFunctionWithArguments(t *testing.T) {
                 ast.NewFuncallNode(loc,
                   ast.NewVariableNode(loc, "println"),
                   []core.IExprNode {
-                    ast.NewStringLiteralNode(loc, "\"hello, world\""),
+                    ast.NewStringLiteralNode(loc, "hello, world"),
                   },
                 ),
               ),
