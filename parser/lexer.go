@@ -15,9 +15,9 @@ type lexer struct {
   sourceName string
   lineNumber int
   lineOffset int
-  ast *ast.AST
+  eof bool
   knownTypedefs []string
-  isEOF bool
+  ast *ast.AST
   error error
   errorHandler *core.ErrorHandler
   options *core.Options
@@ -36,9 +36,9 @@ func newLexer(filename string, source string, errorHandler *core.ErrorHandler, o
     sourceName: filename,
     lineNumber: 1,
     lineOffset: 1,
-    ast: nil,
+    eof: false,
     knownTypedefs: []string { },
-    isEOF: false,
+    ast: nil,
     error: nil,
     errorHandler: errorHandler,
     options: options,
@@ -117,6 +117,10 @@ var operators []key = []key {
 
 func (self *lexer) getNextToken() (t *token) {
   if self.scanner.IsEOS() {
+    if ! self.eof {
+      self.eof = true
+      return &token { EOF, "", core.NewLocation(self.sourceName, self.lineNumber, self.lineOffset) }
+    }
     return nil
   }
 

@@ -15,7 +15,7 @@ import (
 %}
 
 %union {
-  _token token
+  _token *token
 
   _node core.INode
   _nodes []core.INode
@@ -924,14 +924,9 @@ func (self *lexer) Lex(lval *yySymType) int {
     self.errorHandler.Debug(t)
   }
   if t == nil {
-    if self.isEOF {
-      return 0
-    } else {
-      self.isEOF = true
-      return EOF
-    }
+    return 0
   } else {
-    lval._token = *t
+    lval._token = t
     return t.id
   }
 }
