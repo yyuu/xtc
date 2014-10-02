@@ -21,38 +21,6 @@ func TestDecimalIntegerLiteral(t *testing.T) {
   xt.AssertStringEqualsDiff(t, "DecimalIntegerLiteralNode", xt.JSON(x), s)
 }
 
-func TestOctalIntegerLiteral(t *testing.T) {
-  x := NewIntegerLiteralNode(loc(0,0), "0755")
-  s := `{
-  "ClassName": "ast.IntegerLiteralNode",
-  "Location": "[:0,0]",
-  "TypeNode": {
-    "ClassName": "ast.TypeNode",
-    "Location": "[:0,0]",
-    "TypeRef": "int",
-    "Type": null
-  },
-  "Value": 493
-}`
-  xt.AssertStringEqualsDiff(t, "OctalIntegerLiteralNode", xt.JSON(x), s)
-}
-
-func TestHexadecimalIntegerLiteral(t *testing.T) {
-  x := NewIntegerLiteralNode(loc(0,0), "0xFFFF")
-  s := `{
-  "ClassName": "ast.IntegerLiteralNode",
-  "Location": "[:0,0]",
-  "TypeNode": {
-    "ClassName": "ast.TypeNode",
-    "Location": "[:0,0]",
-    "TypeRef": "int",
-    "Type": null
-  },
-  "Value": 65535
-}`
-  xt.AssertStringEqualsDiff(t, "HexadecimalIntegerLiteralNode", xt.JSON(x), s)
-}
-
 func TestCharacterIntegerLiteral(t *testing.T) {
   x := NewCharacterLiteralNode(loc(0,0), "97")
   s := `{

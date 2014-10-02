@@ -236,11 +236,42 @@ func (self *lexer) scanIdentifier() (*token, error) {
 }
 
 func (self *lexer) scanInteger() (*token, error) {
-  s := self.scanner.Scan("([1-9][0-9]*U?L?|0[Xx][0-9A-Fa-f]+U?L?|0[0-7]*U?L?)")
-  if s == "" {
-    return nil, nil
+  var raw string
+  var val int64
+  hex := self.scanner.Scan("0[Xx][0-9A-Fa-f]+")
+  raw += hex
+  if hex != "" {
+    // hexadecimal
+    _, err := fmt.Sscanf(hex[2:], "%x", &val)
+    if err != nil {
+      return nil, err
+    }
+  } else {
+    oct := self.scanner.Scan("0[0-7]+")
+    raw += oct
+    if oct != "" {
+      // octal
+      _, err := fmt.Sscanf(oct[1:], "%o", &val)
+      if err != nil {
+        return nil, err
+      }
+    } else {
+      dec := self.scanner.Scan("[0-9]+")
+      raw += dec
+      if dec != "" {
+        // decimal
+        _, err := fmt.Sscanf(dec, "%d", &val)
+        if err != nil {
+          return nil, err
+        }
+      } else {
+        return nil, nil
+      }
+    }
   }
-  return self.consume(INTEGER, s, s), nil
+  ul := self.scanner.Scan("U?L?")
+  raw += ul
+  return self.consume(INTEGER, raw, fmt.Sprintf("%d%s", val, ul)), nil
 }
 
 func (self *lexer) scanKeyword() (*token, error) {

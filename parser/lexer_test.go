@@ -8,7 +8,7 @@ import (
 
 func assertToken(t *testing.T, lex *lexer, id int, literal string) {
   tok, err := lex.getNextToken()
-  if err != nil { t.Error(err.Error()) }
+  if err != nil { t.Error(err.Error()); t.Fail() }
   xt.AssertNotNil(t, "insufficient token", tok)
   xt.AssertEquals(t, "invalid token id", tok.id, id)
   xt.AssertEquals(t, "invalid token literal", tok.literal, literal)
@@ -142,15 +142,15 @@ func TestInteger1(t *testing.T) {
 
 func TestInteger2(t *testing.T) {
   lex := testNewLexer("0xf00\n0x64U\n0X642L\n0xc4febabe\n0XC0FFEEUL\n")
-  assertToken(t, lex, INTEGER, "0xf00")
+  assertToken(t, lex, INTEGER, "3840")
 //assertToken(t, lex, SPACES, "\n")
-  assertToken(t, lex, INTEGER, "0x64U")
+  assertToken(t, lex, INTEGER, "100U")
 //assertToken(t, lex, SPACES, "\n")
-  assertToken(t, lex, INTEGER, "0X642L")
+  assertToken(t, lex, INTEGER, "1602L")
 //assertToken(t, lex, SPACES, "\n")
-  assertToken(t, lex, INTEGER, "0xc4febabe")
+  assertToken(t, lex, INTEGER, "3305028286")
 //assertToken(t, lex, SPACES, "\n")
-  assertToken(t, lex, INTEGER, "0XC0FFEEUL")
+  assertToken(t, lex, INTEGER, "12648430UL")
 //assertToken(t, lex, SPACES, "\n")
   assertTokenNull(t, lex)
 }
@@ -159,11 +159,11 @@ func TestInteger3(t *testing.T) {
   lex := testNewLexer("0\n012U\n034L\n056UL\n")
   assertToken(t, lex, INTEGER, "0")
 //assertToken(t, lex, SPACES, "\n")
-  assertToken(t, lex, INTEGER, "012U")
+  assertToken(t, lex, INTEGER, "10U")
 //assertToken(t, lex, SPACES, "\n")
-  assertToken(t, lex, INTEGER, "034L")
+  assertToken(t, lex, INTEGER, "28L")
 //assertToken(t, lex, SPACES, "\n")
-  assertToken(t, lex, INTEGER, "056UL")
+  assertToken(t, lex, INTEGER, "46UL")
 //assertToken(t, lex, SPACES, "\n")
   assertTokenNull(t, lex)
 }
