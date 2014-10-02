@@ -2,6 +2,7 @@
 package parser
 
 import (
+  "errors"
   "fmt"
   "io/ioutil"
   "strconv"
@@ -914,14 +915,16 @@ func (self *lexer) Lex(lval *yySymType) int {
     return 0
   }
   if self.options.DumpTokens() {
-    self.errorHandler.Infof("token: %s", t)
+    self.errorHandler.Info(t)
   }
   lval._token = t
   return t.id
 }
 
 func (self *lexer) Error(s string) {
-  self.error = fmt.Errorf("%s: %s", self, s)
+  if self.error == nil {
+    self.error = errors.New(s)
+  }
 }
 
 func ParseExpr(s string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {

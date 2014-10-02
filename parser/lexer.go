@@ -25,9 +25,11 @@ type lexer struct {
 }
 
 func (self lexer) String() string {
-  location := bs_core.NewLocation(self.sourceName, self.lineNumber, self.lineOffset)
-  source := fmt.Sprintf("%s", self.scanner.Peek(16))
-  return fmt.Sprintf("%s: %q", location, source)
+  return fmt.Sprintf("%s %q", self.pos(), self.scanner.Peek(16))
+}
+
+func (self lexer) pos() bs_core.Location {
+  return bs_core.NewLocation(self.sourceName, self.lineNumber, self.lineOffset)
 }
 
 func newLexer(filename string, source string, loader *libraryLoader, errorHandler *bs_core.ErrorHandler, options *bs_core.Options) *lexer {
@@ -119,7 +121,7 @@ func (self *lexer) getNextToken() (t *token, err error) {
   if self.scanner.IsEOS() {
     if ! self.eof {
       self.eof = true
-      return &token { EOF, "", bs_core.NewLocation(self.sourceName, self.lineNumber, self.lineOffset) }, nil
+      return &token { EOF, "", self.pos() }, nil
     }
     return nil, nil
   }
@@ -169,14 +171,14 @@ func (self *lexer) getNextToken() (t *token, err error) {
   if err != nil { return nil, err }
   if t != nil { return t, nil }
 
-  return nil, fmt.Errorf("lexer error: %s", self)
+  return nil, fmt.Errorf("%s lexer error", self.pos())
 }
 
 func (self *lexer) consume(id int, raw, literal string) (t *token) {
   t = &token {
     id: id,
     literal: literal,
-    location: bs_core.NewLocation(self.sourceName, self.lineNumber, self.lineOffset),
+    location: self.pos(),
   }
 
   self.lineNumber += strings.Count(raw, "\n")
@@ -198,7 +200,7 @@ func (self *lexer) scanBlockComment() (*token, error) {
   val := self.scanner.ScanUntil("\\*/")
   raw += val
   if val == "" {
-    return nil, fmt.Errorf("lexer error: %s", self)
+    return nil, fmt.Errorf("%s lexer error", self.pos())
   }
   return self.consume(BLOCK_COMMENT, raw, raw), nil
 }
@@ -211,7 +213,7 @@ func (self *lexer) scanLineComment() (*token, error) {
   val := self.scanner.ScanUntil("(\n|\r\n|\r)")
   raw += val
   if val == "" {
-    return nil, fmt.Errorf("lexer error: %s", self)
+    return nil, fmt.Errorf("%s lexer error", self.pos())
   }
   return self.consume(LINE_COMMENT, raw, raw), nil
 }
@@ -312,7 +314,7 @@ func (self *lexer) scanCharacter() (*token, error) {
           hex := self.scanner.Scan("[0-9A-Fa-f]+")
           raw += hex
           if hex == "" {
-            return nil, fmt.Errorf("[%s:%d,%d] invalid unicode code point", self.sourceName, self.lineNumber, self.lineOffset)
+            return nil, fmt.Errorf("%s invalid unicode code point", self.pos())
           }
           _, err := fmt.Sscanf(hex, "%x", &val)
           if err != nil {
@@ -323,7 +325,7 @@ func (self *lexer) scanCharacter() (*token, error) {
         case "'":  val = '\''
         case "\\": val = '\\'
         default: {
-          return nil, fmt.Errorf("[%s:%d,%d] unknown escape character: %q", self.sourceName, self.lineNumber, self.lineOffset, r2)
+          return nil, fmt.Errorf("%s unknown escape character: %q", self.pos(), r2)
         }
       }
     default: {
@@ -334,7 +336,7 @@ func (self *lexer) scanCharacter() (*token, error) {
   q2 := self.scanner.Scan("'")
   raw += q2
   if q2 == "" {
-    return nil, fmt.Errorf("[%s:%d,%d] invalid character literal", self.sourceName, self.lineNumber, self.lineOffset)
+    return nil, fmt.Errorf("%s invalid character literal", self.pos())
   }
   return self.consume(CHARACTER, raw, fmt.Sprintf("%d", val)), nil
 }
@@ -349,7 +351,7 @@ func (self *lexer) scanString() (*token, error) {
   var val string
   for {
     if self.scanner.IsEOS() {
-      return nil, fmt.Errorf("EOL while scanning string literal")
+      return nil, fmt.Errorf("%s EOL while scanning string literal", self.pos())
     }
     r1 := self.scanner.Scan(".")
     raw += r1
@@ -371,7 +373,7 @@ func (self *lexer) scanString() (*token, error) {
             hex := self.scanner.Scan("[0-9A-Fa-f]+")
             raw += hex
             if hex == "" {
-              return nil, fmt.Errorf("[%s:%d,%d] invalid unicode code point", self.sourceName, self.lineNumber, self.lineOffset)
+              return nil, fmt.Errorf("%s invalid unicode code point", self.pos())
             }
             var num int
             _, err := fmt.Sscanf(hex, "%x", &num)
@@ -384,7 +386,7 @@ func (self *lexer) scanString() (*token, error) {
           case "\"": val += "\""
           case "\\": val += "\\"
           default: {
-            return nil, fmt.Errorf("[%s:%d,%d] unknown escape character: %q", self.sourceName, self.lineNumber, self.lineOffset, r2)
+            return nil, fmt.Errorf("%s unknown escape character: %q", self.pos(), r2)
           }
         }
       }
@@ -393,7 +395,7 @@ func (self *lexer) scanString() (*token, error) {
       }
     }
   }
-  return nil, fmt.Errorf("lexer error: %s", self)
+  return nil, fmt.Errorf("%s lexer error", self.pos())
 }
 
 func (self *lexer) scanOperator() (*token, error) {
