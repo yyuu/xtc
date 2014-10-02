@@ -2,15 +2,15 @@ package parser
 
 import (
   "testing"
-  "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/entity"
-  "bitbucket.org/yyuu/bs/typesys"
+  bs_ast "bitbucket.org/yyuu/bs/ast"
+  bs_core "bitbucket.org/yyuu/bs/core"
+  bs_entity "bitbucket.org/yyuu/bs/entity"
+  bs_typesys "bitbucket.org/yyuu/bs/typesys"
   "bitbucket.org/yyuu/bs/xt"
 )
 
-func testParseExpr(source string) (*ast.AST, error) {
-  return ParseExpr(source, core.NewErrorHandler(core.LOG_WARN), core.NewOptions("parser_test.go"))
+func testParseExpr(source string) (*bs_ast.AST, error) {
+  return ParseExpr(source, bs_core.NewErrorHandler(bs_core.LOG_WARN), bs_core.NewOptions("parser_test.go"))
 }
 
 func TestParseEmpty(t *testing.T) {
@@ -24,47 +24,47 @@ func TestParseFuncallWithoutArguments(t *testing.T) {
       return getc();
     }
   `
-  x := ast.NewAST(loc(1,1),
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(
-        entity.NewDefinedFunction(
+  x := bs_ast.NewAST(loc(1,1),
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(
+        bs_entity.NewDefinedFunction(
           false,
-          ast.NewTypeNode(loc(2,5),
-            typesys.NewFunctionTypeRef(
-              typesys.NewIntTypeRef(loc(2,5)),
-              typesys.NewParamTypeRefs(loc(2,10),
-                []core.ITypeRef { },
+          bs_ast.NewTypeNode(loc(2,5),
+            bs_typesys.NewFunctionTypeRef(
+              bs_typesys.NewIntTypeRef(loc(2,5)),
+              bs_typesys.NewParamTypeRefs(loc(2,10),
+                []bs_core.ITypeRef { },
                 false,
               ),
             ),
           ),
           "f",
-          entity.NewParams(loc(2,10),
-            entity.NewParameters(),
+          bs_entity.NewParams(loc(2,10),
+            bs_entity.NewParameters(),
             false,
           ),
-          ast.NewBlockNode(loc(2,13),
-            entity.NewDefinedVariables(),
-            []core.IStmtNode {
-              ast.NewReturnNode(loc(3,7),
-                ast.NewFuncallNode(loc(3,14),
-                  ast.NewVariableNode(loc(3,14),
+          bs_ast.NewBlockNode(loc(2,13),
+            bs_entity.NewDefinedVariables(),
+            []bs_core.IStmtNode {
+              bs_ast.NewReturnNode(loc(3,7),
+                bs_ast.NewFuncallNode(loc(3,14),
+                  bs_ast.NewVariableNode(loc(3,14),
                     "getc",
                   ),
-                  []core.IExprNode { },
+                  []bs_core.IExprNode { },
                 ),
               ),
             },
           ),
         ),
       ),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
   y, err := testParseExpr(s)
@@ -79,45 +79,45 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
       println("hello, %d", n);
     }
   `
-  x := ast.NewAST(loc(1,1),
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(
-        entity.NewDefinedFunction(
+  x := bs_ast.NewAST(loc(1,1),
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(
+        bs_entity.NewDefinedFunction(
           false,
-          ast.NewTypeNode(loc(2,5),
-            typesys.NewFunctionTypeRef(
-              typesys.NewVoidTypeRef(loc(2,5)),
-              typesys.NewParamTypeRefs(loc(2,12),
-                []core.ITypeRef {
-                  typesys.NewIntTypeRef(loc(2,12)),
+          bs_ast.NewTypeNode(loc(2,5),
+            bs_typesys.NewFunctionTypeRef(
+              bs_typesys.NewVoidTypeRef(loc(2,5)),
+              bs_typesys.NewParamTypeRefs(loc(2,12),
+                []bs_core.ITypeRef {
+                  bs_typesys.NewIntTypeRef(loc(2,12)),
                 },
                 false,
               ),
             ),
           ),
           "f",
-          entity.NewParams(loc(2,12),
-            entity.NewParameters(
-              entity.NewParameter(
-                ast.NewTypeNode(loc(2,12),
-                  typesys.NewIntTypeRef(loc(2,12)),
+          bs_entity.NewParams(loc(2,12),
+            bs_entity.NewParameters(
+              bs_entity.NewParameter(
+                bs_ast.NewTypeNode(loc(2,12),
+                  bs_typesys.NewIntTypeRef(loc(2,12)),
                 ),
                 "n",
               ),
             ),
             false,
           ),
-          ast.NewBlockNode(loc(2,19),
-            entity.NewDefinedVariables(),
-            []core.IStmtNode {
-              ast.NewExprStmtNode(loc(3,7),
-                ast.NewFuncallNode(loc(3,7),
-                  ast.NewVariableNode(loc(3,7), "println"),
-                  []core.IExprNode {
-                    ast.NewStringLiteralNode(loc(3,15), "hello, %d"),
-                    ast.NewVariableNode(loc(3,28), "n"),
+          bs_ast.NewBlockNode(loc(2,19),
+            bs_entity.NewDefinedVariables(),
+            []bs_core.IStmtNode {
+              bs_ast.NewExprStmtNode(loc(3,7),
+                bs_ast.NewFuncallNode(loc(3,7),
+                  bs_ast.NewVariableNode(loc(3,7), "println"),
+                  []bs_core.IExprNode {
+                    bs_ast.NewStringLiteralNode(loc(3,15), "hello, %d"),
+                    bs_ast.NewVariableNode(loc(3,28), "n"),
                   },
                 ),
               ),
@@ -125,11 +125,11 @@ func TestParseFuncallWithSingleArgument(t *testing.T) {
           ),
         ),
       ),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
   y, err := testParseExpr(s)
@@ -146,71 +146,71 @@ func TestParseDefunWithMultipleArguments(t *testing.T) {
       return n;
     }
   `
-  x := ast.NewAST(loc(1,1),
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(
-        entity.NewDefinedFunction(
+  x := bs_ast.NewAST(loc(1,1),
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(
+        bs_entity.NewDefinedFunction(
           false,
-          ast.NewTypeNode(loc(3,5),
-            typesys.NewFunctionTypeRef(
-              typesys.NewIntTypeRef(loc(3,5)),
-              typesys.NewParamTypeRefs(loc(3,11),
-                []core.ITypeRef {
-                  typesys.NewIntTypeRef(loc(3,11)),
-                  typesys.NewIntTypeRef(loc(3,18)),
+          bs_ast.NewTypeNode(loc(3,5),
+            bs_typesys.NewFunctionTypeRef(
+              bs_typesys.NewIntTypeRef(loc(3,5)),
+              bs_typesys.NewParamTypeRefs(loc(3,11),
+                []bs_core.ITypeRef {
+                  bs_typesys.NewIntTypeRef(loc(3,11)),
+                  bs_typesys.NewIntTypeRef(loc(3,18)),
                 },
                 false,
               ),
             ),
           ),
           "g",
-          entity.NewParams(loc(3,11),
-            entity.NewParameters(
-              entity.NewParameter(
-                ast.NewTypeNode(loc(3,11),
-                  typesys.NewIntTypeRef(loc(3,11)),
+          bs_entity.NewParams(loc(3,11),
+            bs_entity.NewParameters(
+              bs_entity.NewParameter(
+                bs_ast.NewTypeNode(loc(3,11),
+                  bs_typesys.NewIntTypeRef(loc(3,11)),
                 ),
                 "x",
               ),
-              entity.NewParameter(
-                ast.NewTypeNode(loc(3,18),
-                  typesys.NewIntTypeRef(loc(3,18)),
+              bs_entity.NewParameter(
+                bs_ast.NewTypeNode(loc(3,18),
+                  bs_typesys.NewIntTypeRef(loc(3,18)),
                 ),
                 "y",
               ),
             ),
             false,
           ),
-          ast.NewBlockNode(loc(3,25),
-            entity.NewDefinedVariables(
-              entity.NewDefinedVariable(
+          bs_ast.NewBlockNode(loc(3,25),
+            bs_entity.NewDefinedVariables(
+              bs_entity.NewDefinedVariable(
                 false,
-                ast.NewTypeNode(loc(4,7),
-                  typesys.NewIntTypeRef(loc(4,7)),
+                bs_ast.NewTypeNode(loc(4,7),
+                  bs_typesys.NewIntTypeRef(loc(4,7)),
                 ),
                 "n",
-                ast.NewBinaryOpNode(loc(4,15),
+                bs_ast.NewBinaryOpNode(loc(4,15),
                   "*",
-                  ast.NewVariableNode(loc(4,15), "x"),
-                  ast.NewVariableNode(loc(4,19), "y"),
+                  bs_ast.NewVariableNode(loc(4,15), "x"),
+                  bs_ast.NewVariableNode(loc(4,19), "y"),
                 ),
               ),
             ),
-            []core.IStmtNode {
-              ast.NewReturnNode(loc(5,7),
-                ast.NewVariableNode(loc(5,14), "n"),
+            []bs_core.IStmtNode {
+              bs_ast.NewReturnNode(loc(5,7),
+                bs_ast.NewVariableNode(loc(5,14), "n"),
               ),
             },
           ),
         ),
       ),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
   y, err := testParseExpr(s)
@@ -225,44 +225,44 @@ func TestParseDefunWithVariableArguments(t *testing.T) {
       _printf(fmt);
     }
   `
-  x := ast.NewAST(loc(1,1),
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(
-        entity.NewDefinedFunction(
+  x := bs_ast.NewAST(loc(1,1),
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(
+        bs_entity.NewDefinedFunction(
           false,
-          ast.NewTypeNode(loc(2,5),
-            typesys.NewFunctionTypeRef(
-              typesys.NewVoidTypeRef(loc(2,5)),
-              typesys.NewParamTypeRefs(loc(2,19),
-                []core.ITypeRef {
-                  typesys.NewPointerTypeRef(typesys.NewCharTypeRef(loc(2,19))),
+          bs_ast.NewTypeNode(loc(2,5),
+            bs_typesys.NewFunctionTypeRef(
+              bs_typesys.NewVoidTypeRef(loc(2,5)),
+              bs_typesys.NewParamTypeRefs(loc(2,19),
+                []bs_core.ITypeRef {
+                  bs_typesys.NewPointerTypeRef(bs_typesys.NewCharTypeRef(loc(2,19))),
                 },
                 true,
               ),
             ),
           ),
           "myPrintf",
-          entity.NewParams(loc(2,19),
-            entity.NewParameters(
-              entity.NewParameter(
-                ast.NewTypeNode(loc(2,19),
-                  typesys.NewPointerTypeRef(typesys.NewCharTypeRef(loc(2,19))),
+          bs_entity.NewParams(loc(2,19),
+            bs_entity.NewParameters(
+              bs_entity.NewParameter(
+                bs_ast.NewTypeNode(loc(2,19),
+                  bs_typesys.NewPointerTypeRef(bs_typesys.NewCharTypeRef(loc(2,19))),
                 ),
                 "fmt",
               ),
             ),
             true,
           ),
-          ast.NewBlockNode(loc(2,35),
-            entity.NewDefinedVariables(),
-            []core.IStmtNode {
-              ast.NewExprStmtNode(loc(3,7),
-                ast.NewFuncallNode(loc(3,7),
-                  ast.NewVariableNode(loc(3,7), "_printf"),
-                  []core.IExprNode {
-                    ast.NewVariableNode(loc(3,15), "fmt"),
+          bs_ast.NewBlockNode(loc(2,35),
+            bs_entity.NewDefinedVariables(),
+            []bs_core.IStmtNode {
+              bs_ast.NewExprStmtNode(loc(3,7),
+                bs_ast.NewFuncallNode(loc(3,7),
+                  bs_ast.NewVariableNode(loc(3,7), "_printf"),
+                  []bs_core.IExprNode {
+                    bs_ast.NewVariableNode(loc(3,15), "fmt"),
                   },
                 ),
               ),
@@ -270,11 +270,11 @@ func TestParseDefunWithVariableArguments(t *testing.T) {
           ),
         ),
       ),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
   y, err := testParseExpr(s)
@@ -292,73 +292,73 @@ func TestFor1(t *testing.T) {
       }
     }
 `
-  x := ast.NewAST(loc(1,1),
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(
-        entity.NewDefinedFunction(
+  x := bs_ast.NewAST(loc(1,1),
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(
+        bs_entity.NewDefinedFunction(
           false,
-          ast.NewTypeNode(loc(2,5),
-            typesys.NewFunctionTypeRef(
-              typesys.NewVoidTypeRef(loc(2,5)),
-              typesys.NewParamTypeRefs(loc(2,12),
-                []core.ITypeRef {
-                  typesys.NewIntTypeRef(loc(2,12)),
+          bs_ast.NewTypeNode(loc(2,5),
+            bs_typesys.NewFunctionTypeRef(
+              bs_typesys.NewVoidTypeRef(loc(2,5)),
+              bs_typesys.NewParamTypeRefs(loc(2,12),
+                []bs_core.ITypeRef {
+                  bs_typesys.NewIntTypeRef(loc(2,12)),
                 },
                 false,
               ),
             ),
           ),
           "f",
-          entity.NewParams(loc(2,12),
-            entity.NewParameters(
-              entity.NewParameter(
-                ast.NewTypeNode(loc(2,12),
-                  typesys.NewIntTypeRef(loc(2,12)),
+          bs_entity.NewParams(loc(2,12),
+            bs_entity.NewParameters(
+              bs_entity.NewParameter(
+                bs_ast.NewTypeNode(loc(2,12),
+                  bs_typesys.NewIntTypeRef(loc(2,12)),
                 ),
                 "n",
               ),
             ),
             false,
           ),
-          ast.NewBlockNode(loc(2,19),
-            entity.NewDefinedVariables(),
-            []core.IStmtNode {
-              ast.NewForNode(loc(3,7),
-                ast.NewAssignNode(loc(3,12),
-                  ast.NewVariableNode(loc(3,12), "i"),
-                  ast.NewIntegerLiteralNode(loc(3,14), "0"),
+          bs_ast.NewBlockNode(loc(2,19),
+            bs_entity.NewDefinedVariables(),
+            []bs_core.IStmtNode {
+              bs_ast.NewForNode(loc(3,7),
+                bs_ast.NewAssignNode(loc(3,12),
+                  bs_ast.NewVariableNode(loc(3,12), "i"),
+                  bs_ast.NewIntegerLiteralNode(loc(3,14), "0"),
                 ),
-                ast.NewBinaryOpNode(loc(3,17),
+                bs_ast.NewBinaryOpNode(loc(3,17),
                   "<",
-                  ast.NewVariableNode(loc(3,17), "i"),
-                  ast.NewVariableNode(loc(3,19), "n"),
+                  bs_ast.NewVariableNode(loc(3,17), "i"),
+                  bs_ast.NewVariableNode(loc(3,19), "n"),
                 ),
-                ast.NewSuffixOpNode(loc(3,22),
+                bs_ast.NewSuffixOpNode(loc(3,22),
                   "++",
-                  ast.NewVariableNode(loc(3,22), "i"),
+                  bs_ast.NewVariableNode(loc(3,22), "i"),
                 ),
-                ast.NewBlockNode(loc(3,27),
-                  entity.NewDefinedVariables(),
-                  []core.IStmtNode {
-                    ast.NewExprStmtNode(loc(4,9),
-                      ast.NewAssignNode(loc(4,9),
-                        ast.NewVariableNode(loc(4,9), "s"),
-                        ast.NewFuncallNode(loc(4,13),
-                          ast.NewVariableNode(loc(4,13), "sprintf"),
-                          []core.IExprNode {
-                            ast.NewStringLiteralNode(loc(4,21), "%d"),
-                            ast.NewVariableNode(loc(4,27), "i"),
+                bs_ast.NewBlockNode(loc(3,27),
+                  bs_entity.NewDefinedVariables(),
+                  []bs_core.IStmtNode {
+                    bs_ast.NewExprStmtNode(loc(4,9),
+                      bs_ast.NewAssignNode(loc(4,9),
+                        bs_ast.NewVariableNode(loc(4,9), "s"),
+                        bs_ast.NewFuncallNode(loc(4,13),
+                          bs_ast.NewVariableNode(loc(4,13), "sprintf"),
+                          []bs_core.IExprNode {
+                            bs_ast.NewStringLiteralNode(loc(4,21), "%d"),
+                            bs_ast.NewVariableNode(loc(4,27), "i"),
                           },
                         ),
                       ),
                     ),
-                    ast.NewExprStmtNode(loc(5,9),
-                      ast.NewFuncallNode(loc(5,9),
-                        ast.NewVariableNode(loc(5,9), "println"),
-                        []core.IExprNode {
-                          ast.NewVariableNode(loc(5,17), "s"),
+                    bs_ast.NewExprStmtNode(loc(5,9),
+                      bs_ast.NewFuncallNode(loc(5,9),
+                        bs_ast.NewVariableNode(loc(5,9), "println"),
+                        []bs_core.IExprNode {
+                          bs_ast.NewVariableNode(loc(5,17), "s"),
                         },
                       ),
                     ),
@@ -369,11 +369,11 @@ func TestFor1(t *testing.T) {
           ),
         ),
       ),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
   y, err := testParseExpr(s)
@@ -392,62 +392,62 @@ func TestIfWithElse(t *testing.T) {
       }
     }
 `
-  x := ast.NewAST(loc(1,1),
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(
-        entity.NewDefinedFunction(
+  x := bs_ast.NewAST(loc(1,1),
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(
+        bs_entity.NewDefinedFunction(
           false,
-          ast.NewTypeNode(loc(2,5),
-            typesys.NewFunctionTypeRef(
-              typesys.NewIntTypeRef(loc(2,5)),
-              typesys.NewParamTypeRefs(loc(2,12),
-                typesys.NewTypeRefs(
-                  typesys.NewIntTypeRef(loc(2,12)),
+          bs_ast.NewTypeNode(loc(2,5),
+            bs_typesys.NewFunctionTypeRef(
+              bs_typesys.NewIntTypeRef(loc(2,5)),
+              bs_typesys.NewParamTypeRefs(loc(2,12),
+                bs_typesys.NewTypeRefs(
+                  bs_typesys.NewIntTypeRef(loc(2,12)),
                 ),
                 false,
               ),
             ),
           ),
           "even_p",
-          entity.NewParams(loc(2,16),
-            entity.NewParameters(
-              entity.NewParameter(
-                ast.NewTypeNode(loc(2,16),
-                  typesys.NewIntTypeRef(loc(2,16)),
+          bs_entity.NewParams(loc(2,16),
+            bs_entity.NewParameters(
+              bs_entity.NewParameter(
+                bs_ast.NewTypeNode(loc(2,16),
+                  bs_typesys.NewIntTypeRef(loc(2,16)),
                 ),
                 "n",
               ),
             ),
             false,
           ),
-          ast.NewBlockNode(loc(2,23),
-            entity.NewDefinedVariables(),
-            ast.NewStmtNodes(
-              ast.NewIfNode(loc(3,7),
-                ast.NewBinaryOpNode(loc(3,11),
+          bs_ast.NewBlockNode(loc(2,23),
+            bs_entity.NewDefinedVariables(),
+            bs_ast.NewStmtNodes(
+              bs_ast.NewIfNode(loc(3,7),
+                bs_ast.NewBinaryOpNode(loc(3,11),
                   "==",
-                  ast.NewBinaryOpNode(loc(3,11),
+                  bs_ast.NewBinaryOpNode(loc(3,11),
                     "%",
-                    ast.NewVariableNode(loc(3,11), "n"),
-                    ast.NewIntegerLiteralNode(loc(3,15), "2"),
+                    bs_ast.NewVariableNode(loc(3,11), "n"),
+                    bs_ast.NewIntegerLiteralNode(loc(3,15), "2"),
                   ),
-                  ast.NewIntegerLiteralNode(loc(3,20), "0"),
+                  bs_ast.NewIntegerLiteralNode(loc(3,20), "0"),
                 ),
-                ast.NewBlockNode(loc(3,23),
-                  entity.NewDefinedVariables(),
-                  ast.NewStmtNodes(
-                    ast.NewReturnNode(loc(4,9),
-                      ast.NewIntegerLiteralNode(loc(4,16), "1"),
+                bs_ast.NewBlockNode(loc(3,23),
+                  bs_entity.NewDefinedVariables(),
+                  bs_ast.NewStmtNodes(
+                    bs_ast.NewReturnNode(loc(4,9),
+                      bs_ast.NewIntegerLiteralNode(loc(4,16), "1"),
                     ),
                   ),
                 ),
-                ast.NewBlockNode(loc(5,14),
-                  entity.NewDefinedVariables(),
-                  ast.NewStmtNodes(
-                    ast.NewReturnNode(loc(6,9),
-                      ast.NewIntegerLiteralNode(loc(6,16), "0"),
+                bs_ast.NewBlockNode(loc(5,14),
+                  bs_entity.NewDefinedVariables(),
+                  bs_ast.NewStmtNodes(
+                    bs_ast.NewReturnNode(loc(6,9),
+                      bs_ast.NewIntegerLiteralNode(loc(6,16), "0"),
                     ),
                   ),
                 ),
@@ -456,11 +456,11 @@ func TestIfWithElse(t *testing.T) {
           ),
         ),
       ),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
   y, err := testParseExpr(s)
@@ -477,57 +477,57 @@ func TestIfWithoutElse(t *testing.T) {
       }
     }
 `
-  x := ast.NewAST(loc(1,1),
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(
-        entity.NewDefinedFunction(
+  x := bs_ast.NewAST(loc(1,1),
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(
+        bs_entity.NewDefinedFunction(
           false,
-          ast.NewTypeNode(loc(2,5),
-            typesys.NewFunctionTypeRef(
-              typesys.NewVoidTypeRef(loc(2,5)),
-              typesys.NewParamTypeRefs(loc(2,12),
-                typesys.NewTypeRefs(
-                  typesys.NewIntTypeRef(loc(2,12)),
+          bs_ast.NewTypeNode(loc(2,5),
+            bs_typesys.NewFunctionTypeRef(
+              bs_typesys.NewVoidTypeRef(loc(2,5)),
+              bs_typesys.NewParamTypeRefs(loc(2,12),
+                bs_typesys.NewTypeRefs(
+                  bs_typesys.NewIntTypeRef(loc(2,12)),
                 ),
                 false,
               ),
             ),
           ),
           "onEven",
-          entity.NewParams(loc(2,17),
-            entity.NewParameters(
-              entity.NewParameter(
-                ast.NewTypeNode(loc(2,17),
-                  typesys.NewIntTypeRef(loc(2,17)),
+          bs_entity.NewParams(loc(2,17),
+            bs_entity.NewParameters(
+              bs_entity.NewParameter(
+                bs_ast.NewTypeNode(loc(2,17),
+                  bs_typesys.NewIntTypeRef(loc(2,17)),
                 ),
                 "n",
               ),
             ),
             false,
           ),
-          ast.NewBlockNode(loc(2,24),
-            entity.NewDefinedVariables(),
-            ast.NewStmtNodes(
-              ast.NewIfNode(loc(3,7),
-                ast.NewBinaryOpNode(loc(3,11),
+          bs_ast.NewBlockNode(loc(2,24),
+            bs_entity.NewDefinedVariables(),
+            bs_ast.NewStmtNodes(
+              bs_ast.NewIfNode(loc(3,7),
+                bs_ast.NewBinaryOpNode(loc(3,11),
                   "==",
-                  ast.NewBinaryOpNode(loc(3,11),
+                  bs_ast.NewBinaryOpNode(loc(3,11),
                     "%",
-                    ast.NewVariableNode(loc(3,11), "n"),
-                    ast.NewIntegerLiteralNode(loc(3,15), "2"),
+                    bs_ast.NewVariableNode(loc(3,11), "n"),
+                    bs_ast.NewIntegerLiteralNode(loc(3,15), "2"),
                   ),
-                  ast.NewIntegerLiteralNode(loc(3,20), "0"),
+                  bs_ast.NewIntegerLiteralNode(loc(3,20), "0"),
                 ),
-                ast.NewBlockNode(loc(3,23),
-                  entity.NewDefinedVariables(),
-                  ast.NewStmtNodes(
-                    ast.NewExprStmtNode(loc(4,9),
-                      ast.NewFuncallNode(loc(4,9),
-                        ast.NewVariableNode(loc(4,9), "println"),
-                        ast.NewExprNodes(
-                          ast.NewStringLiteralNode(loc(4,17), "even"),
+                bs_ast.NewBlockNode(loc(3,23),
+                  bs_entity.NewDefinedVariables(),
+                  bs_ast.NewStmtNodes(
+                    bs_ast.NewExprStmtNode(loc(4,9),
+                      bs_ast.NewFuncallNode(loc(4,9),
+                        bs_ast.NewVariableNode(loc(4,9), "println"),
+                        bs_ast.NewExprNodes(
+                          bs_ast.NewStringLiteralNode(loc(4,17), "even"),
                         ),
                       ),
                     ),
@@ -539,11 +539,11 @@ func TestIfWithoutElse(t *testing.T) {
           ),
         ),
       ),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
   y, err := testParseExpr(s)

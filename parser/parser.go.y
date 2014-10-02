@@ -113,7 +113,7 @@ import_stmts:
 import_stmt: IMPORT import_name ';'
            {
              lex := yylex.(*lexer)
-             $$._node = lex.libraryLoader.loadLibrary($2._token.literal)
+             $$._node = lex.loadLibrary($2._token.literal)
            }
            ;
 

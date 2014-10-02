@@ -1,9 +1,9 @@
 package parser
 
 import (
-  "bitbucket.org/yyuu/bs/core"
+  bs_core "bitbucket.org/yyuu/bs/core"
 )
 
-func loc(lineNumber int, lineOffset int) core.Location {
-  return core.NewLocation("", lineNumber, lineOffset)
+func loc(lineNumber int, lineOffset int) bs_core.Location {
+  return bs_core.NewLocation("", lineNumber, lineOffset)
 }
