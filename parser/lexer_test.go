@@ -169,28 +169,50 @@ func TestInteger3(t *testing.T) {
 }
 
 func TestCharacter1(t *testing.T) {
-  lex := testNewLexer("{'f', 'o', 'o'}")
+  lex := testNewLexer(`{'f', 'o', 'o'}`)
   assertToken(t, lex, '{', "{")
-  assertToken(t, lex, CHARACTER, "'f'")
+  assertToken(t, lex, CHARACTER, `'f'`)
   assertToken(t, lex, ',', ",")
 //assertToken(t, lex, SPACES, " ")
-  assertToken(t, lex, CHARACTER, "'o'")
+  assertToken(t, lex, CHARACTER, `'o'`)
   assertToken(t, lex, ',', ",")
 //assertToken(t, lex, SPACES, " ")
-  assertToken(t, lex, CHARACTER, "'o'")
+  assertToken(t, lex, CHARACTER, `'o'`)
   assertToken(t, lex, '}', "}")
   assertTokenNull(t, lex)
 }
 
 func TestCharacter2(t *testing.T) {
-  lex := testNewLexer("'\x20'")
-  assertToken(t, lex, CHARACTER, "'\x20'")
+  lex := testNewLexer(`{'\n','\t'}`)
+  assertToken(t, lex, '{', "{")
+  assertToken(t, lex, CHARACTER, `'\n'`)
+  assertToken(t, lex, ',', ",")
+  assertToken(t, lex, CHARACTER, `'\t'`)
+  assertToken(t, lex, '}', "}")
+  assertTokenNull(t, lex)
+}
+
+func TestCharacter3(t *testing.T) {
+  lex := testNewLexer(`{'\u0009','\\','\''}`)
+  assertToken(t, lex, '{', "{")
+  assertToken(t, lex, CHARACTER, `'\u0009'`)
+  assertToken(t, lex, ',', ",")
+  assertToken(t, lex, CHARACTER, `'\\'`)
+  assertToken(t, lex, ',', ",")
+  assertToken(t, lex, CHARACTER, `'\''`)
+  assertToken(t, lex, '}', "}")
   assertTokenNull(t, lex)
 }
 
 func TestString1(t *testing.T) {
-  lex := testNewLexer("\"foo, bar, baz\"")
-  assertToken(t, lex, STRING, "\"foo, bar, baz\"")
+  lex := testNewLexer(`"foo, bar, baz"`)
+  assertToken(t, lex, STRING, `"foo, bar, baz"`)
+  assertTokenNull(t, lex)
+}
+
+func TestString2(t *testing.T) {
+  lex := testNewLexer(`"You say \"Yes\", I say \"No\""`)
+  assertToken(t, lex, STRING, `"You say \"Yes\", I say \"No\""`)
   assertTokenNull(t, lex)
 }
 

@@ -295,8 +295,8 @@ func (self *lexer) scanString() (*token, error) {
           case "r":  more += "\r"
           case "t":  more += "\t"
           case "v":  more += "\v"
-          case "\"": more += "\""
-          case "\\": more += "\\"
+          case "\"": more += r + "\""
+          case "\\": more += r + "\\"
           default: {
             return nil, fmt.Errorf("unknown escape character: %q", e)
           }
