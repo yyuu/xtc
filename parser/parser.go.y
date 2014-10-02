@@ -337,12 +337,6 @@ defun: typeref_name '(' ')' block
      }
      ;
 
-/*
-storage:
-       | STATIC
-       ;
- */
-
 params: fixedparams
       {
         $$._entity = entity.NewParams($1._token.location, entity.AsParams($1._entity).GetParamDescs(), false)
@@ -427,11 +421,7 @@ funcdecl: extern_typeref_name '(' ')' ';'
         {
           ps := entity.NewParams($1._typeref.GetLocation(), entity.NewParameters(), false)
           ref := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-          $$._entity = entity.NewUndefinedFunction(
-            ast.NewTypeNode(ref.GetLocation(), ref),
-            $1._token.literal,
-            ps,
-          )
+          $$._entity = entity.NewUndefinedFunction(ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ps)
         }
         | extern_typeref_name '(' params ')' ';'
         {
@@ -526,14 +516,14 @@ typeref: VOID
        ;
 
 param_typerefs: typeref
-               {
-                 $$._typerefs = typesys.NewTypeRefs($1._typeref)
-               }
-               | param_typerefs ',' typeref
-               {
-                 $$._typerefs = append($1._typerefs, $3._typeref)
-               }
-               ;
+              {
+                $$._typerefs = typesys.NewTypeRefs($1._typeref)
+              }
+              | param_typerefs ',' typeref
+              {
+                $$._typerefs = append($1._typerefs, $3._typeref)
+              }
+              ;
 
 typedef: TYPEDEF typeref IDENTIFIER ';'
        {
