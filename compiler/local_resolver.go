@@ -1,7 +1,6 @@
 package compiler
 
 import (
-  "fmt"
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/entity"
@@ -41,6 +40,9 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
   a.SetScope(toplevel)
   a.SetConstantTable(self.constantTable)
   self.errorHandler.Debug("finished local resolver.")
+  if self.errorHandler.ErrorOccured() {
+    self.errorHandler.Fatal("local resolver failed")
+  }
 }
 
 func (self *LocalResolver) resolveGvarInitializers(a *ast.AST) {
@@ -73,7 +75,7 @@ func (self *LocalResolver) resolveFunctions(a *ast.AST) {
 
 func (self *LocalResolver) currentScope() core.IScope {
   if len(self.scopeStack) < 1 {
-    panic("stack is empty")
+    self.errorHandler.Fatal("stack is empty")
   }
   return self.scopeStack[len(self.scopeStack)-1]
 }
@@ -83,7 +85,7 @@ func (self *LocalResolver) pushScope(vars []*entity.DefinedVariable) {
   for i := range vars {
     v := vars[i]
     if scope.IsDefinedLocally(v.GetName()) {
-      panic(fmt.Errorf("duplicated variable in scope: %s", v.GetName()))
+      self.errorHandler.Errorf("duplicated variable in scope: %s", v.GetName())
     }
     scope.DefineVariable(v)
   }
@@ -92,7 +94,7 @@ func (self *LocalResolver) pushScope(vars []*entity.DefinedVariable) {
 
 func (self *LocalResolver) popScope() core.IScope {
   if len(self.scopeStack) < 1 {
-    panic("stack is empty")
+    self.errorHandler.Fatal("stack is empty")
   }
   scope := self.currentScope()
   self.scopeStack = self.scopeStack[0:len(self.scopeStack)-1]
@@ -122,7 +124,7 @@ func (self *LocalResolver) VisitExprNode(unknown core.IExprNode) interface{} {
     case *ast.VariableNode: {
       ent := self.currentScope().GetByName(node.GetName())
       if ent == nil {
-        panic(fmt.Errorf("undefined: %s", node.GetName()))
+        self.errorHandler.Errorf("undefined: %s", node.GetName())
       }
       ent.Refered()
       node.SetEntity(ent)

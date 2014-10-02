@@ -44,12 +44,13 @@ func (self *LocalScope) GetByName(name string) core.IEntity {
   }
 }
 
-func (self *LocalScope) DefineVariable(v *DefinedVariable) {
+func (self *LocalScope) DefineVariable(v *DefinedVariable) error {
   name := v.GetName()
   if self.IsDefinedLocally(name) {
-    panic(fmt.Errorf("duplicated variable: %s", name))
+    return fmt.Errorf("duplicated variable: %s", name)
   }
   self.Variables[name] = v
+  return nil
 }
 
 func (self *LocalScope) IsDefinedLocally(name string) bool {
@@ -71,7 +72,8 @@ func (self *LocalScope) CheckReferences(errorHandler *core.ErrorHandler) {
 
 func (self *LocalScope) AllocateTmp(typeNode core.ITypeNode) *DefinedVariable {
   v := temporaryDefinedVariable(typeNode)
-  self.DefineVariable(v)
+  err := self.DefineVariable(v)
+  if err != nil { panic(err) }
   return v
 }
 
