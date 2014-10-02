@@ -15,8 +15,6 @@ type lexer struct {
   sourceName string
   lineNumber int
   lineOffset int
-  ignoreSpaces bool
-  ignoreComments bool
   ast *ast.AST
   firstToken *token
   knownTypedefs []string
@@ -49,8 +47,6 @@ func newLexer(filename string, source string, errorHandler *core.ErrorHandler, o
     sourceName: filename,
     lineNumber: 1,
     lineOffset: 1,
-    ignoreSpaces: true,
-    ignoreComments: true,
     ast: nil,
     firstToken: nil,
     knownTypedefs: []string { },
@@ -138,28 +134,20 @@ func (self *lexer) getNextToken() (t *token) {
 
   t = self.scanSpaces()
   if t != nil {
-    if ! self.ignoreSpaces {
-      return t
-    } else {
-      return self.getNextToken()
-    }
+    // ignore spaces
+    return self.getNextToken()
   }
 
   t = self.scanBlockComment()
   if t != nil {
-    if ! self.ignoreComments {
-      return t
-    } else {
-      return self.getNextToken()
-    }
+    // ignore comments
+    return self.getNextToken()
   }
+
   t = self.scanLineComment()
   if t != nil {
-    if ! self.ignoreComments {
-      return t
-    } else {
-      return self.getNextToken()
-    }
+    // ignore comments
+    return self.getNextToken()
   }
 
   t = self.scanKeyword()
