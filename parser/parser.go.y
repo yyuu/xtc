@@ -2,10 +2,8 @@
 package parser
 
 import (
-  "errors"
   "fmt"
   "io/ioutil"
-  "os"
   "strconv"
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/core"
@@ -919,49 +917,50 @@ primary: INTEGER
 %%
 
 func (self *lexer) Lex(lval *yySymType) int {
-  t := self.getNextToken()
-  if self.options.DumpTokens() {
-    self.errorHandler.Debug(t)
+  t, err := self.getNextToken()
+  if err != nil {
+    self.Error(err.Error())
   }
   if t == nil {
     return 0
-  } else {
-    lval._token = t
-    return t.id
   }
+  if self.options.DumpTokens() {
+    self.errorHandler.Infof("token: %s", t)
+  }
+  lval._token = t
+  return t.id
 }
 
 func (self *lexer) Error(s string) {
-  self.error = errors.New(s)
-  panic(fmt.Errorf("%s: %s", self, s))
+  self.error = fmt.Errorf("%s: %s", self, s)
 }
 
 func ParseExpr(s string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
-  return doParse("", s, errorHandler, options)
+  return parse("", s, errorHandler, options)
 }
 
 func ParseFile(path string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
   cs, err := ioutil.ReadFile(path)
   if err != nil {
-    panic(err)
-    fmt.Fprintln(os.Stderr, err)
-    os.Exit(1)
+    errorHandler.Fatalf(err.Error())
   }
-  return doParse(path, string(cs), errorHandler, options)
+  return parse(path, string(cs), errorHandler, options)
 }
 
-func doParse(name string, source string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
+func parse(name string, source string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
   if options.IsVerboseMode() {
     yyDebug = 4 // TODO: configurable
   }
-  lex := newLexer(name, source, errorHandler, options)
+  loader := newLibraryLoader(errorHandler, options)
+  lex := newLexer(name, source, loader, errorHandler, options)
   if yyParse(lex) == 0 {
     return lex.ast, nil // success
   } else {
-    if lex.error == nil {
-      panic("must not happen")
+    if lex.error != nil {
+      return nil, lex.error
+    } else {
+      return nil, fmt.Errorf("must not happen: lex.error is nil")
     }
-    return nil, lex.error
   }
 }
 

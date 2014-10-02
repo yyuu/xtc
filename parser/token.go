@@ -12,5 +12,5 @@ type token struct {
 }
 
 func (self token) String() string {
-  return fmt.Sprintf("#<token:%d %s %q>", self.id, self.location, self.literal)
+  return fmt.Sprintf("%s %d %q", self.location, self.id, self.literal)
 }

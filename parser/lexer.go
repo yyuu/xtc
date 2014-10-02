@@ -17,11 +17,11 @@ type lexer struct {
   lineOffset int
   eof bool
   knownTypedefs []string
+  libraryLoader *libraryLoader
   ast *ast.AST
   error error
   errorHandler *core.ErrorHandler
   options *core.Options
-  libraryLoader *libraryLoader
 }
 
 func (self lexer) String() string {
@@ -30,7 +30,7 @@ func (self lexer) String() string {
   return fmt.Sprintf("%s: %q", location, source)
 }
 
-func newLexer(filename string, source string, errorHandler *core.ErrorHandler, options *core.Options) *lexer {
+func newLexer(filename string, source string, loader *libraryLoader, errorHandler *core.ErrorHandler, options *core.Options) *lexer {
   return &lexer {
     scanner: strscan.New(source),
     sourceName: filename,
@@ -38,11 +38,11 @@ func newLexer(filename string, source string, errorHandler *core.ErrorHandler, o
     lineOffset: 1,
     eof: false,
     knownTypedefs: []string { },
+    libraryLoader: loader,
     ast: nil,
     error: nil,
     errorHandler: errorHandler,
     options: options,
-    libraryLoader: newLibraryLoader(errorHandler, options),
   }
 }
 
@@ -115,64 +115,61 @@ var operators []key = []key {
   fixed_sign("||",       OROR),
 }
 
-func (self *lexer) getNextToken() (t *token) {
+func (self *lexer) getNextToken() (t *token, err error) {
   if self.scanner.IsEOS() {
     if ! self.eof {
       self.eof = true
-      return &token { EOF, "", core.NewLocation(self.sourceName, self.lineNumber, self.lineOffset) }
+      return &token { EOF, "", core.NewLocation(self.sourceName, self.lineNumber, self.lineOffset) }, nil
     }
-    return nil
+    return nil, nil
   }
 
-  t = self.scanSpaces()
+  t, err = self.scanSpaces()
+  if err != nil { return nil, err }
+  // ignore spaces
   if t != nil {
-    // ignore spaces
     return self.getNextToken()
   }
 
-  t = self.scanBlockComment()
+  t, err = self.scanBlockComment()
+  if err != nil { return nil, err }
+  // ignore comments
   if t != nil {
-    // ignore comments
     return self.getNextToken()
   }
 
-  t = self.scanLineComment()
+  t, err = self.scanLineComment()
+  if err != nil { return nil, err }
+  // ignore comments
   if t != nil {
-    // ignore comments
     return self.getNextToken()
   }
 
-  t = self.scanKeyword()
-  if t != nil {
-    return t
-  }
+  t, err = self.scanKeyword()
+  if err != nil { return nil, err }
+  if t != nil { return t, nil }
 
-  t = self.scanIdentifier()
-  if t != nil {
-    return t
-  }
+  t, err = self.scanIdentifier()
+  if err != nil { return nil, err }
+  if t != nil { return t, nil }
 
-  t = self.scanInteger()
-  if t != nil {
-    return t
-  }
+  t, err = self.scanInteger()
+  if err != nil { return nil, err }
+  if t != nil { return t, nil }
 
-  t = self.scanCharacter()
-  if t != nil {
-    return t
-  }
+  t, err = self.scanCharacter()
+  if err != nil { return nil, err }
+  if t != nil { return t, nil }
 
-  t = self.scanString()
-  if t != nil {
-    return t
-  }
+  t, err = self.scanString()
+  if err != nil { return nil, err }
+  if t != nil { return t, nil }
 
-  t = self.scanOperator()
-  if t != nil {
-    return t
-  }
+  t, err = self.scanOperator()
+  if err != nil { return nil, err }
+  if t != nil { return t, nil }
 
-  panic(fmt.Errorf("lexer error: %s", self))
+  return nil, fmt.Errorf("lexer error: %s", self)
 }
 
 func (self *lexer) consume(id int, literal string) (t *token) {
@@ -193,102 +190,102 @@ func (self *lexer) consume(id int, literal string) (t *token) {
   return t
 }
 
-func (self *lexer) scanBlockComment() *token {
+func (self *lexer) scanBlockComment() (*token, error) {
   s := self.scanner.Scan("/\\*")
   if s == "" {
-    return nil
+    return nil, nil
   }
   more := self.scanner.ScanUntil("\\*/")
   if more == "" {
-    panic(fmt.Errorf("lexer error: %s", self))
+    return nil, fmt.Errorf("lexer error: %s", self)
   }
-  return self.consume(BLOCK_COMMENT, s + more)
+  return self.consume(BLOCK_COMMENT, s + more), nil
 }
 
-func (self *lexer) scanLineComment() *token {
+func (self *lexer) scanLineComment() (*token, error) {
   s := self.scanner.Scan("//")
   if s == "" {
-    return nil
+    return nil, nil
   }
   more := self.scanner.ScanUntil("(\n|\r\n|\r)")
   if more == "" {
-    panic(fmt.Errorf("lexer error: %s", self))
+    return nil, fmt.Errorf("lexer error: %s", self)
   }
-  return self.consume(LINE_COMMENT, s + more)
+  return self.consume(LINE_COMMENT, s + more), nil
 }
 
-func (self *lexer) scanSpaces() *token {
+func (self *lexer) scanSpaces() (*token, error) {
   s := self.scanner.Scan("[ \t\n\r\f]+")
   if s == "" {
-    return nil
+    return nil, nil
   }
-  return self.consume(SPACES, s)
+  return self.consume(SPACES, s), nil
 }
 
-func (self *lexer) scanIdentifier() *token {
+func (self *lexer) scanIdentifier() (*token, error) {
   s := self.scanner.Scan("[_A-Za-z][_0-9A-Za-z]*")
   if s == "" {
-    return nil
+    return nil, nil
   }
   for i := range self.knownTypedefs {
     if self.knownTypedefs[i] == s {
-      return self.consume(TYPENAME, s)
+      return self.consume(TYPENAME, s), nil
     }
   }
-  return self.consume(IDENTIFIER, s)
+  return self.consume(IDENTIFIER, s), nil
 }
 
-func (self *lexer) scanInteger() *token {
+func (self *lexer) scanInteger() (*token, error) {
   s := self.scanner.Scan("([1-9][0-9]*U?L?|0[Xx][0-9A-Fa-f]+U?L?|0[0-7]*U?L?)")
   if s == "" {
-    return nil
+    return nil, nil
   }
-  return self.consume(INTEGER, s)
+  return self.consume(INTEGER, s), nil
 }
 
-func (self *lexer) scanKeyword() *token {
+func (self *lexer) scanKeyword() (*token, error) {
   for i := range keywords {
     x := keywords[i]
     s := self.scanner.Scan(x.re)
     if s != "" {
-      return self.consume(x.id, s)
+      return self.consume(x.id, s), nil
     }
   }
-  return nil
+  return nil, nil
 }
 
-func (self *lexer) scanCharacter() *token {
+func (self *lexer) scanCharacter() (*token, error) {
   s := self.scanner.Scan("'")
   if s == "" {
-    return nil
+    return nil, nil
   }
   // TODO: handle escape character properly
   more := self.scanner.ScanUntil("'")
   if more == "" {
-    panic(fmt.Errorf("lexer error: %s", self))
+    return nil, fmt.Errorf("lexer error: %s", self)
   }
-  return self.consume(CHARACTER, s + more)
+  return self.consume(CHARACTER, s + more), nil
 }
 
-func (self *lexer) scanString() *token {
+func (self *lexer) scanString() (*token, error) {
   s := self.scanner.Scan("\"")
   if s == "" {
-    return nil
+    return nil, nil
   }
   // TODO: handle escape character properly
   more := self.scanner.ScanUntil("\"")
   if more == "" {
-    panic(fmt.Errorf("lexer error: %s", self))
+    return nil, fmt.Errorf("lexer error: %s", self)
   }
-  return self.consume(STRING, s + more)
+  return self.consume(STRING, s + more), nil
 }
 
-func (self *lexer) scanOperator() *token {
+func (self *lexer) scanOperator() (*token, error) {
   for i := range operators {
     x := operators[i]
     s := self.scanner.Scan(x.re)
     if s != "" {
-      return self.consume(x.id, s)
+      return self.consume(x.id, s), nil
     }
   }
 
@@ -296,7 +293,7 @@ func (self *lexer) scanOperator() *token {
   s := self.scanner.Scan(".")
   if s != "" {
     r, _ := utf8.DecodeRuneInString(s)
-    return self.consume(int(r), s)
+    return self.consume(int(r), s), nil
   }
-  return nil
+  return nil, nil
 }
