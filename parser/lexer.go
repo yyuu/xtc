@@ -30,16 +30,6 @@ func (self lexer) String() string {
   return fmt.Sprintf("%s: %q", location, source)
 }
 
-type token struct {
-  id int
-  literal string
-  location core.Location
-}
-
-func (self token) String() string {
-  return fmt.Sprintf("#<token:%d %s %q>", self.id, self.location, self.literal)
-}
-
 func newLexer(filename string, source string, errorHandler *core.ErrorHandler, options *core.Options) *lexer {
   return &lexer {
     scanner: strscan.New(source),
