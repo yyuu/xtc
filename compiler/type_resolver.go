@@ -1,29 +1,29 @@
 package compiler
 
 import (
-  "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/entity"
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/typesys"
+  bs_ast "bitbucket.org/yyuu/bs/ast"
+  bs_core "bitbucket.org/yyuu/bs/core"
+  bs_entity "bitbucket.org/yyuu/bs/entity"
+  bs_typesys "bitbucket.org/yyuu/bs/typesys"
 )
 
 type TypeResolver struct {
-  errorHandler *core.ErrorHandler
-  options *core.Options
-  typeTable *typesys.TypeTable
+  errorHandler *bs_core.ErrorHandler
+  options *bs_core.Options
+  typeTable *bs_typesys.TypeTable
 }
 
-func NewTypeResolver(errorHandler *core.ErrorHandler, options *core.Options, table *typesys.TypeTable) *TypeResolver {
+func NewTypeResolver(errorHandler *bs_core.ErrorHandler, options *bs_core.Options, table *bs_typesys.TypeTable) *TypeResolver {
   return &TypeResolver { errorHandler, options, table }
 }
 
-func (self *TypeResolver) Resolve(a *ast.AST) {
+func (self *TypeResolver) Resolve(ast *bs_ast.AST) {
   self.errorHandler.Debug("starting type resolver.")
-  types := a.ListTypes()
-  entities := a.ListEntities()
+  types := ast.ListTypes()
+  entities := ast.ListEntities()
   self.defineTypes(types)
-  ast.VisitTypeDefinitions(self, types)
-  entity.VisitEntities(self, entities)
+  bs_ast.VisitTypeDefinitions(self, types)
+  bs_entity.VisitEntities(self, entities)
   if self.errorHandler.ErrorOccured() {
     self.errorHandler.Fatalf("found %d error(s).", self.errorHandler.GetErrors())
   } else {
@@ -31,7 +31,7 @@ func (self *TypeResolver) Resolve(a *ast.AST) {
   }
 }
 
-func (self *TypeResolver) defineTypes(deftypes []core.ITypeDefinition) {
+func (self *TypeResolver) defineTypes(deftypes []bs_core.ITypeDefinition) {
   for i := range deftypes {
     def := deftypes[i]
     if self.typeTable.IsDefined(def.GetTypeRef()) {
@@ -41,7 +41,7 @@ func (self *TypeResolver) defineTypes(deftypes []core.ITypeDefinition) {
   }
 }
 
-func (self *TypeResolver) bindType(n core.ITypeNode) {
+func (self *TypeResolver) bindType(n bs_core.ITypeNode) {
   if ! n.IsResolved() {
     ref := n.GetTypeRef()
     t := self.typeTable.GetType(ref)
@@ -49,9 +49,9 @@ func (self *TypeResolver) bindType(n core.ITypeNode) {
   }
 }
 
-func (self *TypeResolver) resolveCompositeType(def core.ICompositeTypeDefinition) {
+func (self *TypeResolver) resolveCompositeType(def bs_core.ICompositeTypeDefinition) {
   ref := def.GetTypeRef()
-  ct, ok := self.typeTable.GetType(ref).(core.ICompositeType)
+  ct, ok := self.typeTable.GetType(ref).(bs_core.ICompositeType)
   if ! ok {
     self.errorHandler.Errorf("cannot intern struct/union: %s", def.GetName())
   }
@@ -62,7 +62,7 @@ func (self *TypeResolver) resolveCompositeType(def core.ICompositeTypeDefinition
   }
 }
 
-func (self *TypeResolver) resolveFunctionHeader(fun core.IFunction, params []*entity.Parameter) {
+func (self *TypeResolver) resolveFunctionHeader(fun bs_core.IFunction, params []*bs_entity.Parameter) {
   self.bindType(fun.GetTypeNode())
   for i := range params {
     param := params[i]
@@ -71,14 +71,14 @@ func (self *TypeResolver) resolveFunctionHeader(fun core.IFunction, params []*en
   }
 }
 
-func (self *TypeResolver) VisitStmtNode(unknown core.IStmtNode) interface{} {
+func (self *TypeResolver) VisitStmtNode(unknown bs_core.IStmtNode) interface{} {
   switch node := unknown.(type) {
-    case *ast.BlockNode: {
+    case *bs_ast.BlockNode: {
       variables := node.GetVariables()
       for i := range variables {
-        entity.VisitEntity(self, variables[i])
+        bs_entity.VisitEntity(self, variables[i])
       }
-      ast.VisitStmtNodes(self, node.GetStmts())
+      bs_ast.VisitStmtNodes(self, node.GetStmts())
     }
     default: {
       visitStmtNode(self, unknown)
@@ -87,25 +87,25 @@ func (self *TypeResolver) VisitStmtNode(unknown core.IStmtNode) interface{} {
   return nil
 }
 
-func (self *TypeResolver) VisitExprNode(unknown core.IExprNode) interface{} {
+func (self *TypeResolver) VisitExprNode(unknown bs_core.IExprNode) interface{} {
   switch node := unknown.(type) {
-    case *ast.CastNode: {
+    case *bs_ast.CastNode: {
       self.bindType(node.GetTypeNode())
       visitCastNode(self, node)
     }
-    case *ast.IntegerLiteralNode: {
+    case *bs_ast.IntegerLiteralNode: {
       self.bindType(node.GetTypeNode())
     }
-    case *ast.SizeofExprNode: {
+    case *bs_ast.SizeofExprNode: {
       self.bindType(node.GetTypeNode())
       visitSizeofExprNode(self, node)
     }
-    case *ast.SizeofTypeNode: {
+    case *bs_ast.SizeofTypeNode: {
       self.bindType(node.GetOperandTypeNode())
       self.bindType(node.GetTypeNode())
       visitSizeofTypeNode(self, node)
     }
-    case *ast.StringLiteralNode: {
+    case *bs_ast.StringLiteralNode: {
       self.bindType(node.GetTypeNode())
     }
     default: {
@@ -115,16 +115,16 @@ func (self *TypeResolver) VisitExprNode(unknown core.IExprNode) interface{} {
   return nil
 }
 
-func (self *TypeResolver) VisitTypeDefinition(unknown core.ITypeDefinition) interface{} {
+func (self *TypeResolver) VisitTypeDefinition(unknown bs_core.ITypeDefinition) interface{} {
   switch node := unknown.(type) {
-    case *ast.StructNode: {
+    case *bs_ast.StructNode: {
       self.resolveCompositeType(node)
     }
-    case *ast.TypedefNode: {
+    case *bs_ast.TypedefNode: {
       self.bindType(node.GetTypeNode())
       self.bindType(node.GetRealTypeNode())
     }
-    case *ast.UnionNode: {
+    case *bs_ast.UnionNode: {
       self.resolveCompositeType(node)
     }
     default: {
@@ -134,26 +134,26 @@ func (self *TypeResolver) VisitTypeDefinition(unknown core.ITypeDefinition) inte
   return nil
 }
 
-func (self *TypeResolver) VisitEntity(unknown core.IEntity) interface{} {
+func (self *TypeResolver) VisitEntity(unknown bs_core.IEntity) interface{} {
   switch ent := unknown.(type) {
-    case *entity.DefinedVariable: {
+    case *bs_entity.DefinedVariable: {
       self.bindType(ent.GetTypeNode())
       if ent.HasInitializer() {
-        ast.VisitExprNode(self, ent.GetInitializer())
+        bs_ast.VisitExprNode(self, ent.GetInitializer())
       }
     }
-    case *entity.UndefinedVariable: {
+    case *bs_entity.UndefinedVariable: {
       self.bindType(ent.GetTypeNode())
     }
-    case *entity.Constant: {
+    case *bs_entity.Constant: {
       self.bindType(ent.GetTypeNode())
-      ast.VisitExprNode(self, ent.GetValue())
+      bs_ast.VisitExprNode(self, ent.GetValue())
     }
-    case *entity.DefinedFunction: {
+    case *bs_entity.DefinedFunction: {
       self.resolveFunctionHeader(ent, ent.GetParameters())
-      ast.VisitStmtNode(self, ent.GetBody())
+      bs_ast.VisitStmtNode(self, ent.GetBody())
     }
-    case *entity.UndefinedFunction: {
+    case *bs_entity.UndefinedFunction: {
       self.resolveFunctionHeader(ent, ent.GetParameters())
     }
     default: {

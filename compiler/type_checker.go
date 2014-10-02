@@ -1,35 +1,35 @@
 package compiler
 
 import (
-  "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/entity"
-  "bitbucket.org/yyuu/bs/typesys"
+  bs_ast "bitbucket.org/yyuu/bs/ast"
+  bs_core "bitbucket.org/yyuu/bs/core"
+  bs_entity "bitbucket.org/yyuu/bs/entity"
+  bs_typesys "bitbucket.org/yyuu/bs/typesys"
 )
 
 type TypeChecker struct {
-  errorHandler *core.ErrorHandler
-  options *core.Options
-  typeTable *typesys.TypeTable
-  currentFunction *entity.DefinedFunction
+  errorHandler *bs_core.ErrorHandler
+  options *bs_core.Options
+  typeTable *bs_typesys.TypeTable
+  currentFunction *bs_entity.DefinedFunction
 }
 
-func NewTypeChecker(errorHandler *core.ErrorHandler, options *core.Options, table *typesys.TypeTable) *TypeChecker {
+func NewTypeChecker(errorHandler *bs_core.ErrorHandler, options *bs_core.Options, table *bs_typesys.TypeTable) *TypeChecker {
   return &TypeChecker { errorHandler, options, table, nil }
 }
 
-func (self *TypeChecker) Check(a *ast.AST) {
+func (self *TypeChecker) Check(ast *bs_ast.AST) {
   self.errorHandler.Debug("starting type checker.")
-  vs := a.GetDefinedVariables()
+  vs := ast.GetDefinedVariables()
   for i := range vs {
     self.checkVariable(vs[i])
   }
-  fs := a.GetDefinedFunctions()
+  fs := ast.GetDefinedFunctions()
   for i := range fs {
     self.currentFunction = fs[i]
     self.checkReturnType(fs[i])
     self.checkParamTypes(fs[i])
-    ast.VisitStmtNode(self, fs[i].GetBody())
+    bs_ast.VisitStmtNode(self, fs[i].GetBody())
   }
   if self.errorHandler.ErrorOccured() {
     self.errorHandler.Fatalf("found %d error(s).", self.errorHandler.GetErrors())
@@ -38,7 +38,7 @@ func (self *TypeChecker) Check(a *ast.AST) {
   }
 }
 
-func (self *TypeChecker) checkVariable(v *entity.DefinedVariable) {
+func (self *TypeChecker) checkVariable(v *bs_entity.DefinedVariable) {
   if self.isInvalidVariableType(v.GetType()) {
     self.errorHandler.Errorf("invalid variable type: %s", v.GetType())
   }
@@ -46,24 +46,24 @@ func (self *TypeChecker) checkVariable(v *entity.DefinedVariable) {
     if self.isInvalidLHSType(v.GetType()) {
       self.errorHandler.Errorf("invalid LHS type: %s", v.GetType())
     }
-    ast.VisitExprNode(self, v.GetInitializer())
+    bs_ast.VisitExprNode(self, v.GetInitializer())
     v.SetInitializer(self.implicitCast(v.GetType(), v.GetInitializer()))
   }
 }
 
-func (self *TypeChecker) isInvalidVariableType(t core.IType) bool {
+func (self *TypeChecker) isInvalidVariableType(t bs_core.IType) bool {
   return t.IsVoid() || (t.IsArray() && ! t.IsAllocatedArray())
 }
 
-func (self *TypeChecker) isInvalidLHSType(t core.IType) bool {
+func (self *TypeChecker) isInvalidLHSType(t bs_core.IType) bool {
   return t.IsStruct() || t.IsUnion() || t.IsVoid() || t.IsArray()
 }
 
-func (self *TypeChecker) isInvalidRHSType(t core.IType) bool {
+func (self *TypeChecker) isInvalidRHSType(t bs_core.IType) bool {
   return t.IsStruct() || t.IsUnion() || t.IsVoid()
 }
 
-func (self *TypeChecker) implicitCast(t core.IType, expr core.IExprNode) core.IExprNode {
+func (self *TypeChecker) implicitCast(t bs_core.IType, expr bs_core.IExprNode) bs_core.IExprNode {
   if expr.GetType().IsSameType(t) {
     return expr
   } else {
@@ -71,9 +71,9 @@ func (self *TypeChecker) implicitCast(t core.IType, expr core.IExprNode) core.IE
       if ! expr.GetType().IsCompatible(t) && ! self.isSafeIntegerCast(expr, t) {
         self.errorHandler.Errorf("%s incompatible implicit cast from %s to %s", expr.GetLocation(), expr.GetType(), t)
       }
-      typeNode := ast.NewTypeNode(expr.GetLocation(), typesys.NewVoidTypeRef(expr.GetLocation()))
+      typeNode := bs_ast.NewTypeNode(expr.GetLocation(), bs_typesys.NewVoidTypeRef(expr.GetLocation()))
       typeNode.SetType(t)
-      return ast.NewCastNode(expr.GetLocation(), typeNode, expr)
+      return bs_ast.NewCastNode(expr.GetLocation(), typeNode, expr)
     } else {
       self.errorHandler.Errorf("invalid cast error: %s to %s", expr.GetType(), t)
       return expr
@@ -81,11 +81,11 @@ func (self *TypeChecker) implicitCast(t core.IType, expr core.IExprNode) core.IE
   }
 }
 
-func (self *TypeChecker) castOptionalArg(arg core.IExprNode) core.IExprNode {
+func (self *TypeChecker) castOptionalArg(arg bs_core.IExprNode) bs_core.IExprNode {
   if ! arg.GetType().IsInteger() {
     return arg
   } else {
-    var t core.IType
+    var t bs_core.IType
     if arg.GetType().IsSigned() {
       t = self.typeTable.SignedStackType()
     } else {
@@ -99,15 +99,15 @@ func (self *TypeChecker) castOptionalArg(arg core.IExprNode) core.IExprNode {
   }
 }
 
-func (self *TypeChecker) isSafeIntegerCast(node core.INode, t core.IType) bool {
+func (self *TypeChecker) isSafeIntegerCast(node bs_core.INode, t bs_core.IType) bool {
   if ! t.IsInteger() {
     return false
   } else {
-    i, ok := t.(typesys.IntegerType)
+    i, ok := t.(bs_typesys.IntegerType)
     if ! ok {
       return false
     }
-    n, ok := node.(ast.IntegerLiteralNode)
+    n, ok := node.(bs_ast.IntegerLiteralNode)
     if ! ok {
       return false
     }
@@ -115,17 +115,17 @@ func (self *TypeChecker) isSafeIntegerCast(node core.INode, t core.IType) bool {
   }
 }
 
-func (self *TypeChecker) checkReturnType(f *entity.DefinedFunction) {
+func (self *TypeChecker) checkReturnType(f *bs_entity.DefinedFunction) {
   if self.isInvalidReturnType(f.GetReturnType()) {
     self.errorHandler.Errorf("returns invalid type: %s", f.GetReturnType())
   }
 }
 
-func (self *TypeChecker) isInvalidReturnType(t core.IType) bool {
+func (self *TypeChecker) isInvalidReturnType(t bs_core.IType) bool {
   return t.IsStruct() || t.IsUnion() || t.IsArray()
 }
 
-func (self *TypeChecker) checkParamTypes(f *entity.DefinedFunction) {
+func (self *TypeChecker) checkParamTypes(f *bs_entity.DefinedFunction) {
   params := f.GetParameters()
   for i := range params {
     param := params[i]
@@ -135,15 +135,15 @@ func (self *TypeChecker) checkParamTypes(f *entity.DefinedFunction) {
   }
 }
 
-func (self *TypeChecker) isInvalidParameterType(t core.IType) bool {
+func (self *TypeChecker) isInvalidParameterType(t bs_core.IType) bool {
   return t.IsStruct() || t.IsUnion() || t.IsVoid() || t.IsIncompleteArray()
 }
 
-func (self *TypeChecker) isInvalidStatementType(t core.IType) bool {
+func (self *TypeChecker) isInvalidStatementType(t bs_core.IType) bool {
   return t.IsStruct() || t.IsUnion()
 }
 
-func (self *TypeChecker) mustBeInteger(expr core.IExprNode, op string) bool {
+func (self *TypeChecker) mustBeInteger(expr bs_core.IExprNode, op string) bool {
   if ! expr.GetType().IsInteger() {
     self.errorHandler.Errorf("%s wrong operand type for %s: %s", expr.GetLocation(), op, expr.GetType())
     return false
@@ -152,7 +152,7 @@ func (self *TypeChecker) mustBeInteger(expr core.IExprNode, op string) bool {
   }
 }
 
-func (self *TypeChecker) mustBeScalar(expr core.IExprNode, op string) bool {
+func (self *TypeChecker) mustBeScalar(expr bs_core.IExprNode, op string) bool {
   if ! expr.GetType().IsScalar() {
     self.errorHandler.Errorf("%s wrong operand type for %s: %s", expr.GetLocation(), op, expr.GetType())
     return false
@@ -161,11 +161,11 @@ func (self *TypeChecker) mustBeScalar(expr core.IExprNode, op string) bool {
   }
 }
 
-func (self *TypeChecker) checkCond(cond core.IExprNode) {
+func (self *TypeChecker) checkCond(cond bs_core.IExprNode) {
   self.mustBeScalar(cond, "condition expression")
 }
 
-func (self *TypeChecker) expectsComparableScalars(node core.IBinaryOpNode) {
+func (self *TypeChecker) expectsComparableScalars(node bs_core.IBinaryOpNode) {
   if ! self.mustBeScalar(node.GetLeft(), node.GetOperator()) {
     return
   }
@@ -187,33 +187,33 @@ func (self *TypeChecker) expectsComparableScalars(node core.IBinaryOpNode) {
   self.arithmeticImplicitCast(node)
 }
 
-func (self *TypeChecker) forcePointerType(master core.IExprNode, slave core.IExprNode) core.IExprNode {
+func (self *TypeChecker) forcePointerType(master bs_core.IExprNode, slave bs_core.IExprNode) bs_core.IExprNode {
   if master.GetType().IsCompatible(slave.GetType()) {
     return slave
   } else {
     self.errorHandler.Warnf("incompatible implicit cast from %s to %s", slave.GetType(), master.GetType())
-    typeNode := ast.NewTypeNode(master.GetLocation(), typesys.NewVoidTypeRef(master.GetLocation()))
+    typeNode := bs_ast.NewTypeNode(master.GetLocation(), bs_typesys.NewVoidTypeRef(master.GetLocation()))
     typeNode.SetType(master.GetType())
-    return ast.NewCastNode(master.GetLocation(), typeNode, slave)
+    return bs_ast.NewCastNode(master.GetLocation(), typeNode, slave)
   }
 }
 
-func (self *TypeChecker) arithmeticImplicitCast(node core.IBinaryOpNode) {
+func (self *TypeChecker) arithmeticImplicitCast(node bs_core.IBinaryOpNode) {
   r := self.integralPromotion(node.GetRight().GetType())
   l := self.integralPromotion(node.GetLeft().GetType())
   target := self.usualArithmeticConversion(l, r)
   if ! l.IsSameType(target) {
-    typeNode := ast.NewTypeNode(node.GetLocation(), typesys.NewVoidTypeRef(node.GetLocation()))
-    node.SetLeft(ast.NewCastNode(node.GetLocation(), typeNode, node.GetLeft()))
+    typeNode := bs_ast.NewTypeNode(node.GetLocation(), bs_typesys.NewVoidTypeRef(node.GetLocation()))
+    node.SetLeft(bs_ast.NewCastNode(node.GetLocation(), typeNode, node.GetLeft()))
   }
   if ! r.IsSameType(target) {
-    typeNode := ast.NewTypeNode(node.GetLocation(), typesys.NewVoidTypeRef(node.GetLocation()))
-    node.SetLeft(ast.NewCastNode(node.GetLocation(), typeNode, node.GetRight()))
+    typeNode := bs_ast.NewTypeNode(node.GetLocation(), bs_typesys.NewVoidTypeRef(node.GetLocation()))
+    node.SetLeft(bs_ast.NewCastNode(node.GetLocation(), typeNode, node.GetRight()))
   }
   node.SetType(target)
 }
 
-func (self *TypeChecker) integralPromotion(t core.IType) core.IType {
+func (self *TypeChecker) integralPromotion(t bs_core.IType) bs_core.IType {
   if ! t.IsInteger() {
     self.errorHandler.Errorf("integral promotion for %s", t)
   }
@@ -225,17 +225,17 @@ func (self *TypeChecker) integralPromotion(t core.IType) core.IType {
   }
 }
 
-func (self *TypeChecker) integralPromotedExpr(expr core.IExprNode) core.IExprNode {
+func (self *TypeChecker) integralPromotedExpr(expr bs_core.IExprNode) bs_core.IExprNode {
   t := self.integralPromotion(expr.GetType())
   if t.IsSameType(expr.GetType()) {
     return expr
   } else {
-    typeNode := ast.NewTypeNode(expr.GetLocation(), typesys.NewVoidTypeRef(expr.GetLocation()))
-    return ast.NewCastNode(expr.GetLocation(), typeNode, expr)
+    typeNode := bs_ast.NewTypeNode(expr.GetLocation(), bs_typesys.NewVoidTypeRef(expr.GetLocation()))
+    return bs_ast.NewCastNode(expr.GetLocation(), typeNode, expr)
   }
 }
 
-func (self *TypeChecker) usualArithmeticConversion(l core.IType, r core.IType) core.IType {
+func (self *TypeChecker) usualArithmeticConversion(l bs_core.IType, r bs_core.IType) bs_core.IType {
   s_int := self.typeTable.SignedInt()
   u_int := self.typeTable.UnsignedInt()
   s_long := self.typeTable.SignedLong()
@@ -259,7 +259,7 @@ func (self *TypeChecker) usualArithmeticConversion(l core.IType, r core.IType) c
   }
 }
 
-func (self *TypeChecker) expectsScalarLHS(node core.IUnaryArithmeticOpNode) {
+func (self *TypeChecker) expectsScalarLHS(node bs_core.IUnaryArithmeticOpNode) {
   if node.GetExpr().IsParameter() {
     // parameter is always a scalar.
   } else {
@@ -289,7 +289,7 @@ func (self *TypeChecker) expectsScalarLHS(node core.IUnaryArithmeticOpNode) {
   }
 }
 
-func (self *TypeChecker) checkLHS(lhs core.IExprNode) bool {
+func (self *TypeChecker) checkLHS(lhs bs_core.IExprNode) bool {
   if lhs.IsParameter() {
     // parameter is always assignable.
     return true
@@ -303,7 +303,7 @@ func (self *TypeChecker) checkLHS(lhs core.IExprNode) bool {
   }
 }
 
-func (self *TypeChecker) checkRHS(rhs core.IExprNode) bool {
+func (self *TypeChecker) checkRHS(rhs bs_core.IExprNode) bool {
   if self.isInvalidRHSType(rhs.GetType()) {
     self.errorHandler.Errorf("%s invalid RHS expression type: %s", rhs.GetLocation(), rhs.GetType())
     return false
@@ -312,7 +312,7 @@ func (self *TypeChecker) checkRHS(rhs core.IExprNode) bool {
   }
 }
 
-func (self *TypeChecker) expectsSameIntegerOrPointerDiff(node core.IBinaryOpNode) {
+func (self *TypeChecker) expectsSameIntegerOrPointerDiff(node bs_core.IBinaryOpNode) {
   if node.GetLeft().IsPointer() && node.GetRight().IsPointer() {
     if node.GetOperator() == "+" {
       self.errorHandler.Errorf("%s invalid operation: pointer + pointer", node.GetLocation())
@@ -322,7 +322,7 @@ func (self *TypeChecker) expectsSameIntegerOrPointerDiff(node core.IBinaryOpNode
   }
 }
 
-func (self *TypeChecker) expectsSameInteger(node core.IBinaryOpNode) {
+func (self *TypeChecker) expectsSameInteger(node bs_core.IBinaryOpNode) {
   if ! self.mustBeInteger(node.GetLeft(), node.GetOperator()) {
     return
   }
@@ -332,38 +332,38 @@ func (self *TypeChecker) expectsSameInteger(node core.IBinaryOpNode) {
   self.arithmeticImplicitCast(node)
 }
 
-func (self *TypeChecker) VisitStmtNode(unknown core.IStmtNode) interface{} {
+func (self *TypeChecker) VisitStmtNode(unknown bs_core.IStmtNode) interface{} {
   switch node := unknown.(type) {
-    case *ast.BlockNode: {
+    case *bs_ast.BlockNode: {
       vars := node.GetVariables()
       for i := range vars {
         self.checkVariable(vars[i])
       }
-      ast.VisitStmtNodes(self, node.GetStmts())
+      bs_ast.VisitStmtNodes(self, node.GetStmts())
     }
-    case *ast.ExprStmtNode: {
-      ast.VisitExprNode(self, node.GetExpr())
+    case *bs_ast.ExprStmtNode: {
+      bs_ast.VisitExprNode(self, node.GetExpr())
       if self.isInvalidStatementType(node.GetExpr().GetType()) {
         self.errorHandler.Errorf("%s invalid statement type: %s", node.GetLocation(), node.GetExpr().GetType())
       }
     }
-    case *ast.IfNode: {
+    case *bs_ast.IfNode: {
       visitIfNode(self, node)
       self.checkCond(node.GetCond())
     }
-    case *ast.WhileNode: {
+    case *bs_ast.WhileNode: {
       visitWhileNode(self, node)
       self.checkCond(node.GetCond())
     }
-    case *ast.ForNode: {
+    case *bs_ast.ForNode: {
       visitForNode(self, node)
       self.checkCond(node.GetCond())
     }
-    case *ast.SwitchNode: {
+    case *bs_ast.SwitchNode: {
       visitSwitchNode(self, node)
       self.checkCond(node.GetCond())
     }
-    case *ast.ReturnNode: {
+    case *bs_ast.ReturnNode: {
       visitReturnNode(self, node)
       if self.currentFunction.IsVoid() {
         if node.GetExpr() != nil {
@@ -382,9 +382,9 @@ func (self *TypeChecker) VisitStmtNode(unknown core.IStmtNode) interface{} {
   return nil
 }
 
-func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
+func (self *TypeChecker) VisitExprNode(unknown bs_core.IExprNode) interface{} {
   switch node := unknown.(type) {
-    case *ast.AssignNode: {
+    case *bs_ast.AssignNode: {
       visitAssignNode(self, node)
       if self.checkLHS(node.GetLHS()) {
         if self.checkRHS(node.GetRHS()) {
@@ -392,7 +392,7 @@ func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
         }
       }
     }
-    case *ast.OpAssignNode: {
+    case *bs_ast.OpAssignNode: {
       visitOpAssignNode(self, node)
       if self.checkLHS(node.GetLHS()) {
         if self.checkRHS(node.GetRHS()) {
@@ -409,8 +409,8 @@ func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
                   self.errorHandler.Warnf("%s incompatible implicit cast from %s to %s", node.GetLocation(), opType, l)
                 }
                 if ! r.IsSameType(opType) {
-                  typeNode := ast.NewTypeNode(node.GetLocation(), typesys.NewVoidTypeRef(node.GetLocation()))
-                  node.SetRHS(ast.NewCastNode(node.GetLocation(), typeNode, node.GetRHS()))
+                  typeNode := bs_ast.NewTypeNode(node.GetLocation(), bs_typesys.NewVoidTypeRef(node.GetLocation()))
+                  node.SetRHS(bs_ast.NewCastNode(node.GetLocation(), typeNode, node.GetRHS()))
                 }
               }
             }
@@ -418,7 +418,7 @@ func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
         }
       }
     }
-    case *ast.CondExprNode: {
+    case *bs_ast.CondExprNode: {
       visitCondExprNode(self, node)
       self.checkCond(node.GetCond())
       t := node.GetThenExpr().GetType()
@@ -426,14 +426,14 @@ func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
       if ! t.IsSameType(e) {
         if t.IsCompatible(e) {
           // insert cast on thenBody
-          typeNode := ast.NewTypeNode(node.GetLocation(), typesys.NewVoidTypeRef(node.GetLocation()))
-          cast := ast.NewCastNode(node.GetLocation(), typeNode, node.GetThenExpr())
+          typeNode := bs_ast.NewTypeNode(node.GetLocation(), bs_typesys.NewVoidTypeRef(node.GetLocation()))
+          cast := bs_ast.NewCastNode(node.GetLocation(), typeNode, node.GetThenExpr())
           node.SetThenExpr(cast)
         } else {
           if e.IsCompatible(t) {
             // insert cast on elseBody
-            typeNode := ast.NewTypeNode(node.GetLocation(), typesys.NewVoidTypeRef(node.GetLocation()))
-            cast := ast.NewCastNode(node.GetLocation(), typeNode, node.GetElseExpr())
+            typeNode := bs_ast.NewTypeNode(node.GetLocation(), bs_typesys.NewVoidTypeRef(node.GetLocation()))
+            cast := bs_ast.NewCastNode(node.GetLocation(), typeNode, node.GetElseExpr())
             node.SetElseExpr(cast)
           } else {
             self.errorHandler.Errorf("%s invalid cast from %s to %s", node.GetLocation(), e, t)
@@ -441,7 +441,7 @@ func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
         }
       }
     }
-    case *ast.BinaryOpNode: {
+    case *bs_ast.BinaryOpNode: {
       visitBinaryOpNode(self, node)
       if node.GetOperator() == "+" || node.GetOperator() == "-" {
         self.expectsSameIntegerOrPointerDiff(node)
@@ -459,15 +459,15 @@ func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
         }
       }
     }
-    case *ast.LogicalAndNode: {
+    case *bs_ast.LogicalAndNode: {
       visitLogicalAndNode(self, node)
       self.expectsComparableScalars(node)
     }
-    case *ast.LogicalOrNode: {
+    case *bs_ast.LogicalOrNode: {
       visitLogicalOrNode(self, node)
       self.expectsComparableScalars(node)
     }
-    case *ast.UnaryOpNode: {
+    case *bs_ast.UnaryOpNode: {
       visitUnaryOpNode(self, node)
       if node.GetOperator() == "!" {
         self.mustBeScalar(node.GetExpr(), node.GetOperator())
@@ -475,15 +475,15 @@ func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
         self.mustBeInteger(node.GetExpr(), node.GetOperator())
       }
     }
-    case *ast.PrefixOpNode: {
+    case *bs_ast.PrefixOpNode: {
       visitPrefixOpNode(self, node)
       self.expectsScalarLHS(node)
     }
-    case *ast.SuffixOpNode: {
+    case *bs_ast.SuffixOpNode: {
       visitSuffixOpNode(self, node)
       self.expectsScalarLHS(node)
     }
-    case *ast.FuncallNode: {
+    case *bs_ast.FuncallNode: {
       visitFuncallNode(self, node)
       t := node.GetFunctionType()
       if ! t.AcceptsArgc(node.NumArgs()) {
@@ -494,7 +494,7 @@ func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
         if len(args) < len(paramDescs) {
           self.errorHandler.Errorf("%s missing argument: %d for %d", node.GetLocation(), len(args), len(paramDescs))
         }
-        newArgs := []core.IExprNode { }
+        newArgs := []bs_core.IExprNode { }
         for i := range args {
           arg := args[i]
           if i < len(paramDescs) {
@@ -513,11 +513,11 @@ func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
         node.SetArgs(newArgs)
       }
     }
-    case *ast.ArefNode: {
+    case *bs_ast.ArefNode: {
       visitArefNode(self, node)
       self.mustBeInteger(node.GetIndex(), "[]")
     }
-    case *ast.CastNode: {
+    case *bs_ast.CastNode: {
       visitCastNode(self, node)
       if ! node.GetExpr().GetType().IsCastableTo(node.GetType()) {
         self.errorHandler.Errorf("%s invalid cast from %s to %s", node.GetLocation(), node.GetExpr().GetType(), node.GetType())
@@ -530,7 +530,7 @@ func (self *TypeChecker) VisitExprNode(unknown core.IExprNode) interface{} {
   return nil
 }
 
-func (self *TypeChecker) VisitTypeDefinition(unknown core.ITypeDefinition) interface{} {
+func (self *TypeChecker) VisitTypeDefinition(unknown bs_core.ITypeDefinition) interface{} {
   visitTypeDefinition(self, unknown)
   return nil
 }

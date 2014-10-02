@@ -2,256 +2,256 @@ package compiler
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/entity"
+  bs_ast "bitbucket.org/yyuu/bs/ast"
+  bs_core "bitbucket.org/yyuu/bs/core"
+  bs_entity "bitbucket.org/yyuu/bs/entity"
 )
 
-func visitAddressNode(v ast.INodeVisitor, node *ast.AddressNode) {
-  ast.VisitExprNode(v, node.GetExpr())
+func visitAddressNode(v bs_ast.INodeVisitor, node *bs_ast.AddressNode) {
+  bs_ast.VisitExprNode(v, node.GetExpr())
 }
 
-func visitArefNode(v ast.INodeVisitor, node *ast.ArefNode) {
-  ast.VisitExprNode(v, node.GetExpr())
-  ast.VisitExprNode(v, node.GetIndex())
+func visitArefNode(v bs_ast.INodeVisitor, node *bs_ast.ArefNode) {
+  bs_ast.VisitExprNode(v, node.GetExpr())
+  bs_ast.VisitExprNode(v, node.GetIndex())
 }
 
-func visitAssignNode(v ast.INodeVisitor, node *ast.AssignNode) {
-  ast.VisitExprNode(v, node.GetLHS())
-  ast.VisitExprNode(v, node.GetRHS())
+func visitAssignNode(v bs_ast.INodeVisitor, node *bs_ast.AssignNode) {
+  bs_ast.VisitExprNode(v, node.GetLHS())
+  bs_ast.VisitExprNode(v, node.GetRHS())
 }
 
-func visitBinaryOpNode(v ast.INodeVisitor, node *ast.BinaryOpNode) {
-  ast.VisitExprNode(v, node.GetLeft())
-  ast.VisitExprNode(v, node.GetRight())
+func visitBinaryOpNode(v bs_ast.INodeVisitor, node *bs_ast.BinaryOpNode) {
+  bs_ast.VisitExprNode(v, node.GetLeft())
+  bs_ast.VisitExprNode(v, node.GetRight())
 }
 
-func visitBlockNode(v ast.INodeVisitor, node *ast.BlockNode) {
+func visitBlockNode(v bs_ast.INodeVisitor, node *bs_ast.BlockNode) {
   vars := node.GetVariables()
   for i := range vars {
-    ast.VisitExprNode(v, vars[i].GetInitializer())
+    bs_ast.VisitExprNode(v, vars[i].GetInitializer())
   }
-  ast.VisitStmtNodes(v, node.GetStmts())
+  bs_ast.VisitStmtNodes(v, node.GetStmts())
 }
 
-func visitBreakNode(v ast.INodeVisitor, node *ast.BreakNode) {
+func visitBreakNode(v bs_ast.INodeVisitor, node *bs_ast.BreakNode) {
   // nop
 }
 
-func visitCaseNode(v ast.INodeVisitor, node *ast.CaseNode) {
-  ast.VisitExprNodes(v, node.GetValues())
-  ast.VisitStmtNode(v, node.GetBody())
+func visitCaseNode(v bs_ast.INodeVisitor, node *bs_ast.CaseNode) {
+  bs_ast.VisitExprNodes(v, node.GetValues())
+  bs_ast.VisitStmtNode(v, node.GetBody())
 }
 
-func visitCastNode(v ast.INodeVisitor, node *ast.CastNode) {
-  ast.VisitExprNode(v, node.GetExpr())
+func visitCastNode(v bs_ast.INodeVisitor, node *bs_ast.CastNode) {
+  bs_ast.VisitExprNode(v, node.GetExpr())
 }
 
-func visitCondExprNode(v ast.INodeVisitor, node *ast.CondExprNode) {
-  ast.VisitExprNode(v, node.GetCond())
-  ast.VisitExprNode(v, node.GetThenExpr())
+func visitCondExprNode(v bs_ast.INodeVisitor, node *bs_ast.CondExprNode) {
+  bs_ast.VisitExprNode(v, node.GetCond())
+  bs_ast.VisitExprNode(v, node.GetThenExpr())
   if node.GetElseExpr() != nil {
-    ast.VisitExprNode(v, node.GetElseExpr())
+    bs_ast.VisitExprNode(v, node.GetElseExpr())
   }
 }
 
-func visitContinueNode(v ast.INodeVisitor, node *ast.ContinueNode) {
+func visitContinueNode(v bs_ast.INodeVisitor, node *bs_ast.ContinueNode) {
   // nop
 }
 
-func visitDereferenceNode(v ast.INodeVisitor, node *ast.DereferenceNode) {
-  ast.VisitExprNode(v, node.GetExpr())
+func visitDereferenceNode(v bs_ast.INodeVisitor, node *bs_ast.DereferenceNode) {
+  bs_ast.VisitExprNode(v, node.GetExpr())
 }
 
-func visitDoWhileNode(v ast.INodeVisitor, node *ast.DoWhileNode) {
-  ast.VisitStmtNode(v, node.GetBody())
-  ast.VisitExprNode(v, node.GetCond())
+func visitDoWhileNode(v bs_ast.INodeVisitor, node *bs_ast.DoWhileNode) {
+  bs_ast.VisitStmtNode(v, node.GetBody())
+  bs_ast.VisitExprNode(v, node.GetCond())
 }
 
-func visitExprStmtNode(v ast.INodeVisitor, node *ast.ExprStmtNode) {
-  ast.VisitExprNode(v, node.GetExpr())
+func visitExprStmtNode(v bs_ast.INodeVisitor, node *bs_ast.ExprStmtNode) {
+  bs_ast.VisitExprNode(v, node.GetExpr())
 }
 
-func visitForNode(v ast.INodeVisitor, node *ast.ForNode) {
-  ast.VisitExprNode(v, node.GetInit())
-  ast.VisitExprNode(v, node.GetCond())
-  ast.VisitExprNode(v, node.GetIncr())
-  ast.VisitStmtNode(v, node.GetBody())
+func visitForNode(v bs_ast.INodeVisitor, node *bs_ast.ForNode) {
+  bs_ast.VisitExprNode(v, node.GetInit())
+  bs_ast.VisitExprNode(v, node.GetCond())
+  bs_ast.VisitExprNode(v, node.GetIncr())
+  bs_ast.VisitStmtNode(v, node.GetBody())
 }
 
-func visitFuncallNode(v ast.INodeVisitor, node *ast.FuncallNode) {
-  ast.VisitExprNode(v, node.GetExpr())
-  ast.VisitExprNodes(v, node.GetArgs())
+func visitFuncallNode(v bs_ast.INodeVisitor, node *bs_ast.FuncallNode) {
+  bs_ast.VisitExprNode(v, node.GetExpr())
+  bs_ast.VisitExprNodes(v, node.GetArgs())
 }
 
-func visitGotoNode(v ast.INodeVisitor, node *ast.GotoNode) {
+func visitGotoNode(v bs_ast.INodeVisitor, node *bs_ast.GotoNode) {
   // nop
 }
 
-func visitIfNode(v ast.INodeVisitor, node *ast.IfNode) {
-  ast.VisitExprNode(v, node.GetCond())
-  ast.VisitStmtNode(v, node.GetThenBody())
+func visitIfNode(v bs_ast.INodeVisitor, node *bs_ast.IfNode) {
+  bs_ast.VisitExprNode(v, node.GetCond())
+  bs_ast.VisitStmtNode(v, node.GetThenBody())
   if node.HasElseBody() {
-    ast.VisitStmtNode(v, node.GetElseBody())
+    bs_ast.VisitStmtNode(v, node.GetElseBody())
   }
 }
 
-func visitIntegerLiteralNode(v ast.INodeVisitor, node *ast.IntegerLiteralNode) {
+func visitIntegerLiteralNode(v bs_ast.INodeVisitor, node *bs_ast.IntegerLiteralNode) {
   // nop
 }
 
-func visitLabelNode(v ast.INodeVisitor, node *ast.LabelNode) {
-  ast.VisitStmtNode(v, node.GetStmt())
+func visitLabelNode(v bs_ast.INodeVisitor, node *bs_ast.LabelNode) {
+  bs_ast.VisitStmtNode(v, node.GetStmt())
 }
 
-func visitLogicalAndNode(v ast.INodeVisitor, node *ast.LogicalAndNode) {
-  ast.VisitExprNode(v, node.GetLeft())
-  ast.VisitExprNode(v, node.GetRight())
+func visitLogicalAndNode(v bs_ast.INodeVisitor, node *bs_ast.LogicalAndNode) {
+  bs_ast.VisitExprNode(v, node.GetLeft())
+  bs_ast.VisitExprNode(v, node.GetRight())
 }
 
-func visitLogicalOrNode(v ast.INodeVisitor, node *ast.LogicalOrNode) {
-  ast.VisitExprNode(v, node.GetLeft())
-  ast.VisitExprNode(v, node.GetRight())
+func visitLogicalOrNode(v bs_ast.INodeVisitor, node *bs_ast.LogicalOrNode) {
+  bs_ast.VisitExprNode(v, node.GetLeft())
+  bs_ast.VisitExprNode(v, node.GetRight())
 }
 
-func visitMemberNode(v ast.INodeVisitor, node *ast.MemberNode) {
-  ast.VisitExprNode(v, node.GetExpr())
+func visitMemberNode(v bs_ast.INodeVisitor, node *bs_ast.MemberNode) {
+  bs_ast.VisitExprNode(v, node.GetExpr())
 }
 
-func visitOpAssignNode(v ast.INodeVisitor, node *ast.OpAssignNode) {
-  ast.VisitExprNode(v, node.GetLHS())
-  ast.VisitExprNode(v, node.GetRHS())
+func visitOpAssignNode(v bs_ast.INodeVisitor, node *bs_ast.OpAssignNode) {
+  bs_ast.VisitExprNode(v, node.GetLHS())
+  bs_ast.VisitExprNode(v, node.GetRHS())
 }
 
-func visitPrefixOpNode(v ast.INodeVisitor, node *ast.PrefixOpNode) {
-  ast.VisitExprNode(v, node.GetExpr())
+func visitPrefixOpNode(v bs_ast.INodeVisitor, node *bs_ast.PrefixOpNode) {
+  bs_ast.VisitExprNode(v, node.GetExpr())
 }
 
-func visitPtrMemberNode(v ast.INodeVisitor, node *ast.PtrMemberNode) {
-  ast.VisitExprNode(v, node.GetExpr())
+func visitPtrMemberNode(v bs_ast.INodeVisitor, node *bs_ast.PtrMemberNode) {
+  bs_ast.VisitExprNode(v, node.GetExpr())
 }
 
-func visitReturnNode(v ast.INodeVisitor, node *ast.ReturnNode) {
+func visitReturnNode(v bs_ast.INodeVisitor, node *bs_ast.ReturnNode) {
   if node.GetExpr() != nil {
-    ast.VisitExprNode(v, node.GetExpr())
+    bs_ast.VisitExprNode(v, node.GetExpr())
   }
 }
 
-func visitSizeofExprNode(v ast.INodeVisitor, node *ast.SizeofExprNode) {
-  ast.VisitExprNode(v, node.GetExpr())
+func visitSizeofExprNode(v bs_ast.INodeVisitor, node *bs_ast.SizeofExprNode) {
+  bs_ast.VisitExprNode(v, node.GetExpr())
 }
 
-func visitSizeofTypeNode(v ast.INodeVisitor, node *ast.SizeofTypeNode) {
+func visitSizeofTypeNode(v bs_ast.INodeVisitor, node *bs_ast.SizeofTypeNode) {
   // nop
 }
 
-func visitStringLiteralNode(v ast.INodeVisitor, node *ast.StringLiteralNode) {
+func visitStringLiteralNode(v bs_ast.INodeVisitor, node *bs_ast.StringLiteralNode) {
   // nop
 }
 
-func visitStructNode(v ast.INodeVisitor, node *ast.StructNode) {
+func visitStructNode(v bs_ast.INodeVisitor, node *bs_ast.StructNode) {
   // nop
 }
 
-func visitSuffixOpNode(v ast.INodeVisitor, node *ast.SuffixOpNode) {
-  ast.VisitExprNode(v, node.GetExpr())
+func visitSuffixOpNode(v bs_ast.INodeVisitor, node *bs_ast.SuffixOpNode) {
+  bs_ast.VisitExprNode(v, node.GetExpr())
 }
 
-func visitSwitchNode(v ast.INodeVisitor, node *ast.SwitchNode) {
-  ast.VisitExprNode(v, node.GetCond())
-  ast.VisitStmtNodes(v, node.GetCases())
+func visitSwitchNode(v bs_ast.INodeVisitor, node *bs_ast.SwitchNode) {
+  bs_ast.VisitExprNode(v, node.GetCond())
+  bs_ast.VisitStmtNodes(v, node.GetCases())
 }
 
-func visitTypedefNode(v ast.INodeVisitor, node *ast.TypedefNode) {
+func visitTypedefNode(v bs_ast.INodeVisitor, node *bs_ast.TypedefNode) {
   // nop
 }
 
-func visitUnaryOpNode(v ast.INodeVisitor, node *ast.UnaryOpNode) {
-  ast.VisitExprNode(v, node.GetExpr())
+func visitUnaryOpNode(v bs_ast.INodeVisitor, node *bs_ast.UnaryOpNode) {
+  bs_ast.VisitExprNode(v, node.GetExpr())
 }
 
-func visitUnionNode(v ast.INodeVisitor, node *ast.UnionNode) {
+func visitUnionNode(v bs_ast.INodeVisitor, node *bs_ast.UnionNode) {
   // nop
 }
 
-func visitVariableNode(v ast.INodeVisitor, node *ast.VariableNode) {
+func visitVariableNode(v bs_ast.INodeVisitor, node *bs_ast.VariableNode) {
   // nop
 }
 
-func visitWhileNode(v ast.INodeVisitor, node *ast.WhileNode) {
-  ast.VisitExprNode(v, node.GetCond())
-  ast.VisitStmtNode(v, node.GetBody())
+func visitWhileNode(v bs_ast.INodeVisitor, node *bs_ast.WhileNode) {
+  bs_ast.VisitExprNode(v, node.GetCond())
+  bs_ast.VisitStmtNode(v, node.GetBody())
 }
 
-func visitStmtNode(v ast.INodeVisitor, unknown core.IStmtNode) {
+func visitStmtNode(v bs_ast.INodeVisitor, unknown bs_core.IStmtNode) {
   switch node := unknown.(type) {
-    case *ast.BlockNode: visitBlockNode(v, node)
-    case *ast.BreakNode: visitBreakNode(v, node)
-    case *ast.CaseNode: visitCaseNode(v, node)
-    case *ast.ContinueNode: visitContinueNode(v, node)
-    case *ast.DoWhileNode: visitDoWhileNode(v, node)
-    case *ast.ExprStmtNode: visitExprStmtNode(v, node)
-    case *ast.ForNode: visitForNode(v, node)
-    case *ast.GotoNode: visitGotoNode(v, node)
-    case *ast.IfNode: visitIfNode(v, node)
-    case *ast.LabelNode: visitLabelNode(v, node)
-    case *ast.ReturnNode: visitReturnNode(v, node)
-    case *ast.SwitchNode: visitSwitchNode(v, node)
-    case *ast.WhileNode: visitWhileNode(v, node)
+    case *bs_ast.BlockNode: visitBlockNode(v, node)
+    case *bs_ast.BreakNode: visitBreakNode(v, node)
+    case *bs_ast.CaseNode: visitCaseNode(v, node)
+    case *bs_ast.ContinueNode: visitContinueNode(v, node)
+    case *bs_ast.DoWhileNode: visitDoWhileNode(v, node)
+    case *bs_ast.ExprStmtNode: visitExprStmtNode(v, node)
+    case *bs_ast.ForNode: visitForNode(v, node)
+    case *bs_ast.GotoNode: visitGotoNode(v, node)
+    case *bs_ast.IfNode: visitIfNode(v, node)
+    case *bs_ast.LabelNode: visitLabelNode(v, node)
+    case *bs_ast.ReturnNode: visitReturnNode(v, node)
+    case *bs_ast.SwitchNode: visitSwitchNode(v, node)
+    case *bs_ast.WhileNode: visitWhileNode(v, node)
     default: {
       panic(fmt.Errorf("unknown stmt node: %s", unknown))
     }
   }
 }
 
-func visitExprNode(v ast.INodeVisitor, unknown core.IExprNode) {
+func visitExprNode(v bs_ast.INodeVisitor, unknown bs_core.IExprNode) {
   switch node := unknown.(type) {
-    case *ast.AddressNode: visitAddressNode(v, node)
-    case *ast.ArefNode: visitArefNode(v, node)
-    case *ast.AssignNode: visitAssignNode(v, node)
-    case *ast.BinaryOpNode: visitBinaryOpNode(v, node)
-    case *ast.CondExprNode: visitCondExprNode(v, node)
-    case *ast.DereferenceNode: visitDereferenceNode(v, node)
-    case *ast.FuncallNode: visitFuncallNode(v, node)
-    case *ast.IntegerLiteralNode: visitIntegerLiteralNode(v, node)
-    case *ast.LogicalAndNode: visitLogicalAndNode(v, node)
-    case *ast.LogicalOrNode: visitLogicalOrNode(v, node)
-    case *ast.MemberNode: visitMemberNode(v, node)
-    case *ast.OpAssignNode: visitOpAssignNode(v, node)
-    case *ast.PrefixOpNode: visitPrefixOpNode(v, node)
-    case *ast.PtrMemberNode: visitPtrMemberNode(v, node)
-    case *ast.SizeofExprNode: visitSizeofExprNode(v, node)
-    case *ast.SizeofTypeNode: visitSizeofTypeNode(v, node)
-    case *ast.StringLiteralNode: visitStringLiteralNode(v, node)
-    case *ast.SuffixOpNode: visitSuffixOpNode(v, node)
-    case *ast.UnaryOpNode: visitUnaryOpNode(v, node)
-    case *ast.VariableNode: visitVariableNode(v, node)
+    case *bs_ast.AddressNode: visitAddressNode(v, node)
+    case *bs_ast.ArefNode: visitArefNode(v, node)
+    case *bs_ast.AssignNode: visitAssignNode(v, node)
+    case *bs_ast.BinaryOpNode: visitBinaryOpNode(v, node)
+    case *bs_ast.CondExprNode: visitCondExprNode(v, node)
+    case *bs_ast.DereferenceNode: visitDereferenceNode(v, node)
+    case *bs_ast.FuncallNode: visitFuncallNode(v, node)
+    case *bs_ast.IntegerLiteralNode: visitIntegerLiteralNode(v, node)
+    case *bs_ast.LogicalAndNode: visitLogicalAndNode(v, node)
+    case *bs_ast.LogicalOrNode: visitLogicalOrNode(v, node)
+    case *bs_ast.MemberNode: visitMemberNode(v, node)
+    case *bs_ast.OpAssignNode: visitOpAssignNode(v, node)
+    case *bs_ast.PrefixOpNode: visitPrefixOpNode(v, node)
+    case *bs_ast.PtrMemberNode: visitPtrMemberNode(v, node)
+    case *bs_ast.SizeofExprNode: visitSizeofExprNode(v, node)
+    case *bs_ast.SizeofTypeNode: visitSizeofTypeNode(v, node)
+    case *bs_ast.StringLiteralNode: visitStringLiteralNode(v, node)
+    case *bs_ast.SuffixOpNode: visitSuffixOpNode(v, node)
+    case *bs_ast.UnaryOpNode: visitUnaryOpNode(v, node)
+    case *bs_ast.VariableNode: visitVariableNode(v, node)
     default: {
       panic(fmt.Errorf("unknown expr node: %s", unknown))
     }
   }
 }
 
-func visitTypeDefinition(v ast.INodeVisitor, unknown core.ITypeDefinition) {
+func visitTypeDefinition(v bs_ast.INodeVisitor, unknown bs_core.ITypeDefinition) {
   switch node := unknown.(type) {
-    case *ast.StructNode: visitStructNode(v, node)
-    case *ast.TypedefNode: visitTypedefNode(v, node)
-    case *ast.UnionNode: visitUnionNode(v, node)
+    case *bs_ast.StructNode: visitStructNode(v, node)
+    case *bs_ast.TypedefNode: visitTypedefNode(v, node)
+    case *bs_ast.UnionNode: visitUnionNode(v, node)
     default: {
       panic(fmt.Errorf("unknown type definition: %s", unknown))
     }
   }
 }
 
-func visitEntity(v entity.IEntityVisitor, unknown core.IEntity) {
+func visitEntity(v bs_entity.IEntityVisitor, unknown bs_core.IEntity) {
   switch unknown.(type) {
-    case *entity.DefinedVariable: { }
-    case *entity.UndefinedVariable: { }
-    case *entity.Constant: { }
-    case *entity.DefinedFunction: { }
-    case *entity.UndefinedFunction: { }
+    case *bs_entity.DefinedVariable: { }
+    case *bs_entity.UndefinedVariable: { }
+    case *bs_entity.Constant: { }
+    case *bs_entity.DefinedFunction: { }
+    case *bs_entity.UndefinedFunction: { }
     default: {
-      panic(fmt.Errorf("unknown entity: %s", unknown))
+      panic(fmt.Errorf("unknown bs_entity: %s", unknown))
     }
   }
 }

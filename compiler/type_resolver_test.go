@@ -2,38 +2,38 @@ package compiler
 
 import (
   "testing"
-  "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/entity"
-  "bitbucket.org/yyuu/bs/typesys"
+  bs_ast "bitbucket.org/yyuu/bs/ast"
+  bs_core "bitbucket.org/yyuu/bs/core"
+  bs_entity "bitbucket.org/yyuu/bs/entity"
+  bs_typesys "bitbucket.org/yyuu/bs/typesys"
   "bitbucket.org/yyuu/bs/xt"
 )
 
-func setupTypeResolver(a *ast.AST, table *typesys.TypeTable) (int, *TypeResolver) {
-  resolver := NewTypeResolver(core.NewErrorHandler(core.LOG_WARN), core.NewOptions("type_resolver_test.go"), table)
+func setupTypeResolver(a *bs_ast.AST, table *bs_typesys.TypeTable) (int, *TypeResolver) {
+  resolver := NewTypeResolver(bs_core.NewErrorHandler(bs_core.LOG_WARN), bs_core.NewOptions("type_resolver_test.go"), table)
   numTypes := resolver.typeTable.NumTypes()
   resolver.defineTypes(a.ListTypes())
   return numTypes, resolver
 }
 
 func TestTypeResolverVisitTypeDefinitionsEmpty(t *testing.T) {
-  loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(loc,
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+  loc := bs_core.NewLocation("", 0, 0)
+  a := bs_ast.NewAST(loc,
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
   numTypes, resolver := setupTypeResolver(a, table)
 
-  ast.VisitTypeDefinitions(resolver, a.ListTypes())
+  bs_ast.VisitTypeDefinitions(resolver, a.ListTypes())
   xt.AssertEquals(t, "empty declaration should not have new types", resolver.typeTable.NumTypes(), numTypes)
 }
 
@@ -44,33 +44,33 @@ func TestTypeResolverWithStruct(t *testing.T) {
     int m
   };
  */
-  loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(loc,
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(
-        ast.NewStructNode(
+  loc := bs_core.NewLocation("", 0, 0)
+  a := bs_ast.NewAST(loc,
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(
+        bs_ast.NewStructNode(
           loc,
-          typesys.NewStructTypeRef(loc, "foo"),
+          bs_typesys.NewStructTypeRef(loc, "foo"),
           "foo",
-          []core.ISlot {
-            ast.NewSlot(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "n"),
-            ast.NewSlot(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "m"),
+          []bs_core.ISlot {
+            bs_ast.NewSlot(bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "n"),
+            bs_ast.NewSlot(bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "m"),
           },
         ),
       ),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
   numTypes, resolver := setupTypeResolver(a, table)
 
-  ast.VisitTypeDefinitions(resolver, a.ListTypes())
+  bs_ast.VisitTypeDefinitions(resolver, a.ListTypes())
   xt.AssertEquals(t, "new struct `foo' should be declared", resolver.typeTable.NumTypes(), numTypes+1)
 }
 
@@ -83,40 +83,40 @@ func TestTypeResolverWithUnion(t *testing.T) {
     int m
   };
  */
-  loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(loc,
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(
-        ast.NewUnionNode(
+  loc := bs_core.NewLocation("", 0, 0)
+  a := bs_ast.NewAST(loc,
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(
+        bs_ast.NewUnionNode(
           loc,
-          typesys.NewUnionTypeRef(loc, "foo"),
+          bs_typesys.NewUnionTypeRef(loc, "foo"),
           "foo",
-          []core.ISlot {
-            ast.NewSlot(ast.NewTypeNode(loc, typesys.NewShortTypeRef(loc)), "n"),
+          []bs_core.ISlot {
+            bs_ast.NewSlot(bs_ast.NewTypeNode(loc, bs_typesys.NewShortTypeRef(loc)), "n"),
           },
         ),
-        ast.NewUnionNode(
+        bs_ast.NewUnionNode(
           loc,
-          typesys.NewUnionTypeRef(loc, "bar"),
+          bs_typesys.NewUnionTypeRef(loc, "bar"),
           "bar",
-          []core.ISlot {
-            ast.NewSlot(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "m"),
+          []bs_core.ISlot {
+            bs_ast.NewSlot(bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "m"),
           },
         ),
       ),
-      ast.NewTypedefNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
   numTypes, resolver := setupTypeResolver(a, table)
 
-  ast.VisitTypeDefinitions(resolver, a.ListTypes())
+  bs_ast.VisitTypeDefinitions(resolver, a.ListTypes())
   xt.AssertEquals(t, "new union `foo' and `bar' should be declared", resolver.typeTable.NumTypes(), numTypes+2)
 }
 
@@ -126,48 +126,48 @@ func TestTypeResolverWithTypedef(t *testing.T) {
   typedef int bar;
   typedef long baz;
  */
-  loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(loc,
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(
-        ast.NewTypedefNode(loc, typesys.NewShortTypeRef(loc), "foo"),
-        ast.NewTypedefNode(loc, typesys.NewIntTypeRef(loc), "bar"),
-        ast.NewTypedefNode(loc, typesys.NewLongTypeRef(loc), "baz"),
+  loc := bs_core.NewLocation("", 0, 0)
+  a := bs_ast.NewAST(loc,
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(
+        bs_ast.NewTypedefNode(loc, bs_typesys.NewShortTypeRef(loc), "foo"),
+        bs_ast.NewTypedefNode(loc, bs_typesys.NewIntTypeRef(loc), "bar"),
+        bs_ast.NewTypedefNode(loc, bs_typesys.NewLongTypeRef(loc), "baz"),
       ),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
   numTypes, resolver := setupTypeResolver(a, table)
 
-  ast.VisitTypeDefinitions(resolver, a.ListTypes())
+  bs_ast.VisitTypeDefinitions(resolver, a.ListTypes())
   xt.AssertEquals(t, "new typedef `foo', `bar' and `baz' should be declared", resolver.typeTable.NumTypes(), numTypes+3)
 }
 
 func TestTypeResolverVisitEntity(t *testing.T) {
-  loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(loc,
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+  loc := bs_core.NewLocation("", 0, 0)
+  a := bs_ast.NewAST(loc,
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
   _, resolver := setupTypeResolver(a, table)
 
-  entity.VisitEntities(resolver, a.ListEntities())
+  bs_entity.VisitEntities(resolver, a.ListEntities())
   assertTypeResolved(t, "visit entity", a)
 }
 
@@ -177,28 +177,28 @@ func TestTypeResolverWithFunctionWithoutArguments(t *testing.T) {
     println("hello, world");
   }
  */
-  loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(loc,
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(
-        entity.NewDefinedFunction(
+  loc := bs_core.NewLocation("", 0, 0)
+  a := bs_ast.NewAST(loc,
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(
+        bs_entity.NewDefinedFunction(
           false,
-          ast.NewTypeNode(loc, typesys.NewVoidTypeRef(loc)),
+          bs_ast.NewTypeNode(loc, bs_typesys.NewVoidTypeRef(loc)),
           "hello",
-          entity.NewParams(loc,
-            entity.NewParameters(),
+          bs_entity.NewParams(loc,
+            bs_entity.NewParameters(),
             false,
           ),
-          ast.NewBlockNode(loc,
-            entity.NewDefinedVariables(),
-            []core.IStmtNode {
-              ast.NewExprStmtNode(loc,
-                ast.NewFuncallNode(loc,
-                  ast.NewVariableNode(loc, "println"),
-                  []core.IExprNode {
-                    ast.NewStringLiteralNode(loc, "hello, world"),
+          bs_ast.NewBlockNode(loc,
+            bs_entity.NewDefinedVariables(),
+            []bs_core.IStmtNode {
+              bs_ast.NewExprStmtNode(loc,
+                bs_ast.NewFuncallNode(loc,
+                  bs_ast.NewVariableNode(loc, "println"),
+                  []bs_core.IExprNode {
+                    bs_ast.NewStringLiteralNode(loc, "hello, world"),
                   },
                 ),
               ),
@@ -206,17 +206,17 @@ func TestTypeResolverWithFunctionWithoutArguments(t *testing.T) {
           ),
         ),
       ),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
   _, resolver := setupTypeResolver(a, table)
 
-  entity.VisitEntities(resolver, a.ListEntities())
+  bs_entity.VisitEntities(resolver, a.ListEntities())
   assertTypeResolved(t, "function w/o args", a)
 }
 
@@ -226,31 +226,31 @@ func TestTypeResolverWithFunctionWithArguments(t *testing.T) {
     println("hello, world");
   }
  */
-  loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(loc,
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(
-        entity.NewDefinedFunction(
+  loc := bs_core.NewLocation("", 0, 0)
+  a := bs_ast.NewAST(loc,
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(
+        bs_entity.NewDefinedFunction(
           false,
-          ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)),
+          bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)),
           "main",
-          entity.NewParams(loc,
-            entity.NewParameters(
-              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "argc"),
-              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewArrayTypeRef(typesys.NewPointerTypeRef(typesys.NewCharTypeRef(loc)), 0)), "argv"),
+          bs_entity.NewParams(loc,
+            bs_entity.NewParameters(
+              bs_entity.NewParameter(bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "argc"),
+              bs_entity.NewParameter(bs_ast.NewTypeNode(loc, bs_typesys.NewArrayTypeRef(bs_typesys.NewPointerTypeRef(bs_typesys.NewCharTypeRef(loc)), 0)), "argv"),
             ),
             false,
           ),
-          ast.NewBlockNode(loc,
-            entity.NewDefinedVariables(),
-            []core.IStmtNode {
-              ast.NewExprStmtNode(loc,
-                ast.NewFuncallNode(loc,
-                  ast.NewVariableNode(loc, "println"),
-                  []core.IExprNode {
-                    ast.NewStringLiteralNode(loc, "hello, world"),
+          bs_ast.NewBlockNode(loc,
+            bs_entity.NewDefinedVariables(),
+            []bs_core.IStmtNode {
+              bs_ast.NewExprStmtNode(loc,
+                bs_ast.NewFuncallNode(loc,
+                  bs_ast.NewVariableNode(loc, "println"),
+                  []bs_core.IExprNode {
+                    bs_ast.NewStringLiteralNode(loc, "hello, world"),
                   },
                 ),
               ),
@@ -258,17 +258,17 @@ func TestTypeResolverWithFunctionWithArguments(t *testing.T) {
           ),
         ),
       ),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
   _, resolver := setupTypeResolver(a, table)
 
-  entity.VisitEntities(resolver, a.ListEntities())
+  bs_entity.VisitEntities(resolver, a.ListEntities())
   // TODO: add asserts
   assertTypeResolved(t, "function w/ args", a)
 }
@@ -282,50 +282,50 @@ func TestTypeResolverWithFunctionArguments(t *testing.T) {
     return f(x*2);
   }
  */
-  loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(loc,
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(
-        entity.NewDefinedFunction(
+  loc := bs_core.NewLocation("", 0, 0)
+  a := bs_ast.NewAST(loc,
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(
+        bs_entity.NewDefinedFunction(
           false,
-          ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)),
+          bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)),
           "f",
-          entity.NewParams(loc,
-            entity.NewParameters(
-              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "x"),
+          bs_entity.NewParams(loc,
+            bs_entity.NewParameters(
+              bs_entity.NewParameter(bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "x"),
             ),
             false,
           ),
-          ast.NewBlockNode(loc,
-            entity.NewDefinedVariables(),
-            []core.IStmtNode {
-              ast.NewReturnNode(loc, ast.NewVariableNode(loc, "x")),
+          bs_ast.NewBlockNode(loc,
+            bs_entity.NewDefinedVariables(),
+            []bs_core.IStmtNode {
+              bs_ast.NewReturnNode(loc, bs_ast.NewVariableNode(loc, "x")),
             },
           ),
         ),
-        entity.NewDefinedFunction(
+        bs_entity.NewDefinedFunction(
           false,
-          ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)),
+          bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)),
           "g",
-          entity.NewParams(loc,
-            entity.NewParameters(
-              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "x"),
+          bs_entity.NewParams(loc,
+            bs_entity.NewParameters(
+              bs_entity.NewParameter(bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "x"),
             ),
             false,
           ),
-          ast.NewBlockNode(loc,
-            entity.NewDefinedVariables(),
-            []core.IStmtNode {
-              ast.NewExprStmtNode(loc,
-                ast.NewFuncallNode(loc,
-                  ast.NewVariableNode(loc, "f"),
-                  []core.IExprNode {
-                    ast.NewBinaryOpNode(loc,
+          bs_ast.NewBlockNode(loc,
+            bs_entity.NewDefinedVariables(),
+            []bs_core.IStmtNode {
+              bs_ast.NewExprStmtNode(loc,
+                bs_ast.NewFuncallNode(loc,
+                  bs_ast.NewVariableNode(loc, "f"),
+                  []bs_core.IExprNode {
+                    bs_ast.NewBinaryOpNode(loc,
                       "*",
-                      ast.NewVariableNode(loc, "x"),
-                      ast.NewIntegerLiteralNode(loc, "2"),
+                      bs_ast.NewVariableNode(loc, "x"),
+                      bs_ast.NewIntegerLiteralNode(loc, "2"),
                     ),
                   },
                 ),
@@ -334,18 +334,18 @@ func TestTypeResolverWithFunctionArguments(t *testing.T) {
           ),
         ),
       ),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
-  table := typesys.NewTypeTableFor(core.PLATFORM_LINUX_X86)
-  errorHandler := core.NewErrorHandler(core.LOG_WARN)
-  options := core.NewOptions("type_resolver_test.go")
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
+  errorHandler := bs_core.NewErrorHandler(bs_core.LOG_WARN)
+  options := bs_core.NewOptions("type_resolver_test.go")
 
-  localResolver := NewLocalResolver(core.NewErrorHandler(core.LOG_WARN), options)
+  localResolver := NewLocalResolver(bs_core.NewErrorHandler(bs_core.LOG_WARN), options)
   localResolver.Resolve(a)
   typeResolver := NewTypeResolver(errorHandler, options, table)
   typeResolver.Resolve(a)

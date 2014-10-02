@@ -1,44 +1,44 @@
 package compiler
 
 import (
-  "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/entity"
+  bs_ast "bitbucket.org/yyuu/bs/ast"
+  bs_core "bitbucket.org/yyuu/bs/core"
+  bs_entity "bitbucket.org/yyuu/bs/entity"
 )
 
 type LocalResolver struct {
-  errorHandler *core.ErrorHandler
-  options *core.Options
-  scopeStack []core.IScope
-  constantTable *entity.ConstantTable
+  errorHandler *bs_core.ErrorHandler
+  options *bs_core.Options
+  scopeStack []bs_core.IScope
+  constantTable *bs_entity.ConstantTable
 }
 
-func NewLocalResolver(errorHandler *core.ErrorHandler, options *core.Options) *LocalResolver {
-  return &LocalResolver { errorHandler, options, []core.IScope { }, entity.NewConstantTable() }
+func NewLocalResolver(errorHandler *bs_core.ErrorHandler, options *bs_core.Options) *LocalResolver {
+  return &LocalResolver { errorHandler, options, []bs_core.IScope { }, bs_entity.NewConstantTable() }
 }
 
-func (self *LocalResolver) Resolve(a *ast.AST) {
+func (self *LocalResolver) Resolve(ast *bs_ast.AST) {
   self.errorHandler.Debug("starting local resolver.")
-  toplevel := entity.NewToplevelScope()
+  toplevel := bs_entity.NewToplevelScope()
   self.scopeStack = append(self.scopeStack, toplevel)
 
-  declarations := a.ListDeclarations()
+  declarations := ast.ListDeclarations()
   for i := range declarations {
     toplevel.DeclareEntity(declarations[i])
   }
-  definitions := a.ListDefinitions()
+  definitions := ast.ListDefinitions()
   for i := range definitions {
     toplevel.DefineEntity(definitions[i])
   }
 
-  self.resolveGvarInitializers(a)
-  self.resolveConstantValues(a)
-  self.resolveFunctions(a)
+  self.resolveGvarInitializers(ast)
+  self.resolveConstantValues(ast)
+  self.resolveFunctions(ast)
 
   toplevel.CheckReferences(self.errorHandler)
 
-  a.SetScope(toplevel)
-  a.SetConstantTable(self.constantTable)
+  ast.SetScope(toplevel)
+  ast.SetConstantTable(self.constantTable)
   if self.errorHandler.ErrorOccured() {
     self.errorHandler.Fatalf("found %d error(s).", self.errorHandler.GetErrors())
   } else {
@@ -46,43 +46,43 @@ func (self *LocalResolver) Resolve(a *ast.AST) {
   }
 }
 
-func (self *LocalResolver) resolveGvarInitializers(a *ast.AST) {
-  variables := a.GetDefinedVariables()
+func (self *LocalResolver) resolveGvarInitializers(ast *bs_ast.AST) {
+  variables := ast.GetDefinedVariables()
   for i := range variables {
     gvar := variables[i]
     if gvar.HasInitializer() {
-      ast.VisitExprNode(self, gvar.GetInitializer())
+      bs_ast.VisitExprNode(self, gvar.GetInitializer())
     }
   }
 }
 
-func (self *LocalResolver) resolveConstantValues(a *ast.AST) {
-  constants := a.GetConstants()
+func (self *LocalResolver) resolveConstantValues(ast *bs_ast.AST) {
+  constants := ast.GetConstants()
   for i := range constants {
     constant := constants[i]
-    ast.VisitExprNode(self, constant.GetValue())
+    bs_ast.VisitExprNode(self, constant.GetValue())
   }
 }
 
-func (self *LocalResolver) resolveFunctions(a *ast.AST) {
-  functions := a.GetDefinedFunctions()
+func (self *LocalResolver) resolveFunctions(ast *bs_ast.AST) {
+  functions := ast.GetDefinedFunctions()
   for i := range functions {
     function := functions[i]
     self.pushScope(function.ListParameters())
-    ast.VisitStmtNode(self, function.GetBody())
-    function.SetScope(self.popScope().(*entity.LocalScope))
+    bs_ast.VisitStmtNode(self, function.GetBody())
+    function.SetScope(self.popScope().(*bs_entity.LocalScope))
   }
 }
 
-func (self *LocalResolver) currentScope() core.IScope {
+func (self *LocalResolver) currentScope() bs_core.IScope {
   if len(self.scopeStack) < 1 {
     self.errorHandler.Fatal("stack is empty")
   }
   return self.scopeStack[len(self.scopeStack)-1]
 }
 
-func (self *LocalResolver) pushScope(vars []*entity.DefinedVariable) {
-  scope := entity.NewLocalScope(self.currentScope())
+func (self *LocalResolver) pushScope(vars []*bs_entity.DefinedVariable) {
+  scope := bs_entity.NewLocalScope(self.currentScope())
   for i := range vars {
     v := vars[i]
     if scope.IsDefinedLocally(v.GetName()) {
@@ -93,7 +93,7 @@ func (self *LocalResolver) pushScope(vars []*entity.DefinedVariable) {
   self.scopeStack = append(self.scopeStack, scope)
 }
 
-func (self *LocalResolver) popScope() core.IScope {
+func (self *LocalResolver) popScope() bs_core.IScope {
   if len(self.scopeStack) < 1 {
     self.errorHandler.Fatal("stack is empty")
   }
@@ -102,12 +102,12 @@ func (self *LocalResolver) popScope() core.IScope {
   return scope
 }
 
-func (self *LocalResolver) VisitStmtNode(unknown core.IStmtNode) interface{} {
+func (self *LocalResolver) VisitStmtNode(unknown bs_core.IStmtNode) interface{} {
   switch node := unknown.(type) {
-    case *ast.BlockNode: {
+    case *bs_ast.BlockNode: {
       self.pushScope(node.GetVariables())
       visitBlockNode(self, node)
-      node.SetScope(self.popScope().(*entity.LocalScope))
+      node.SetScope(self.popScope().(*bs_entity.LocalScope))
     }
     default: {
       visitStmtNode(self, unknown)
@@ -116,13 +116,13 @@ func (self *LocalResolver) VisitStmtNode(unknown core.IStmtNode) interface{} {
   return nil
 }
 
-func (self *LocalResolver) VisitExprNode(unknown core.IExprNode) interface{} {
+func (self *LocalResolver) VisitExprNode(unknown bs_core.IExprNode) interface{} {
   switch node := unknown.(type) {
-    case *ast.StringLiteralNode: {
+    case *bs_ast.StringLiteralNode: {
       ent := self.constantTable.Intern(node.GetValue())
       node.SetEntry(ent)
     }
-    case *ast.VariableNode: {
+    case *bs_ast.VariableNode: {
       ent := self.currentScope().GetByName(node.GetName())
       if ent == nil {
         self.errorHandler.Errorf("undefined: %s", node.GetName())
@@ -137,7 +137,7 @@ func (self *LocalResolver) VisitExprNode(unknown core.IExprNode) interface{} {
   return nil
 }
 
-func (self *LocalResolver) VisitTypeDefinition(unknown core.ITypeDefinition) interface{} {
+func (self *LocalResolver) VisitTypeDefinition(unknown bs_core.ITypeDefinition) interface{} {
   visitTypeDefinition(self, unknown)
   return nil
 }

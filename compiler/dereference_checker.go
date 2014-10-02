@@ -1,31 +1,31 @@
 package compiler
 
 import (
-  "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/entity"
-  "bitbucket.org/yyuu/bs/typesys"
+  bs_ast "bitbucket.org/yyuu/bs/ast"
+  bs_core "bitbucket.org/yyuu/bs/core"
+  bs_entity "bitbucket.org/yyuu/bs/entity"
+  bs_typesys "bitbucket.org/yyuu/bs/typesys"
 )
 
 type DereferenceChecker struct {
-  errorHandler *core.ErrorHandler
-  options *core.Options
-  typeTable *typesys.TypeTable
+  errorHandler *bs_core.ErrorHandler
+  options *bs_core.Options
+  typeTable *bs_typesys.TypeTable
 }
 
-func NewDereferenceChecker(errorHandler *core.ErrorHandler, options *core.Options, table *typesys.TypeTable) *DereferenceChecker {
+func NewDereferenceChecker(errorHandler *bs_core.ErrorHandler, options *bs_core.Options, table *bs_typesys.TypeTable) *DereferenceChecker {
   return &DereferenceChecker { errorHandler, options, table }
 }
 
-func (self *DereferenceChecker) Check(a *ast.AST) {
+func (self *DereferenceChecker) Check(ast *bs_ast.AST) {
   self.errorHandler.Debug("starting dereference checker.")
-  vs := a.GetDefinedVariables()
+  vs := ast.GetDefinedVariables()
   for i := range vs {
     self.checkToplevelVariable(vs[i])
   }
-  fs := a.GetDefinedFunctions()
+  fs := ast.GetDefinedFunctions()
   for i := range fs {
-    ast.VisitStmtNode(self, fs[i].GetBody())
+    bs_ast.VisitStmtNode(self, fs[i].GetBody())
   }
   if self.errorHandler.ErrorOccured() {
     self.errorHandler.Fatalf("found %d error(s).", self.errorHandler.GetErrors())
@@ -34,26 +34,26 @@ func (self *DereferenceChecker) Check(a *ast.AST) {
   }
 }
 
-func (self *DereferenceChecker) checkToplevelVariable(v *entity.DefinedVariable) {
+func (self *DereferenceChecker) checkToplevelVariable(v *bs_entity.DefinedVariable) {
   self.checkVariable(v)
   if v.HasInitializer() {
     self.checkConstant(v.GetInitializer())
   }
 }
 
-func (self *DereferenceChecker) checkConstant(expr core.IExprNode) {
+func (self *DereferenceChecker) checkConstant(expr bs_core.IExprNode) {
   if ! expr.IsConstant() {
     self.errorHandler.Errorf("%s not a constant", expr.GetLocation())
   }
 }
 
-func (self *DereferenceChecker) checkVariable(v *entity.DefinedVariable) {
+func (self *DereferenceChecker) checkVariable(v *bs_entity.DefinedVariable) {
   if v.HasInitializer() {
-    ast.VisitExprNode(self, v.GetInitializer())
+    bs_ast.VisitExprNode(self, v.GetInitializer())
   }
 }
 
-func (self *DereferenceChecker) handleImplicitAddress(node core.IExprNode) {
+func (self *DereferenceChecker) handleImplicitAddress(node bs_core.IExprNode) {
   if ! node.IsLoadable() {
     t := node.GetType()
     if t.IsArray() {
@@ -65,24 +65,24 @@ func (self *DereferenceChecker) handleImplicitAddress(node core.IExprNode) {
   }
 }
 
-func (self *DereferenceChecker) checkMemberRef(loc core.Location, t core.IType, memb string) {
+func (self *DereferenceChecker) checkMemberRef(loc bs_core.Location, t bs_core.IType, memb string) {
   if ! t.IsCompositeType() {
     self.errorHandler.Errorf("%s accessing member `%s' for non-struct/union: %s", loc, t, memb)
   }
-  ct := t.(core.ICompositeType)
+  ct := t.(bs_core.ICompositeType)
   if ! ct.HasMember(memb) {
     self.errorHandler.Errorf("%s %s does not have member: %s", loc, t, memb)
   }
 }
 
-func (self *DereferenceChecker) VisitStmtNode(unknown core.IStmtNode) interface{} {
+func (self *DereferenceChecker) VisitStmtNode(unknown bs_core.IStmtNode) interface{} {
   switch node := unknown.(type) {
-    case *ast.BlockNode: {
+    case *bs_ast.BlockNode: {
       vs := node.GetVariables()
       for i := range vs {
         self.checkVariable(vs[i])
       }
-      ast.VisitStmtNodes(self, node.GetStmts())
+      bs_ast.VisitStmtNodes(self, node.GetStmts())
     }
     default: {
       visitStmtNode(self, unknown)
@@ -91,51 +91,51 @@ func (self *DereferenceChecker) VisitStmtNode(unknown core.IStmtNode) interface{
   return nil
 }
 
-func (self *DereferenceChecker) VisitExprNode(unknown core.IExprNode) interface{} {
+func (self *DereferenceChecker) VisitExprNode(unknown bs_core.IExprNode) interface{} {
   switch node := unknown.(type) {
-    case *ast.AssignNode: {
+    case *bs_ast.AssignNode: {
       visitAssignNode(self, node)
       if ! node.GetLHS().IsAssignable() {
         self.errorHandler.Errorf("%s invalid lhs expression", node.GetLocation())
       }
     }
-    case *ast.OpAssignNode: {
+    case *bs_ast.OpAssignNode: {
       visitOpAssignNode(self, node)
       if ! node.GetLHS().IsAssignable() {
         self.errorHandler.Errorf("%s invalid lhs expression", node.GetLocation())
       }
     }
-    case *ast.PrefixOpNode: {
+    case *bs_ast.PrefixOpNode: {
       visitPrefixOpNode(self, node)
       if ! node.GetExpr().IsAssignable() {
         self.errorHandler.Errorf("%s cannot increment/decrement", node.GetExpr().GetLocation())
       }
     }
-    case *ast.SuffixOpNode: {
+    case *bs_ast.SuffixOpNode: {
       visitSuffixOpNode(self, node)
       if ! node.GetExpr().IsAssignable() {
         self.errorHandler.Errorf("%s cannot increment/decrement", node.GetExpr().GetLocation())
       }
     }
-    case *ast.FuncallNode: {
+    case *bs_ast.FuncallNode: {
       visitFuncallNode(self, node)
       if ! node.GetExpr().IsCallable() {
         self.errorHandler.Errorf("%s calling object is not a function", node.GetLocation())
       }
     }
-    case *ast.ArefNode: {
+    case *bs_ast.ArefNode: {
       visitArefNode(self, node)
       if ! node.GetExpr().IsPointer() {
         self.errorHandler.Errorf("%s indexing non-array/pointer expression", node.GetLocation())
       }
       self.handleImplicitAddress(node)
     }
-    case *ast.MemberNode: {
+    case *bs_ast.MemberNode: {
       visitMemberNode(self, node)
       self.checkMemberRef(node.GetLocation(), node.GetExpr().GetType(), node.GetMember())
       self.handleImplicitAddress(node)
     }
-    case *ast.PtrMemberNode: {
+    case *bs_ast.PtrMemberNode: {
       visitPtrMemberNode(self, node)
       if ! node.GetExpr().IsPointer() {
         self.errorHandler.Errorf("%s undereferable error", node.GetLocation())
@@ -143,14 +143,14 @@ func (self *DereferenceChecker) VisitExprNode(unknown core.IExprNode) interface{
       self.checkMemberRef(node.GetLocation(), node.GetDereferedType(), node.GetMember())
       self.handleImplicitAddress(node)
     }
-    case *ast.DereferenceNode: {
+    case *bs_ast.DereferenceNode: {
       visitDereferenceNode(self, node)
       if ! node.GetExpr().IsPointer() {
         self.errorHandler.Errorf("%s undereferable error", node.GetLocation())
       }
       self.handleImplicitAddress(node)
     }
-    case *ast.AddressNode: {
+    case *bs_ast.AddressNode: {
       visitAddressNode(self, node)
       if ! node.GetExpr().IsLvalue() {
         self.errorHandler.Errorf("%s invalid expression for &", node.GetLocation())
@@ -162,14 +162,14 @@ func (self *DereferenceChecker) VisitExprNode(unknown core.IExprNode) interface{
         node.SetType(self.typeTable.PointerTo(base))
       }
     }
-    case *ast.VariableNode: {
+    case *bs_ast.VariableNode: {
       visitVariableNode(self, node)
       if node.GetEntity().IsConstant() {
-        self.checkConstant(node.GetEntity().(*entity.Constant).GetValue())
+        self.checkConstant(node.GetEntity().(*bs_entity.Constant).GetValue())
       }
       self.handleImplicitAddress(node)
     }
-    case *ast.CastNode: {
+    case *bs_ast.CastNode: {
       visitCastNode(self, node)
       if node.GetType().IsArray() {
         self.errorHandler.Errorf("%s cast specifies array type", node.GetLocation())
@@ -182,7 +182,7 @@ func (self *DereferenceChecker) VisitExprNode(unknown core.IExprNode) interface{
   return nil
 }
 
-func (self *DereferenceChecker) VisitTypeDefinition(unknown core.ITypeDefinition) interface{} {
+func (self *DereferenceChecker) VisitTypeDefinition(unknown bs_core.ITypeDefinition) interface{} {
   visitTypeDefinition(self, unknown)
   return nil
 }

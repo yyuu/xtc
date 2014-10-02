@@ -38,17 +38,17 @@ func (self *Compiler) Compile() {
   for i := range files {
     ast, err := bs_parser.ParseFile(files[i], self.errorHandler, self.options)
     if err != nil { self.errorHandler.Fatal(err) }
-    self.evaluateAST(ast)
+    self.build(ast)
   }
 }
 
 func (self *Compiler) CompileString(source string) {
   ast, err := bs_parser.ParseExpr(source, self.errorHandler, self.options)
   if err != nil { self.errorHandler.Fatal(err) }
-  self.evaluateAST(ast)
+  self.build(ast)
 }
 
-func (self *Compiler) evaluateAST(ast *bs_ast.AST) {
+func (self *Compiler) build(ast *bs_ast.AST) {
   self.dumpAST(ast)
   types := bs_typesys.NewTypeTableFor(self.options.TargetPlatform())
   sem, err := self.semanticAnalyze(ast, types)

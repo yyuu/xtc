@@ -2,16 +2,16 @@ package compiler
 
 import (
   "testing"
-  "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/entity"
-  "bitbucket.org/yyuu/bs/typesys"
+  bs_ast "bitbucket.org/yyuu/bs/ast"
+  bs_core "bitbucket.org/yyuu/bs/core"
+  bs_entity "bitbucket.org/yyuu/bs/entity"
+  bs_typesys "bitbucket.org/yyuu/bs/typesys"
   "bitbucket.org/yyuu/bs/xt"
 )
 
-func setupLocalResolver(a *ast.AST) *LocalResolver {
-  resolver := NewLocalResolver(core.NewErrorHandler(core.LOG_WARN), core.NewOptions("local_resolver_test.go"))
-  toplevel := entity.NewToplevelScope()
+func setupLocalResolver(a *bs_ast.AST) *LocalResolver {
+  resolver := NewLocalResolver(bs_core.NewErrorHandler(bs_core.LOG_WARN), bs_core.NewOptions("local_resolver_test.go"))
+  toplevel := bs_entity.NewToplevelScope()
   resolver.scopeStack = append(resolver.scopeStack, toplevel)
 
   declarations := a.ListDeclarations()
@@ -27,17 +27,17 @@ func setupLocalResolver(a *ast.AST) *LocalResolver {
 }
 
 func TestLocalResolverPushPopStacks(t *testing.T) {
-  resolver := NewLocalResolver(core.NewErrorHandler(core.LOG_WARN), core.NewOptions("local_resolver_test.go"))
-  loc := core.NewLocation("", 0, 0)
-  toplevel := entity.NewToplevelScope()
+  resolver := NewLocalResolver(bs_core.NewErrorHandler(bs_core.LOG_WARN), bs_core.NewOptions("local_resolver_test.go"))
+  loc := bs_core.NewLocation("", 0, 0)
+  toplevel := bs_entity.NewToplevelScope()
 
   resolver.scopeStack = append(resolver.scopeStack, toplevel)
   xt.AssertEquals(t, "let there be toplevel", len(resolver.scopeStack), 1)
   xt.AssertEquals(t, "there is toplevel", resolver.currentScope(), toplevel)
 
   resolver.pushScope(
-    entity.NewDefinedVariables(
-      entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "foo", ast.NewIntegerLiteralNode(loc, "12345")),
+    bs_entity.NewDefinedVariables(
+      bs_entity.NewDefinedVariable(false, bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "foo", bs_ast.NewIntegerLiteralNode(loc, "12345")),
     ),
   )
   scope1 := resolver.currentScope()
@@ -48,8 +48,8 @@ func TestLocalResolverPushPopStacks(t *testing.T) {
   xt.AssertNotNil(t, "scope1 should contain foo", scope1.GetByName("foo"))
 
   resolver.pushScope(
-    entity.NewDefinedVariables(
-      entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "bar", ast.NewIntegerLiteralNode(loc, "67890")),
+    bs_entity.NewDefinedVariables(
+      bs_entity.NewDefinedVariable(false, bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "bar", bs_ast.NewIntegerLiteralNode(loc, "67890")),
     ),
   )
   scope2 := resolver.currentScope()
@@ -69,17 +69,17 @@ func TestLocalResolverPushPopStacks(t *testing.T) {
 }
 
 func TestLocalResolverWithEmptyDeclaration(t *testing.T) {
-  loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(loc,
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+  loc := bs_core.NewLocation("", 0, 0)
+  a := bs_ast.NewAST(loc,
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
   resolver := setupLocalResolver(a)
@@ -92,19 +92,19 @@ func TestLocalResolverWithGlobalVariables(t *testing.T) {
 /*
   static int foo = 12345;
  */
-  loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(loc,
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(
-        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "foo", ast.NewIntegerLiteralNode(loc, "12345")),
+  loc := bs_core.NewLocation("", 0, 0)
+  a := bs_ast.NewAST(loc,
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(
+        bs_entity.NewDefinedVariable(false, bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "foo", bs_ast.NewIntegerLiteralNode(loc, "12345")),
       ),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
   resolver := setupLocalResolver(a)
@@ -116,19 +116,19 @@ func TestLocalResolverWithGlobalVariables2(t *testing.T) {
 /*
   static int foo = bar; // undefined
  */
-  loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(loc,
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(
-        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "foo", ast.NewVariableNode(loc, "bar")),
+  loc := bs_core.NewLocation("", 0, 0)
+  a := bs_ast.NewAST(loc,
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(
+        bs_entity.NewDefinedVariable(false, bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "foo", bs_ast.NewVariableNode(loc, "bar")),
       ),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
   resolver := setupLocalResolver(a)
@@ -148,40 +148,40 @@ func TestLocalResolverWithGlobalVariables3(t *testing.T) {
   static int bar = foo;
   static int baz = foo;
  */
-  loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(loc,
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(
-        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "foo", ast.NewIntegerLiteralNode(loc, "12345")),
-        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "bar", ast.NewVariableNode(loc, "foo")),
-        entity.NewDefinedVariable(false, ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "baz", ast.NewVariableNode(loc, "foo")),
+  loc := bs_core.NewLocation("", 0, 0)
+  a := bs_ast.NewAST(loc,
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(
+        bs_entity.NewDefinedVariable(false, bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "foo", bs_ast.NewIntegerLiteralNode(loc, "12345")),
+        bs_entity.NewDefinedVariable(false, bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "bar", bs_ast.NewVariableNode(loc, "foo")),
+        bs_entity.NewDefinedVariable(false, bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "baz", bs_ast.NewVariableNode(loc, "foo")),
       ),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
   resolver := setupLocalResolver(a)
   resolver.resolveGvarInitializers(a)
 
   foo := resolver.currentScope().GetByName("foo")
-  foo_var, ok := foo.(*entity.DefinedVariable)
+  foo_var, ok := foo.(*bs_entity.DefinedVariable)
   xt.AssertNotNil(t, "foo should not be nil", foo)
   xt.AssertTrue(t, "foo should be an *entity.DefinedVariable", ok)
   xt.AssertEquals(t, "foo should be refered 2 times", foo_var.GetNumRefered(), 2)
 
   bar := resolver.currentScope().GetByName("bar")
-  bar_var, ok := bar.(*entity.DefinedVariable)
+  bar_var, ok := bar.(*bs_entity.DefinedVariable)
   xt.AssertNotNil(t, "bar should not be nil", bar)
   xt.AssertTrue(t, "bar should be an *entity.DefinedVariable", ok)
   xt.AssertEquals(t, "bar should be refered 0 times", bar_var.GetNumRefered(), 0)
 
   baz := resolver.currentScope().GetByName("baz")
-  baz_var, ok := baz.(*entity.DefinedVariable)
+  baz_var, ok := baz.(*bs_entity.DefinedVariable)
   xt.AssertNotNil(t, "baz should not be nil", baz)
   xt.AssertTrue(t, "baz should be an *entity.DefinedVariable", ok)
   xt.AssertEquals(t, "baz should be refered 0 times", baz_var.GetNumRefered(), 0)
@@ -192,28 +192,28 @@ func TestLocalResolverWithConstants1(t *testing.T) {
   const char[] foo = "foo";
   const char[] bar = "bar";
  */
-  loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(loc,
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(
-        entity.NewConstant(
-          ast.NewTypeNode(loc, typesys.NewArrayTypeRef(typesys.NewCharTypeRef(loc), len("foo"))),
+  loc := bs_core.NewLocation("", 0, 0)
+  a := bs_ast.NewAST(loc,
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(
+        bs_entity.NewConstant(
+          bs_ast.NewTypeNode(loc, bs_typesys.NewArrayTypeRef(bs_typesys.NewCharTypeRef(loc), len("foo"))),
           "foo",
-          ast.NewStringLiteralNode(loc, "foo"),
+          bs_ast.NewStringLiteralNode(loc, "foo"),
         ),
-        entity.NewConstant(
-          ast.NewTypeNode(loc, typesys.NewArrayTypeRef(typesys.NewCharTypeRef(loc), len("bar"))),
+        bs_entity.NewConstant(
+          bs_ast.NewTypeNode(loc, bs_typesys.NewArrayTypeRef(bs_typesys.NewCharTypeRef(loc), len("bar"))),
           "bar",
-          ast.NewStringLiteralNode(loc, "bar"),
+          bs_ast.NewStringLiteralNode(loc, "bar"),
         ),
       ),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
   resolver := setupLocalResolver(a)
@@ -230,7 +230,7 @@ func TestLocalResolverWithConstants1(t *testing.T) {
   nodes := a.GetConstants()
   xt.AssertEquals(t, "there should be 2 constant nodes", len(nodes), 2)
   for i := range nodes {
-    s, ok := nodes[i].GetValue().(*ast.StringLiteralNode)
+    s, ok := nodes[i].GetValue().(*bs_ast.StringLiteralNode)
     if ! ok {
       t.Errorf("there should be only string constants: %v", nodes[i])
     }
@@ -248,64 +248,64 @@ func TestLocalResolverWithFunctions1(t *testing.T) {
       return 67890 + m;
    }
  */
-  loc := core.NewLocation("", 0, 0)
-  a := ast.NewAST(loc,
-    ast.NewDeclaration(
-      entity.NewDefinedVariables(),
-      entity.NewUndefinedVariables(),
-      entity.NewDefinedFunctions(
-        entity.NewDefinedFunction(
+  loc := bs_core.NewLocation("", 0, 0)
+  a := bs_ast.NewAST(loc,
+    bs_ast.NewDeclaration(
+      bs_entity.NewDefinedVariables(),
+      bs_entity.NewUndefinedVariables(),
+      bs_entity.NewDefinedFunctions(
+        bs_entity.NewDefinedFunction(
           true,
-          ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)),
+          bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)),
           "foo",
-          entity.NewParams(loc,
-            entity.NewParameters(
-              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "n"),
+          bs_entity.NewParams(loc,
+            bs_entity.NewParameters(
+              bs_entity.NewParameter(bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "n"),
             ),
             false,
           ),
-          ast.NewBlockNode(loc,
-            entity.NewDefinedVariables(),
-            []core.IStmtNode {
-              ast.NewReturnNode(loc,
-                ast.NewBinaryOpNode(loc,
+          bs_ast.NewBlockNode(loc,
+            bs_entity.NewDefinedVariables(),
+            []bs_core.IStmtNode {
+              bs_ast.NewReturnNode(loc,
+                bs_ast.NewBinaryOpNode(loc,
                   "+",
-                  ast.NewIntegerLiteralNode(loc, "12345"),
-                  ast.NewVariableNode(loc, "n"),
+                  bs_ast.NewIntegerLiteralNode(loc, "12345"),
+                  bs_ast.NewVariableNode(loc, "n"),
                 ),
               ),
             },
           ),
         ),
-        entity.NewDefinedFunction(
+        bs_entity.NewDefinedFunction(
           true,
-          ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)),
+          bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)),
           "bar",
-          entity.NewParams(loc,
-            entity.NewParameters(
-              entity.NewParameter(ast.NewTypeNode(loc, typesys.NewIntTypeRef(loc)), "m"),
+          bs_entity.NewParams(loc,
+            bs_entity.NewParameters(
+              bs_entity.NewParameter(bs_ast.NewTypeNode(loc, bs_typesys.NewIntTypeRef(loc)), "m"),
             ),
             false,
           ),
-          ast.NewBlockNode(loc,
-            entity.NewDefinedVariables(),
-            []core.IStmtNode {
-              ast.NewReturnNode(loc,
-                ast.NewBinaryOpNode(loc,
+          bs_ast.NewBlockNode(loc,
+            bs_entity.NewDefinedVariables(),
+            []bs_core.IStmtNode {
+              bs_ast.NewReturnNode(loc,
+                bs_ast.NewBinaryOpNode(loc,
                   "+",
-                  ast.NewIntegerLiteralNode(loc, "67890"),
-                  ast.NewVariableNode(loc, "m"),
+                  bs_ast.NewIntegerLiteralNode(loc, "67890"),
+                  bs_ast.NewVariableNode(loc, "m"),
                 ),
               ),
             },
           ),
         ),
       ),
-      entity.NewUndefinedFunctions(),
-      entity.NewConstants(),
-      ast.NewStructNodes(),
-      ast.NewUnionNodes(),
-      ast.NewTypedefNodes(),
+      bs_entity.NewUndefinedFunctions(),
+      bs_entity.NewConstants(),
+      bs_ast.NewStructNodes(),
+      bs_ast.NewUnionNodes(),
+      bs_ast.NewTypedefNodes(),
     ),
   )
   resolver := setupLocalResolver(a)
