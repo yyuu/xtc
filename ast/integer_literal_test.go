@@ -54,7 +54,7 @@ func TestHexadecimalIntegerLiteral(t *testing.T) {
 }
 
 func TestCharacterIntegerLiteral(t *testing.T) {
-  x := NewIntegerLiteralNode(loc(0,0), "'a'")
+  x := NewCharacterLiteralNode(loc(0,0), "97")
   s := `{
   "ClassName": "ast.IntegerLiteralNode",
   "Location": "[:0,0]",

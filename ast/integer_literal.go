@@ -2,6 +2,7 @@ package ast
 
 import (
   "fmt"
+  "strconv"
   "strings"
   "bitbucket.org/yyuu/bs/core"
   "bitbucket.org/yyuu/bs/typesys"
@@ -19,36 +20,38 @@ func NewIntegerLiteralNode(loc core.Location, literal string) *IntegerLiteralNod
   var ref core.ITypeRef
   var value int64
   var err error
-  if ( startsWith(literal, "'") && endsWith(literal, "'") ) && 2 < len(literal) {
-    _, err = fmt.Sscanf(literal[1:len(literal)-1], "%c", &value)
-    ref = typesys.NewCharTypeRef(loc)
+  if ( startsWith(literal, "0X") || startsWith(literal, "0x") ) && 2 < len(literal) {
+    // hexadecimal
+    _, err = fmt.Sscanf(literal[2:], "%x", &value)
   } else {
-    if ( startsWith(literal, "0X") || startsWith(literal, "0x") ) && 2 < len(literal) {
-      // hexadecimal
-      _, err = fmt.Sscanf(literal[2:], "%x", &value)
+    if startsWith(literal, "0") && 1 < len(literal) {
+      // octal
+      _, err = fmt.Sscanf(literal[1:], "%o", &value)
     } else {
-      if startsWith(literal, "0") && 1 < len(literal) {
-        // octal
-        _, err = fmt.Sscanf(literal[1:], "%o", &value)
-      } else {
-        // decimal
-        _, err = fmt.Sscanf(literal, "%d", &value)
-      }
+      // decimal
+      _, err = fmt.Sscanf(literal, "%d", &value)
     }
-    if endsWith(literal, "UL") {
-      ref = typesys.NewUnsignedLongTypeRef(loc)
-    } else if endsWith(literal, "L") {
-      ref = typesys.NewLongTypeRef(loc)
-    } else if endsWith(literal, "U") {
-      ref = typesys.NewUnsignedIntTypeRef(loc)
-    } else {
-      ref = typesys.NewIntTypeRef(loc)
-    }
+  }
+  if endsWith(literal, "UL") {
+    ref = typesys.NewUnsignedLongTypeRef(loc)
+  } else if endsWith(literal, "L") {
+    ref = typesys.NewLongTypeRef(loc)
+  } else if endsWith(literal, "U") {
+    ref = typesys.NewUnsignedIntTypeRef(loc)
+  } else {
+    ref = typesys.NewIntTypeRef(loc)
   }
   if err != nil {
     panic(err)
   }
   return &IntegerLiteralNode { "ast.IntegerLiteralNode", loc, NewTypeNode(loc, ref), value }
+}
+
+func NewCharacterLiteralNode(loc core.Location, literal string) *IntegerLiteralNode {
+  ref := typesys.NewCharTypeRef(loc)
+  value, err := strconv.Atoi(literal)
+  if err != nil { panic(err) }
+  return &IntegerLiteralNode { "ast.IntegerLiteralNode", loc, NewTypeNode(loc, ref), int64(value) }
 }
 
 func startsWith(s, prefix string) bool {

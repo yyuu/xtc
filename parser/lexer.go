@@ -3,7 +3,6 @@ package parser
 import (
   "fmt"
   "regexp"
-  "strconv"
   "strings"
   "unicode/utf8"
   "bitbucket.org/yyuu/bs/ast"
@@ -256,66 +255,108 @@ func (self *lexer) scanKeyword() (*token, error) {
 }
 
 func (self *lexer) scanCharacter() (*token, error) {
-  s := self.scanner.Scan("'")
-  if s == "" {
+  var raw string
+  q1 := self.scanner.Scan("'")
+  raw += q1
+  if q1 == "" {
     return nil, nil
   }
-  e := self.scanner.Scan("\\\\([abfnrtv]|u[0-9]+|'|\\\\)'")
-  if e != "" {
-    return self.consume(CHARACTER, s+e, s+e), nil
+  var val int
+  r1 := self.scanner.Scan(".")
+  raw += r1
+  switch r1 {
+    case "\\":
+      r2 := self.scanner.Scan(".")
+      raw += r2
+      switch r2 {
+        case "a":  val = '\a'
+        case "b":  val = '\b'
+        case "f":  val = '\f'
+        case "n":  val = '\n'
+        case "r":  val = '\r'
+        case "t":  val = '\t'
+        case "u": {
+          hex := self.scanner.Scan("[0-9A-Fa-f]+")
+          raw += hex
+          if hex == "" {
+            return nil, fmt.Errorf("[%s:%d,%d] invalid unicode code point", self.sourceName, self.lineNumber, self.lineOffset)
+          }
+          _, err := fmt.Sscanf(hex, "%x", &val)
+          if err != nil {
+            return nil, err
+          }
+        }
+        case "v":  val = '\v'
+        case "'":  val = '\''
+        case "\\": val = '\\'
+        default: {
+          return nil, fmt.Errorf("[%s:%d,%d] unknown escape character: %q", self.sourceName, self.lineNumber, self.lineOffset, r2)
+        }
+      }
+    default: {
+      r, _ := utf8.DecodeRuneInString(r1)
+      val = int(r)
+    }
   }
-  r := self.scanner.Scan(".'")
-  if r != "" {
-    return self.consume(CHARACTER, s+r, s+r), nil
+  q2 := self.scanner.Scan("'")
+  raw += q2
+  if q2 == "" {
+    return nil, fmt.Errorf("[%s:%d,%d] invalid character literal", self.sourceName, self.lineNumber, self.lineOffset)
   }
-  return nil, fmt.Errorf("lexer error: %s", self)
+  return self.consume(CHARACTER, raw, fmt.Sprintf("%d", val)), nil
 }
 
 func (self *lexer) scanString() (*token, error) {
-  s := self.scanner.Scan("\"")
-  if s == "" {
+  var raw string
+  q1 := self.scanner.Scan("\"")
+  raw += q1
+  if q1 == "" {
     return nil, nil
   }
-  var more string
+  var val string
   for {
     if self.scanner.IsEOS() {
       return nil, fmt.Errorf("EOL while scanning string literal")
     }
-    r := self.scanner.Scan(".")
-    switch r {
+    r1 := self.scanner.Scan(".")
+    raw += r1
+    switch r1 {
       case "\"": {
-        return self.consume(STRING, s+more+r, more), nil
+        return self.consume(STRING, raw, val), nil
       }
       case "\\": {
-        e := self.scanner.Scan(".")
-        switch e {
-          case "a":  more += "\a"
-          case "b":  more += "\b"
-          case "f":  more += "\f"
-          case "n":  more += "\n"
-          case "r":  more += "\r"
-          case "t":  more += "\t"
+        r2 := self.scanner.Scan(".")
+        raw += r2
+        switch r2 {
+          case "a":  val += "\a"
+          case "b":  val += "\b"
+          case "f":  val += "\f"
+          case "n":  val += "\n"
+          case "r":  val += "\r"
+          case "t":  val += "\t"
           case "u": {
-            a := self.scanner.Scan("[0-9]+")
-            if a == "" {
-              return nil, fmt.Errorf("not a utf8 codepoint")
+            hex := self.scanner.Scan("[0-9A-Fa-f]+")
+            raw += hex
+            if hex == "" {
+              return nil, fmt.Errorf("[%s:%d,%d] invalid unicode code point", self.sourceName, self.lineNumber, self.lineOffset)
             }
-            i, err := strconv.Atoi(a)
+            var num int
+            _, err := fmt.Sscanf(hex, "%x", &num)
             if err != nil {
               return nil, err
             }
-            more += string(rune(i))
+            val += string(rune(num))
           }
-          case "v":  more += "\v"
-          case "\"": more += "\""
-          case "\\": more += "\\"
+          case "v":  val += "\v"
+          case "\"": val += "\""
+          case "\\": val += "\\"
           default: {
-            return nil, fmt.Errorf("unknown escape character: %q", e)
+            return nil, fmt.Errorf("[%s:%d,%d] unknown escape character: %q", self.sourceName, self.lineNumber, self.lineOffset, r2)
           }
         }
       }
       default: {
-        more += r
+        val += r1
       }
     }
   }

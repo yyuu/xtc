@@ -897,8 +897,7 @@ primary: INTEGER
        }
        | CHARACTER
        {
-         // TODO: decode character literal
-         $$._node = ast.NewIntegerLiteralNode($1._token.location, $1._token.literal)
+         $$._node = ast.NewCharacterLiteralNode($1._token.location, $1._token.literal)
        }
        | STRING
        {

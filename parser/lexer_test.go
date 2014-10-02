@@ -171,13 +171,13 @@ func TestInteger3(t *testing.T) {
 func TestCharacter1(t *testing.T) {
   lex := testNewLexer(`{'f', 'o', 'o'}`)
   assertToken(t, lex, '{', "{")
-  assertToken(t, lex, CHARACTER, `'f'`)
+  assertToken(t, lex, CHARACTER, "102")
   assertToken(t, lex, ',', ",")
 //assertToken(t, lex, SPACES, " ")
-  assertToken(t, lex, CHARACTER, `'o'`)
+  assertToken(t, lex, CHARACTER, "111")
   assertToken(t, lex, ',', ",")
 //assertToken(t, lex, SPACES, " ")
-  assertToken(t, lex, CHARACTER, `'o'`)
+  assertToken(t, lex, CHARACTER, "111")
   assertToken(t, lex, '}', "}")
   assertTokenNull(t, lex)
 }
@@ -185,9 +185,9 @@ func TestCharacter1(t *testing.T) {
 func TestCharacter2(t *testing.T) {
   lex := testNewLexer(`{'\n','\t'}`)
   assertToken(t, lex, '{', "{")
-  assertToken(t, lex, CHARACTER, `'\n'`)
+  assertToken(t, lex, CHARACTER, "10")
   assertToken(t, lex, ',', ",")
-  assertToken(t, lex, CHARACTER, `'\t'`)
+  assertToken(t, lex, CHARACTER, "9")
   assertToken(t, lex, '}', "}")
   assertTokenNull(t, lex)
 }
@@ -195,11 +195,11 @@ func TestCharacter2(t *testing.T) {
 func TestCharacter3(t *testing.T) {
   lex := testNewLexer(`{'\u0009','\\','\''}`)
   assertToken(t, lex, '{', "{")
-  assertToken(t, lex, CHARACTER, `'\u0009'`)
+  assertToken(t, lex, CHARACTER, "9")
   assertToken(t, lex, ',', ",")
-  assertToken(t, lex, CHARACTER, `'\\'`)
+  assertToken(t, lex, CHARACTER, "92")
   assertToken(t, lex, ',', ",")
-  assertToken(t, lex, CHARACTER, `'\''`)
+  assertToken(t, lex, CHARACTER, "39")
   assertToken(t, lex, '}', "}")
   assertTokenNull(t, lex)
 }
