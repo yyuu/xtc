@@ -63,7 +63,7 @@ type Options struct {
 }
 
 func NewOptions(name string) *Options {
-  flagSet := flag.NewFlagSet(name, 1)
+  flagSet := flag.NewFlagSet(name, flag.ExitOnError)
   return &Options {
     flagSet,
     newAssemblerOptions(flagSet),
@@ -106,10 +106,6 @@ func (self *Options) IsVerboseMode() bool {
 
 func (self *Options) IsVerboseAsm() bool {
   return *self.codeGeneratorOptions.verboseAsm
-}
-
-func (self *Options) NewLibraryLoader() {
-  panic("not implemented")
 }
 
 func (self *Options) TargetPlatform() int {
