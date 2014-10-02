@@ -115,7 +115,7 @@ import_stmts:
 import_stmt: IMPORT import_name ';'
            {
              lex := yylex.(*lexer)
-             $$._node = loadLibrary($2._token.literal, lex.errorHandler, lex.options)
+             $$._node = lex.libraryLoader.loadLibrary($2._token.literal)
            }
            ;
 

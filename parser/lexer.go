@@ -24,6 +24,7 @@ type lexer struct {
   error error
   errorHandler *core.ErrorHandler
   options *core.Options
+  libraryLoader *libraryLoader
 }
 
 func (self lexer) String() string {
@@ -57,6 +58,7 @@ func newLexer(filename string, source string, errorHandler *core.ErrorHandler, o
     error: nil,
     errorHandler: errorHandler,
     options: options,
+    libraryLoader: newLibraryLoader(errorHandler, options),
   }
 }
 

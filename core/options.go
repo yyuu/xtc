@@ -2,6 +2,7 @@ package core
 
 import (
   "flag"
+  "os"
 )
 
 type assemblerOptions struct {
@@ -170,4 +171,14 @@ func (self *Options) IsPICRequired() bool {
 
 func (self *Options) IsPIERequired() bool {
   return *self.codeGeneratorOptions.generatePIE
+}
+
+func (self *Options) GetLibraryPath() []string {
+  var libraryPath []string
+  environ := os.Getenv("BSPATH")
+  if 0 < len(environ) {
+    libraryPath = append(libraryPath, environ)
+  }
+  libraryPath = append(libraryPath, "bspath")
+  return libraryPath
 }
