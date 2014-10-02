@@ -1,6 +1,7 @@
 package compiler
 
 import (
+  "fmt"
   bs_ast "bitbucket.org/yyuu/bs/ast"
   bs_core "bitbucket.org/yyuu/bs/core"
   bs_entity "bitbucket.org/yyuu/bs/entity"
@@ -17,8 +18,7 @@ func NewDereferenceChecker(errorHandler *bs_core.ErrorHandler, options *bs_core.
   return &DereferenceChecker { errorHandler, options, table }
 }
 
-func (self *DereferenceChecker) Check(ast *bs_ast.AST) {
-  self.errorHandler.Debug("starting dereference checker.")
+func (self *DereferenceChecker) Check(ast *bs_ast.AST) (*bs_ast.AST, error) {
   vs := ast.GetDefinedVariables()
   for i := range vs {
     self.checkToplevelVariable(vs[i])
@@ -28,10 +28,9 @@ func (self *DereferenceChecker) Check(ast *bs_ast.AST) {
     bs_ast.VisitStmtNode(self, fs[i].GetBody())
   }
   if self.errorHandler.ErrorOccured() {
-    self.errorHandler.Fatalf("found %d error(s).", self.errorHandler.GetErrors())
-  } else {
-    self.errorHandler.Debug("finished dereference checker.")
+    return nil, fmt.Errorf("found %d error(s).", self.errorHandler.GetErrors())
   }
+  return ast, nil
 }
 
 func (self *DereferenceChecker) checkToplevelVariable(v *bs_entity.DefinedVariable) {

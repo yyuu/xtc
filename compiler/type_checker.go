@@ -1,6 +1,7 @@
 package compiler
 
 import (
+  "fmt"
   bs_ast "bitbucket.org/yyuu/bs/ast"
   bs_core "bitbucket.org/yyuu/bs/core"
   bs_entity "bitbucket.org/yyuu/bs/entity"
@@ -18,8 +19,7 @@ func NewTypeChecker(errorHandler *bs_core.ErrorHandler, options *bs_core.Options
   return &TypeChecker { errorHandler, options, table, nil }
 }
 
-func (self *TypeChecker) Check(ast *bs_ast.AST) {
-  self.errorHandler.Debug("starting type checker.")
+func (self *TypeChecker) Check(ast *bs_ast.AST) (*bs_ast.AST, error) {
   vs := ast.GetDefinedVariables()
   for i := range vs {
     self.checkVariable(vs[i])
@@ -32,10 +32,9 @@ func (self *TypeChecker) Check(ast *bs_ast.AST) {
     bs_ast.VisitStmtNode(self, fs[i].GetBody())
   }
   if self.errorHandler.ErrorOccured() {
-    self.errorHandler.Fatalf("found %d error(s).", self.errorHandler.GetErrors())
-  } else {
-    self.errorHandler.Debug("finished type checker.")
+    return nil, fmt.Errorf("found %d error(s).", self.errorHandler.GetErrors())
   }
+  return ast, nil
 }
 
 func (self *TypeChecker) checkVariable(v *bs_entity.DefinedVariable) {

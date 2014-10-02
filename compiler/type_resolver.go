@@ -1,6 +1,7 @@
 package compiler
 
 import (
+  "fmt"
   bs_ast "bitbucket.org/yyuu/bs/ast"
   bs_core "bitbucket.org/yyuu/bs/core"
   bs_entity "bitbucket.org/yyuu/bs/entity"
@@ -17,18 +18,16 @@ func NewTypeResolver(errorHandler *bs_core.ErrorHandler, options *bs_core.Option
   return &TypeResolver { errorHandler, options, table }
 }
 
-func (self *TypeResolver) Resolve(ast *bs_ast.AST) {
-  self.errorHandler.Debug("starting type resolver.")
+func (self *TypeResolver) Resolve(ast *bs_ast.AST) (*bs_ast.AST, error) {
   types := ast.ListTypes()
   entities := ast.ListEntities()
   self.defineTypes(types)
   bs_ast.VisitTypeDefinitions(self, types)
   bs_entity.VisitEntities(self, entities)
   if self.errorHandler.ErrorOccured() {
-    self.errorHandler.Fatalf("found %d error(s).", self.errorHandler.GetErrors())
-  } else {
-    self.errorHandler.Debug("finished type resolver.")
+    return nil, fmt.Errorf("found %d error(s).", self.errorHandler.GetErrors())
   }
+  return ast, nil
 }
 
 func (self *TypeResolver) defineTypes(deftypes []bs_core.ITypeDefinition) {

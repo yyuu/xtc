@@ -7,7 +7,7 @@ import (
 )
 
 type CodeGenerator interface {
-  Generate(ir *bs_ir.IR) AssemblyCode
+  Generate(ir *bs_ir.IR) (AssemblyCode, error)
 }
 
 func NewCodeGeneratorFor(errorHandler *bs_core.ErrorHandler, options *bs_core.Options, platformId int) CodeGenerator {

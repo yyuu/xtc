@@ -54,7 +54,8 @@ func (self *Compiler) build(ast *bs_ast.AST) {
   sem, err := self.semanticAnalyze(ast, types)
   if err != nil { self.errorHandler.Fatal(err) }
   self.dumpSemant(sem)
-  ir := NewIRGenerator(self.errorHandler, self.options, types).Generate(sem)
+  ir, err := NewIRGenerator(self.errorHandler, self.options, types).Generate(sem)
+  if err != nil { self.errorHandler.Fatal(err) }
   self.dumpIR(ir)
   asm, err := self.generateAssembly(ir)
   if err != nil { self.errorHandler.Fatal(err) }
@@ -63,17 +64,19 @@ func (self *Compiler) build(ast *bs_ast.AST) {
 }
 
 func (self *Compiler) semanticAnalyze(ast *bs_ast.AST, types *bs_typesys.TypeTable) (*bs_ast.AST, error) {
-  NewLocalResolver(self.errorHandler, self.options).Resolve(ast)
-  NewTypeResolver(self.errorHandler, self.options, types).Resolve(ast)
+  sem1, err := NewLocalResolver(self.errorHandler, self.options).Resolve(ast)
+  if err != nil { return nil, err }
+  sem2, err := NewTypeResolver(self.errorHandler, self.options, types).Resolve(sem1)
+  if err != nil { return nil, err }
   types.SemanticCheck(self.errorHandler)
-  NewDereferenceChecker(self.errorHandler, self.options, types).Check(ast)
-  NewTypeChecker(self.errorHandler, self.options, types).Check(ast)
-  return ast, nil
+  sem3, err := NewDereferenceChecker(self.errorHandler, self.options, types).Check(sem2)
+  if err != nil { return nil, err }
+  return NewTypeChecker(self.errorHandler, self.options, types).Check(sem3)
 }
 
 func (self *Compiler) generateAssembly(ir *bs_ir.IR) (bs_sysdep.AssemblyCode, error) {
   code_generator := bs_sysdep.NewCodeGeneratorFor(self.errorHandler, self.options, self.options.TargetPlatform())
-  return code_generator.Generate(ir), nil
+  return code_generator.Generate(ir)
 }
 
 func (self *Compiler) dumpAST(ast *bs_ast.AST) {

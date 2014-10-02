@@ -45,12 +45,13 @@ func NewLinuxX86CodeGenerator(errorHandler *bs_core.ErrorHandler, options *bs_co
   return &LinuxX86CodeGenerator { errorHandler, options, bs_asm.TYPE_INT32 }
 }
 
-func (self *LinuxX86CodeGenerator) Generate(ir *bs_ir.IR) AssemblyCode {
-  self.errorHandler.Debug("starting code generator.")
+func (self *LinuxX86CodeGenerator) Generate(ir *bs_ir.IR) (AssemblyCode, error) {
   self.locateSymbols(ir)
   asm := self.generateAssemblyCode(ir)
-  self.errorHandler.Debug("finished code generator.")
-  return asm
+  if self.errorHandler.ErrorOccured() {
+    return nil, fmt.Errorf("found %d error(s).", self.errorHandler.GetErrors())
+  }
+  return asm, nil
 }
 
 func (self *LinuxX86CodeGenerator) locateSymbols(ir *bs_ir.IR) {

@@ -1,6 +1,7 @@
 package compiler
 
 import (
+  "fmt"
   bs_ast "bitbucket.org/yyuu/bs/ast"
   bs_core "bitbucket.org/yyuu/bs/core"
   bs_entity "bitbucket.org/yyuu/bs/entity"
@@ -17,8 +18,7 @@ func NewLocalResolver(errorHandler *bs_core.ErrorHandler, options *bs_core.Optio
   return &LocalResolver { errorHandler, options, []bs_core.IScope { }, bs_entity.NewConstantTable() }
 }
 
-func (self *LocalResolver) Resolve(ast *bs_ast.AST) {
-  self.errorHandler.Debug("starting local resolver.")
+func (self *LocalResolver) Resolve(ast *bs_ast.AST) (*bs_ast.AST, error) {
   toplevel := bs_entity.NewToplevelScope()
   self.scopeStack = append(self.scopeStack, toplevel)
 
@@ -40,10 +40,9 @@ func (self *LocalResolver) Resolve(ast *bs_ast.AST) {
   ast.SetScope(toplevel)
   ast.SetConstantTable(self.constantTable)
   if self.errorHandler.ErrorOccured() {
-    self.errorHandler.Fatalf("found %d error(s).", self.errorHandler.GetErrors())
-  } else {
-    self.errorHandler.Debug("finished local resolver.")
+    return ast, fmt.Errorf("found %d error(s).", self.errorHandler.GetErrors())
   }
+  return ast, nil
 }
 
 func (self *LocalResolver) resolveGvarInitializers(ast *bs_ast.AST) {

@@ -1,6 +1,7 @@
 package compiler
 
 import (
+  "fmt"
   bs_asm "bitbucket.org/yyuu/bs/asm"
   bs_ast "bitbucket.org/yyuu/bs/ast"
   bs_core "bitbucket.org/yyuu/bs/core"
@@ -42,8 +43,7 @@ func NewIRGenerator(errorHandler *bs_core.ErrorHandler, options *bs_core.Options
   return &IRGenerator { errorHandler, options, table, 0, stmts, scopeStack, breakStack, continueStack, jumpMap }
 }
 
-func (self *IRGenerator) Generate(ast *bs_ast.AST) *bs_ir.IR {
-  self.errorHandler.Debug("starting IR generator.")
+func (self *IRGenerator) Generate(ast *bs_ast.AST) (*bs_ir.IR, error) {
   vs := ast.GetDefinedVariables()
   for i := range vs {
     if vs[i].HasInitializer() {
@@ -56,11 +56,9 @@ func (self *IRGenerator) Generate(ast *bs_ast.AST) *bs_ir.IR {
   }
   ir := ast.GenerateIR()
   if self.errorHandler.ErrorOccured() {
-    self.errorHandler.Fatalf("found %d error(s).", self.errorHandler.GetErrors())
-  } else {
-    self.errorHandler.Debug("finished IR generator.")
+    return nil, fmt.Errorf("found %d error(s).", self.errorHandler.GetErrors())
   }
-  return ir
+  return ir, nil
 }
 
 func (self *IRGenerator) compileFunctionBody(f *bs_entity.DefinedFunction) []bs_core.IStmt {
