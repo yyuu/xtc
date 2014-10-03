@@ -2,6 +2,7 @@ package parser
 
 import (
   "fmt"
+  "io/ioutil"
   "os"
   "strings"
   bs_ast "bitbucket.org/yyuu/bs/ast"
@@ -22,7 +23,8 @@ func (self *libraryLoader) loadLibrary(name string) *bs_ast.Declaration {
   if ! ok {
     panic(fmt.Errorf("No such file or directory: %s.bs", name))
   }
-  ast, err := ParseFile(path, self.errorHandler, self.options)
+  reader := &libraryReader { path }
+  ast, err := Parse(reader, self.errorHandler, self.options)
   if err != nil {
     panic(err)
   }
@@ -40,4 +42,20 @@ func (self *libraryLoader) searchLibrary(name string) (string, bool) {
     }
   }
   return "", false
+}
+
+type libraryReader struct {
+  name string
+}
+
+func (self *libraryReader) GetName() string {
+  return self.name
+}
+
+func (self *libraryReader) Read() ([]byte, error) {
+  bytes, err := ioutil.ReadFile(self.name)
+  if err != nil {
+    return []byte { }, nil
+  }
+  return bytes, nil
 }

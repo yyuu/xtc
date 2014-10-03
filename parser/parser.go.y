@@ -4,7 +4,6 @@ package parser
 import (
   "errors"
   "fmt"
-  "io/ioutil"
   "strconv"
   "bitbucket.org/yyuu/bs/ast"
   "bitbucket.org/yyuu/bs/core"
@@ -925,24 +924,21 @@ func (self *lexer) Error(s string) {
   self.errorHandler.Error(s)
 }
 
-func ParseExpr(s string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
-  return parse("", s, errorHandler, options)
+type sourceReader interface {
+  GetName() string
+  Read() ([]byte, error)
 }
 
-func ParseFile(path string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
-  cs, err := ioutil.ReadFile(path)
-  if err != nil {
-    errorHandler.Fatalf(err.Error())
-  }
-  return parse(path, string(cs), errorHandler, options)
-}
-
-func parse(name string, source string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
+func Parse(src sourceReader, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
   if options.IsVerboseMode() {
     yyDebug = 4 // TODO: configurable
   }
   loader := newLibraryLoader(errorHandler, options)
-  lex := newLexer(name, source, loader, errorHandler, options)
+  bytes, err := src.Read()
+  if err != nil {
+    return nil, err
+  }
+  lex := newLexer(src.GetName(), string(bytes), loader, errorHandler, options)
   if yyParse(lex) == 0 {
     return lex.ast, nil // success
   } else {
