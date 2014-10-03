@@ -80,7 +80,7 @@ func (self *ErrorHandler) Errorf(format string, v...interface{}) {
   self.errors++
 }
 
-func (self *ErrorHandler) Error(format string, v...interface{}) {
+func (self *ErrorHandler) Error(v...interface{}) {
   self.log(LOG_ERROR, v...)
   self.errors++
 }

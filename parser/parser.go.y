@@ -922,9 +922,7 @@ func (self *lexer) Lex(lval *yySymType) int {
 }
 
 func (self *lexer) Error(s string) {
-  if self.error == nil {
-    self.error = errors.New(s)
-  }
+  self.errorHandler.Error(s)
 }
 
 func ParseExpr(s string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
@@ -948,10 +946,10 @@ func parse(name string, source string, errorHandler *core.ErrorHandler, options 
   if yyParse(lex) == 0 {
     return lex.ast, nil // success
   } else {
-    if lex.error != nil {
-      return nil, lex.error
+    if errorHandler.ErrorOccured() {
+      return nil, fmt.Errorf("found %d error(s).", errorHandler.GetErrors())
     } else {
-      return nil, fmt.Errorf("must not happen: lex.error is nil")
+      return nil, errors.New("must not happen: lexer error not recorded.")
     }
   }
 }

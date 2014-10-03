@@ -19,7 +19,6 @@ type lexer struct {
   knownTypedefs []string
   libraryLoader *libraryLoader
   ast *bs_ast.AST
-  error error
   errorHandler *bs_core.ErrorHandler
   options *bs_core.Options
 }
@@ -54,7 +53,6 @@ func newLexer(filename string, source string, loader *libraryLoader, errorHandle
     knownTypedefs: []string { },
     libraryLoader: loader,
     ast: nil,
-    error: nil,
     errorHandler: errorHandler,
     options: options,
   }
