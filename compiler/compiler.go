@@ -151,24 +151,39 @@ func (self *Compiler) compile(sources []*bs_core.SourceFile) (*bs_core.SourceFil
       decl.AddDeclaration(parsed.GetDeclaration())
     }
   }
-  self.dumpAST(ast)
+  if self.options.DumpAST() {
+    self.dumpAST(ast)
+    return dst, nil
+  }
   types := bs_typesys.NewTypeTableFor(self.options.TargetPlatform())
   sem, err := self.semanticAnalyze(ast, types)
   if err != nil {
     return nil, err
   }
-  self.dumpSemant(sem)
+  if self.options.DumpSemantic() {
+    self.dumpSemant(sem)
+    return dst, nil
+  }
   ir, err := NewIRGenerator(self.errorHandler, self.options, types).Generate(sem)
   if err != nil {
     return nil, err
   }
-  self.dumpIR(ir)
+  if self.options.DumpIR() {
+    self.dumpIR(ir)
+    return dst, nil
+  }
   asm, err := self.generateAssembly(ir)
   if err != nil {
     return nil, err
   }
-  self.dumpAsm(asm)
-  self.printAsm(asm)
+  if self.options.DumpAsm() {
+    self.dumpAsm(asm)
+    return dst, nil
+  }
+  if self.options.PrintAsm() {
+    self.printAsm(asm)
+    return dst, nil
+  }
   dst.WriteAll([]byte(asm.ToSource()))
   return dst, nil
 }
@@ -218,57 +233,31 @@ func (self *Compiler) link(src *bs_core.SourceFile) (*bs_core.SourceFile, error)
   return dst, nil
 }
 
-func (self *Compiler) dumpAST(ast *bs_ast.AST) {
-  if ! self.options.DumpAST() {
-    return
-  }
-  cs, err := json.MarshalIndent(ast, "", "  ")
+func (self *Compiler) dump(name string, x interface{}) {
+  bytes, err := json.MarshalIndent(x, "", "  ")
   if err != nil {
     self.errorHandler.Fatal(err)
   }
-  fmt.Println("// AST")
-  fmt.Println(string(cs))
+  fmt.Println("// " + name)
+  fmt.Println(string(bytes))
+}
+
+func (self *Compiler) dumpAST(ast *bs_ast.AST) {
+  self.dump("AST", ast)
 }
 
 func (self *Compiler) dumpSemant(ast *bs_ast.AST) {
-  if ! self.options.DumpSemantic() {
-    return
-  }
-  cs, err := json.MarshalIndent(ast, "", "  ")
-  if err != nil {
-    self.errorHandler.Fatal(err)
-  }
-  fmt.Println("// Semantics")
-  fmt.Println(string(cs))
+  self.dump("Semantics", ast)
 }
 
 func (self *Compiler) dumpIR(ir *bs_ir.IR) {
-  if ! self.options.DumpIR() {
-    return
-  }
-  cs, err := json.MarshalIndent(ir, "", "  ")
-  if err != nil {
-    self.errorHandler.Fatal(err)
-  }
-  fmt.Println("// IR")
-  fmt.Println(string(cs))
+  self.dump("IR", ir)
 }
 
 func (self *Compiler) dumpAsm(asm bs_core.IAssemblyCode) {
-  if ! self.options.DumpAsm() {
-    return
-  }
-  cs, err := json.MarshalIndent(asm, "", "  ")
-  if err != nil {
-    self.errorHandler.Fatal(err)
-  }
-  fmt.Println("// Asm")
-  fmt.Println(string(cs))
+  self.dump("Asm", asm)
 }
 
 func (self *Compiler) printAsm(asm bs_core.IAssemblyCode) {
-  if ! self.options.PrintAsm() {
-    return
-  }
   fmt.Println(asm.ToSource())
 }
