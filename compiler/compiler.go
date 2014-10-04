@@ -37,13 +37,10 @@ func (self *Compiler) SourceFiles() []*bs_core.SourceFile {
 }
 
 func (self *Compiler) Compile() {
-  sources := self.SourceFiles()
-  for i := range sources {
-    _, err := self.phase1(sources[i])
-    if err != nil {
-      self.errorHandler.Fatal(err)
-      return
-    }
+  _, err := self.phase1(self.SourceFiles())
+  if err != nil {
+    self.errorHandler.Fatal(err)
+    return
   }
 }
 
@@ -53,31 +50,36 @@ func (self *Compiler) CompileString(s string) {
     self.errorHandler.Fatal(err)
     return
   }
-  _, err = self.phase1(src)
+  _, err = self.phase1([]*bs_core.SourceFile { src })
   if err != nil {
     self.errorHandler.Fatal(err)
     return
   }
 }
 
-func (self *Compiler) phase1(src *bs_core.SourceFile) (*bs_core.SourceFile, error) {
-  if ! self.options.IsCompileRequired() {
-    return src, nil
+func (self *Compiler) phase1(sources []*bs_core.SourceFile) (*bs_core.SourceFile, error) {
+  if len(sources) < 1 {
+    return nil, fmt.Errorf("no program sources given")
   }
-  if src.IsProgramSource() {
+  if ! self.options.IsCompileRequired() {
+    return sources[0], nil
+  }
+  if sources[0].IsProgramSource() {
     defer func() {
-      if src.IsGenerated() {
-        self.errorHandler.Debugf("Remove temporary file: %s", src)
-        src.Remove()
+      for i := range sources {
+        if sources[i].IsGenerated() {
+          self.errorHandler.Debugf("Remove temporary file: %s", sources[i])
+          sources[i].Remove()
+        }
       }
     }()
-    dst, err := self.compile(src)
+    dst, err := self.compile(sources)
     if err != nil {
       return nil, err
     }
     return self.phase2(dst)
   } else {
-    return self.phase2(src)
+    return self.phase2(sources[0])
   }
 }
 
@@ -119,11 +121,23 @@ func (self *Compiler) phase3(src *bs_core.SourceFile) (*bs_core.SourceFile, erro
   }
 }
 
-func (self *Compiler) compile(src *bs_core.SourceFile) (*bs_core.SourceFile, error) {
-  dst := src.ToAssemblySource()
-  ast, err := bs_parser.Parse(src, self.errorHandler, self.options)
-  if err != nil {
-    return nil, err
+func (self *Compiler) compile(sources []*bs_core.SourceFile) (*bs_core.SourceFile, error) {
+  if len(sources) < 1 {
+    return nil, fmt.Errorf("no program sources given")
+  }
+  dst := sources[0].ToAssemblySource()
+  var ast *bs_ast.AST
+  for i := range sources {
+    parsed, err := bs_parser.Parse(sources[i], self.errorHandler, self.options)
+    if err != nil {
+      return nil, err
+    }
+    if ast == nil {
+      ast = parsed
+    } else {
+      decl := ast.GetDeclaration()
+      decl.AddDeclaration(parsed.GetDeclaration())
+    }
   }
   self.dumpAST(ast)
   types := bs_typesys.NewTypeTableFor(self.options.TargetPlatform())
