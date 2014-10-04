@@ -40,7 +40,7 @@ func (self *LinuxX86AssemblyCode) ToSource() string {
   for i := range self.Assemblies {
     sources[i] = self.Assemblies[i].ToSource(self.LabelSymbols)
   }
-  return strings.Join(sources, "\n")
+  return strings.Join(sources, "\n") + "\n"
 }
 
 func (self *LinuxX86AssemblyCode) GetStatistics() *bs_asm.Statistics {

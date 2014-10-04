@@ -48,6 +48,10 @@ func NewTemporarySourceFile(ext string, bytes []byte) (*SourceFile, error) {
   return &SourceFile { path, true, true }, nil
 }
 
+func (self SourceFile) String() string {
+  return self.path
+}
+
 func (self SourceFile) GetName() string {
   if self.anonymous {
     return ""
@@ -107,7 +111,7 @@ func filename(name, ext string) string {
   if dot == -1 {
     base = name
   } else {
-    base = name[dot:len(name)]
+    base = name[0:dot]
   }
   return base + ext
 }
