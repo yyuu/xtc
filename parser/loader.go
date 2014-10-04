@@ -33,7 +33,7 @@ func (self *libraryLoader) searchLibrary(name string) (string, bool) {
   file := strings.Replace(name, ".", "/", -1)
   libraryPath := self.options.GetLibraryPath()
   for i := range libraryPath {
-    path := fmt.Sprintf("%s/%s.bs", libraryPath[i], file)
+    path := fmt.Sprintf("%s/%s%s", libraryPath[i], file, bs_core.EXT_PROGRAM_SOURCE)
     _, err := os.Stat(path)
     if ! os.IsNotExist(err) {
       return path, true

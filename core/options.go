@@ -175,10 +175,10 @@ func (self *Options) IsPIERequired() bool {
 
 func (self *Options) GetLibraryPath() []string {
   var libraryPath []string
-  environ := os.Getenv("BSPATH")
+  environ := os.Getenv("XTCPATH")
   if 0 < len(environ) {
     libraryPath = append(libraryPath, environ)
   }
-  libraryPath = append(libraryPath, "bspath")
+  libraryPath = append(libraryPath, "xtcpath")
   return libraryPath
 }
