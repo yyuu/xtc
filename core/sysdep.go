@@ -1,6 +1,10 @@
 package core
 
 const (
-  PLATFORM_LINUX_X86 = iota
-  PLATFORM_LINUX_AMD64
+  PLATFORM_X86_LINUX = iota
+  PLATFORM_AMD64_LINUX
 )
+
+type IAssemblyCode interface {
+  ToSource() string
+}

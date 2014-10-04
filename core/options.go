@@ -141,7 +141,7 @@ func (self *Options) IsVerboseAsm() bool {
 }
 
 func (self *Options) TargetPlatform() int {
-  return PLATFORM_LINUX_X86
+  return PLATFORM_X86_LINUX
 }
 
 func (self *Options) IsGenratingSharedLibrary() bool {

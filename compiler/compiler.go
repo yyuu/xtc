@@ -8,8 +8,8 @@ import (
   bs_ast "bitbucket.org/yyuu/bs/ast"
   bs_core "bitbucket.org/yyuu/bs/core"
   bs_ir "bitbucket.org/yyuu/bs/ir"
+  bs_x86_linux "bitbucket.org/yyuu/bs/x86/linux"
   bs_parser "bitbucket.org/yyuu/bs/parser"
-  bs_sysdep "bitbucket.org/yyuu/bs/sysdep"
   bs_typesys "bitbucket.org/yyuu/bs/typesys"
 )
 
@@ -190,9 +190,15 @@ func (self *Compiler) semanticAnalyze(ast *bs_ast.AST, types *bs_typesys.TypeTab
   return NewTypeChecker(self.errorHandler, self.options, types).Check(sem3)
 }
 
-func (self *Compiler) generateAssembly(ir *bs_ir.IR) (bs_sysdep.AssemblyCode, error) {
-  code_generator := bs_sysdep.NewCodeGeneratorFor(self.errorHandler, self.options, self.options.TargetPlatform())
-  return code_generator.Generate(ir)
+func (self *Compiler) generateAssembly(ir *bs_ir.IR) (bs_core.IAssemblyCode, error) {
+  switch self.options.TargetPlatform() {
+    case bs_core.PLATFORM_X86_LINUX: {
+      return bs_x86_linux.NewCodeGenerator(self.errorHandler, self.options).Generate(ir)
+    }
+    default: {
+      return nil, fmt.Errorf("unknown platform: %d", self.options.TargetPlatform())
+    }
+  }
 }
 
 func (self *Compiler) assemble(src *bs_core.SourceFile) (*bs_core.SourceFile, error) {
@@ -208,6 +214,7 @@ func (self *Compiler) link(src *bs_core.SourceFile) (*bs_core.SourceFile, error)
   dst := src.ToExecutableFile()
   self.errorHandler.Warn("FIXME: Compiler#link: not implemented")
   dst.WriteAll([]byte { })
+  os.Chmod(dst.GetPath(), 0755) // FIXME: support umask
   return dst, nil
 }
 
@@ -247,7 +254,7 @@ func (self *Compiler) dumpIR(ir *bs_ir.IR) {
   fmt.Println(string(cs))
 }
 
-func (self *Compiler) dumpAsm(asm bs_sysdep.AssemblyCode) {
+func (self *Compiler) dumpAsm(asm bs_core.IAssemblyCode) {
   if ! self.options.DumpAsm() {
     return
   }
@@ -259,7 +266,7 @@ func (self *Compiler) dumpAsm(asm bs_sysdep.AssemblyCode) {
   fmt.Println(string(cs))
 }
 
-func (self *Compiler) printAsm(asm bs_sysdep.AssemblyCode) {
+func (self *Compiler) printAsm(asm bs_core.IAssemblyCode) {
   if ! self.options.PrintAsm() {
     return
   }

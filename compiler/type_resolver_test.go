@@ -30,7 +30,7 @@ func TestTypeResolverVisitTypeDefinitionsEmpty(t *testing.T) {
       bs_ast.NewTypedefNodes(),
     ),
   )
-  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_X86_LINUX)
   numTypes, resolver := setupTypeResolver(a, table)
 
   bs_ast.VisitTypeDefinitions(resolver, a.ListTypes())
@@ -67,7 +67,7 @@ func TestTypeResolverWithStruct(t *testing.T) {
       bs_ast.NewTypedefNodes(),
     ),
   )
-  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_X86_LINUX)
   numTypes, resolver := setupTypeResolver(a, table)
 
   bs_ast.VisitTypeDefinitions(resolver, a.ListTypes())
@@ -113,7 +113,7 @@ func TestTypeResolverWithUnion(t *testing.T) {
       bs_ast.NewTypedefNodes(),
     ),
   )
-  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_X86_LINUX)
   numTypes, resolver := setupTypeResolver(a, table)
 
   bs_ast.VisitTypeDefinitions(resolver, a.ListTypes())
@@ -143,7 +143,7 @@ func TestTypeResolverWithTypedef(t *testing.T) {
       ),
     ),
   )
-  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_X86_LINUX)
   numTypes, resolver := setupTypeResolver(a, table)
 
   bs_ast.VisitTypeDefinitions(resolver, a.ListTypes())
@@ -164,7 +164,7 @@ func TestTypeResolverVisitEntity(t *testing.T) {
       bs_ast.NewTypedefNodes(),
     ),
   )
-  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_X86_LINUX)
   _, resolver := setupTypeResolver(a, table)
 
   bs_entity.VisitEntities(resolver, a.ListEntities())
@@ -213,7 +213,7 @@ func TestTypeResolverWithFunctionWithoutArguments(t *testing.T) {
       bs_ast.NewTypedefNodes(),
     ),
   )
-  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_X86_LINUX)
   _, resolver := setupTypeResolver(a, table)
 
   bs_entity.VisitEntities(resolver, a.ListEntities())
@@ -265,7 +265,7 @@ func TestTypeResolverWithFunctionWithArguments(t *testing.T) {
       bs_ast.NewTypedefNodes(),
     ),
   )
-  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_X86_LINUX)
   _, resolver := setupTypeResolver(a, table)
 
   bs_entity.VisitEntities(resolver, a.ListEntities())
@@ -341,7 +341,7 @@ func TestTypeResolverWithFunctionArguments(t *testing.T) {
       bs_ast.NewTypedefNodes(),
     ),
   )
-  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_LINUX_X86)
+  table := bs_typesys.NewTypeTableFor(bs_core.PLATFORM_X86_LINUX)
   errorHandler := bs_core.NewErrorHandler(bs_core.LOG_WARN)
   options := bs_core.NewOptions("type_resolver_test.go")
 

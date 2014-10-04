@@ -1,4 +1,4 @@
-package sysdep
+package x86_linux
 
 import (
   "fmt"
@@ -6,6 +6,7 @@ import (
   bs_core "bitbucket.org/yyuu/bs/core"
   bs_entity "bitbucket.org/yyuu/bs/entity"
   bs_ir "bitbucket.org/yyuu/bs/ir"
+  bs_x86 "bitbucket.org/yyuu/bs/x86"
 )
 
 const (
@@ -35,17 +36,17 @@ const (
   STACK_WORD_SIZE = int64(4)
 )
 
-type LinuxX86CodeGenerator struct {
+type CodeGenerator struct {
   errorHandler *bs_core.ErrorHandler
   options *bs_core.Options
   naturalType int
 }
 
-func NewLinuxX86CodeGenerator(errorHandler *bs_core.ErrorHandler, options *bs_core.Options) *LinuxX86CodeGenerator {
-  return &LinuxX86CodeGenerator { errorHandler, options, bs_asm.TYPE_INT32 }
+func NewCodeGenerator(errorHandler *bs_core.ErrorHandler, options *bs_core.Options) *CodeGenerator {
+  return &CodeGenerator { errorHandler, options, bs_asm.TYPE_INT32 }
 }
 
-func (self *LinuxX86CodeGenerator) Generate(ir *bs_ir.IR) (AssemblyCode, error) {
+func (self *CodeGenerator) Generate(ir *bs_ir.IR) (*AssemblyCode, error) {
   self.locateSymbols(ir)
   asm := self.generateAssemblyCode(ir)
   if self.errorHandler.ErrorOccured() {
@@ -54,7 +55,7 @@ func (self *LinuxX86CodeGenerator) Generate(ir *bs_ir.IR) (AssemblyCode, error) 
   return asm, nil
 }
 
-func (self *LinuxX86CodeGenerator) locateSymbols(ir *bs_ir.IR) {
+func (self *CodeGenerator) locateSymbols(ir *bs_ir.IR) {
   constSymbols := bs_asm.NewSymbolTable(CONST_SYMBOL_BASE)
   es := ir.GetConstantTable().GetEntries()
   for i := range es {
@@ -70,7 +71,7 @@ func (self *LinuxX86CodeGenerator) locateSymbols(ir *bs_ir.IR) {
   }
 }
 
-func (self *LinuxX86CodeGenerator) locateStringLiteral(ent *bs_entity.ConstantEntry, syms *bs_asm.SymbolTable) {
+func (self *CodeGenerator) locateStringLiteral(ent *bs_entity.ConstantEntry, syms *bs_asm.SymbolTable) {
   ent.SetSymbol(syms.NewSymbol())
   if self.options.IsPositionIndependent() {
     offset := self.localGOTSymbol(ent.GetSymbol())
@@ -81,7 +82,7 @@ func (self *LinuxX86CodeGenerator) locateStringLiteral(ent *bs_entity.ConstantEn
   }
 }
 
-func (self *LinuxX86CodeGenerator) locateGlobalVariable(ent bs_core.IEntity) {
+func (self *CodeGenerator) locateGlobalVariable(ent bs_core.IEntity) {
   sym := self.symbol(ent.SymbolString(), ent.IsPrivate())
   if self.options.IsPositionIndependent() {
     if ent.IsPrivate() || self.optimizeGvarAccess(ent) {
@@ -95,12 +96,12 @@ func (self *LinuxX86CodeGenerator) locateGlobalVariable(ent bs_core.IEntity) {
   }
 }
 
-func (self *LinuxX86CodeGenerator) locateFunction(fun bs_core.IFunction) {
+func (self *CodeGenerator) locateFunction(fun bs_core.IFunction) {
   fun.SetCallingSymbol(self.callingSymbol(fun))
   self.locateGlobalVariable(fun)
 }
 
-func (self *LinuxX86CodeGenerator) symbol(sym string, isPrivate bool) bs_core.ISymbol {
+func (self *CodeGenerator) symbol(sym string, isPrivate bool) bs_core.ISymbol {
   if isPrivate {
     return self.privateSymbol(sym)
   } else {
@@ -108,15 +109,15 @@ func (self *LinuxX86CodeGenerator) symbol(sym string, isPrivate bool) bs_core.IS
   }
 }
 
-func (self *LinuxX86CodeGenerator) globalSymbol(sym string) bs_core.ISymbol {
+func (self *CodeGenerator) globalSymbol(sym string) bs_core.ISymbol {
   return bs_asm.NewNamedSymbol(sym)
 }
 
-func (self *LinuxX86CodeGenerator) privateSymbol(sym string) bs_core.ISymbol {
+func (self *CodeGenerator) privateSymbol(sym string) bs_core.ISymbol {
   return bs_asm.NewNamedSymbol(sym)
 }
 
-func (self *LinuxX86CodeGenerator) callingSymbol(fun bs_core.IFunction) bs_core.ISymbol {
+func (self *CodeGenerator) callingSymbol(fun bs_core.IFunction) bs_core.ISymbol {
   if fun.IsPrivate() {
     return self.privateSymbol(fun.SymbolString())
   } else {
@@ -129,15 +130,15 @@ func (self *LinuxX86CodeGenerator) callingSymbol(fun bs_core.IFunction) bs_core.
   }
 }
 
-func (self *LinuxX86CodeGenerator) shouldUsePLT(ent bs_core.IEntity) bool {
+func (self *CodeGenerator) shouldUsePLT(ent bs_core.IEntity) bool {
   return self.options.IsPositionIndependent() && !self.optimizeGvarAccess(ent)
 }
 
-func (self *LinuxX86CodeGenerator) optimizeGvarAccess(ent bs_core.IEntity) bool {
+func (self *CodeGenerator) optimizeGvarAccess(ent bs_core.IEntity) bool {
   return self.options.IsPIERequired() && ent.IsDefined()
 }
 
-func (self *LinuxX86CodeGenerator) generateAssemblyCode(ir *bs_ir.IR) *LinuxX86AssemblyCode {
+func (self *CodeGenerator) generateAssemblyCode(ir *bs_ir.IR) *AssemblyCode {
   file := self.newAssemblyCode()
   file._file(ir.GetFileName())
   if ir.IsGlobalVariableDefined() {
@@ -158,11 +159,11 @@ func (self *LinuxX86CodeGenerator) generateAssemblyCode(ir *bs_ir.IR) *LinuxX86A
   return file
 }
 
-func (self *LinuxX86CodeGenerator) newAssemblyCode() *LinuxX86AssemblyCode {
-  return NewLinuxX86AssemblyCode(self.naturalType, bs_asm.NewSymbolTable(LABEL_SYMBOL_BASE))
+func (self *CodeGenerator) newAssemblyCode() *AssemblyCode {
+  return NewAssemblyCode(self.naturalType, bs_asm.NewSymbolTable(LABEL_SYMBOL_BASE))
 }
 
-func (self *LinuxX86CodeGenerator) generateDataSection(file *LinuxX86AssemblyCode, gvars []*bs_entity.DefinedVariable) {
+func (self *CodeGenerator) generateDataSection(file *AssemblyCode, gvars []*bs_entity.DefinedVariable) {
   file._data()
   for i := range gvars {
     gvar := gvars[i]
@@ -178,7 +179,7 @@ func (self *LinuxX86CodeGenerator) generateDataSection(file *LinuxX86AssemblyCod
   }
 }
 
-func (self *LinuxX86CodeGenerator) generateImmediate(file *LinuxX86AssemblyCode, size int64, node bs_core.IExpr) {
+func (self *CodeGenerator) generateImmediate(file *AssemblyCode, size int64, node bs_core.IExpr) {
   switch expr := node.(type) {
     case *bs_ir.Int: {
       switch size {
@@ -206,7 +207,7 @@ func (self *LinuxX86CodeGenerator) generateImmediate(file *LinuxX86AssemblyCode,
   }
 }
 
-func (self *LinuxX86CodeGenerator) generateReadOnlyDataSection(file *LinuxX86AssemblyCode, constants *bs_entity.ConstantTable) {
+func (self *CodeGenerator) generateReadOnlyDataSection(file *AssemblyCode, constants *bs_entity.ConstantTable) {
   file._section(".rodata")
   entries := constants.GetEntries()
   for i := range entries {
@@ -216,7 +217,7 @@ func (self *LinuxX86CodeGenerator) generateReadOnlyDataSection(file *LinuxX86Ass
   }
 }
 
-func (self *LinuxX86CodeGenerator) generateTextSection(file *LinuxX86AssemblyCode, functions []*bs_entity.DefinedFunction) {
+func (self *CodeGenerator) generateTextSection(file *AssemblyCode, functions []*bs_entity.DefinedFunction) {
   file._text()
   for i := range functions {
     fun := functions[i]
@@ -231,7 +232,7 @@ func (self *LinuxX86CodeGenerator) generateTextSection(file *LinuxX86AssemblyCod
   }
 }
 
-func (self *LinuxX86CodeGenerator) generateCommonSymbols(file *LinuxX86AssemblyCode, variables []*bs_entity.DefinedVariable) {
+func (self *CodeGenerator) generateCommonSymbols(file *AssemblyCode, variables []*bs_entity.DefinedVariable) {
   for i := range variables {
     v := variables[i]
     sym := self.globalSymbol(v.SymbolString())
@@ -247,28 +248,28 @@ func (self *LinuxX86CodeGenerator) generateCommonSymbols(file *LinuxX86AssemblyC
 // PIC/PIE related constants and codes
 //
 var got = bs_asm.NewNamedSymbol("_GLOBAL_OFFSET_TABLE_")
-func (self *LinuxX86CodeGenerator) loadGOTBaseAddress(file *LinuxX86AssemblyCode, reg *x86Register) {
+func (self *CodeGenerator) loadGOTBaseAddress(file *AssemblyCode, reg *bs_x86.Register) {
   file.call(self.picThunkSymbol(reg))
   file.add(self.imm2(got), reg)
 }
 
-func (self *LinuxX86CodeGenerator) gotBaseReg() *x86Register {
+func (self *CodeGenerator) gotBaseReg() *bs_x86.Register {
   return self.bx()
 }
 
-func (self *LinuxX86CodeGenerator) globalGOTSymbol(base bs_core.ISymbol) bs_core.ISymbol {
+func (self *CodeGenerator) globalGOTSymbol(base bs_core.ISymbol) bs_core.ISymbol {
   return bs_asm.NewSuffixedSymbol(base, "@GOT")
 }
 
-func (self *LinuxX86CodeGenerator) localGOTSymbol(base bs_core.ISymbol) bs_core.ISymbol {
+func (self *CodeGenerator) localGOTSymbol(base bs_core.ISymbol) bs_core.ISymbol {
   return bs_asm.NewSuffixedSymbol(base, "@GOTOFF")
 }
 
-func (self *LinuxX86CodeGenerator) pltSymbol(base bs_core.ISymbol) bs_core.ISymbol {
+func (self *CodeGenerator) pltSymbol(base bs_core.ISymbol) bs_core.ISymbol {
   return bs_asm.NewSuffixedSymbol(base, "@PLT")
 }
 
-func (self *LinuxX86CodeGenerator) picThunkSymbol(reg *x86Register) bs_core.ISymbol {
+func (self *CodeGenerator) picThunkSymbol(reg *bs_x86.Register) bs_core.ISymbol {
   return bs_asm.NewNamedSymbol("__i686.get_pc_thunk." + reg.GetBaseName())
 }
 
@@ -284,7 +285,7 @@ func (self *LinuxX86CodeGenerator) picThunkSymbol(reg *x86Register) bs_core.ISym
  *
  *     .section NAME, "...M", TYPE, section_group_name, linkage
  */
-func (self *LinuxX86CodeGenerator) picThunk(file *LinuxX86AssemblyCode, reg *x86Register) {
+func (self *CodeGenerator) picThunk(file *AssemblyCode, reg *bs_x86.Register) {
   sym := self.picThunkSymbol(reg)
   file._section2(fmt.Sprintf(".text.%s", sym),
                  fmt.Sprintf("\"%s\"", PICThunkSectionFlags),
@@ -337,16 +338,16 @@ func (self *LinuxX86CodeGenerator) picThunk(file *LinuxX86AssemblyCode, reg *x86
  * ======================= stack bottom
  */
 
-func (self *LinuxX86CodeGenerator) alignStack(size int64) int64 {
+func (self *CodeGenerator) alignStack(size int64) int64 {
   return (size + STACK_WORD_SIZE - 1) / STACK_WORD_SIZE * STACK_WORD_SIZE
 }
 
-func (self *LinuxX86CodeGenerator) stackSizeFromWordNum(numWords int64) int64 {
+func (self *CodeGenerator) stackSizeFromWordNum(numWords int64) int64 {
   return numWords * STACK_WORD_SIZE
 }
 
 type stackFrameInfo struct {
-  saveRegs []*x86Register
+  saveRegs []*bs_x86.Register
   lvarSize int64
   tempSize int64
 }
@@ -367,14 +368,14 @@ func (self *stackFrameInfo) frameSize() int64 {
   return self.saveRegsSize() + self.lvarSize + self.tempSize
 }
 
-func (self *LinuxX86CodeGenerator) compileFunctionBody(file *LinuxX86AssemblyCode, fun *bs_entity.DefinedFunction) {
-  frame := &stackFrameInfo { []*x86Register { }, int64(0), int64(0) }
+func (self *CodeGenerator) compileFunctionBody(file *AssemblyCode, fun *bs_entity.DefinedFunction) {
+  frame := &stackFrameInfo { []*bs_x86.Register { }, int64(0), int64(0) }
   self.locateParameters(fun.GetParameters())
   frame.lvarSize = self.locateLocalVariables(fun.LocalVariableScope(), int64(0))
 
   body := self.optimize(self.compileStmts(fun))
   frame.saveRegs = self.usedCalleeSaveRegisters(body)
-  frame.tempSize = body.virtualStack.maxSize()
+  frame.tempSize = body.virtualStack.MaxSize()
 
   self.fixLocalVariableOffsets(fun.LocalVariableScope(), frame.lvarOffset())
   self.fixTempVariableOffsets(body, frame.tempOffset())
@@ -385,12 +386,12 @@ func (self *LinuxX86CodeGenerator) compileFunctionBody(file *LinuxX86AssemblyCod
   self.generateFunctionBody(file, body, frame)
 }
 
-func (self *LinuxX86CodeGenerator) optimize(body *LinuxX86AssemblyCode) *LinuxX86AssemblyCode {
+func (self *CodeGenerator) optimize(body *AssemblyCode) *AssemblyCode {
   self.errorHandler.Warn("FIXME: CodeGenerator#optimize: not implemented")
   return body
 }
 
-func (self *LinuxX86CodeGenerator) printStackFrameLayout(file *LinuxX86AssemblyCode, frame *stackFrameInfo, lvars []*bs_entity.DefinedVariable) {
+func (self *CodeGenerator) printStackFrameLayout(file *AssemblyCode, frame *stackFrameInfo, lvars []*bs_entity.DefinedVariable) {
   vars := []*memInfo { }
   for i := range lvars {
     vars = append(vars, &memInfo { lvars[i].GetMemref(), lvars[i].GetName() })
@@ -422,10 +423,10 @@ type memInfo struct {
   name string
 }
 
-var as *LinuxX86AssemblyCode
+var as *AssemblyCode
 var epilogue *bs_asm.Label
 
-func (self *LinuxX86CodeGenerator) compileStmts(fun *bs_entity.DefinedFunction) *LinuxX86AssemblyCode {
+func (self *CodeGenerator) compileStmts(fun *bs_entity.DefinedFunction) *AssemblyCode {
   as = self.newAssemblyCode()
   epilogue = bs_asm.NewUnnamedLabel()
   stmts := fun.GetIR()
@@ -436,8 +437,8 @@ func (self *LinuxX86CodeGenerator) compileStmts(fun *bs_entity.DefinedFunction) 
   return as
 }
 
-func (self *LinuxX86CodeGenerator) usedCalleeSaveRegisters(body *LinuxX86AssemblyCode) []*x86Register {
-  result := []*x86Register { }
+func (self *CodeGenerator) usedCalleeSaveRegisters(body *AssemblyCode) []*bs_x86.Register {
+  result := []*bs_x86.Register { }
   regs := self.calleeSaveRegisters()
   for i := range regs {
     reg := regs[i]
@@ -450,28 +451,28 @@ func (self *LinuxX86CodeGenerator) usedCalleeSaveRegisters(body *LinuxX86Assembl
   return result
 }
 
-var CALLEE_SAVE_REGISTERS = []int { x86_bx, x86_bp, x86_si, x86_di }
+var CALLEE_SAVE_REGISTERS = []int { bs_x86.BX, bs_x86.BP, bs_x86.SI, bs_x86.DI }
 
-func (self *LinuxX86CodeGenerator) calleeSaveRegisters() []*x86Register {
-  regs := make([]*x86Register, len(CALLEE_SAVE_REGISTERS))
+func (self *CodeGenerator) calleeSaveRegisters() []*bs_x86.Register {
+  regs := make([]*bs_x86.Register, len(CALLEE_SAVE_REGISTERS))
   for i := range CALLEE_SAVE_REGISTERS {
-    regs[i] = newX86Register(CALLEE_SAVE_REGISTERS[i], self.naturalType)
+    regs[i] = bs_x86.NewRegister(CALLEE_SAVE_REGISTERS[i], self.naturalType)
   }
   return regs
 }
 
-func (self *LinuxX86CodeGenerator) generateFunctionBody(file *LinuxX86AssemblyCode, body *LinuxX86AssemblyCode, frame *stackFrameInfo) {
-  file.virtualStack.reset()
+func (self *CodeGenerator) generateFunctionBody(file *AssemblyCode, body *AssemblyCode, frame *stackFrameInfo) {
+  file.virtualStack.Reset()
   self.prologue(file, frame.saveRegs, frame.frameSize())
   if self.options.IsPositionIndependent() && body.doesUses(self.gotBaseReg()) {
     self.loadGOTBaseAddress(file, self.gotBaseReg())
   }
   file.addAll(body.GetAssemblies())
   self.epilogue(file, frame.saveRegs)
-  file.virtualStack.fixOffset(0)
+  file.virtualStack.FixOffset(0)
 }
 
-func (self *LinuxX86CodeGenerator) prologue(file *LinuxX86AssemblyCode, saveRegs []*x86Register, frameSize int64) {
+func (self *CodeGenerator) prologue(file *AssemblyCode, saveRegs []*bs_x86.Register, frameSize int64) {
   file.push(self.bp())
   file.mov1(self.sp(), self.bp())
   for i := range saveRegs {
@@ -481,7 +482,7 @@ func (self *LinuxX86CodeGenerator) prologue(file *LinuxX86AssemblyCode, saveRegs
   self.extendStack(file, frameSize)
 }
 
-func (self *LinuxX86CodeGenerator) epilogue(file *LinuxX86AssemblyCode, savedRegs []*x86Register) {
+func (self *CodeGenerator) epilogue(file *AssemblyCode, savedRegs []*bs_x86.Register) {
   for i := range savedRegs {
     reg := savedRegs[len(savedRegs)-1-i]
     file.virtualPop(reg)
@@ -493,7 +494,7 @@ func (self *LinuxX86CodeGenerator) epilogue(file *LinuxX86AssemblyCode, savedReg
 
 const PARAM_START_WORD = int64(2) // return addr and saved up
 
-func (self *LinuxX86CodeGenerator) locateParameters(params []*bs_entity.Parameter) {
+func (self *CodeGenerator) locateParameters(params []*bs_entity.Parameter) {
   numWords := PARAM_START_WORD
   for i := range params {
     params[i].SetMemref(self.mem3(self.stackSizeFromWordNum(numWords), self.bp()))
@@ -505,7 +506,7 @@ func (self *LinuxX86CodeGenerator) locateParameters(params []*bs_entity.Paramete
  * Allocate addresses of local variables, but offset is still
  * not determined, assign unfixed IndirectMemoryReference.
  */
-func (self *LinuxX86CodeGenerator) locateLocalVariables(scope *bs_entity.LocalScope, parentStackLen int64) int64 {
+func (self *CodeGenerator) locateLocalVariables(scope *bs_entity.LocalScope, parentStackLen int64) int64 {
   n := parentStackLen
   vars := scope.GetLocalVariables()
   for i := range vars {
@@ -523,28 +524,28 @@ func (self *LinuxX86CodeGenerator) locateLocalVariables(scope *bs_entity.LocalSc
   return maxLen
 }
 
-func (self *LinuxX86CodeGenerator) relocatableMem(offset int64, base *x86Register) *bs_asm.IndirectMemoryReference {
+func (self *CodeGenerator) relocatableMem(offset int64, base *bs_x86.Register) *bs_asm.IndirectMemoryReference {
   return bs_asm.NewIndirectMemoryReference(bs_asm.NewIntegerLiteral(offset), base, false)
 }
 
-func (self *LinuxX86CodeGenerator) fixLocalVariableOffsets(scope *bs_entity.LocalScope, n int64) {
+func (self *CodeGenerator) fixLocalVariableOffsets(scope *bs_entity.LocalScope, n int64) {
   vs := scope.AllLocalVariables()
   for i := range vs {
     vs[i].GetMemref().FixOffset(-n)
   }
 }
 
-func (self *LinuxX86CodeGenerator) fixTempVariableOffsets(asm *LinuxX86AssemblyCode, n int64) {
-  asm.virtualStack.fixOffset(-n)
+func (self *CodeGenerator) fixTempVariableOffsets(asm *AssemblyCode, n int64) {
+  asm.virtualStack.FixOffset(-n)
 }
 
-func (self *LinuxX86CodeGenerator) extendStack(file *LinuxX86AssemblyCode, n int64) {
+func (self *CodeGenerator) extendStack(file *AssemblyCode, n int64) {
   if 0 < n {
     file.sub(self.imm1(n), self.sp())
   }
 }
 
-func (self *LinuxX86CodeGenerator) rewindStack(file *LinuxX86AssemblyCode, n int64) {
+func (self *CodeGenerator) rewindStack(file *AssemblyCode, n int64) {
   if 0 < n {
     file.add(self.imm1(n), self.sp())
   }
@@ -555,7 +556,7 @@ func (self *LinuxX86CodeGenerator) rewindStack(file *LinuxX86AssemblyCode, n int
 // Statements
 //
 
-func (self *LinuxX86CodeGenerator) compileStmt(stmt bs_core.IStmt) {
+func (self *CodeGenerator) compileStmt(stmt bs_core.IStmt) {
   if self.options.IsVerboseAsm() {
     as.comment(fmt.Sprint(stmt.GetLocation()))
   }
@@ -566,7 +567,7 @@ func (self *LinuxX86CodeGenerator) compileStmt(stmt bs_core.IStmt) {
 // Expressions
 //
 
-func (self *LinuxX86CodeGenerator) compile(n bs_core.IExpr) {
+func (self *CodeGenerator) compile(n bs_core.IExpr) {
   if self.options.IsVerboseAsm() {
     as.comment(fmt.Sprintf("%s {", n))
     as.indentComment()
@@ -578,7 +579,7 @@ func (self *LinuxX86CodeGenerator) compile(n bs_core.IExpr) {
   }
 }
 
-func (self *LinuxX86CodeGenerator) doesRequireRegisterOperand(op int) bool {
+func (self *CodeGenerator) doesRequireRegisterOperand(op int) bool {
   switch op {
     case bs_ir.OP_S_DIV:      fallthrough
     case bs_ir.OP_U_DIV:      fallthrough
@@ -595,7 +596,7 @@ func (self *LinuxX86CodeGenerator) doesRequireRegisterOperand(op int) bool {
   }
 }
 
-func (self *LinuxX86CodeGenerator) compileBinaryOp(op int, left *x86Register, right bs_core.IOperand) {
+func (self *CodeGenerator) compileBinaryOp(op int, left *bs_x86.Register, right bs_core.IOperand) {
   switch op {
     case bs_ir.OP_ADD: as.add(right, left)
     case bs_ir.OP_SUB: as.sub(right, left)
@@ -652,7 +653,7 @@ func (self *LinuxX86CodeGenerator) compileBinaryOp(op int, left *x86Register, ri
  * Load constant value.  You must check node by #isConstant
  * before calling this method.
  */
-func (self *LinuxX86CodeGenerator) loadConstant(node bs_core.IExpr, reg *x86Register) {
+func (self *CodeGenerator) loadConstant(node bs_core.IExpr, reg *bs_x86.Register) {
   if node.GetAsmValue() != nil {
     as.mov2(node.GetAsmValue(), reg)
   } else {
@@ -664,7 +665,7 @@ func (self *LinuxX86CodeGenerator) loadConstant(node bs_core.IExpr, reg *x86Regi
   }
 }
 
-func (self *LinuxX86CodeGenerator) loadVariable(v *bs_ir.Var, dest *x86Register) {
+func (self *CodeGenerator) loadVariable(v *bs_ir.Var, dest *bs_x86.Register) {
   if v.GetMemref() == nil {
     a := dest.ForType(self.naturalType)
     as.mov2(v.GetAddress(), a)
@@ -674,7 +675,7 @@ func (self *LinuxX86CodeGenerator) loadVariable(v *bs_ir.Var, dest *x86Register)
   }
 }
 
-func (self *LinuxX86CodeGenerator) loadAddress(v bs_core.IEntity, dest *x86Register) {
+func (self *CodeGenerator) loadAddress(v bs_core.IEntity, dest *bs_x86.Register) {
   if v.GetAddress() != nil {
     as.mov2(v.GetAddress(), dest)
   } else {
@@ -682,95 +683,95 @@ func (self *LinuxX86CodeGenerator) loadAddress(v bs_core.IEntity, dest *x86Regis
   }
 }
 
-func (self *LinuxX86CodeGenerator) ax() *x86Register {
-  return newX86Register(x86_ax, self.naturalType)
+func (self *CodeGenerator) ax() *bs_x86.Register {
+  return bs_x86.NewRegister(bs_x86.AX, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) al() *x86Register {
+func (self *CodeGenerator) al() *bs_x86.Register {
   return self.axT(bs_asm.TYPE_INT8)
 }
 
-func (self *LinuxX86CodeGenerator) bx() *x86Register {
-  return newX86Register(x86_bx, self.naturalType)
+func (self *CodeGenerator) bx() *bs_x86.Register {
+  return bs_x86.NewRegister(bs_x86.BX, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) cx() *x86Register {
-  return newX86Register(x86_cx, self.naturalType)
+func (self *CodeGenerator) cx() *bs_x86.Register {
+  return bs_x86.NewRegister(bs_x86.CX, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) cl() *x86Register {
+func (self *CodeGenerator) cl() *bs_x86.Register {
   return self.cxT(bs_asm.TYPE_INT8)
 }
 
-func (self *LinuxX86CodeGenerator) dx() *x86Register {
-  return newX86Register(x86_dx, self.naturalType)
+func (self *CodeGenerator) dx() *bs_x86.Register {
+  return bs_x86.NewRegister(bs_x86.DX, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) axT(t int) *x86Register {
-  return newX86Register(x86_ax, t)
+func (self *CodeGenerator) axT(t int) *bs_x86.Register {
+  return bs_x86.NewRegister(bs_x86.AX, t)
 }
 
-func (self *LinuxX86CodeGenerator) bxT(t int) *x86Register {
-  return newX86Register(x86_bx, t)
+func (self *CodeGenerator) bxT(t int) *bs_x86.Register {
+  return bs_x86.NewRegister(bs_x86.BX, t)
 }
 
-func (self *LinuxX86CodeGenerator) cxT(t int) *x86Register {
-  return newX86Register(x86_cx, t)
+func (self *CodeGenerator) cxT(t int) *bs_x86.Register {
+  return bs_x86.NewRegister(bs_x86.CX, t)
 }
 
-func (self *LinuxX86CodeGenerator) dxT(t int) *x86Register {
-  return newX86Register(x86_dx, t)
+func (self *CodeGenerator) dxT(t int) *bs_x86.Register {
+  return bs_x86.NewRegister(bs_x86.DX, t)
 }
 
-func (self *LinuxX86CodeGenerator) si() *x86Register {
-  return newX86Register(x86_si, self.naturalType)
+func (self *CodeGenerator) si() *bs_x86.Register {
+  return bs_x86.NewRegister(bs_x86.SI, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) di() *x86Register {
-  return newX86Register(x86_di, self.naturalType)
+func (self *CodeGenerator) di() *bs_x86.Register {
+  return bs_x86.NewRegister(bs_x86.DI, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) bp() *x86Register {
-  return newX86Register(x86_bp, self.naturalType)
+func (self *CodeGenerator) bp() *bs_x86.Register {
+  return bs_x86.NewRegister(bs_x86.BP, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) sp() *x86Register {
-  return newX86Register(x86_sp, self.naturalType)
+func (self *CodeGenerator) sp() *bs_x86.Register {
+  return bs_x86.NewRegister(bs_x86.SP, self.naturalType)
 }
 
-func (self *LinuxX86CodeGenerator) mem1(sym bs_core.ISymbol) *bs_asm.DirectMemoryReference {
+func (self *CodeGenerator) mem1(sym bs_core.ISymbol) *bs_asm.DirectMemoryReference {
   return bs_asm.NewDirectMemoryReference(sym)
 }
 
-func (self *LinuxX86CodeGenerator) mem2(reg *x86Register) *bs_asm.IndirectMemoryReference {
+func (self *CodeGenerator) mem2(reg *bs_x86.Register) *bs_asm.IndirectMemoryReference {
   return bs_asm.NewIndirectMemoryReference(bs_asm.NewIntegerLiteral(0), reg, true)
 }
 
-func (self *LinuxX86CodeGenerator) mem3(offset int64, reg *x86Register) *bs_asm.IndirectMemoryReference {
+func (self *CodeGenerator) mem3(offset int64, reg *bs_x86.Register) *bs_asm.IndirectMemoryReference {
   return bs_asm.NewIndirectMemoryReference(bs_asm.NewIntegerLiteral(offset), reg, true)
 }
 
-func (self *LinuxX86CodeGenerator) mem4(offset bs_core.ISymbol, reg *x86Register) *bs_asm.IndirectMemoryReference {
+func (self *CodeGenerator) mem4(offset bs_core.ISymbol, reg *bs_x86.Register) *bs_asm.IndirectMemoryReference {
   return bs_asm.NewIndirectMemoryReference(offset, reg, true)
 }
 
-func (self *LinuxX86CodeGenerator) imm1(n int64) *bs_asm.ImmediateValue {
+func (self *CodeGenerator) imm1(n int64) *bs_asm.ImmediateValue {
   return bs_asm.NewImmediateValue(bs_asm.NewIntegerLiteral(n))
 }
 
-func (self *LinuxX86CodeGenerator) imm2(lit bs_core.ILiteral) *bs_asm.ImmediateValue {
+func (self *CodeGenerator) imm2(lit bs_core.ILiteral) *bs_asm.ImmediateValue {
   return bs_asm.NewImmediateValue(lit)
 }
 
-func (self *LinuxX86CodeGenerator) load(mem bs_core.IMemoryReference, reg *x86Register) {
+func (self *CodeGenerator) load(mem bs_core.IMemoryReference, reg *bs_x86.Register) {
   as.mov2(mem, reg)
 }
 
-func (self *LinuxX86CodeGenerator) store(reg *x86Register, mem bs_core.IMemoryReference) {
+func (self *CodeGenerator) store(reg *bs_x86.Register, mem bs_core.IMemoryReference) {
   as.mov3(reg, mem)
 }
 
-func (self *LinuxX86CodeGenerator) VisitStmt(unknown bs_core.IStmt) interface{} {
+func (self *CodeGenerator) VisitStmt(unknown bs_core.IStmt) interface{} {
   switch node := unknown.(type) {
     case *bs_ir.Assign: {
       switch {
@@ -835,7 +836,7 @@ func (self *LinuxX86CodeGenerator) VisitStmt(unknown bs_core.IStmt) interface{} 
   return nil
 }
 
-func (self *LinuxX86CodeGenerator) VisitExpr(unknown bs_core.IExpr) interface{} {
+func (self *CodeGenerator) VisitExpr(unknown bs_core.IExpr) interface{} {
   switch node := unknown.(type) {
     case *bs_ir.Addr: {
       self.loadAddress(node.GetEntity(), self.ax())
