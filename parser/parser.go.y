@@ -925,7 +925,7 @@ func (self *lexer) Error(s string) {
 }
 
 func ParseExpr(s string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
-  src, err := core.NewTemporarySourceFile(core.EXT_PROGRAM_SOURCE, []byte(s))
+  src, err := core.NewTemporarySourceFile("", core.EXT_PROGRAM_SOURCE, []byte(s))
   if err != nil {
     return nil, err
   }
@@ -936,7 +936,8 @@ func ParseExpr(s string, errorHandler *core.ErrorHandler, options *core.Options)
 }
 
 func ParseFile(path string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
-  return Parse(core.NewSourceFile(path), errorHandler, options)
+  src := core.NewSourceFile(path, path, core.EXT_PROGRAM_SOURCE)
+  return Parse(src, errorHandler, options)
 }
 
 func Parse(src *core.SourceFile, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {

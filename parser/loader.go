@@ -22,7 +22,8 @@ func (self *libraryLoader) loadLibrary(name string) *bs_ast.Declaration {
   if ! ok {
     panic(fmt.Errorf("No such file or directory: %s.bs", name))
   }
-  ast, err := Parse(bs_core.NewSourceFile(path), self.errorHandler, self.options)
+  src := bs_core.NewSourceFile(path, path, bs_core.EXT_PROGRAM_SOURCE)
+  ast, err := Parse(src, self.errorHandler, self.options)
   if err != nil {
     panic(err)
   }

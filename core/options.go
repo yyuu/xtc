@@ -60,6 +60,9 @@ type Options struct {
   dumpIR *bool
   dumpAsm *bool
   printAsm *bool
+  compile *bool
+  assemble *bool
+  link *bool
   verbose *bool
 }
 
@@ -80,6 +83,9 @@ func NewOptions(name string) *Options {
     flagSet.Bool("dump-ir", false, "dump ir"),
     flagSet.Bool("dump-asm", false, "dump asm"),
     flagSet.Bool("print-asm", false, "print asm"),
+    flagSet.Bool("S", false, "S"), // compile
+    flagSet.Bool("c", false, "c"), // assemble
+    flagSet.Bool("link", false, "link"), // link
     flagSet.Bool("verbose", false, "verbose"),
   }
 }
@@ -90,15 +96,38 @@ func ParseOptions(name string, args []string) *Options {
 
 func (self *Options) Parse(args []string) *Options {
   self.flagSet.Parse(args)
+  switch {
+    case *self.link: {
+      *self.compile = true
+      *self.assemble = true
+    }
+    case *self.assemble: {
+      *self.compile = true
+      *self.link = false
+    }
+    case *self.compile: {
+      *self.assemble = false
+      *self.link = false
+    }
+    default: {
+      *self.compile = true
+      *self.assemble = true
+      *self.link = true
+    }
+  }
   return self
 }
 
+func (self *Options) IsCompileRequired() bool {
+  return *self.compile
+}
+
 func (self *Options) IsAssembleRequired() bool {
-  panic("not implemented")
+  return *self.assemble
 }
 
 func (self *Options) IsLinkRequired() bool {
-  panic("not implemented")
+  return *self.link
 }
 
 func (self *Options) IsVerboseMode() bool {

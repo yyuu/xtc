@@ -3,6 +3,7 @@ package compiler
 import (
   "encoding/json"
   "fmt"
+  "os/exec"
   bs_ast "bitbucket.org/yyuu/bs/ast"
   bs_core "bitbucket.org/yyuu/bs/core"
   bs_ir "bitbucket.org/yyuu/bs/ir"
@@ -26,43 +27,53 @@ func NewCompiler(name string, args []string) *Compiler {
   return &Compiler { errorHandler, options }
 }
 
-func (self *Compiler) SourceFiles() []string {
-  return self.options.SourceFiles()
+func (self *Compiler) SourceFiles() []*bs_core.SourceFile {
+  files := self.options.SourceFiles()
+  sources := make([]*bs_core.SourceFile, len(files))
+  for i := range files {
+    sources[i] = bs_core.NewSourceFile(files[i], files[i], "")
+  }
+  return sources
 }
 
 func (self *Compiler) Compile() {
-  files := self.SourceFiles()
-  for i := range files {
-    err := self.phase1(bs_core.NewSourceFile(files[i]))
+  sources := self.SourceFiles()
+  for i := range sources {
+    _, err := self.phase1(sources[i])
     if err != nil {
       self.errorHandler.Fatal(err)
+      return
     }
   }
 }
 
 func (self *Compiler) CompileString(s string) {
-  src, err := bs_core.NewTemporarySourceFile(bs_core.EXT_PROGRAM_SOURCE, []byte(s))
+  src, err := bs_core.NewTemporarySourceFile("", bs_core.EXT_PROGRAM_SOURCE, []byte(s))
   if err != nil {
     self.errorHandler.Fatal(err)
     return
   }
-  err = self.phase1(src)
+  _, err = self.phase1(src)
   if err != nil {
     self.errorHandler.Fatal(err)
+    return
   }
 }
 
-func (self *Compiler) phase1(src *bs_core.SourceFile) error {
-  defer func() {
-    if src != nil && src.IsTemporary() {
-      src.Remove()
-    }
-  }()
+func (self *Compiler) phase1(src *bs_core.SourceFile) (*bs_core.SourceFile, error) {
+  if ! self.options.IsCompileRequired() {
+    return src, nil
+  }
   if src.IsProgramSource() {
-    dst := src.ToAssemblySource()
-    err := self.compile(src, dst)
+    defer func() {
+      if src.IsGenerated() {
+        self.errorHandler.Debugf("Remove temporary file: %s", src)
+        src.Remove()
+      }
+    }()
+    dst, err := self.compile(src)
     if err != nil {
-      return err
+      return nil, err
     }
     return self.phase2(dst)
   } else {
@@ -70,17 +81,20 @@ func (self *Compiler) phase1(src *bs_core.SourceFile) error {
   }
 }
 
-func (self *Compiler) phase2(src *bs_core.SourceFile) error {
-  defer func() {
-    if src != nil && src.IsTemporary() {
-      src.Remove()
-    }
-  }()
+func (self *Compiler) phase2(src *bs_core.SourceFile) (*bs_core.SourceFile, error) {
+  if ! self.options.IsAssembleRequired() {
+    return src, nil
+  }
   if src.IsAssemblySource() {
-    dst := src.ToObjectFile()
-    err := self.assemble(src, dst)
+    defer func() {
+      if src.IsGenerated() {
+        self.errorHandler.Debugf("Remove temporary file: %s", src)
+        src.Remove()
+      }
+    }()
+    dst, err := self.assemble(src)
     if err != nil {
-      return err
+      return nil, err
     }
     return self.phase3(dst)
   } else {
@@ -88,44 +102,49 @@ func (self *Compiler) phase2(src *bs_core.SourceFile) error {
   }
 }
 
-func (self *Compiler) phase3(src *bs_core.SourceFile) error {
-  defer func() {
-    if src != nil && src.IsTemporary() {
-      src.Remove()
-    }
-  }()
+func (self *Compiler) phase3(src *bs_core.SourceFile) (*bs_core.SourceFile, error) {
+  if ! self.options.IsLinkRequired() {
+    return src, nil
+  }
   if src.IsObjectFile() {
+    defer func() {
+      if src.IsGenerated() {
+        self.errorHandler.Debugf("Remove temporary file: %s", src)
+        src.Remove()
+      }
+    }()
     return self.link(src)
   } else {
-    return fmt.Errorf("not an object file: %s", src)
+    return nil, fmt.Errorf("not an object file: %s", src)
   }
 }
 
-func (self *Compiler) compile(src *bs_core.SourceFile, dst *bs_core.SourceFile) error {
+func (self *Compiler) compile(src *bs_core.SourceFile) (*bs_core.SourceFile, error) {
+  dst := src.ToAssemblySource()
   ast, err := bs_parser.Parse(src, self.errorHandler, self.options)
   if err != nil {
-    return err
+    return nil, err
   }
   self.dumpAST(ast)
   types := bs_typesys.NewTypeTableFor(self.options.TargetPlatform())
   sem, err := self.semanticAnalyze(ast, types)
   if err != nil {
-    return err
+    return nil, err
   }
   self.dumpSemant(sem)
   ir, err := NewIRGenerator(self.errorHandler, self.options, types).Generate(sem)
   if err != nil {
-    return err
+    return nil, err
   }
   self.dumpIR(ir)
   asm, err := self.generateAssembly(ir)
   if err != nil {
-    return err
+    return nil, err
   }
   self.dumpAsm(asm)
   self.printAsm(asm)
   dst.WriteAll([]byte(asm.ToSource()))
-  return nil
+  return dst, nil
 }
 
 func (self *Compiler) semanticAnalyze(ast *bs_ast.AST, types *bs_typesys.TypeTable) (*bs_ast.AST, error) {
@@ -150,12 +169,19 @@ func (self *Compiler) generateAssembly(ir *bs_ir.IR) (bs_sysdep.AssemblyCode, er
   return code_generator.Generate(ir)
 }
 
-func (self *Compiler) assemble(src *bs_core.SourceFile, dst *bs_core.SourceFile) error {
-  return fmt.Errorf("not implemented")
+func (self *Compiler) assemble(src *bs_core.SourceFile) (*bs_core.SourceFile, error) {
+  dst := src.ToObjectFile()
+  err := exec.Command("/usr/bin/as", "--32", "-o", fmt.Sprint(dst), fmt.Sprint(src)).Run()
+  if err != nil {
+    return nil, err
+  }
+  return dst, nil
 }
 
-func (self *Compiler) link(src *bs_core.SourceFile) error {
-  return fmt.Errorf("not implemented")
+func (self *Compiler) link(src *bs_core.SourceFile) (*bs_core.SourceFile, error) {
+  dst := src.ToExecutableFile()
+  self.errorHandler.Warn("FIXME: Compiler#link: not implemented")
+  return dst, nil
 }
 
 func (self *Compiler) dumpAST(ast *bs_ast.AST) {
