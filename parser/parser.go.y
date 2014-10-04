@@ -5,24 +5,24 @@ import (
   "errors"
   "fmt"
   "strconv"
-  "bitbucket.org/yyuu/bs/ast"
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/entity"
-  "bitbucket.org/yyuu/bs/typesys"
+  bs_ast "bitbucket.org/yyuu/bs/ast"
+  bs_core "bitbucket.org/yyuu/bs/core"
+  bs_entity "bitbucket.org/yyuu/bs/entity"
+  bs_typesys "bitbucket.org/yyuu/bs/typesys"
 )
 %}
 
 %union {
   _token *token
 
-  _node core.INode
-  _nodes []core.INode
+  _node bs_core.INode
+  _nodes []bs_core.INode
 
-  _entity core.IEntity
-  _entities []core.IEntity
+  _entity bs_core.IEntity
+  _entities []bs_core.IEntity
 
-  _typeref core.ITypeRef
-  _typerefs []core.ITypeRef
+  _typeref bs_core.ITypeRef
+  _typerefs []bs_core.ITypeRef
 }
 
 %token EOF
@@ -95,11 +95,11 @@ compilation_unit: EOF
                 | import_stmts top_defs EOF
                 {
                   lex := yylex.(*lexer)
-                  decl := ast.AsDeclaration($2._node)
+                  decl := bs_ast.AsDeclaration($2._node)
                   for i := range $1._nodes {
-                    decl.AddDeclaration(ast.AsDeclaration($1._nodes[i]))
+                    decl.AddDeclaration(bs_ast.AsDeclaration($1._nodes[i]))
                   }
-                  lex.ast = ast.NewAST(core.NewLocation(lex.sourceName, 1, 1), decl)
+                  lex.ast = bs_ast.NewAST(bs_core.NewLocation(lex.sourceName, 1, 1), decl)
                 }
                 ;
 
@@ -126,154 +126,154 @@ import_name: name
 
 top_defs: defun
         {
-          $$._node = ast.NewDeclaration(
-            entity.NewDefinedVariables(),
-            entity.NewUndefinedVariables(),
-            entity.NewDefinedFunctions(entity.AsDefinedFunction($1._entity)),
-            entity.NewUndefinedFunctions(),
-            entity.NewConstants(),
-            ast.NewStructNodes(),
-            ast.NewUnionNodes(),
-            ast.NewTypedefNodes(),
+          $$._node = bs_ast.NewDeclaration(
+            bs_entity.NewDefinedVariables(),
+            bs_entity.NewUndefinedVariables(),
+            bs_entity.NewDefinedFunctions(bs_entity.AsDefinedFunction($1._entity)),
+            bs_entity.NewUndefinedFunctions(),
+            bs_entity.NewConstants(),
+            bs_ast.NewStructNodes(),
+            bs_ast.NewUnionNodes(),
+            bs_ast.NewTypedefNodes(),
           )
         }
         | funcdecl
         {
-          $$._node = ast.NewDeclaration(
-            entity.NewDefinedVariables(),
-            entity.NewUndefinedVariables(),
-            entity.NewDefinedFunctions(),
-            entity.NewUndefinedFunctions(entity.AsUndefinedFunction($1._entity)),
-            entity.NewConstants(),
-            ast.NewStructNodes(),
-            ast.NewUnionNodes(),
-            ast.NewTypedefNodes(),
+          $$._node = bs_ast.NewDeclaration(
+            bs_entity.NewDefinedVariables(),
+            bs_entity.NewUndefinedVariables(),
+            bs_entity.NewDefinedFunctions(),
+            bs_entity.NewUndefinedFunctions(bs_entity.AsUndefinedFunction($1._entity)),
+            bs_entity.NewConstants(),
+            bs_ast.NewStructNodes(),
+            bs_ast.NewUnionNodes(),
+            bs_ast.NewTypedefNodes(),
           )
         }
         | defvars
         {
-          $$._node = ast.NewDeclaration(
-            entity.NewDefinedVariables(entity.AsDefinedVariable($1._entity)),
-            entity.NewUndefinedVariables(),
-            entity.NewDefinedFunctions(),
-            entity.NewUndefinedFunctions(),
-            entity.NewConstants(),
-            ast.NewStructNodes(),
-            ast.NewUnionNodes(),
-            ast.NewTypedefNodes(),
+          $$._node = bs_ast.NewDeclaration(
+            bs_entity.NewDefinedVariables(bs_entity.AsDefinedVariable($1._entity)),
+            bs_entity.NewUndefinedVariables(),
+            bs_entity.NewDefinedFunctions(),
+            bs_entity.NewUndefinedFunctions(),
+            bs_entity.NewConstants(),
+            bs_ast.NewStructNodes(),
+            bs_ast.NewUnionNodes(),
+            bs_ast.NewTypedefNodes(),
           )
         }
         | vardecl
         {
-          $$._node = ast.NewDeclaration(
-            entity.NewDefinedVariables(),
-            entity.NewUndefinedVariables(entity.AsUndefinedVariable($1._entity)),
-            entity.NewDefinedFunctions(),
-            entity.NewUndefinedFunctions(),
-            entity.NewConstants(),
-            ast.NewStructNodes(),
-            ast.NewUnionNodes(),
-            ast.NewTypedefNodes(),
+          $$._node = bs_ast.NewDeclaration(
+            bs_entity.NewDefinedVariables(),
+            bs_entity.NewUndefinedVariables(bs_entity.AsUndefinedVariable($1._entity)),
+            bs_entity.NewDefinedFunctions(),
+            bs_entity.NewUndefinedFunctions(),
+            bs_entity.NewConstants(),
+            bs_ast.NewStructNodes(),
+            bs_ast.NewUnionNodes(),
+            bs_ast.NewTypedefNodes(),
           )
         }
         | defconst
         {
-          $$._node = ast.NewDeclaration(
-            entity.NewDefinedVariables(),
-            entity.NewUndefinedVariables(),
-            entity.NewDefinedFunctions(),
-            entity.NewUndefinedFunctions(),
-            entity.NewConstants(entity.AsConstant($1._entity)),
-            ast.NewStructNodes(),
-            ast.NewUnionNodes(),
-            ast.NewTypedefNodes(),
+          $$._node = bs_ast.NewDeclaration(
+            bs_entity.NewDefinedVariables(),
+            bs_entity.NewUndefinedVariables(),
+            bs_entity.NewDefinedFunctions(),
+            bs_entity.NewUndefinedFunctions(),
+            bs_entity.NewConstants(bs_entity.AsConstant($1._entity)),
+            bs_ast.NewStructNodes(),
+            bs_ast.NewUnionNodes(),
+            bs_ast.NewTypedefNodes(),
           )
         }
         | defstruct
         {
-          $$._node = ast.NewDeclaration(
-            entity.NewDefinedVariables(),
-            entity.NewUndefinedVariables(),
-            entity.NewDefinedFunctions(),
-            entity.NewUndefinedFunctions(),
-            entity.NewConstants(),
-            ast.NewStructNodes(ast.AsStructNode($1._node)),
-            ast.NewUnionNodes(),
-            ast.NewTypedefNodes(),
+          $$._node = bs_ast.NewDeclaration(
+            bs_entity.NewDefinedVariables(),
+            bs_entity.NewUndefinedVariables(),
+            bs_entity.NewDefinedFunctions(),
+            bs_entity.NewUndefinedFunctions(),
+            bs_entity.NewConstants(),
+            bs_ast.NewStructNodes(bs_ast.AsStructNode($1._node)),
+            bs_ast.NewUnionNodes(),
+            bs_ast.NewTypedefNodes(),
           )
         }
         | defunion
         {
-          $$._node = ast.NewDeclaration(
-            entity.NewDefinedVariables(),
-            entity.NewUndefinedVariables(),
-            entity.NewDefinedFunctions(),
-            entity.NewUndefinedFunctions(),
-            entity.NewConstants(),
-            ast.NewStructNodes(),
-            ast.NewUnionNodes(ast.AsUnionNode($1._node)),
-            ast.NewTypedefNodes(),
+          $$._node = bs_ast.NewDeclaration(
+            bs_entity.NewDefinedVariables(),
+            bs_entity.NewUndefinedVariables(),
+            bs_entity.NewDefinedFunctions(),
+            bs_entity.NewUndefinedFunctions(),
+            bs_entity.NewConstants(),
+            bs_ast.NewStructNodes(),
+            bs_ast.NewUnionNodes(bs_ast.AsUnionNode($1._node)),
+            bs_ast.NewTypedefNodes(),
           )
         }
         | typedef
         {
-          $$._node = ast.NewDeclaration(
-            entity.NewDefinedVariables(),
-            entity.NewUndefinedVariables(),
-            entity.NewDefinedFunctions(),
-            entity.NewUndefinedFunctions(),
-            entity.NewConstants(),
-            ast.NewStructNodes(),
-            ast.NewUnionNodes(),
-            ast.NewTypedefNodes(ast.AsTypedefNode($1._node)),
+          $$._node = bs_ast.NewDeclaration(
+            bs_entity.NewDefinedVariables(),
+            bs_entity.NewUndefinedVariables(),
+            bs_entity.NewDefinedFunctions(),
+            bs_entity.NewUndefinedFunctions(),
+            bs_entity.NewConstants(),
+            bs_ast.NewStructNodes(),
+            bs_ast.NewUnionNodes(),
+            bs_ast.NewTypedefNodes(bs_ast.AsTypedefNode($1._node)),
           )
         }
         | top_defs defun
         {
-          decl := ast.AsDeclaration($1._node)
-          decl.AddDefun(entity.AsDefinedFunction($2._entity))
+          decl := bs_ast.AsDeclaration($1._node)
+          decl.AddDefun(bs_entity.AsDefinedFunction($2._entity))
           $$._node = decl
         }
         | top_defs funcdecl
         {
-          decl := ast.AsDeclaration($1._node)
-          decl.AddFuncdecl(entity.AsUndefinedFunction($2._entity))
+          decl := bs_ast.AsDeclaration($1._node)
+          decl.AddFuncdecl(bs_entity.AsUndefinedFunction($2._entity))
           $$._node = decl
         }
         | top_defs defvars
         {
-          decl := ast.AsDeclaration($1._node)
-          decl.AddDefvar(entity.AsDefinedVariable($2._entity))
+          decl := bs_ast.AsDeclaration($1._node)
+          decl.AddDefvar(bs_entity.AsDefinedVariable($2._entity))
           $$._node = decl
         }
         | top_defs vardecl
         {
-          decl := ast.AsDeclaration($1._node)
-          decl.AddVardecl(entity.AsUndefinedVariable($2._entity))
+          decl := bs_ast.AsDeclaration($1._node)
+          decl.AddVardecl(bs_entity.AsUndefinedVariable($2._entity))
           $$._node = decl
         }
         | top_defs defconst
         {
-          decl := ast.AsDeclaration($1._node)
-          decl.AddConstant(entity.AsConstant($2._entity))
+          decl := bs_ast.AsDeclaration($1._node)
+          decl.AddConstant(bs_entity.AsConstant($2._entity))
           $$._node = decl
         }
         | top_defs defstruct
         {
-          decl := ast.AsDeclaration($1._node)
-          decl.AddDefstruct(ast.AsStructNode($2._node))
+          decl := bs_ast.AsDeclaration($1._node)
+          decl.AddDefstruct(bs_ast.AsStructNode($2._node))
           $$._node = decl
         }
         | top_defs defunion
         {
-          decl := ast.AsDeclaration($1._node)
-          decl.AddDefunion(ast.AsUnionNode($2._node))
+          decl := bs_ast.AsDeclaration($1._node)
+          decl.AddDefunion(bs_ast.AsUnionNode($2._node))
           $$._node = decl
         }
         | top_defs typedef
         {
-          decl := ast.AsDeclaration($1._node)
-          decl.AddTypedef(ast.AsTypedefNode($2._node))
+          decl := bs_ast.AsDeclaration($1._node)
+          decl.AddTypedef(bs_ast.AsTypedefNode($2._node))
           $$._node = decl
         }
         ;
@@ -295,77 +295,77 @@ static_typeref_name: STATIC typeref_name
 defvars: typeref_name '=' expr ';'
        {
          ref := $1._typeref
-         $$._entity = entity.NewDefinedVariable(false, ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ast.AsExprNode($3._node))
+         $$._entity = bs_entity.NewDefinedVariable(false, bs_ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, bs_ast.AsExprNode($3._node))
        }
        | static_typeref_name '=' expr ';'
        {
          ref := $1._typeref
-         $$._entity = entity.NewDefinedVariable(true, ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ast.AsExprNode($3._node))
+         $$._entity = bs_entity.NewDefinedVariable(true, bs_ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, bs_ast.AsExprNode($3._node))
        }
        ;
 
 defconst: CONST typeref_name '=' expr ';'
         {
           ref := $2._typeref
-          $$._entity = entity.NewConstant(ast.NewTypeNode(ref.GetLocation(), ref), $2._token.literal, ast.AsExprNode($4._node))
+          $$._entity = bs_entity.NewConstant(bs_ast.NewTypeNode(ref.GetLocation(), ref), $2._token.literal, bs_ast.AsExprNode($4._node))
         }
         ;
 
 defun: typeref_name '(' ')' block
      {
-       ps := entity.NewParams($2._token.location, entity.NewParameters(), false)
-       t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, ast.AsStmtNode($4._node))
+       ps := bs_entity.NewParams($2._token.location, bs_entity.NewParameters(), false)
+       t := bs_typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
+       $$._entity = bs_entity.NewDefinedFunction(false, bs_ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, bs_ast.AsStmtNode($4._node))
      }
      | typeref_name '(' params ')' block
      {
-       ps := entity.AsParams($3._entity)
-       t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(false, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, ast.AsStmtNode($5._node))
+       ps := bs_entity.AsParams($3._entity)
+       t := bs_typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
+       $$._entity = bs_entity.NewDefinedFunction(false, bs_ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, bs_ast.AsStmtNode($5._node))
      }
      | static_typeref_name '(' ')' block
      {
-       ps := entity.NewParams($2._token.location, entity.NewParameters(), false)
-       t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, ast.AsStmtNode($4._node))
+       ps := bs_entity.NewParams($2._token.location, bs_entity.NewParameters(), false)
+       t := bs_typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
+       $$._entity = bs_entity.NewDefinedFunction(true, bs_ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, bs_ast.AsStmtNode($4._node))
      }
      | static_typeref_name '(' params ')' block
      {
-       ps := entity.AsParams($3._entity)
-       t := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-       $$._entity = entity.NewDefinedFunction(true, ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, ast.AsStmtNode($5._node))
+       ps := bs_entity.AsParams($3._entity)
+       t := bs_typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
+       $$._entity = bs_entity.NewDefinedFunction(true, bs_ast.NewTypeNode(t.GetLocation(), t), $1._token.literal, ps, bs_ast.AsStmtNode($5._node))
      }
      ;
 
 params: fixedparams
       {
-        $$._entity = entity.NewParams($1._token.location, entity.AsParams($1._entity).GetParamDescs(), false)
+        $$._entity = bs_entity.NewParams($1._token.location, bs_entity.AsParams($1._entity).GetParamDescs(), false)
       }
       | fixedparams ',' DOTDOTDOT
       {
-        $$._entity = entity.NewParams($1._token.location, entity.AsParams($1._entity).GetParamDescs(), true)
+        $$._entity = bs_entity.NewParams($1._token.location, bs_entity.AsParams($1._entity).GetParamDescs(), true)
       }
       ;
 
 fixedparams: param
            {
-             $$._entity = entity.NewParams($1._token.location, entity.NewParameters(entity.AsParameter($1._entity)), false)
+             $$._entity = bs_entity.NewParams($1._token.location, bs_entity.NewParameters(bs_entity.AsParameter($1._entity)), false)
            }
            | fixedparams ',' param
            {
-             $$._entity = entity.NewParams($1._token.location, append(entity.AsParams($1._entity).GetParamDescs(), entity.AsParameter($3._entity)), false)
+             $$._entity = bs_entity.NewParams($1._token.location, append(bs_entity.AsParams($1._entity).GetParamDescs(), bs_entity.AsParameter($3._entity)), false)
            }
            ;
 
 param: type name
      {
-       $$._entity = entity.NewParameter(ast.AsTypeNode($1._node), $2._token.literal)
+       $$._entity = bs_entity.NewParameter(bs_ast.AsTypeNode($1._node), $2._token.literal)
      }
      ;
 
 block: '{' defvar_list stmts '}'
      {
-       $$._node = ast.NewBlockNode($1._token.location, entity.AsDefinedVariables($2._entities), ast.AsStmtNodes($3._nodes))
+       $$._node = bs_ast.NewBlockNode($1._token.location, bs_entity.AsDefinedVariables($2._entities), bs_ast.AsStmtNodes($3._nodes))
      }
      ;
 
@@ -378,13 +378,13 @@ defvar_list:
 
 defstruct: STRUCT name member_list ';'
          {
-           $$._node = ast.NewStructNode($1._token.location, typesys.NewStructTypeRef($1._token.location, $2._token.literal), $2._token.literal, ast.AsSlots($3._nodes))
+           $$._node = bs_ast.NewStructNode($1._token.location, bs_typesys.NewStructTypeRef($1._token.location, $2._token.literal), $2._token.literal, bs_ast.AsSlots($3._nodes))
          }
          ;
 
 defunion: UNION name member_list ';'
         {
-          $$._node = ast.NewUnionNode($1._token.location, typesys.NewUnionTypeRef($1._token.location, $2._token.literal), $2._token.literal, ast.AsSlots($3._nodes))
+          $$._node = bs_ast.NewUnionNode($1._token.location, bs_typesys.NewUnionTypeRef($1._token.location, $2._token.literal), $2._token.literal, bs_ast.AsSlots($3._nodes))
         }
         ;
 
@@ -396,7 +396,7 @@ member_list: '{' member_list_body '}'
 
 member_list_body: slot ';'
                 {
-                  $$._nodes = ast.NewNodes($1._node)
+                  $$._nodes = bs_ast.NewNodes($1._node)
                 }
                 | member_list_body slot ';'
                 {
@@ -406,7 +406,7 @@ member_list_body: slot ';'
 
 slot: type name
     {
-      $$._node = ast.NewSlot(ast.AsTypeNode($1._node), $2._token.literal)
+      $$._node = bs_ast.NewSlot(bs_ast.AsTypeNode($1._node), $2._token.literal)
     }
     ;
 
@@ -419,105 +419,105 @@ extern_typeref_name: EXTERN typeref_name
 
 funcdecl: extern_typeref_name '(' ')' ';'
         {
-          ps := entity.NewParams($1._typeref.GetLocation(), entity.NewParameters(), false)
-          ref := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-          $$._entity = entity.NewUndefinedFunction(ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ps)
+          ps := bs_entity.NewParams($1._typeref.GetLocation(), bs_entity.NewParameters(), false)
+          ref := bs_typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
+          $$._entity = bs_entity.NewUndefinedFunction(bs_ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ps)
         }
         | extern_typeref_name '(' params ')' ';'
         {
-          ps := entity.AsParams($3._entity)
-          ref := typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
-          $$._entity = entity.NewUndefinedFunction(ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ps)
+          ps := bs_entity.AsParams($3._entity)
+          ref := bs_typesys.NewFunctionTypeRef($1._typeref, parametersTypeRef(ps))
+          $$._entity = bs_entity.NewUndefinedFunction(bs_ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, ps)
         }
         ;
 
 vardecl: extern_typeref_name ';'
        {
          ref := $1._typeref
-         $$._entity = entity.NewUndefinedVariable(ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal)
+         $$._entity = bs_entity.NewUndefinedVariable(bs_ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal)
        }
        ;
 
 type: typeref
     {
-      $$._node = ast.NewTypeNode($1._token.location, $1._typeref)
+      $$._node = bs_ast.NewTypeNode($1._token.location, $1._typeref)
     }
     ;
 
 typeref: VOID
        {
-         $$._typeref = typesys.NewVoidTypeRef($1._token.location)
+         $$._typeref = bs_typesys.NewVoidTypeRef($1._token.location)
        }
        | CHAR
        {
-         $$._typeref = typesys.NewCharTypeRef($1._token.location)
+         $$._typeref = bs_typesys.NewCharTypeRef($1._token.location)
        }
        | SHORT
        {
-         $$._typeref = typesys.NewShortTypeRef($1._token.location)
+         $$._typeref = bs_typesys.NewShortTypeRef($1._token.location)
        }
        | INT
        {
-         $$._typeref = typesys.NewIntTypeRef($1._token.location)
+         $$._typeref = bs_typesys.NewIntTypeRef($1._token.location)
        }
        | LONG
        {
-         $$._typeref = typesys.NewLongTypeRef($1._token.location)
+         $$._typeref = bs_typesys.NewLongTypeRef($1._token.location)
        }
        | UNSIGNED CHAR
        {
-         $$._typeref = typesys.NewUnsignedIntTypeRef($1._token.location)
+         $$._typeref = bs_typesys.NewUnsignedIntTypeRef($1._token.location)
        }
        | UNSIGNED SHORT
        {
-         $$._typeref = typesys.NewUnsignedShortTypeRef($1._token.location)
+         $$._typeref = bs_typesys.NewUnsignedShortTypeRef($1._token.location)
        }
        | UNSIGNED INT
        {
-         $$._typeref = typesys.NewUnsignedIntTypeRef($1._token.location)
+         $$._typeref = bs_typesys.NewUnsignedIntTypeRef($1._token.location)
        }
        | UNSIGNED LONG
        {
-         $$._typeref = typesys.NewUnsignedLongTypeRef($1._token.location)
+         $$._typeref = bs_typesys.NewUnsignedLongTypeRef($1._token.location)
        }
        | STRUCT IDENTIFIER
        {
-         $$._typeref = typesys.NewStructTypeRef($1._token.location, $2._token.literal)
+         $$._typeref = bs_typesys.NewStructTypeRef($1._token.location, $2._token.literal)
        }
        | UNION IDENTIFIER
        {
-         $$._typeref = typesys.NewUnionTypeRef($1._token.location, $2._token.literal)
+         $$._typeref = bs_typesys.NewUnionTypeRef($1._token.location, $2._token.literal)
        }
        | typeref '[' ']'
        {
-         $$._typeref = typesys.NewArrayTypeRef($1._typeref, 0)
+         $$._typeref = bs_typesys.NewArrayTypeRef($1._typeref, 0)
        }
        | typeref '[' INTEGER ']'
        {
          n, _ := strconv.Atoi($3._token.literal)
-         $$._typeref = typesys.NewArrayTypeRef($1._typeref, n)
+         $$._typeref = bs_typesys.NewArrayTypeRef($1._typeref, n)
        }
        | typeref '*'
        {
-         $$._typeref = typesys.NewPointerTypeRef($1._typeref)
+         $$._typeref = bs_typesys.NewPointerTypeRef($1._typeref)
        }
        | typeref '(' ')'
        {
-         $$._typeref = typesys.NewFunctionTypeRef($1._typeref, typesys.NewParamTypeRefs($2._token.location, typesys.NewTypeRefs(), false))
+         $$._typeref = bs_typesys.NewFunctionTypeRef($1._typeref, bs_typesys.NewParamTypeRefs($2._token.location, bs_typesys.NewTypeRefs(), false))
        }
        | typeref '(' param_typerefs ')'
        {
-         $$._typeref = typesys.NewFunctionTypeRef($1._typeref, $3._typeref)
+         $$._typeref = bs_typesys.NewFunctionTypeRef($1._typeref, $3._typeref)
        }
        | TYPENAME
        {
-         $$._typeref = typesys.NewUserTypeRef($1._token.location, $1._token.literal)
+         $$._typeref = bs_typesys.NewUserTypeRef($1._token.location, $1._token.literal)
        }
        ;
 
 param_typerefs: typeref
               {
-                $$._typerefs = typesys.NewTypeRefs($1._typeref)
+                $$._typerefs = bs_typesys.NewTypeRefs($1._typeref)
               }
               | param_typerefs ',' typeref
               {
@@ -529,7 +529,7 @@ typedef: TYPEDEF typeref IDENTIFIER ';'
        {
          lex := yylex.(*lexer)
          lex.knownTypedefs = append(lex.knownTypedefs, $3._token.literal)
-         $$._node = ast.NewTypedefNode($1._token.location, $2._typeref, $3._token.literal)
+         $$._node = bs_ast.NewTypedefNode($1._token.location, $2._typeref, $3._token.literal)
        }
        ;
 
@@ -544,7 +544,7 @@ stmt: ';'
     | labeled_stmt
     | expr ';'
     {
-      $$._node = ast.NewExprStmtNode($1._token.location, ast.AsExprNode($1._node))
+      $$._node = bs_ast.NewExprStmtNode($1._token.location, bs_ast.AsExprNode($1._node))
     }
     | block
     | if_stmt
@@ -560,44 +560,44 @@ stmt: ';'
 
 labeled_stmt: IDENTIFIER ':' stmt
             {
-              $$._node = ast.NewLabelNode($1._token.location, $1._token.literal, ast.AsStmtNode($3._node))
+              $$._node = bs_ast.NewLabelNode($1._token.location, $1._token.literal, bs_ast.AsStmtNode($3._node))
             }
             ;
 
 if_stmt: IF '(' expr ')' '{' defvar_list stmts '}'
        {
-         thenBody := ast.NewBlockNode($5._token.location, entity.AsDefinedVariables($6._entities), ast.AsStmtNodes($7._nodes))
-         $$._node = ast.NewIfNode($1._token.location, ast.AsExprNode($3._node), thenBody, nil)
+         thenBody := bs_ast.NewBlockNode($5._token.location, bs_entity.AsDefinedVariables($6._entities), bs_ast.AsStmtNodes($7._nodes))
+         $$._node = bs_ast.NewIfNode($1._token.location, bs_ast.AsExprNode($3._node), thenBody, nil)
        }
        | IF '(' expr ')' '{' defvar_list stmts '}' ELSE '{' defvar_list stmts '}'
        {
-         thenBody := ast.NewBlockNode($5._token.location, entity.AsDefinedVariables($6._entities), ast.AsStmtNodes($7._nodes))
-         elseBody := ast.NewBlockNode($10._token.location, entity.AsDefinedVariables($11._entities), ast.AsStmtNodes($12._nodes))
-         $$._node = ast.NewIfNode($1._token.location, ast.AsExprNode($3._node), thenBody, elseBody)
+         thenBody := bs_ast.NewBlockNode($5._token.location, bs_entity.AsDefinedVariables($6._entities), bs_ast.AsStmtNodes($7._nodes))
+         elseBody := bs_ast.NewBlockNode($10._token.location, bs_entity.AsDefinedVariables($11._entities), bs_ast.AsStmtNodes($12._nodes))
+         $$._node = bs_ast.NewIfNode($1._token.location, bs_ast.AsExprNode($3._node), thenBody, elseBody)
        }
        ;
 
 while_stmt: WHILE '(' expr ')' stmt
           {
-            $$._node = ast.NewWhileNode($1._token.location, ast.AsExprNode($3._node), ast.AsStmtNode($5._node))
+            $$._node = bs_ast.NewWhileNode($1._token.location, bs_ast.AsExprNode($3._node), bs_ast.AsStmtNode($5._node))
           }
           ;
 
 dowhile_stmt: DO stmt WHILE '(' expr ')' ';'
             {
-              $$._node = ast.NewDoWhileNode($1._token.location, ast.AsStmtNode($2._node), ast.AsExprNode($5._node))
+              $$._node = bs_ast.NewDoWhileNode($1._token.location, bs_ast.AsStmtNode($2._node), bs_ast.AsExprNode($5._node))
             }
             ;
 
 for_stmt: FOR '(' expr ';' expr ';' expr ')' stmt
         {
-          $$._node = ast.NewForNode($1._token.location, ast.AsExprNode($3._node), ast.AsExprNode($5._node), ast.AsExprNode($7._node), ast.AsStmtNode($9._node))
+          $$._node = bs_ast.NewForNode($1._token.location, bs_ast.AsExprNode($3._node), bs_ast.AsExprNode($5._node), bs_ast.AsExprNode($7._node), bs_ast.AsStmtNode($9._node))
         }
         ;
 
 switch_stmt: SWITCH '(' expr ')' '{' case_clauses '}'
            {
-             $$._node = ast.NewSwitchNode($1._token.location, ast.AsExprNode($3._node), ast.AsStmtNodes($6._nodes))
+             $$._node = bs_ast.NewSwitchNode($1._token.location, bs_ast.AsExprNode($3._node), bs_ast.AsStmtNodes($6._nodes))
            }
            ;
 
@@ -614,7 +614,7 @@ case_clauses:
 
 case_clause: cases case_body
            {
-             $$._node = ast.NewCaseNode($1._token.location, ast.AsExprNodes($1._nodes), ast.AsStmtNode($2._node))
+             $$._node = bs_ast.NewCaseNode($1._token.location, bs_ast.AsExprNodes($1._nodes), bs_ast.AsStmtNode($2._node))
            }
            ;
 
@@ -627,7 +627,7 @@ cases:
 
 default_clause: DEFAULT ':' case_body
               {
-                $$._node = ast.NewCaseNode($1._token.location, ast.NewExprNodes(), ast.AsStmtNode($3._node))
+                $$._node = bs_ast.NewCaseNode($1._token.location, bs_ast.NewExprNodes(), bs_ast.AsStmtNode($3._node))
               }
               ;
 
@@ -635,72 +635,72 @@ case_body: stmt
 
 goto_stmt: GOTO IDENTIFIER ';'
          {
-           $$._node = ast.NewGotoNode($1._token.location, $2._token.literal)
+           $$._node = bs_ast.NewGotoNode($1._token.location, $2._token.literal)
          }
          ;
 
 
 break_stmt: BREAK ';'
           {
-            $$._node = ast.NewBreakNode($1._token.location)
+            $$._node = bs_ast.NewBreakNode($1._token.location)
           }
           ;
 
 continue_stmt: CONTINUE ';'
              {
-               $$._node = ast.NewContinueNode($1._token.location)
+               $$._node = bs_ast.NewContinueNode($1._token.location)
              }
              ;
 
 return_stmt: RETURN expr ';'
            {
-             $$._node = ast.NewReturnNode($1._token.location, ast.AsExprNode($2._node))
+             $$._node = bs_ast.NewReturnNode($1._token.location, bs_ast.AsExprNode($2._node))
            }
            ;
 
 expr: term '=' expr
     {
-      $$._node = ast.NewAssignNode($1._token.location, ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+      $$._node = bs_ast.NewAssignNode($1._token.location, bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
     }
     | term PLUSEQ expr
     {
-      $$._node = ast.NewOpAssignNode($1._token.location, "+", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+      $$._node = bs_ast.NewOpAssignNode($1._token.location, "+", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
     }
     | term MINUSEQ expr
     {
-      $$._node = ast.NewOpAssignNode($1._token.location, "-", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+      $$._node = bs_ast.NewOpAssignNode($1._token.location, "-", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
     }
     | term MULEQ expr
     {
-      $$._node = ast.NewOpAssignNode($1._token.location, "*", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+      $$._node = bs_ast.NewOpAssignNode($1._token.location, "*", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
     }
     | term DIVEQ expr
     {
-      $$._node = ast.NewOpAssignNode($1._token.location, "/", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+      $$._node = bs_ast.NewOpAssignNode($1._token.location, "/", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
     }
     | term MODEQ expr
     {
-      $$._node = ast.NewOpAssignNode($1._token.location, "%", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+      $$._node = bs_ast.NewOpAssignNode($1._token.location, "%", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
     }
     | term ANDEQ expr
     {
-      $$._node = ast.NewOpAssignNode($1._token.location, "&", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+      $$._node = bs_ast.NewOpAssignNode($1._token.location, "&", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
     }
     | term OREQ expr
     {
-      $$._node = ast.NewOpAssignNode($1._token.location, "|", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+      $$._node = bs_ast.NewOpAssignNode($1._token.location, "|", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
     }
     | term XOREQ expr
     {
-      $$._node = ast.NewOpAssignNode($1._token.location, "^", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+      $$._node = bs_ast.NewOpAssignNode($1._token.location, "^", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
     }
     | term LSHIFTEQ expr
     {
-      $$._node = ast.NewOpAssignNode($1._token.location, "<<", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+      $$._node = bs_ast.NewOpAssignNode($1._token.location, "<<", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
     }
     | term RSHIFTEQ expr
     {
-      $$._node = ast.NewOpAssignNode($1._token.location, ">>", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+      $$._node = bs_ast.NewOpAssignNode($1._token.location, ">>", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
     }
     | expr10
     ;
@@ -708,106 +708,106 @@ expr: term '=' expr
 expr10: expr9
       | expr9 '?' expr ':' expr10
       {
-        $$._node = ast.NewCondExprNode($1._token.location, ast.AsExprNode($1._node), ast.AsExprNode($3._node), ast.AsExprNode($5._node))
+        $$._node = bs_ast.NewCondExprNode($1._token.location, bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node), bs_ast.AsExprNode($5._node))
       }
       ;
 
 expr9: expr8
      | expr9 OROR expr8
      {
-       $$._node = ast.NewLogicalOrNode($1._token.location, ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewLogicalOrNode($1._token.location, bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      ;
 
 expr8: expr7
      | expr8 ANDAND expr7
      {
-       $$._node = ast.NewLogicalAndNode($1._token.location, ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewLogicalAndNode($1._token.location, bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      ;
 
 expr7: expr6
      | expr7 '>' expr6
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, ">", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, ">", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      | expr7 '<' expr6
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, "<", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, "<", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      | expr7 GTEQ expr6
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, ">=", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, ">=", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      | expr7 LTEQ expr6
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, "<=", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, "<=", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      | expr7 EQEQ expr6
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, "==", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, "==", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      | expr7 NEQ expr6
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, "!=", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, "!=", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      ;
 
 expr6: expr5
      | expr6 '|' expr5
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, "|", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, "|", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      ;
 
 expr5: expr4
      | expr5 '^' expr4
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, "^", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, "^", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      ;
 
 expr4: expr3
      | expr4 '&' expr3
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, "&", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, "&", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      ;
 
 expr3: expr2
      | expr3 RSHIFT expr2
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, ">>", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, ">>", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      | expr3 LSHIFT expr2
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, "<<", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, "<<", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      ;
 
 expr2: expr1
      | expr2 '+' expr1
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, "+", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, "+", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      | expr2 '-' expr1
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, "-", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, "-", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      ;
 
 expr1: term
      | expr1 '*' term
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, "*", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, "*", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      | expr1 '/' term
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, "/", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, "/", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      | expr1 '%' term
      {
-       $$._node = ast.NewBinaryOpNode($1._token.location, "%", ast.AsExprNode($1._node), ast.AsExprNode($3._node))
+       $$._node = bs_ast.NewBinaryOpNode($1._token.location, "%", bs_ast.AsExprNode($1._node), bs_ast.AsExprNode($3._node))
      }
      ;
 
@@ -816,35 +816,35 @@ term: unary
 
 unary: PLUSPLUS unary
      {
-       $$._node = ast.NewPrefixOpNode($1._token.location, "++", ast.AsExprNode($2._node))
+       $$._node = bs_ast.NewPrefixOpNode($1._token.location, "++", bs_ast.AsExprNode($2._node))
      }
      | MINUSMINUS unary
      {
-       $$._node = ast.NewPrefixOpNode($1._token.location, "--", ast.AsExprNode($2._node))
+       $$._node = bs_ast.NewPrefixOpNode($1._token.location, "--", bs_ast.AsExprNode($2._node))
      }
      | '+' term
      {
-       $$._node = ast.NewUnaryOpNode($1._token.location, "+", ast.AsExprNode($2._node))
+       $$._node = bs_ast.NewUnaryOpNode($1._token.location, "+", bs_ast.AsExprNode($2._node))
      }
      | '-' term
      {
-       $$._node = ast.NewUnaryOpNode($1._token.location, "-", ast.AsExprNode($2._node))
+       $$._node = bs_ast.NewUnaryOpNode($1._token.location, "-", bs_ast.AsExprNode($2._node))
      }
      | '!' term
      {
-       $$._node = ast.NewUnaryOpNode($1._token.location, "!", ast.AsExprNode($2._node))
+       $$._node = bs_ast.NewUnaryOpNode($1._token.location, "!", bs_ast.AsExprNode($2._node))
      }
      | '~' term
      {
-       $$._node = ast.NewUnaryOpNode($1._token.location, "~", ast.AsExprNode($2._node))
+       $$._node = bs_ast.NewUnaryOpNode($1._token.location, "~", bs_ast.AsExprNode($2._node))
      }
      | SIZEOF '(' type ')'
      {
-       $$._node = ast.NewSizeofTypeNode($1._token.location, ast.AsTypeNode($3._node), typesys.NewUnsignedLongTypeRef($1._token.location))
+       $$._node = bs_ast.NewSizeofTypeNode($1._token.location, bs_ast.AsTypeNode($3._node), bs_typesys.NewUnsignedLongTypeRef($1._token.location))
      }
      | SIZEOF unary
      {
-       $$._node = ast.NewSizeofExprNode($1._token.location, ast.AsExprNode($2._node), typesys.NewUnsignedLongTypeRef($1._token.location))
+       $$._node = bs_ast.NewSizeofExprNode($1._token.location, bs_ast.AsExprNode($2._node), bs_typesys.NewUnsignedLongTypeRef($1._token.location))
      }
      | postfix
      ;
@@ -852,19 +852,19 @@ unary: PLUSPLUS unary
 postfix: primary
        | primary PLUSPLUS
        {
-         $$._node = ast.NewSuffixOpNode($1._token.location, "++", ast.AsExprNode($1._node))
+         $$._node = bs_ast.NewSuffixOpNode($1._token.location, "++", bs_ast.AsExprNode($1._node))
        }
        | primary MINUSMINUS
        {
-         $$._node = ast.NewSuffixOpNode($1._token.location, "--", ast.AsExprNode($1._node))
+         $$._node = bs_ast.NewSuffixOpNode($1._token.location, "--", bs_ast.AsExprNode($1._node))
        }
        | primary '(' ')'
        {
-         $$._node = ast.NewFuncallNode($1._token.location, ast.AsExprNode($1._node), ast.NewExprNodes())
+         $$._node = bs_ast.NewFuncallNode($1._token.location, bs_ast.AsExprNode($1._node), bs_ast.NewExprNodes())
        }
        | primary '(' args ')'
        {
-         $$._node = ast.NewFuncallNode($1._token.location, ast.AsExprNode($1._node), ast.AsExprNodes($3._nodes))
+         $$._node = bs_ast.NewFuncallNode($1._token.location, bs_ast.AsExprNode($1._node), bs_ast.AsExprNodes($3._nodes))
        }
        ;
 
@@ -883,23 +883,23 @@ args: expr
 
 primary: INTEGER
        {
-         $$._node = ast.NewIntegerLiteralNode($1._token.location, $1._token.literal)
+         $$._node = bs_ast.NewIntegerLiteralNode($1._token.location, $1._token.literal)
        }
        | CHARACTER
        {
-         $$._node = ast.NewCharacterLiteralNode($1._token.location, $1._token.literal)
+         $$._node = bs_ast.NewCharacterLiteralNode($1._token.location, $1._token.literal)
        }
        | STRING
        {
-         $$._node = ast.NewStringLiteralNode($1._token.location, $1._token.literal)
+         $$._node = bs_ast.NewStringLiteralNode($1._token.location, $1._token.literal)
        }
        | IDENTIFIER
        {
-         $$._node = ast.NewVariableNode($1._token.location, $1._token.literal)
+         $$._node = bs_ast.NewVariableNode($1._token.location, $1._token.literal)
        }
        | '(' expr ')'
        {
-         $$._node = ast.AsExprNode($2._node)
+         $$._node = bs_ast.AsExprNode($2._node)
        }
        ;
 
@@ -924,8 +924,8 @@ func (self *lexer) Error(s string) {
   self.errorHandler.Error(s)
 }
 
-func ParseExpr(s string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
-  src, err := core.NewTemporarySourceFile("", core.EXT_PROGRAM_SOURCE, []byte(s))
+func ParseExpr(s string, errorHandler *bs_core.ErrorHandler, options *bs_core.Options) (*bs_ast.AST, error) {
+  src, err := bs_core.NewTemporarySourceFile("", bs_core.EXT_PROGRAM_SOURCE, []byte(s))
   if err != nil {
     return nil, err
   }
@@ -935,12 +935,12 @@ func ParseExpr(s string, errorHandler *core.ErrorHandler, options *core.Options)
   return Parse(src, errorHandler, options)
 }
 
-func ParseFile(path string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
-  src := core.NewSourceFile(path, path, core.EXT_PROGRAM_SOURCE)
+func ParseFile(path string, errorHandler *bs_core.ErrorHandler, options *bs_core.Options) (*bs_ast.AST, error) {
+  src := bs_core.NewSourceFile(path, path, bs_core.EXT_PROGRAM_SOURCE)
   return Parse(src, errorHandler, options)
 }
 
-func Parse(src *core.SourceFile, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
+func Parse(src *bs_core.SourceFile, errorHandler *bs_core.ErrorHandler, options *bs_core.Options) (*bs_ast.AST, error) {
   if options.IsVerboseMode() {
     yyDebug = 4 // TODO: configurable
   }
@@ -961,11 +961,11 @@ func Parse(src *core.SourceFile, errorHandler *core.ErrorHandler, options *core.
   }
 }
 
-func parametersTypeRef(params *entity.Params) *typesys.ParamTypeRefs {
+func parametersTypeRef(params *bs_entity.Params) *bs_typesys.ParamTypeRefs {
   paramDescs := params.GetParamDescs()
-  newParamDescs := make([]core.ITypeRef, len(paramDescs))
+  newParamDescs := make([]bs_core.ITypeRef, len(paramDescs))
   for i := range paramDescs {
     newParamDescs[i] = paramDescs[i].GetTypeNode().GetTypeRef()
   }
-  return typesys.NewParamTypeRefs(params.GetLocation(), newParamDescs, params.IsVararg())
+  return bs_typesys.NewParamTypeRefs(params.GetLocation(), newParamDescs, params.IsVararg())
 }
