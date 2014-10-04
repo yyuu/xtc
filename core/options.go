@@ -63,6 +63,7 @@ type Options struct {
   compile *bool
   assemble *bool
   link *bool
+  output *string
   verbose *bool
 }
 
@@ -86,6 +87,7 @@ func NewOptions(name string) *Options {
     flagSet.Bool("S", false, "S"), // compile
     flagSet.Bool("c", false, "c"), // assemble
     flagSet.Bool("link", false, "link"), // link
+    flagSet.String("o", "", "o"),
     flagSet.Bool("verbose", false, "verbose"),
   }
 }
