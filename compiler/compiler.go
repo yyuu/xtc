@@ -58,12 +58,12 @@ func (self *Compiler) Compile() (string, error) {
 func (self *Compiler) CompileString(s string) (string, error) {
   src, err := xtc_core.NewTemporarySourceFile("", xtc_core.EXT_PROGRAM_SOURCE, []byte(s))
   if err != nil {
-    self.errorHandler.Fatal(err)
+//  self.errorHandler.Fatal(err)
     return "", err
   }
   dst, err := self.phase1([]*xtc_core.SourceFile { src })
   if err != nil {
-    self.errorHandler.Fatal(err)
+//  self.errorHandler.Fatal(err)
     return "", err
   }
   return dst.GetPath(), nil

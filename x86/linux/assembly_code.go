@@ -5,13 +5,13 @@ import (
   "strings"
   xtc_asm "bitbucket.org/yyuu/xtc/asm"
   xtc_core "bitbucket.org/yyuu/xtc/core"
-  xtc_x86 "bitbucket.org/yyuu/xtc/x86"
+  "bitbucket.org/yyuu/xtc/x86"
 )
 
 type AssemblyCode struct {
   NaturalType int
   LabelSymbols *xtc_asm.SymbolTable
-  virtualStack *xtc_x86.VirtualStack
+  virtualStack *x86.VirtualStack
   Assemblies []xtc_core.IAssembly
   CommentIndentLevel int
   Statistics *xtc_asm.Statistics
@@ -21,7 +21,7 @@ func NewAssemblyCode(naturalType int, labelSymbols *xtc_asm.SymbolTable) *Assemb
   return &AssemblyCode {
     NaturalType: naturalType,
     LabelSymbols: labelSymbols,
-    virtualStack: xtc_x86.NewVirtualStack(naturalType),
+    virtualStack: x86.NewVirtualStack(naturalType),
     Assemblies: []xtc_core.IAssembly { },
     CommentIndentLevel: 0,
     Statistics: nil,
@@ -51,7 +51,7 @@ func (self *AssemblyCode) GetStatistics() *xtc_asm.Statistics {
   return self.Statistics
 }
 
-func (self *AssemblyCode) doesUses(reg *xtc_x86.Register) bool {
+func (self *AssemblyCode) doesUses(reg *x86.Register) bool {
   if reg == nil { panic("reg is nil") }
   return self.GetStatistics().DoesRegisterUsed(reg)
 }
@@ -227,13 +227,13 @@ func (self *AssemblyCode) _string(str string) {
   self.directive(fmt.Sprintf("\t.string\t%q", str))
 }
 
-func (self *AssemblyCode) virtualPush(reg *xtc_x86.Register) {
+func (self *AssemblyCode) virtualPush(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.virtualStack.Extend(STACK_WORD_SIZE)
   self.mov3(reg, self.virtualStack.Top())
 }
 
-func (self *AssemblyCode) virtualPop(reg *xtc_x86.Register) {
+func (self *AssemblyCode) virtualPop(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.mov2(self.virtualStack.Top(), reg)
   self.virtualStack.Rewind(STACK_WORD_SIZE)
@@ -254,74 +254,74 @@ func (self *AssemblyCode) je(label *xtc_asm.Label) {
   self.insn2("je", xtc_asm.NewDirectMemoryReference(label.GetSymbol()))
 }
 
-func (self *AssemblyCode) cmp(a xtc_core.IOperand, b *xtc_x86.Register) {
+func (self *AssemblyCode) cmp(a xtc_core.IOperand, b *x86.Register) {
   if a == nil { panic("a is nil") }
   if b == nil { panic("b is nil") }
   self.insn6(b.GetTypeId(), "cmp", a, b)
 }
 
-func (self *AssemblyCode) sete(reg *xtc_x86.Register) {
+func (self *AssemblyCode) sete(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn2("sete", reg)
 }
 
-func (self *AssemblyCode) setne(reg *xtc_x86.Register) {
+func (self *AssemblyCode) setne(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn2("setne", reg)
 }
 
-func (self *AssemblyCode) seta(reg *xtc_x86.Register) {
+func (self *AssemblyCode) seta(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn2("seta", reg)
 }
 
-func (self *AssemblyCode) setae(reg *xtc_x86.Register) {
+func (self *AssemblyCode) setae(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn2("setae", reg)
 }
 
-func (self *AssemblyCode) setb(reg *xtc_x86.Register) {
+func (self *AssemblyCode) setb(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn2("setb", reg)
 }
 
-func (self *AssemblyCode) setbe(reg *xtc_x86.Register) {
+func (self *AssemblyCode) setbe(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn2("setbe", reg)
 }
 
-func (self *AssemblyCode) setg(reg *xtc_x86.Register) {
+func (self *AssemblyCode) setg(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn2("setg", reg)
 }
 
-func (self *AssemblyCode) setge(reg *xtc_x86.Register) {
+func (self *AssemblyCode) setge(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn2("setge", reg)
 }
 
-func (self *AssemblyCode) setl(reg *xtc_x86.Register) {
+func (self *AssemblyCode) setl(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn2("setl", reg)
 }
 
-func (self *AssemblyCode) setle(reg *xtc_x86.Register) {
+func (self *AssemblyCode) setle(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn2("setle", reg)
 }
 
-func (self *AssemblyCode) test(a *xtc_x86.Register, b *xtc_x86.Register) {
+func (self *AssemblyCode) test(a *x86.Register, b *x86.Register) {
   if a == nil { panic("a is nil") }
   if b == nil { panic("b is nil") }
   self.insn6(b.GetTypeId(), "test", a, b)
 }
 
-func (self *AssemblyCode) push(reg *xtc_x86.Register) {
+func (self *AssemblyCode) push(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn3("push", self.typeSuffix(self.NaturalType), reg)
 }
 
-func (self *AssemblyCode) pop(reg *xtc_x86.Register) {
+func (self *AssemblyCode) pop(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn3("pop", self.typeSuffix(self.NaturalType), reg)
 }
@@ -333,7 +333,7 @@ func (self *AssemblyCode) call(sym xtc_core.ISymbol) {
 }
 
 // call function by absolute address
-func (self *AssemblyCode) callAbsolute(reg *xtc_x86.Register) {
+func (self *AssemblyCode) callAbsolute(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn2("call", xtc_asm.NewAbsoluteAddress(reg))
 }
@@ -342,21 +342,21 @@ func (self *AssemblyCode) ret() {
   self.insn1("ret")
 }
 
-func (self *AssemblyCode) mov1(src *xtc_x86.Register, dest *xtc_x86.Register) {
+func (self *AssemblyCode) mov1(src *x86.Register, dest *x86.Register) {
   if src == nil { panic("src is nil") }
   if dest == nil { panic("dest is nil") }
   self.insn6(self.NaturalType, "mov", src, dest)
 }
 
 // load
-func (self *AssemblyCode) mov2(src xtc_core.IOperand, dest *xtc_x86.Register) {
+func (self *AssemblyCode) mov2(src xtc_core.IOperand, dest *x86.Register) {
   if src == nil { panic("src is nil") }
   if dest == nil { panic("dest is nil") }
   self.insn6(dest.GetTypeId(), "mov", src, dest)
 }
 
 // save
-func (self *AssemblyCode) mov3(src *xtc_x86.Register, dest xtc_core.IOperand) {
+func (self *AssemblyCode) mov3(src *x86.Register, dest xtc_core.IOperand) {
   if src == nil { panic("src is nil") }
   if dest == nil { panic("dest is nil") }
   self.insn6(src.GetTypeId(), "mov", src, dest)
@@ -370,48 +370,48 @@ func (self *AssemblyCode) relocatableMov(src xtc_core.IOperand, dest xtc_core.IO
   self.Assemblies = append(self.Assemblies, instruction)
 }
 
-func (self *AssemblyCode) movsx(src *xtc_x86.Register, dest *xtc_x86.Register) {
+func (self *AssemblyCode) movsx(src *x86.Register, dest *x86.Register) {
   if src == nil { panic("src is nil") }
   if dest == nil { panic("dest is nil") }
   self.insn5("movs", self.typeSuffix2(src.GetTypeId(), dest.GetTypeId()), src, dest)
 }
 
-func (self *AssemblyCode) movzx(src *xtc_x86.Register, dest *xtc_x86.Register) {
+func (self *AssemblyCode) movzx(src *x86.Register, dest *x86.Register) {
   if src == nil { panic("src is nil") }
   if dest == nil { panic("dest is nil") }
   self.insn5("movz", self.typeSuffix2(src.GetTypeId(), dest.GetTypeId()), src, dest)
 }
 
-func (self *AssemblyCode) movzb(src *xtc_x86.Register, dest *xtc_x86.Register) {
+func (self *AssemblyCode) movzb(src *x86.Register, dest *x86.Register) {
   if src == nil { panic("src is nil") }
   if dest == nil { panic("dest is nil") }
   self.insn5("movz", "b"+self.typeSuffix(dest.GetTypeId()), src, dest)
 }
 
-func (self *AssemblyCode) lea(src xtc_core.IOperand, dest *xtc_x86.Register) {
+func (self *AssemblyCode) lea(src xtc_core.IOperand, dest *x86.Register) {
   if src == nil { panic("src is nil") }
   if dest == nil { panic("dest is nil") }
   self.insn6(self.NaturalType, "lea", src, dest)
 }
 
-func (self *AssemblyCode) neg(reg *xtc_x86.Register) {
+func (self *AssemblyCode) neg(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn4(reg.GetTypeId(), "neg", reg)
 }
 
-func (self *AssemblyCode) add(diff xtc_core.IOperand, base *xtc_x86.Register) {
+func (self *AssemblyCode) add(diff xtc_core.IOperand, base *x86.Register) {
   if diff == nil { panic("diff is nil") }
   if base == nil { panic("base is nil") }
   self.insn6(base.GetTypeId(), "add", diff, base)
 }
 
-func (self *AssemblyCode) sub(diff xtc_core.IOperand, base *xtc_x86.Register) {
+func (self *AssemblyCode) sub(diff xtc_core.IOperand, base *x86.Register) {
   if diff == nil { panic("diff is nil") }
   if base == nil { panic("base is nil") }
   self.insn6(base.GetTypeId(), "sub", diff, base)
 }
 
-func (self *AssemblyCode) imul(m xtc_core.IOperand, base *xtc_x86.Register) {
+func (self *AssemblyCode) imul(m xtc_core.IOperand, base *x86.Register) {
   if m == nil { panic("m is nil") }
   if base == nil { panic("base is nil") }
   self.insn6(base.GetTypeId(), "imul", m, base)
@@ -421,52 +421,52 @@ func (self *AssemblyCode) cltd() {
   self.insn1("cltd")
 }
 
-func (self *AssemblyCode) div(base *xtc_x86.Register) {
+func (self *AssemblyCode) div(base *x86.Register) {
   if base == nil { panic("base is nil") }
   self.insn4(base.GetTypeId(), "div", base)
 }
 
-func (self *AssemblyCode) idiv(base *xtc_x86.Register) {
+func (self *AssemblyCode) idiv(base *x86.Register) {
   if base == nil { panic("base is nil") }
   self.insn4(base.GetTypeId(), "idiv", base)
 }
 
-func (self *AssemblyCode) not(reg *xtc_x86.Register) {
+func (self *AssemblyCode) not(reg *x86.Register) {
   if reg == nil { panic("reg is nil") }
   self.insn4(reg.GetTypeId(), "not", reg)
 }
 
-func (self *AssemblyCode) and(bits xtc_core.IOperand, base *xtc_x86.Register) {
+func (self *AssemblyCode) and(bits xtc_core.IOperand, base *x86.Register) {
   if bits == nil { panic("bits is nil") }
   if base == nil { panic("base is nil") }
   self.insn6(base.GetTypeId(), "and", bits, base)
 }
 
-func (self *AssemblyCode) or(bits xtc_core.IOperand, base *xtc_x86.Register) {
+func (self *AssemblyCode) or(bits xtc_core.IOperand, base *x86.Register) {
   if bits == nil { panic("bits is nil") }
   if base == nil { panic("base is nil") }
   self.insn6(base.GetTypeId(), "or", bits, base)
 }
 
-func (self *AssemblyCode) xor(bits xtc_core.IOperand, base *xtc_x86.Register) {
+func (self *AssemblyCode) xor(bits xtc_core.IOperand, base *x86.Register) {
   if bits == nil { panic("bits is nil") }
   if base == nil { panic("base is nil") }
   self.insn6(base.GetTypeId(), "xor", bits, base)
 }
 
-func (self *AssemblyCode) sar(bits *xtc_x86.Register, base *xtc_x86.Register) {
+func (self *AssemblyCode) sar(bits *x86.Register, base *x86.Register) {
   if bits == nil { panic("bits is nil") }
   if base == nil { panic("base is nil") }
   self.insn6(base.GetTypeId(), "sar", bits, base)
 }
 
-func (self *AssemblyCode) sal(bits *xtc_x86.Register, base *xtc_x86.Register) {
+func (self *AssemblyCode) sal(bits *x86.Register, base *x86.Register) {
   if bits == nil { panic("bits is nil") }
   if base == nil { panic("base is nil") }
   self.insn6(base.GetTypeId(), "sal", bits, base)
 }
 
-func (self *AssemblyCode) shr(bits *xtc_x86.Register, base *xtc_x86.Register) {
+func (self *AssemblyCode) shr(bits *x86.Register, base *x86.Register) {
   if bits == nil { panic("bits is nil") }
   if base == nil { panic("base is nil") }
   self.insn6(base.GetTypeId(), "shr", bits, base)

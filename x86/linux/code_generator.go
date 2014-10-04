@@ -6,7 +6,7 @@ import (
   xtc_core "bitbucket.org/yyuu/xtc/core"
   xtc_entity "bitbucket.org/yyuu/xtc/entity"
   xtc_ir "bitbucket.org/yyuu/xtc/ir"
-  xtc_x86 "bitbucket.org/yyuu/xtc/x86"
+  "bitbucket.org/yyuu/xtc/x86"
 )
 
 const (
@@ -248,12 +248,12 @@ func (self *CodeGenerator) generateCommonSymbols(file *AssemblyCode, variables [
 // PIC/PIE related constants and codes
 //
 var got = xtc_asm.NewNamedSymbol("_GLOBAL_OFFSET_TABLE_")
-func (self *CodeGenerator) loadGOTBaseAddress(file *AssemblyCode, reg *xtc_x86.Register) {
+func (self *CodeGenerator) loadGOTBaseAddress(file *AssemblyCode, reg *x86.Register) {
   file.call(self.picThunkSymbol(reg))
   file.add(self.imm2(got), reg)
 }
 
-func (self *CodeGenerator) gotBaseReg() *xtc_x86.Register {
+func (self *CodeGenerator) gotBaseReg() *x86.Register {
   return self.bx()
 }
 
@@ -269,7 +269,7 @@ func (self *CodeGenerator) pltSymbol(base xtc_core.ISymbol) xtc_core.ISymbol {
   return xtc_asm.NewSuffixedSymbol(base, "@PLT")
 }
 
-func (self *CodeGenerator) picThunkSymbol(reg *xtc_x86.Register) xtc_core.ISymbol {
+func (self *CodeGenerator) picThunkSymbol(reg *x86.Register) xtc_core.ISymbol {
   return xtc_asm.NewNamedSymbol("__i686.get_pc_thunk." + reg.GetBaseName())
 }
 
@@ -285,7 +285,7 @@ func (self *CodeGenerator) picThunkSymbol(reg *xtc_x86.Register) xtc_core.ISymbo
  *
  *     .section NAME, "...M", TYPE, section_group_name, linkage
  */
-func (self *CodeGenerator) picThunk(file *AssemblyCode, reg *xtc_x86.Register) {
+func (self *CodeGenerator) picThunk(file *AssemblyCode, reg *x86.Register) {
   sym := self.picThunkSymbol(reg)
   file._section2(fmt.Sprintf(".text.%s", sym),
                  fmt.Sprintf("\"%s\"", PICThunkSectionFlags),
@@ -347,7 +347,7 @@ func (self *CodeGenerator) stackSizeFromWordNum(numWords int64) int64 {
 }
 
 type stackFrameInfo struct {
-  saveRegs []*xtc_x86.Register
+  saveRegs []*x86.Register
   lvarSize int64
   tempSize int64
 }
@@ -369,7 +369,7 @@ func (self *stackFrameInfo) frameSize() int64 {
 }
 
 func (self *CodeGenerator) compileFunctionBody(file *AssemblyCode, fun *xtc_entity.DefinedFunction) {
-  frame := &stackFrameInfo { []*xtc_x86.Register { }, int64(0), int64(0) }
+  frame := &stackFrameInfo { []*x86.Register { }, int64(0), int64(0) }
   self.locateParameters(fun.GetParameters())
   frame.lvarSize = self.locateLocalVariables(fun.LocalVariableScope(), int64(0))
 
@@ -437,8 +437,8 @@ func (self *CodeGenerator) compileStmts(fun *xtc_entity.DefinedFunction) *Assemb
   return as
 }
 
-func (self *CodeGenerator) usedCalleeSaveRegisters(body *AssemblyCode) []*xtc_x86.Register {
-  result := []*xtc_x86.Register { }
+func (self *CodeGenerator) usedCalleeSaveRegisters(body *AssemblyCode) []*x86.Register {
+  result := []*x86.Register { }
   regs := self.calleeSaveRegisters()
   for i := range regs {
     reg := regs[i]
@@ -451,12 +451,12 @@ func (self *CodeGenerator) usedCalleeSaveRegisters(body *AssemblyCode) []*xtc_x8
   return result
 }
 
-var CALLEE_SAVE_REGISTERS = []int { xtc_x86.BX, xtc_x86.BP, xtc_x86.SI, xtc_x86.DI }
+var CALLEE_SAVE_REGISTERS = []int { x86.BX, x86.BP, x86.SI, x86.DI }
 
-func (self *CodeGenerator) calleeSaveRegisters() []*xtc_x86.Register {
-  regs := make([]*xtc_x86.Register, len(CALLEE_SAVE_REGISTERS))
+func (self *CodeGenerator) calleeSaveRegisters() []*x86.Register {
+  regs := make([]*x86.Register, len(CALLEE_SAVE_REGISTERS))
   for i := range CALLEE_SAVE_REGISTERS {
-    regs[i] = xtc_x86.NewRegister(CALLEE_SAVE_REGISTERS[i], self.naturalType)
+    regs[i] = x86.NewRegister(CALLEE_SAVE_REGISTERS[i], self.naturalType)
   }
   return regs
 }
@@ -472,7 +472,7 @@ func (self *CodeGenerator) generateFunctionBody(file *AssemblyCode, body *Assemb
   file.virtualStack.FixOffset(0)
 }
 
-func (self *CodeGenerator) prologue(file *AssemblyCode, saveRegs []*xtc_x86.Register, frameSize int64) {
+func (self *CodeGenerator) prologue(file *AssemblyCode, saveRegs []*x86.Register, frameSize int64) {
   file.push(self.bp())
   file.mov1(self.sp(), self.bp())
   for i := range saveRegs {
@@ -482,7 +482,7 @@ func (self *CodeGenerator) prologue(file *AssemblyCode, saveRegs []*xtc_x86.Regi
   self.extendStack(file, frameSize)
 }
 
-func (self *CodeGenerator) epilogue(file *AssemblyCode, savedRegs []*xtc_x86.Register) {
+func (self *CodeGenerator) epilogue(file *AssemblyCode, savedRegs []*x86.Register) {
   for i := range savedRegs {
     reg := savedRegs[len(savedRegs)-1-i]
     file.virtualPop(reg)
@@ -524,7 +524,7 @@ func (self *CodeGenerator) locateLocalVariables(scope *xtc_entity.LocalScope, pa
   return maxLen
 }
 
-func (self *CodeGenerator) relocatableMem(offset int64, base *xtc_x86.Register) *xtc_asm.IndirectMemoryReference {
+func (self *CodeGenerator) relocatableMem(offset int64, base *x86.Register) *xtc_asm.IndirectMemoryReference {
   return xtc_asm.NewIndirectMemoryReference(xtc_asm.NewIntegerLiteral(offset), base, false)
 }
 
@@ -596,7 +596,7 @@ func (self *CodeGenerator) doesRequireRegisterOperand(op int) bool {
   }
 }
 
-func (self *CodeGenerator) compileBinaryOp(op int, left *xtc_x86.Register, right xtc_core.IOperand) {
+func (self *CodeGenerator) compileBinaryOp(op int, left *x86.Register, right xtc_core.IOperand) {
   switch op {
     case xtc_ir.OP_ADD: as.add(right, left)
     case xtc_ir.OP_SUB: as.sub(right, left)
@@ -653,7 +653,7 @@ func (self *CodeGenerator) compileBinaryOp(op int, left *xtc_x86.Register, right
  * Load constant value.  You must check node by #isConstant
  * before calling this method.
  */
-func (self *CodeGenerator) loadConstant(node xtc_core.IExpr, reg *xtc_x86.Register) {
+func (self *CodeGenerator) loadConstant(node xtc_core.IExpr, reg *x86.Register) {
   if node.GetAsmValue() != nil {
     as.mov2(node.GetAsmValue(), reg)
   } else {
@@ -665,7 +665,7 @@ func (self *CodeGenerator) loadConstant(node xtc_core.IExpr, reg *xtc_x86.Regist
   }
 }
 
-func (self *CodeGenerator) loadVariable(v *xtc_ir.Var, dest *xtc_x86.Register) {
+func (self *CodeGenerator) loadVariable(v *xtc_ir.Var, dest *x86.Register) {
   if v.GetMemref() == nil {
     a := dest.ForType(self.naturalType)
     as.mov2(v.GetAddress(), a)
@@ -675,7 +675,7 @@ func (self *CodeGenerator) loadVariable(v *xtc_ir.Var, dest *xtc_x86.Register) {
   }
 }
 
-func (self *CodeGenerator) loadAddress(v xtc_core.IEntity, dest *xtc_x86.Register) {
+func (self *CodeGenerator) loadAddress(v xtc_core.IEntity, dest *x86.Register) {
   if v.GetAddress() != nil {
     as.mov2(v.GetAddress(), dest)
   } else {
@@ -683,75 +683,75 @@ func (self *CodeGenerator) loadAddress(v xtc_core.IEntity, dest *xtc_x86.Registe
   }
 }
 
-func (self *CodeGenerator) ax() *xtc_x86.Register {
-  return xtc_x86.NewRegister(xtc_x86.AX, self.naturalType)
+func (self *CodeGenerator) ax() *x86.Register {
+  return x86.NewRegister(x86.AX, self.naturalType)
 }
 
-func (self *CodeGenerator) al() *xtc_x86.Register {
+func (self *CodeGenerator) al() *x86.Register {
   return self.axT(xtc_asm.TYPE_INT8)
 }
 
-func (self *CodeGenerator) bx() *xtc_x86.Register {
-  return xtc_x86.NewRegister(xtc_x86.BX, self.naturalType)
+func (self *CodeGenerator) bx() *x86.Register {
+  return x86.NewRegister(x86.BX, self.naturalType)
 }
 
-func (self *CodeGenerator) cx() *xtc_x86.Register {
-  return xtc_x86.NewRegister(xtc_x86.CX, self.naturalType)
+func (self *CodeGenerator) cx() *x86.Register {
+  return x86.NewRegister(x86.CX, self.naturalType)
 }
 
-func (self *CodeGenerator) cl() *xtc_x86.Register {
+func (self *CodeGenerator) cl() *x86.Register {
   return self.cxT(xtc_asm.TYPE_INT8)
 }
 
-func (self *CodeGenerator) dx() *xtc_x86.Register {
-  return xtc_x86.NewRegister(xtc_x86.DX, self.naturalType)
+func (self *CodeGenerator) dx() *x86.Register {
+  return x86.NewRegister(x86.DX, self.naturalType)
 }
 
-func (self *CodeGenerator) axT(t int) *xtc_x86.Register {
-  return xtc_x86.NewRegister(xtc_x86.AX, t)
+func (self *CodeGenerator) axT(t int) *x86.Register {
+  return x86.NewRegister(x86.AX, t)
 }
 
-func (self *CodeGenerator) bxT(t int) *xtc_x86.Register {
-  return xtc_x86.NewRegister(xtc_x86.BX, t)
+func (self *CodeGenerator) bxT(t int) *x86.Register {
+  return x86.NewRegister(x86.BX, t)
 }
 
-func (self *CodeGenerator) cxT(t int) *xtc_x86.Register {
-  return xtc_x86.NewRegister(xtc_x86.CX, t)
+func (self *CodeGenerator) cxT(t int) *x86.Register {
+  return x86.NewRegister(x86.CX, t)
 }
 
-func (self *CodeGenerator) dxT(t int) *xtc_x86.Register {
-  return xtc_x86.NewRegister(xtc_x86.DX, t)
+func (self *CodeGenerator) dxT(t int) *x86.Register {
+  return x86.NewRegister(x86.DX, t)
 }
 
-func (self *CodeGenerator) si() *xtc_x86.Register {
-  return xtc_x86.NewRegister(xtc_x86.SI, self.naturalType)
+func (self *CodeGenerator) si() *x86.Register {
+  return x86.NewRegister(x86.SI, self.naturalType)
 }
 
-func (self *CodeGenerator) di() *xtc_x86.Register {
-  return xtc_x86.NewRegister(xtc_x86.DI, self.naturalType)
+func (self *CodeGenerator) di() *x86.Register {
+  return x86.NewRegister(x86.DI, self.naturalType)
 }
 
-func (self *CodeGenerator) bp() *xtc_x86.Register {
-  return xtc_x86.NewRegister(xtc_x86.BP, self.naturalType)
+func (self *CodeGenerator) bp() *x86.Register {
+  return x86.NewRegister(x86.BP, self.naturalType)
 }
 
-func (self *CodeGenerator) sp() *xtc_x86.Register {
-  return xtc_x86.NewRegister(xtc_x86.SP, self.naturalType)
+func (self *CodeGenerator) sp() *x86.Register {
+  return x86.NewRegister(x86.SP, self.naturalType)
 }
 
 func (self *CodeGenerator) mem1(sym xtc_core.ISymbol) *xtc_asm.DirectMemoryReference {
   return xtc_asm.NewDirectMemoryReference(sym)
 }
 
-func (self *CodeGenerator) mem2(reg *xtc_x86.Register) *xtc_asm.IndirectMemoryReference {
+func (self *CodeGenerator) mem2(reg *x86.Register) *xtc_asm.IndirectMemoryReference {
   return xtc_asm.NewIndirectMemoryReference(xtc_asm.NewIntegerLiteral(0), reg, true)
 }
 
-func (self *CodeGenerator) mem3(offset int64, reg *xtc_x86.Register) *xtc_asm.IndirectMemoryReference {
+func (self *CodeGenerator) mem3(offset int64, reg *x86.Register) *xtc_asm.IndirectMemoryReference {
   return xtc_asm.NewIndirectMemoryReference(xtc_asm.NewIntegerLiteral(offset), reg, true)
 }
 
-func (self *CodeGenerator) mem4(offset xtc_core.ISymbol, reg *xtc_x86.Register) *xtc_asm.IndirectMemoryReference {
+func (self *CodeGenerator) mem4(offset xtc_core.ISymbol, reg *x86.Register) *xtc_asm.IndirectMemoryReference {
   return xtc_asm.NewIndirectMemoryReference(offset, reg, true)
 }
 
@@ -763,11 +763,11 @@ func (self *CodeGenerator) imm2(lit xtc_core.ILiteral) *xtc_asm.ImmediateValue {
   return xtc_asm.NewImmediateValue(lit)
 }
 
-func (self *CodeGenerator) load(mem xtc_core.IMemoryReference, reg *xtc_x86.Register) {
+func (self *CodeGenerator) load(mem xtc_core.IMemoryReference, reg *x86.Register) {
   as.mov2(mem, reg)
 }
 
-func (self *CodeGenerator) store(reg *xtc_x86.Register, mem xtc_core.IMemoryReference) {
+func (self *CodeGenerator) store(reg *x86.Register, mem xtc_core.IMemoryReference) {
   as.mov3(reg, mem)
 }
 

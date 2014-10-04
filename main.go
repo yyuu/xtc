@@ -4,6 +4,8 @@ import (
   "bufio"
   "fmt"
   "os"
+  "os/exec"
+  "path/filepath"
   "strings"
   xtc_compiler "bitbucket.org/yyuu/xtc/compiler"
 )
@@ -63,9 +65,25 @@ func repl(compiler *xtc_compiler.Compiler) {
       case "r": fallthrough
       case "ru": fallthrough
       case "run": {
-        _, err := compiler.CompileString(strings.Join(sources, ""))
+        out, err := compiler.CompileString(strings.Join(sources, ""))
         if err != nil {
           fmt.Fprintln(os.Stderr, err)
+          continue
+        }
+        _, err = os.Stat(out)
+        if os.IsNotExist(err) {
+          fmt.Fprintln(os.Stderr, err)
+          continue
+        }
+        abspath, err := filepath.Abs(out)
+        if err != nil {
+          fmt.Fprintln(os.Stderr, err)
+          continue
+        }
+        err = exec.Command(abspath).Run()
+        if err != nil {
+          fmt.Fprintln(os.Stderr, err)
+          continue
         }
       }
       case "ex": fallthrough
