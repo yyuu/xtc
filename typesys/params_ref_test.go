@@ -2,8 +2,8 @@ package typesys
 
 import (
   "testing"
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/xt"
+  "bitbucket.org/yyuu/xtc/core"
+  "bitbucket.org/yyuu/xtc/xt"
 )
 
 func TestParamTypeRefsKeyString1(t *testing.T) {

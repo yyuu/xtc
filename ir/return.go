@@ -1,7 +1,7 @@
 package ir
 
 import (
-  "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/xtc/core"
 )
 
 type Return struct {

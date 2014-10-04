@@ -1,9 +1,9 @@
 package ast
 
 import (
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/entity"
-  "bitbucket.org/yyuu/bs/typesys"
+  "bitbucket.org/yyuu/xtc/core"
+  "bitbucket.org/yyuu/xtc/entity"
+  "bitbucket.org/yyuu/xtc/typesys"
 )
 
 // StringLiteralNode

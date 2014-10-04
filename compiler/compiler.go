@@ -5,34 +5,34 @@ import (
   "fmt"
   "os"
   "os/exec"
-  bs_ast "bitbucket.org/yyuu/bs/ast"
-  bs_core "bitbucket.org/yyuu/bs/core"
-  bs_ir "bitbucket.org/yyuu/bs/ir"
-  bs_x86_linux "bitbucket.org/yyuu/bs/x86/linux"
-  bs_parser "bitbucket.org/yyuu/bs/parser"
-  bs_typesys "bitbucket.org/yyuu/bs/typesys"
+  xtc_ast "bitbucket.org/yyuu/xtc/ast"
+  xtc_core "bitbucket.org/yyuu/xtc/core"
+  xtc_ir "bitbucket.org/yyuu/xtc/ir"
+  xtc_x86_linux "bitbucket.org/yyuu/xtc/x86/linux"
+  xtc_parser "bitbucket.org/yyuu/xtc/parser"
+  xtc_typesys "bitbucket.org/yyuu/xtc/typesys"
 )
 
 type Compiler struct {
-  errorHandler *bs_core.ErrorHandler
-  options *bs_core.Options
+  errorHandler *xtc_core.ErrorHandler
+  options *xtc_core.Options
 }
 
 func NewCompiler(name string, args []string) *Compiler {
-  options := bs_core.ParseOptions(name, args)
-  var logLevel = bs_core.LOG_INFO
+  options := xtc_core.ParseOptions(name, args)
+  var logLevel = xtc_core.LOG_INFO
   if options.IsVerboseMode() {
-    logLevel = bs_core.LOG_DEBUG
+    logLevel = xtc_core.LOG_DEBUG
   }
-  errorHandler := bs_core.NewErrorHandler(logLevel)
+  errorHandler := xtc_core.NewErrorHandler(logLevel)
   return &Compiler { errorHandler, options }
 }
 
-func (self *Compiler) SourceFiles() []*bs_core.SourceFile {
+func (self *Compiler) SourceFiles() []*xtc_core.SourceFile {
   files := self.options.SourceFiles()
-  sources := make([]*bs_core.SourceFile, len(files))
+  sources := make([]*xtc_core.SourceFile, len(files))
   for i := range files {
-    sources[i] = bs_core.NewSourceFile(files[i], files[i], "")
+    sources[i] = xtc_core.NewSourceFile(files[i], files[i], "")
   }
   return sources
 }
@@ -56,12 +56,12 @@ func (self *Compiler) Compile() (string, error) {
 }
 
 func (self *Compiler) CompileString(s string) (string, error) {
-  src, err := bs_core.NewTemporarySourceFile("", bs_core.EXT_PROGRAM_SOURCE, []byte(s))
+  src, err := xtc_core.NewTemporarySourceFile("", xtc_core.EXT_PROGRAM_SOURCE, []byte(s))
   if err != nil {
     self.errorHandler.Fatal(err)
     return "", err
   }
-  dst, err := self.phase1([]*bs_core.SourceFile { src })
+  dst, err := self.phase1([]*xtc_core.SourceFile { src })
   if err != nil {
     self.errorHandler.Fatal(err)
     return "", err
@@ -69,7 +69,7 @@ func (self *Compiler) CompileString(s string) (string, error) {
   return dst.GetPath(), nil
 }
 
-func (self *Compiler) phase1(sources []*bs_core.SourceFile) (*bs_core.SourceFile, error) {
+func (self *Compiler) phase1(sources []*xtc_core.SourceFile) (*xtc_core.SourceFile, error) {
   if len(sources) < 1 {
     return nil, fmt.Errorf("no program sources given")
   }
@@ -95,7 +95,7 @@ func (self *Compiler) phase1(sources []*bs_core.SourceFile) (*bs_core.SourceFile
   }
 }
 
-func (self *Compiler) phase2(src *bs_core.SourceFile) (*bs_core.SourceFile, error) {
+func (self *Compiler) phase2(src *xtc_core.SourceFile) (*xtc_core.SourceFile, error) {
   if ! self.options.IsAssembleRequired() {
     return src, nil
   }
@@ -116,7 +116,7 @@ func (self *Compiler) phase2(src *bs_core.SourceFile) (*bs_core.SourceFile, erro
   }
 }
 
-func (self *Compiler) phase3(src *bs_core.SourceFile) (*bs_core.SourceFile, error) {
+func (self *Compiler) phase3(src *xtc_core.SourceFile) (*xtc_core.SourceFile, error) {
   if ! self.options.IsLinkRequired() {
     return src, nil
   }
@@ -132,14 +132,14 @@ func (self *Compiler) phase3(src *bs_core.SourceFile) (*bs_core.SourceFile, erro
   return src, nil
 }
 
-func (self *Compiler) compile(sources []*bs_core.SourceFile) (*bs_core.SourceFile, error) {
+func (self *Compiler) compile(sources []*xtc_core.SourceFile) (*xtc_core.SourceFile, error) {
   if len(sources) < 1 {
     return nil, fmt.Errorf("no program sources given")
   }
   dst := sources[0].ToAssemblySource()
-  var ast *bs_ast.AST
+  var ast *xtc_ast.AST
   for i := range sources {
-    parsed, err := bs_parser.Parse(sources[i], self.errorHandler, self.options)
+    parsed, err := xtc_parser.Parse(sources[i], self.errorHandler, self.options)
     if err != nil {
       return nil, err
     }
@@ -154,7 +154,7 @@ func (self *Compiler) compile(sources []*bs_core.SourceFile) (*bs_core.SourceFil
     self.dumpAST(ast)
     return sources[0], nil
   }
-  types := bs_typesys.NewTypeTableFor(self.options.TargetPlatform())
+  types := xtc_typesys.NewTypeTableFor(self.options.TargetPlatform())
   sem, err := self.semanticAnalyze(ast, types)
   if err != nil {
     return nil, err
@@ -187,7 +187,7 @@ func (self *Compiler) compile(sources []*bs_core.SourceFile) (*bs_core.SourceFil
   return dst, nil
 }
 
-func (self *Compiler) semanticAnalyze(ast *bs_ast.AST, types *bs_typesys.TypeTable) (*bs_ast.AST, error) {
+func (self *Compiler) semanticAnalyze(ast *xtc_ast.AST, types *xtc_typesys.TypeTable) (*xtc_ast.AST, error) {
   sem1, err := NewLocalResolver(self.errorHandler, self.options).Resolve(ast)
   if err != nil {
     return nil, err
@@ -204,10 +204,10 @@ func (self *Compiler) semanticAnalyze(ast *bs_ast.AST, types *bs_typesys.TypeTab
   return NewTypeChecker(self.errorHandler, self.options, types).Check(sem3)
 }
 
-func (self *Compiler) generateAssembly(ir *bs_ir.IR) (bs_core.IAssemblyCode, error) {
+func (self *Compiler) generateAssembly(ir *xtc_ir.IR) (xtc_core.IAssemblyCode, error) {
   switch self.options.TargetPlatform() {
-    case bs_core.PLATFORM_X86_LINUX: {
-      return bs_x86_linux.NewCodeGenerator(self.errorHandler, self.options).Generate(ir)
+    case xtc_core.PLATFORM_X86_LINUX: {
+      return xtc_x86_linux.NewCodeGenerator(self.errorHandler, self.options).Generate(ir)
     }
     default: {
       return nil, fmt.Errorf("unknown platform: %d", self.options.TargetPlatform())
@@ -215,7 +215,7 @@ func (self *Compiler) generateAssembly(ir *bs_ir.IR) (bs_core.IAssemblyCode, err
   }
 }
 
-func (self *Compiler) assemble(src *bs_core.SourceFile) (*bs_core.SourceFile, error) {
+func (self *Compiler) assemble(src *xtc_core.SourceFile) (*xtc_core.SourceFile, error) {
   dst := src.ToObjectFile()
   err := exec.Command("/usr/bin/as", "--32", "-o", fmt.Sprint(dst), fmt.Sprint(src)).Run()
   if err != nil {
@@ -224,7 +224,7 @@ func (self *Compiler) assemble(src *bs_core.SourceFile) (*bs_core.SourceFile, er
   return dst, nil
 }
 
-func (self *Compiler) link(src *bs_core.SourceFile) (*bs_core.SourceFile, error) {
+func (self *Compiler) link(src *xtc_core.SourceFile) (*xtc_core.SourceFile, error) {
   dst := src.ToExecutableFile()
   self.errorHandler.Warn("FIXME: Compiler#link: not implemented")
   dst.WriteAll([]byte { })
@@ -241,22 +241,22 @@ func (self *Compiler) dump(name string, x interface{}) {
   fmt.Println(string(bytes))
 }
 
-func (self *Compiler) dumpAST(ast *bs_ast.AST) {
+func (self *Compiler) dumpAST(ast *xtc_ast.AST) {
   self.dump("AST", ast)
 }
 
-func (self *Compiler) dumpSemant(ast *bs_ast.AST) {
+func (self *Compiler) dumpSemant(ast *xtc_ast.AST) {
   self.dump("Semantics", ast)
 }
 
-func (self *Compiler) dumpIR(ir *bs_ir.IR) {
+func (self *Compiler) dumpIR(ir *xtc_ir.IR) {
   self.dump("IR", ir)
 }
 
-func (self *Compiler) dumpAsm(asm bs_core.IAssemblyCode) {
+func (self *Compiler) dumpAsm(asm xtc_core.IAssemblyCode) {
   self.dump("Asm", asm)
 }
 
-func (self *Compiler) printAsm(asm bs_core.IAssemblyCode) {
+func (self *Compiler) printAsm(asm xtc_core.IAssemblyCode) {
   fmt.Println(asm.ToSource())
 }

@@ -2,7 +2,7 @@ package ast
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/xtc/core"
 )
 
 // OpAssignNode

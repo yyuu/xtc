@@ -3,8 +3,8 @@ package ast
 import (
   "fmt"
   "strings"
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/entity"
+  "bitbucket.org/yyuu/xtc/core"
+  "bitbucket.org/yyuu/xtc/entity"
 )
 
 // BlockNode

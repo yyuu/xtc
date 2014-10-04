@@ -2,7 +2,7 @@ package asm
 
 import (
   "strconv"
-  "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/xtc/core"
 )
 
 type SymbolTable struct {

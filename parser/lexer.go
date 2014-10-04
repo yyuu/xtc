@@ -5,47 +5,47 @@ import (
   "regexp"
   "strings"
   "unicode/utf8"
-  bs_ast "bitbucket.org/yyuu/bs/ast"
-  bs_core "bitbucket.org/yyuu/bs/core"
-  bs_strscan "bitbucket.org/yyuu/bs/strscan"
+  xtc_ast "bitbucket.org/yyuu/xtc/ast"
+  xtc_core "bitbucket.org/yyuu/xtc/core"
+  xtc_strscan "bitbucket.org/yyuu/xtc/strscan"
 )
 
 type lexer struct {
-  scanner *bs_strscan.StringScanner
+  scanner *xtc_strscan.StringScanner
   sourceName string
   lineNumber int
   lineOffset int
   eof bool
   knownTypedefs []string
   libraryLoader *libraryLoader
-  ast *bs_ast.AST
-  errorHandler *bs_core.ErrorHandler
-  options *bs_core.Options
+  ast *xtc_ast.AST
+  errorHandler *xtc_core.ErrorHandler
+  options *xtc_core.Options
 }
 
 func (self lexer) String() string {
   return fmt.Sprintf("%s %q", self.pos(), self.scanner.Peek(16))
 }
 
-func (self lexer) pos() bs_core.Location {
-  return bs_core.NewLocation(self.sourceName, self.lineNumber, self.lineOffset)
+func (self lexer) pos() xtc_core.Location {
+  return xtc_core.NewLocation(self.sourceName, self.lineNumber, self.lineOffset)
 }
 
-func (self lexer) debugPos() bs_core.Location {
+func (self lexer) debugPos() xtc_core.Location {
   // FIXME: inefficient
   s := self.scanner.String[0:self.scanner.Pos()]
   lineNumber := 1 + strings.Count(s, "\n")
   if 1 < lineNumber {
     lineOffset := len(s[1 + strings.LastIndex(s, "\n"):])
-    return bs_core.NewLocation(self.sourceName, lineNumber, lineOffset)
+    return xtc_core.NewLocation(self.sourceName, lineNumber, lineOffset)
   } else {
-    return bs_core.NewLocation(self.sourceName, 1, len(s))
+    return xtc_core.NewLocation(self.sourceName, 1, len(s))
   }
 }
 
-func newLexer(filename string, source string, loader *libraryLoader, errorHandler *bs_core.ErrorHandler, options *bs_core.Options) *lexer {
+func newLexer(filename string, source string, loader *libraryLoader, errorHandler *xtc_core.ErrorHandler, options *xtc_core.Options) *lexer {
   return &lexer {
-    scanner: bs_strscan.New(source),
+    scanner: xtc_strscan.New(source),
     sourceName: filename,
     lineNumber: 1,
     lineOffset: 1,
@@ -426,6 +426,6 @@ func (self *lexer) scanOperator() (*token, error) {
   return nil, nil
 }
 
-func (self *lexer) loadLibrary(name string) *bs_ast.Declaration {
+func (self *lexer) loadLibrary(name string) *xtc_ast.Declaration {
   return self.libraryLoader.loadLibrary(name)
 }

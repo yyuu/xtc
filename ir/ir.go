@@ -1,25 +1,25 @@
 package ir
 
 import (
-  bs_core "bitbucket.org/yyuu/bs/core"
-  bs_entity "bitbucket.org/yyuu/bs/entity"
+  xtc_core "bitbucket.org/yyuu/xtc/core"
+  xtc_entity "bitbucket.org/yyuu/xtc/entity"
 )
 
 type IR struct {
   ClassName string
-  Location bs_core.Location
-  Defvars []*bs_entity.DefinedVariable
-  Defuns []*bs_entity.DefinedFunction
-  Funcdecls []*bs_entity.UndefinedFunction
-  Scope *bs_entity.ToplevelScope
-  ConstantTable *bs_entity.ConstantTable
+  Location xtc_core.Location
+  Defvars []*xtc_entity.DefinedVariable
+  Defuns []*xtc_entity.DefinedFunction
+  Funcdecls []*xtc_entity.UndefinedFunction
+  Scope *xtc_entity.ToplevelScope
+  ConstantTable *xtc_entity.ConstantTable
 }
 
-func NewIR(loc bs_core.Location, defvars []*bs_entity.DefinedVariable, defuns []*bs_entity.DefinedFunction, funcdecls []*bs_entity.UndefinedFunction, scope *bs_entity.ToplevelScope, constantTable *bs_entity.ConstantTable) *IR {
+func NewIR(loc xtc_core.Location, defvars []*xtc_entity.DefinedVariable, defuns []*xtc_entity.DefinedFunction, funcdecls []*xtc_entity.UndefinedFunction, scope *xtc_entity.ToplevelScope, constantTable *xtc_entity.ConstantTable) *IR {
   return &IR { "ir.IR", loc, defvars, defuns, funcdecls, scope, constantTable }
 }
 
-func (self *IR) GetLocation() bs_core.Location {
+func (self *IR) GetLocation() xtc_core.Location {
   return self.Location
 }
 
@@ -27,7 +27,7 @@ func (self *IR) GetFileName() string {
   return self.Location.GetSourceName()
 }
 
-func (self *IR) GetDefinedVariables() []*bs_entity.DefinedVariable {
+func (self *IR) GetDefinedVariables() []*xtc_entity.DefinedVariable {
   return self.Defvars
 }
 
@@ -35,16 +35,16 @@ func (self *IR) IsFunctionDefined() bool {
   return 0 < len(self.Defuns)
 }
 
-func (self *IR) GetDefinedFunctions() []*bs_entity.DefinedFunction {
+func (self *IR) GetDefinedFunctions() []*xtc_entity.DefinedFunction {
   return self.Defuns
 }
 
-func (self *IR) GetScope() *bs_entity.ToplevelScope {
+func (self *IR) GetScope() *xtc_entity.ToplevelScope {
   return self.Scope
 }
 
-func (self *IR) AllFunctions() []bs_core.IFunction {
-  fs := []bs_core.IFunction { }
+func (self *IR) AllFunctions() []xtc_core.IFunction {
+  fs := []xtc_core.IFunction { }
   for i := range self.Defuns {
     fs = append(fs, self.Defuns[i])
   }
@@ -54,7 +54,7 @@ func (self *IR) AllFunctions() []bs_core.IFunction {
   return fs
 }
 
-func (self *IR) AllGlobalVariables() []bs_core.IVariable {
+func (self *IR) AllGlobalVariables() []xtc_core.IVariable {
   return self.Scope.AllGlobalVariables()
 }
 
@@ -63,8 +63,8 @@ func (self *IR) IsGlobalVariableDefined() bool {
   return 0 < len(gvars)
 }
 
-func (self *IR) GetDefinedGlobalVariables() []*bs_entity.DefinedVariable {
-  gvars := []*bs_entity.DefinedVariable { }
+func (self *IR) GetDefinedGlobalVariables() []*xtc_entity.DefinedVariable {
+  gvars := []*xtc_entity.DefinedVariable { }
   vs := self.Scope.GetDefinedGlobalScopeVariables()
   for i := range vs {
     if vs[i].HasInitializer() {
@@ -79,8 +79,8 @@ func (self *IR) IsCommonSymbolDefined() bool {
   return 0 < len(comms)
 }
 
-func (self *IR) GetDefinedCommonSymbols() []*bs_entity.DefinedVariable {
-  comms := []*bs_entity.DefinedVariable { }
+func (self *IR) GetDefinedCommonSymbols() []*xtc_entity.DefinedVariable {
+  comms := []*xtc_entity.DefinedVariable { }
   vs := self.Scope.GetDefinedGlobalScopeVariables()
   for i := range vs {
     if ! vs[i].HasInitializer() {
@@ -94,6 +94,6 @@ func (self *IR) IsStringLiteralDefined() bool {
   return ! self.ConstantTable.IsEmpty()
 }
 
-func (self *IR) GetConstantTable() *bs_entity.ConstantTable {
+func (self *IR) GetConstantTable() *xtc_entity.ConstantTable {
   return self.ConstantTable
 }

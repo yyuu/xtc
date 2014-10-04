@@ -4,8 +4,8 @@ import (
   "fmt"
   "strconv"
   "strings"
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/typesys"
+  "bitbucket.org/yyuu/xtc/core"
+  "bitbucket.org/yyuu/xtc/typesys"
 )
 
 // IntegerLiteralNode

@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-package="bitbucket.org/yyuu/bs"
+package="bitbucket.org/yyuu/xtc"
 export GOBIN="$PWD/bin"
 export GOPATH="$PWD/gopath"
 

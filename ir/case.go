@@ -1,7 +1,7 @@
 package ir
 
 import (
-  "bitbucket.org/yyuu/bs/asm"
+  "bitbucket.org/yyuu/xtc/asm"
 )
 
 type Case struct {

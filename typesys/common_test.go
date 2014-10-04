@@ -2,7 +2,7 @@ package typesys
 
 import (
   "encoding/json"
-  "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/xtc/core"
 )
 
 type typeNode struct {

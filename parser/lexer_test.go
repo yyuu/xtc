@@ -2,8 +2,8 @@ package parser
 
 import (
   "testing"
-  bs_core "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/xt"
+  xtc_core "bitbucket.org/yyuu/xtc/core"
+  "bitbucket.org/yyuu/xtc/xt"
 )
 
 func assertToken(t *testing.T, lex *lexer, id int, literal string) {
@@ -21,8 +21,8 @@ func assertTokenNull(t *testing.T, lex *lexer) {
 }
 
 func testNewLexer(source string) *lexer {
-  errorHandler := bs_core.NewErrorHandler(bs_core.LOG_WARN)
-  options := bs_core.NewOptions("lexer_test.go")
+  errorHandler := xtc_core.NewErrorHandler(xtc_core.LOG_WARN)
+  options := xtc_core.NewOptions("lexer_test.go")
   loader := newLibraryLoader(errorHandler, options)
   return newLexer("test.txt", source, loader, errorHandler, options)
 }

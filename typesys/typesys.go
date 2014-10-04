@@ -1,7 +1,7 @@
 package typesys
 
 import (
-  "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/xtc/core"
 )
 
 func NewTypes(xs...core.IType) []core.IType {

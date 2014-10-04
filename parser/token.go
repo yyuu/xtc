@@ -2,13 +2,13 @@ package parser
 
 import (
   "fmt"
-  bs_core "bitbucket.org/yyuu/bs/core"
+  xtc_core "bitbucket.org/yyuu/xtc/core"
 )
 
 type token struct {
   id int
   literal string
-  location bs_core.Location
+  location xtc_core.Location
 }
 
 func (self token) String() string {

@@ -1,7 +1,7 @@
 package ast
 
 import (
-  "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/xtc/core"
 )
 
 func NewExprNodes(xs...core.IExprNode) []core.IExprNode {

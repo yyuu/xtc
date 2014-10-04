@@ -2,7 +2,7 @@ package entity
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/xtc/core"
 )
 
 func checkAddress(ent core.IEntity, memref core.IMemoryReference, address core.IOperand) {

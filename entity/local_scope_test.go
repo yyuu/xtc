@@ -2,7 +2,7 @@ package entity
 
 import (
   "testing"
-  "bitbucket.org/yyuu/bs/xt"
+  "bitbucket.org/yyuu/xtc/xt"
 )
 
 func TestLocalScope(t *testing.T) {

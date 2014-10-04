@@ -3,7 +3,7 @@ package typesys
 import (
   "fmt"
   "strings"
-  "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/xtc/core"
 )
 
 type TypeTable struct {

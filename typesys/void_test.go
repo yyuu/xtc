@@ -2,7 +2,7 @@ package typesys
 
 import (
   "testing"
-  "bitbucket.org/yyuu/bs/xt"
+  "bitbucket.org/yyuu/xtc/xt"
 )
 
 func TestVoid1(t *testing.T) {

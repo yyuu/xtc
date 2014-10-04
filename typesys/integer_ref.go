@@ -2,7 +2,7 @@ package typesys
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/xtc/core"
 )
 
 // IntegerTypeRef

@@ -2,8 +2,8 @@ package ast
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/core"
-  "bitbucket.org/yyuu/bs/entity"
+  "bitbucket.org/yyuu/xtc/core"
+  "bitbucket.org/yyuu/xtc/entity"
 )
 
 type Declaration struct {

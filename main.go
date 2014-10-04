@@ -5,11 +5,11 @@ import (
   "fmt"
   "os"
   "strings"
-  bs_compiler "bitbucket.org/yyuu/bs/compiler"
+  xtc_compiler "bitbucket.org/yyuu/xtc/compiler"
 )
 
 func main() {
-  compiler := bs_compiler.NewCompiler(os.Args[0], os.Args[1:])
+  compiler := xtc_compiler.NewCompiler(os.Args[0], os.Args[1:])
   files := compiler.SourceFiles()
   if 0 < len(files) {
     _, err := compiler.Compile()
@@ -21,7 +21,7 @@ func main() {
   }
 }
 
-func repl(compiler *bs_compiler.Compiler) {
+func repl(compiler *xtc_compiler.Compiler) {
   defer func() {
     if s := recover(); s != nil {
       fmt.Fprintf(os.Stderr, "recovered: %s\n", s)

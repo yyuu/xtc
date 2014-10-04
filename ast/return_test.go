@@ -2,7 +2,7 @@ package ast
 
 import (
   "testing"
-  "bitbucket.org/yyuu/bs/xt"
+  "bitbucket.org/yyuu/xtc/xt"
 )
 
 func TestReturn(t *testing.T) {

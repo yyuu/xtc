@@ -1,7 +1,7 @@
 package asm
 
 import (
-  "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/xtc/core"
 )
 
 type Label struct {

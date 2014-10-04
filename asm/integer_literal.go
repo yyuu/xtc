@@ -2,7 +2,7 @@ package asm
 
 import (
   "fmt"
-  "bitbucket.org/yyuu/bs/core"
+  "bitbucket.org/yyuu/xtc/core"
 )
 
 type IntegerLiteral struct {

@@ -2,48 +2,48 @@ package compiler
 
 import (
   "fmt"
-  bs_asm "bitbucket.org/yyuu/bs/asm"
-  bs_ast "bitbucket.org/yyuu/bs/ast"
-  bs_core "bitbucket.org/yyuu/bs/core"
-  bs_entity "bitbucket.org/yyuu/bs/entity"
-  bs_ir "bitbucket.org/yyuu/bs/ir"
-  bs_typesys "bitbucket.org/yyuu/bs/typesys"
+  xtc_asm "bitbucket.org/yyuu/xtc/asm"
+  xtc_ast "bitbucket.org/yyuu/xtc/ast"
+  xtc_core "bitbucket.org/yyuu/xtc/core"
+  xtc_entity "bitbucket.org/yyuu/xtc/entity"
+  xtc_ir "bitbucket.org/yyuu/xtc/ir"
+  xtc_typesys "bitbucket.org/yyuu/xtc/typesys"
 )
 
 type IRGenerator struct {
-  errorHandler *bs_core.ErrorHandler
-  options *bs_core.Options
-  typeTable *bs_typesys.TypeTable
+  errorHandler *xtc_core.ErrorHandler
+  options *xtc_core.Options
+  typeTable *xtc_typesys.TypeTable
   exprNestLevel int
-  stmts []bs_core.IStmt
-  scopeStack []*bs_entity.LocalScope
-  breakStack []*bs_asm.Label
-  continueStack []*bs_asm.Label
+  stmts []xtc_core.IStmt
+  scopeStack []*xtc_entity.LocalScope
+  breakStack []*xtc_asm.Label
+  continueStack []*xtc_asm.Label
   jumpMap map[string]*jumpEntry
 }
 
 type jumpEntry struct {
-  label *bs_asm.Label
+  label *xtc_asm.Label
   numRefered int
   isDefined bool
-  location bs_core.Location
+  location xtc_core.Location
 }
 
-func newJumpEntry(label *bs_asm.Label) *jumpEntry {
-  loc := bs_core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
+func newJumpEntry(label *xtc_asm.Label) *jumpEntry {
+  loc := xtc_core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
   return &jumpEntry { label, 0, false, loc }
 }
 
-func NewIRGenerator(errorHandler *bs_core.ErrorHandler, options *bs_core.Options, table *bs_typesys.TypeTable) *IRGenerator {
-  stmts := []bs_core.IStmt { }
-  scopeStack := []*bs_entity.LocalScope { }
-  breakStack := []*bs_asm.Label { }
-  continueStack := []*bs_asm.Label { }
+func NewIRGenerator(errorHandler *xtc_core.ErrorHandler, options *xtc_core.Options, table *xtc_typesys.TypeTable) *IRGenerator {
+  stmts := []xtc_core.IStmt { }
+  scopeStack := []*xtc_entity.LocalScope { }
+  breakStack := []*xtc_asm.Label { }
+  continueStack := []*xtc_asm.Label { }
   jumpMap := make(map[string]*jumpEntry)
   return &IRGenerator { errorHandler, options, table, 0, stmts, scopeStack, breakStack, continueStack, jumpMap }
 }
 
-func (self *IRGenerator) Generate(ast *bs_ast.AST) (*bs_ir.IR, error) {
+func (self *IRGenerator) Generate(ast *xtc_ast.AST) (*xtc_ir.IR, error) {
   vs := ast.GetDefinedVariables()
   for i := range vs {
     if vs[i].HasInitializer() {
@@ -61,66 +61,66 @@ func (self *IRGenerator) Generate(ast *bs_ast.AST) (*bs_ir.IR, error) {
   return ir, nil
 }
 
-func (self *IRGenerator) compileFunctionBody(f *bs_entity.DefinedFunction) []bs_core.IStmt {
-  self.stmts = []bs_core.IStmt { }
-  self.scopeStack = []*bs_entity.LocalScope { }
-  self.breakStack = []*bs_asm.Label { }
-  self.continueStack = []*bs_asm.Label { }
+func (self *IRGenerator) compileFunctionBody(f *xtc_entity.DefinedFunction) []xtc_core.IStmt {
+  self.stmts = []xtc_core.IStmt { }
+  self.scopeStack = []*xtc_entity.LocalScope { }
+  self.breakStack = []*xtc_asm.Label { }
+  self.continueStack = []*xtc_asm.Label { }
   self.jumpMap = make(map[string]*jumpEntry)
   self.transformStmt(f.GetBody())
   self.checkJumpLinks(self.jumpMap)
   return self.stmts
 }
 
-func (self *IRGenerator) transformStmt(node bs_core.IStmtNode) {
-  bs_ast.VisitStmtNode(self, node)
+func (self *IRGenerator) transformStmt(node xtc_core.IStmtNode) {
+  xtc_ast.VisitStmtNode(self, node)
 }
 
-func (self *IRGenerator) transformStmtExpr(node bs_core.IExprNode) {
-  bs_ast.VisitExprNode(self, node)
+func (self *IRGenerator) transformStmtExpr(node xtc_core.IExprNode) {
+  xtc_ast.VisitExprNode(self, node)
 }
 
-func (self *IRGenerator) transformExpr(node bs_core.IExprNode) bs_core.IExpr {
+func (self *IRGenerator) transformExpr(node xtc_core.IExprNode) xtc_core.IExpr {
   self.exprNestLevel++
-  e := bs_ast.VisitExprNode(self, node)
+  e := xtc_ast.VisitExprNode(self, node)
   self.exprNestLevel--
-  return e.(bs_core.IExpr)
+  return e.(xtc_core.IExpr)
 }
 
 func (self *IRGenerator) isStatement() bool {
   return self.exprNestLevel == 0
 }
 
-func (self *IRGenerator) assign(loc bs_core.Location, lhs bs_core.IExpr, rhs bs_core.IExpr) {
-  self.stmts = append(self.stmts, bs_ir.NewAssign(loc, self.addressOf(lhs), rhs))
+func (self *IRGenerator) assign(loc xtc_core.Location, lhs xtc_core.IExpr, rhs xtc_core.IExpr) {
+  self.stmts = append(self.stmts, xtc_ir.NewAssign(loc, self.addressOf(lhs), rhs))
 }
 
-func (self *IRGenerator) tmpVar(t bs_core.IType) *bs_entity.DefinedVariable {
+func (self *IRGenerator) tmpVar(t xtc_core.IType) *xtc_entity.DefinedVariable {
   ref := self.typeTable.GetTypeRef(t)
-  typeNode := bs_ast.NewTypeNode(bs_core.NewLocation("[builtin:ir_generator]", 0, 0), ref)
+  typeNode := xtc_ast.NewTypeNode(xtc_core.NewLocation("[builtin:ir_generator]", 0, 0), ref)
   typeNode.SetType(t)
   return self.currentScope().AllocateTmp(typeNode)
 }
 
-func (self *IRGenerator) label(label *bs_asm.Label) {
-  loc := bs_core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
-  self.stmts = append(self.stmts, bs_ir.NewLabelStmt(loc, label))
+func (self *IRGenerator) label(label *xtc_asm.Label) {
+  loc := xtc_core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
+  self.stmts = append(self.stmts, xtc_ir.NewLabelStmt(loc, label))
 }
 
-func (self *IRGenerator) jump(target *bs_asm.Label) {
-  loc := bs_core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
-  self.stmts = append(self.stmts, bs_ir.NewJump(loc, target))
+func (self *IRGenerator) jump(target *xtc_asm.Label) {
+  loc := xtc_core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
+  self.stmts = append(self.stmts, xtc_ir.NewJump(loc, target))
 }
 
-func (self *IRGenerator) cjump(loc bs_core.Location, cond bs_core.IExpr, thenLabel *bs_asm.Label, elseLabel *bs_asm.Label) {
-  self.stmts = append(self.stmts, bs_ir.NewCJump(loc, cond, thenLabel, elseLabel))
+func (self *IRGenerator) cjump(loc xtc_core.Location, cond xtc_core.IExpr, thenLabel *xtc_asm.Label, elseLabel *xtc_asm.Label) {
+  self.stmts = append(self.stmts, xtc_ir.NewCJump(loc, cond, thenLabel, elseLabel))
 }
 
-func (self *IRGenerator) pushBreak(label *bs_asm.Label) {
+func (self *IRGenerator) pushBreak(label *xtc_asm.Label) {
   self.breakStack = append(self.breakStack, label)
 }
 
-func (self *IRGenerator) popBreak() *bs_asm.Label {
+func (self *IRGenerator) popBreak() *xtc_asm.Label {
   if len(self.breakStack) < 1 {
     self.errorHandler.Fatal("unmatched push/pop for break stack")
   }
@@ -129,18 +129,18 @@ func (self *IRGenerator) popBreak() *bs_asm.Label {
   return label
 }
 
-func (self *IRGenerator) currentBreakTarget() *bs_asm.Label {
+func (self *IRGenerator) currentBreakTarget() *xtc_asm.Label {
   if len(self.breakStack) < 1 {
     self.errorHandler.Fatal("break from out of loop")
   }
   return self.breakStack[len(self.breakStack)-1]
 }
 
-func (self *IRGenerator) pushContinue(label *bs_asm.Label) {
+func (self *IRGenerator) pushContinue(label *xtc_asm.Label) {
   self.continueStack = append(self.continueStack, label)
 }
 
-func (self *IRGenerator) popContinue() *bs_asm.Label {
+func (self *IRGenerator) popContinue() *xtc_asm.Label {
   if len(self.continueStack) < 1 {
     self.errorHandler.Fatal("unmatched push/pop for continue stack")
   }
@@ -149,27 +149,27 @@ func (self *IRGenerator) popContinue() *bs_asm.Label {
   return label
 }
 
-func (self *IRGenerator) currentContinueTarget() *bs_asm.Label {
+func (self *IRGenerator) currentContinueTarget() *xtc_asm.Label {
   if len(self.continueStack) < 1 {
     self.errorHandler.Fatal("continue from out of loop")
   }
   return self.continueStack[len(self.continueStack)-1]
 }
 
-func (self *IRGenerator) transformIndex(node *bs_ast.ArefNode) bs_core.IExpr {
+func (self *IRGenerator) transformIndex(node *xtc_ast.ArefNode) xtc_core.IExpr {
   if node.IsMultiDimension() {
-    return bs_ir.NewBin(self.int_t(), bs_ir.OP_ADD,
+    return xtc_ir.NewBin(self.int_t(), xtc_ir.OP_ADD,
                      self.transformExpr(node.GetIndex()),
-                     bs_ir.NewBin(self.int_t(), bs_ir.OP_MUL,
-                               bs_ir.NewInt(self.int_t(), int64(node.GetLength())),
-                               self.transformIndex(node.GetExpr().(*bs_ast.ArefNode))))
+                     xtc_ir.NewBin(self.int_t(), xtc_ir.OP_MUL,
+                               xtc_ir.NewInt(self.int_t(), int64(node.GetLength())),
+                               self.transformIndex(node.GetExpr().(*xtc_ast.ArefNode))))
 
   } else {
     return self.transformExpr(node.GetIndex())
   }
 }
 
-func (self *IRGenerator) transformOpAssign(loc bs_core.Location, op int, lhsType bs_core.IType, lhs bs_core.IExpr, rhs bs_core.IExpr) bs_core.IExpr {
+func (self *IRGenerator) transformOpAssign(loc xtc_core.Location, op int, lhsType xtc_core.IType, lhs xtc_core.IExpr, rhs xtc_core.IExpr) xtc_core.IExpr {
   if lhs.IsVar() {
     self.assign(loc, lhs, self.bin(op, lhsType, lhs, rhs))
     if self.isStatement() {
@@ -189,128 +189,128 @@ func (self *IRGenerator) transformOpAssign(loc bs_core.Location, op int, lhsType
   }
 }
 
-func (self *IRGenerator) bin(op int, leftType bs_core.IType, left bs_core.IExpr, right bs_core.IExpr) *bs_ir.Bin {
+func (self *IRGenerator) bin(op int, leftType xtc_core.IType, left xtc_core.IExpr, right xtc_core.IExpr) *xtc_ir.Bin {
   if self.isPointerArithmetic(op, leftType) {
-    return bs_ir.NewBin(left.GetTypeId(), op, left,
-                     bs_ir.NewBin(right.GetTypeId(), bs_ir.OP_MUL,
+    return xtc_ir.NewBin(left.GetTypeId(), op, left,
+                     xtc_ir.NewBin(right.GetTypeId(), xtc_ir.OP_MUL,
                                right,
                                self.ptrBaseSize(leftType)))
   } else {
-    return bs_ir.NewBin(left.GetTypeId(), op, left, right)
+    return xtc_ir.NewBin(left.GetTypeId(), op, left, right)
   }
 }
 
-func (self *IRGenerator) isPointerDiff(op int, l bs_core.IType, r bs_core.IType) bool {
-  return op == bs_ir.OP_SUB && l.IsPointer() && r.IsPointer()
+func (self *IRGenerator) isPointerDiff(op int, l xtc_core.IType, r xtc_core.IType) bool {
+  return op == xtc_ir.OP_SUB && l.IsPointer() && r.IsPointer()
 }
 
-func (self *IRGenerator) isPointerArithmetic(op int, operandType bs_core.IType) bool {
+func (self *IRGenerator) isPointerArithmetic(op int, operandType xtc_core.IType) bool {
   switch op {
-    case bs_ir.OP_ADD: return operandType.IsPointer()
-    case bs_ir.OP_SUB: return operandType.IsPointer()
+    case xtc_ir.OP_ADD: return operandType.IsPointer()
+    case xtc_ir.OP_SUB: return operandType.IsPointer()
     default:        return false
   }
 }
 
-func (self *IRGenerator) ptrBaseSize(t bs_core.IType) bs_core.IExpr {
-  return bs_ir.NewInt(self.ptrdiff_t(), int64(t.GetBaseType().Size()))
+func (self *IRGenerator) ptrBaseSize(t xtc_core.IType) xtc_core.IExpr {
+  return xtc_ir.NewInt(self.ptrdiff_t(), int64(t.GetBaseType().Size()))
 }
 
 func (self *IRGenerator) binOp(uniOp string) int {
   if uniOp == "++" {
-    return bs_ir.OP_ADD
+    return xtc_ir.OP_ADD
   } else {
     if uniOp == "--" {
-      return bs_ir.OP_SUB
+      return xtc_ir.OP_SUB
     } else {
       panic("must not happen")
     }
   }
 }
 
-func (self *IRGenerator) addressOf(expr bs_core.IExpr) bs_core.IExpr {
+func (self *IRGenerator) addressOf(expr xtc_core.IExpr) xtc_core.IExpr {
   return expr.GetAddressNode(self.ptr_t())
 }
 
-func (self *IRGenerator) ref(ent bs_core.IEntity) *bs_ir.Var {
-  return bs_ir.NewVar(self.varType(ent.GetType()), ent)
+func (self *IRGenerator) ref(ent xtc_core.IEntity) *xtc_ir.Var {
+  return xtc_ir.NewVar(self.varType(ent.GetType()), ent)
 }
 
-func (self *IRGenerator) mem(ent bs_core.IEntity) *bs_ir.Mem {
-  return bs_ir.NewMem(self.asmType(ent.GetType().GetBaseType()), self.ref(ent))
+func (self *IRGenerator) mem(ent xtc_core.IEntity) *xtc_ir.Mem {
+  return xtc_ir.NewMem(self.asmType(ent.GetType().GetBaseType()), self.ref(ent))
 }
 
-func (self *IRGenerator) mem2(expr bs_core.IExpr, t bs_core.IType) *bs_ir.Mem {
-  return bs_ir.NewMem(self.asmType(t), expr)
+func (self *IRGenerator) mem2(expr xtc_core.IExpr, t xtc_core.IType) *xtc_ir.Mem {
+  return xtc_ir.NewMem(self.asmType(t), expr)
 }
 
-func (self *IRGenerator) ptrdiff(n int64) *bs_ir.Int {
-  return bs_ir.NewInt(self.ptrdiff_t(), n)
+func (self *IRGenerator) ptrdiff(n int64) *xtc_ir.Int {
+  return xtc_ir.NewInt(self.ptrdiff_t(), n)
 }
 
-func (self *IRGenerator) size(n int64) *bs_ir.Int {
-  return bs_ir.NewInt(self.size_t(), n)
+func (self *IRGenerator) size(n int64) *xtc_ir.Int {
+  return xtc_ir.NewInt(self.size_t(), n)
 }
 
-func (self *IRGenerator) imm(operandType bs_core.IType, n int64) *bs_ir.Int {
+func (self *IRGenerator) imm(operandType xtc_core.IType, n int64) *xtc_ir.Int {
   if operandType.IsPointer() {
-    return bs_ir.NewInt(self.ptrdiff_t(), n)
+    return xtc_ir.NewInt(self.ptrdiff_t(), n)
   } else {
-    return bs_ir.NewInt(self.int_t(), n)
+    return xtc_ir.NewInt(self.int_t(), n)
   }
 }
 
-func (self *IRGenerator) pointerTo(t bs_core.IType) bs_core.IType {
+func (self *IRGenerator) pointerTo(t xtc_core.IType) xtc_core.IType {
   return self.typeTable.PointerTo(t)
 }
 
-func (self *IRGenerator) asmType(t bs_core.IType) int {
+func (self *IRGenerator) asmType(t xtc_core.IType) int {
   if t.IsVoid() {
     return self.int_t()
   } else {
-    return bs_asm.TypeGet(t.Size())
+    return xtc_asm.TypeGet(t.Size())
   }
 }
 
-func (self *IRGenerator) varType(t bs_core.IType) int {
+func (self *IRGenerator) varType(t xtc_core.IType) int {
   if ! t.IsScalar() {
     return 0
   } else {
-    return bs_asm.TypeGet(t.Size())
+    return xtc_asm.TypeGet(t.Size())
   }
 }
 
 func (self *IRGenerator) int_t() int {
-  return bs_asm.TypeGet(self.typeTable.GetIntSize())
+  return xtc_asm.TypeGet(self.typeTable.GetIntSize())
 }
 
 func (self *IRGenerator) size_t() int {
-  return bs_asm.TypeGet(self.typeTable.GetLongSize())
+  return xtc_asm.TypeGet(self.typeTable.GetLongSize())
 }
 
 func (self *IRGenerator) ptr_t() int {
-  return bs_asm.TypeGet(self.typeTable.GetPointerSize())
+  return xtc_asm.TypeGet(self.typeTable.GetPointerSize())
 }
 
 func (self *IRGenerator) ptrdiff_t() int {
-  return bs_asm.TypeGet(self.typeTable.GetLongSize())
+  return xtc_asm.TypeGet(self.typeTable.GetLongSize())
 }
 
-func (self *IRGenerator) currentScope() *bs_entity.LocalScope {
+func (self *IRGenerator) currentScope() *xtc_entity.LocalScope {
   return self.scopeStack[len(self.scopeStack)-1]
 }
 
-func (self *IRGenerator) pushScope(scope *bs_entity.LocalScope) {
+func (self *IRGenerator) pushScope(scope *xtc_entity.LocalScope) {
   self.scopeStack = append(self.scopeStack, scope)
 }
 
-func (self *IRGenerator) popScope() *bs_entity.LocalScope {
+func (self *IRGenerator) popScope() *xtc_entity.LocalScope {
   scope := self.currentScope()
   self.scopeStack = self.scopeStack[0:len(self.scopeStack)-1]
   return scope
 }
 
-func (self *IRGenerator) defineLabel(name string, loc bs_core.Location) *bs_asm.Label {
+func (self *IRGenerator) defineLabel(name string, loc xtc_core.Location) *xtc_asm.Label {
   ent := self.getJumpEntry(name)
   if ent.isDefined {
     self.errorHandler.Errorf("duplicated jump label in %s(): %s", name, name)
@@ -320,7 +320,7 @@ func (self *IRGenerator) defineLabel(name string, loc bs_core.Location) *bs_asm.
   return ent.label
 }
 
-func (self *IRGenerator) referLabel(name string) *bs_asm.Label {
+func (self *IRGenerator) referLabel(name string) *xtc_asm.Label {
   ent := self.getJumpEntry(name)
   ent.numRefered++
   return ent.label
@@ -329,7 +329,7 @@ func (self *IRGenerator) referLabel(name string) *bs_asm.Label {
 func (self *IRGenerator) getJumpEntry(name string) *jumpEntry {
   ent := self.jumpMap[name]
   if ent == nil {
-    ent = newJumpEntry(bs_asm.NewUnnamedLabel())
+    ent = newJumpEntry(xtc_asm.NewUnnamedLabel())
     self.jumpMap[name] = ent
   }
   return ent
@@ -346,10 +346,10 @@ func (self *IRGenerator) checkJumpLinks(jumpMap map[string]*jumpEntry) {
   }
 }
 
-func (self *IRGenerator) VisitStmtNode(unknown bs_core.IStmtNode) interface{} {
+func (self *IRGenerator) VisitStmtNode(unknown xtc_core.IStmtNode) interface{} {
   switch node := unknown.(type) {
-    case *bs_ast.BlockNode: {
-      self.pushScope(node.GetScope().(*bs_entity.LocalScope))
+    case *xtc_ast.BlockNode: {
+      self.pushScope(node.GetScope().(*xtc_entity.LocalScope))
       vs := node.GetVariables()
       for i := range vs {
         if vs[i].HasInitializer() {
@@ -366,17 +366,17 @@ func (self *IRGenerator) VisitStmtNode(unknown bs_core.IStmtNode) interface{} {
       }
       self.popScope()
     }
-    case *bs_ast.ExprStmtNode: {
-      e := bs_ast.VisitExprNode(self, node.GetExpr())
+    case *xtc_ast.ExprStmtNode: {
+      e := xtc_ast.VisitExprNode(self, node.GetExpr())
       if e != nil {
         self.errorHandler.Warnf("%s useless expression", node.GetLocation())
       }
       return nil
     }
-    case *bs_ast.IfNode: {
-      thenLabel := bs_asm.NewUnnamedLabel()
-      elseLabel := bs_asm.NewUnnamedLabel()
-      endLabel := bs_asm.NewUnnamedLabel()
+    case *xtc_ast.IfNode: {
+      thenLabel := xtc_asm.NewUnnamedLabel()
+      elseLabel := xtc_asm.NewUnnamedLabel()
+      endLabel := xtc_asm.NewUnnamedLabel()
       cond := self.transformExpr(node.GetCond())
       if node.HasElseBody() {
         self.cjump(node.GetLocation(), cond, thenLabel, endLabel)
@@ -394,28 +394,28 @@ func (self *IRGenerator) VisitStmtNode(unknown bs_core.IStmtNode) interface{} {
       }
       return nil
     }
-    case *bs_ast.SwitchNode: {
+    case *xtc_ast.SwitchNode: {
       caseNodes := node.GetCases()
-      cases := make([]*bs_ir.Case, len(caseNodes))
-      endLabel := bs_asm.NewUnnamedLabel()
+      cases := make([]*xtc_ir.Case, len(caseNodes))
+      endLabel := xtc_asm.NewUnnamedLabel()
       defaultLabel := endLabel
       cond := self.transformExpr(node.GetCond())
       for i := range caseNodes {
-        c := caseNodes[i].(*bs_ast.CaseNode)
+        c := caseNodes[i].(*xtc_ast.CaseNode)
         if c.IsDefault() {
           defaultLabel = c.GetLabel()
         } else {
           values := c.GetValues()
           for j := range values {
             v := self.transformExpr(values[j])
-            cases[i] = bs_ir.NewCase(v.(*bs_ir.Int).GetValue(), c.GetLabel())
+            cases[i] = xtc_ir.NewCase(v.(*xtc_ir.Int).GetValue(), c.GetLabel())
           }
         }
       }
-      self.stmts = append(self.stmts, bs_ir.NewSwitch(node.GetLocation(), cond, cases, defaultLabel, endLabel))
+      self.stmts = append(self.stmts, xtc_ir.NewSwitch(node.GetLocation(), cond, cases, defaultLabel, endLabel))
       self.pushBreak(endLabel)
       for i := range caseNodes {
-        c := caseNodes[i].(*bs_ast.CaseNode)
+        c := caseNodes[i].(*xtc_ast.CaseNode)
         self.label(c.GetLabel())
         self.transformStmt(c.GetBody())
       }
@@ -423,13 +423,13 @@ func (self *IRGenerator) VisitStmtNode(unknown bs_core.IStmtNode) interface{} {
       self.label(endLabel)
       return nil
     }
-    case *bs_ast.CaseNode: {
+    case *xtc_ast.CaseNode: {
       panic("must not happen")
     }
-    case *bs_ast.WhileNode: {
-      begLabel := bs_asm.NewUnnamedLabel()
-      bodyLabel := bs_asm.NewUnnamedLabel()
-      endLabel := bs_asm.NewUnnamedLabel()
+    case *xtc_ast.WhileNode: {
+      begLabel := xtc_asm.NewUnnamedLabel()
+      bodyLabel := xtc_asm.NewUnnamedLabel()
+      endLabel := xtc_asm.NewUnnamedLabel()
       self.label(begLabel)
       self.cjump(node.GetLocation(), self.transformExpr(node.GetCond()), bodyLabel, endLabel)
       self.label(bodyLabel)
@@ -442,10 +442,10 @@ func (self *IRGenerator) VisitStmtNode(unknown bs_core.IStmtNode) interface{} {
       self.label(endLabel)
       return nil
     }
-    case *bs_ast.DoWhileNode: {
-      begLabel := bs_asm.NewUnnamedLabel()
-      contLabel := bs_asm.NewUnnamedLabel()
-      endLabel := bs_asm.NewUnnamedLabel()
+    case *xtc_ast.DoWhileNode: {
+      begLabel := xtc_asm.NewUnnamedLabel()
+      contLabel := xtc_asm.NewUnnamedLabel()
+      endLabel := xtc_asm.NewUnnamedLabel()
       self.pushContinue(contLabel)
       self.pushBreak(endLabel)
       self.label(begLabel)
@@ -457,11 +457,11 @@ func (self *IRGenerator) VisitStmtNode(unknown bs_core.IStmtNode) interface{} {
       self.label(endLabel)
       return nil
     }
-    case *bs_ast.ForNode: {
-      begLabel := bs_asm.NewUnnamedLabel()
-      bodyLabel := bs_asm.NewUnnamedLabel()
-      contLabel := bs_asm.NewUnnamedLabel()
-      endLabel := bs_asm.NewUnnamedLabel()
+    case *xtc_ast.ForNode: {
+      begLabel := xtc_asm.NewUnnamedLabel()
+      bodyLabel := xtc_asm.NewUnnamedLabel()
+      contLabel := xtc_asm.NewUnnamedLabel()
+      endLabel := xtc_asm.NewUnnamedLabel()
       self.transformStmtExpr(node.GetInit())
       self.label(begLabel)
       self.cjump(node.GetLocation(), self.transformExpr(node.GetCond()), bodyLabel, endLabel)
@@ -477,31 +477,31 @@ func (self *IRGenerator) VisitStmtNode(unknown bs_core.IStmtNode) interface{} {
       self.label(endLabel)
       return nil
     }
-    case *bs_ast.BreakNode: {
+    case *xtc_ast.BreakNode: {
       self.jump(self.currentBreakTarget())
       return nil
     }
-    case *bs_ast.ContinueNode: {
+    case *xtc_ast.ContinueNode: {
       self.jump(self.currentContinueTarget())
       return nil
     }
-    case *bs_ast.LabelNode: {
-      stmt := bs_ir.NewLabelStmt(node.GetLocation(), self.defineLabel(node.GetName(), node.GetLocation()))
+    case *xtc_ast.LabelNode: {
+      stmt := xtc_ir.NewLabelStmt(node.GetLocation(), self.defineLabel(node.GetName(), node.GetLocation()))
       self.stmts = append(self.stmts, stmt)
       if node.GetStmt() != nil {
         self.transformStmt(node.GetStmt())
       }
       return nil
     }
-    case *bs_ast.GotoNode: {
+    case *xtc_ast.GotoNode: {
       self.jump(self.referLabel(node.GetTarget()))
     }
-    case *bs_ast.ReturnNode: {
-      var expr bs_core.IExpr
+    case *xtc_ast.ReturnNode: {
+      var expr xtc_core.IExpr
       if node.GetExpr() != nil {
         expr = self.transformExpr(node.GetExpr())
       }
-      self.stmts = append(self.stmts, bs_ir.NewReturn(node.GetLocation(), expr))
+      self.stmts = append(self.stmts, xtc_ir.NewReturn(node.GetLocation(), expr))
       return nil
     }
     default: {
@@ -511,12 +511,12 @@ func (self *IRGenerator) VisitStmtNode(unknown bs_core.IStmtNode) interface{} {
   return nil
 }
 
-func (self *IRGenerator) VisitExprNode(unknown bs_core.IExprNode) interface{} {
+func (self *IRGenerator) VisitExprNode(unknown xtc_core.IExprNode) interface{} {
   switch node := unknown.(type) {
-    case *bs_ast.CondExprNode: {
-      thenLabel := bs_asm.NewUnnamedLabel()
-      elseLabel := bs_asm.NewUnnamedLabel()
-      endLabel := bs_asm.NewUnnamedLabel()
+    case *xtc_ast.CondExprNode: {
+      thenLabel := xtc_asm.NewUnnamedLabel()
+      elseLabel := xtc_asm.NewUnnamedLabel()
+      endLabel := xtc_asm.NewUnnamedLabel()
       v := self.tmpVar(node.GetType())
       cond := self.transformExpr(node.GetCond())
       self.cjump(node.GetLocation(), cond, thenLabel, elseLabel)
@@ -533,9 +533,9 @@ func (self *IRGenerator) VisitExprNode(unknown bs_core.IExprNode) interface{} {
         return self.ref(v)
       }
     }
-    case *bs_ast.LogicalAndNode: {
-      rightLabel := bs_asm.NewUnnamedLabel()
-      endLabel := bs_asm.NewUnnamedLabel()
+    case *xtc_ast.LogicalAndNode: {
+      rightLabel := xtc_asm.NewUnnamedLabel()
+      endLabel := xtc_asm.NewUnnamedLabel()
       v := self.tmpVar(node.GetType())
       self.assign(node.GetLeft().GetLocation(), self.ref(v), self.transformExpr(node.GetLeft()))
       self.cjump(node.GetLocation(), self.ref(v), rightLabel, endLabel)
@@ -548,9 +548,9 @@ func (self *IRGenerator) VisitExprNode(unknown bs_core.IExprNode) interface{} {
         return self.ref(v)
       }
     }
-    case *bs_ast.LogicalOrNode: {
-      rightLabel := bs_asm.NewUnnamedLabel()
-      endLabel := bs_asm.NewUnnamedLabel()
+    case *xtc_ast.LogicalOrNode: {
+      rightLabel := xtc_asm.NewUnnamedLabel()
+      endLabel := xtc_asm.NewUnnamedLabel()
       v := self.tmpVar(node.GetType())
       self.assign(node.GetLeft().GetLocation(), self.ref(v), self.transformExpr(node.GetLeft()))
       self.cjump(node.GetLocation(), self.ref(v), endLabel, rightLabel)
@@ -563,7 +563,7 @@ func (self *IRGenerator) VisitExprNode(unknown bs_core.IExprNode) interface{} {
         return self.ref(v)
       }
     }
-    case *bs_ast.AssignNode: {
+    case *xtc_ast.AssignNode: {
       lloc := node.GetLHS().GetLocation()
       rloc := node.GetRHS().GetLocation()
       if self.isStatement() {
@@ -577,21 +577,21 @@ func (self *IRGenerator) VisitExprNode(unknown bs_core.IExprNode) interface{} {
         return self.ref(tmp)
       }
     }
-    case *bs_ast.OpAssignNode: {
+    case *xtc_ast.OpAssignNode: {
       rhs := self.transformExpr(node.GetRHS())
       lhs := self.transformExpr(node.GetLHS())
       t := node.GetLHS().GetType()
-      op := bs_ir.OpInternBinary(node.GetOperator(), t.IsSigned())
+      op := xtc_ir.OpInternBinary(node.GetOperator(), t.IsSigned())
       return self.transformOpAssign(node.GetLocation(), op, t, lhs, rhs)
     }
-    case *bs_ast.PrefixOpNode: {
+    case *xtc_ast.PrefixOpNode: {
       t := node.GetExpr().GetType()
       return self.transformOpAssign(node.GetLocation(),
                                     self.binOp(node.GetOperator()),
                                     t,
                                     self.transformExpr(node.GetExpr()), self.imm(t, 1))
     }
-    case *bs_ast.SuffixOpNode: {
+    case *xtc_ast.SuffixOpNode: {
       expr := self.transformExpr(node.GetExpr())
       t := node.GetExpr().GetType()
       op := self.binOp(node.GetOperator())
@@ -615,88 +615,88 @@ func (self *IRGenerator) VisitExprNode(unknown bs_core.IExprNode) interface{} {
         }
       }
     }
-    case *bs_ast.FuncallNode: {
+    case *xtc_ast.FuncallNode: {
       numArgs := node.NumArgs()
-      args := make([]bs_core.IExpr, numArgs)
+      args := make([]xtc_core.IExpr, numArgs)
       for i := range args {
         a := node.GetArg(numArgs-1-i)
         args[i] = self.transformExpr(a)
       }
-      call := bs_ir.NewCall(self.asmType(node.GetType()),
+      call := xtc_ir.NewCall(self.asmType(node.GetType()),
                          self.transformExpr(node.GetExpr()),
                          args)
       if self.isStatement() {
-        self.stmts = append(self.stmts, bs_ir.NewExprStmt(node.GetLocation(), call))
+        self.stmts = append(self.stmts, xtc_ir.NewExprStmt(node.GetLocation(), call))
       } else {
         tmp := self.tmpVar(node.GetType())
         self.assign(node.GetLocation(), self.ref(tmp), call)
         return self.ref(tmp)
       }
     }
-    case *bs_ast.BinaryOpNode: {
+    case *xtc_ast.BinaryOpNode: {
       right := self.transformExpr(node.GetRight())
       left := self.transformExpr(node.GetLeft())
-      op := bs_ir.OpInternBinary(node.GetOperator(), node.GetType().IsSigned())
+      op := xtc_ir.OpInternBinary(node.GetOperator(), node.GetType().IsSigned())
       t := node.GetType()
       r := node.GetRight().GetType()
       l := node.GetLeft().GetType()
       if self.isPointerDiff(op, l, r) {
-        tmp := bs_ir.NewBin(self.asmType(t), op, left, right)
-        return bs_ir.NewBin(self.asmType(t), bs_ir.OP_S_DIV, tmp, self.ptrBaseSize(l))
+        tmp := xtc_ir.NewBin(self.asmType(t), op, left, right)
+        return xtc_ir.NewBin(self.asmType(t), xtc_ir.OP_S_DIV, tmp, self.ptrBaseSize(l))
       } else {
         if self.isPointerArithmetic(op, l) {
-          return bs_ir.NewBin(self.asmType(t), op,
+          return xtc_ir.NewBin(self.asmType(t), op,
                            left, 
-                           bs_ir.NewBin(self.asmType(r), bs_ir.OP_MUL,
+                           xtc_ir.NewBin(self.asmType(r), xtc_ir.OP_MUL,
                                      right,
                                      self.ptrBaseSize(l)))
         } else {
           if self.isPointerArithmetic(op, r) {
-            return bs_ir.NewBin(self.asmType(t), op,
-                             bs_ir.NewBin(self.asmType(l), bs_ir.OP_MUL, left, self.ptrBaseSize(r)),
+            return xtc_ir.NewBin(self.asmType(t), op,
+                             xtc_ir.NewBin(self.asmType(l), xtc_ir.OP_MUL, left, self.ptrBaseSize(r)),
                              right)
           } else {
-            return bs_ir.NewBin(self.asmType(t), op, left, right)
+            return xtc_ir.NewBin(self.asmType(t), op, left, right)
           }
         }
       }
     }
-    case *bs_ast.UnaryOpNode: {
+    case *xtc_ast.UnaryOpNode: {
       if node.GetOperator() == "+" {
         return self.transformExpr(node.GetExpr())
       } else {
-        return bs_ir.NewUni(self.asmType(node.GetType()),
-                         bs_ir.OpInternUnary(node.GetOperator()),
+        return xtc_ir.NewUni(self.asmType(node.GetType()),
+                         xtc_ir.OpInternUnary(node.GetOperator()),
                          self.transformExpr(node.GetExpr()))
       }
     }
-    case *bs_ast.ArefNode: {
+    case *xtc_ast.ArefNode: {
       expr := self.transformExpr(node.GetBaseExpr())
-      offset := bs_ir.NewBin(self.ptrdiff_t(), bs_ir.OP_MUL, self.size(int64(node.GetElementSize())), self.transformIndex(node))
-      addr := bs_ir.NewBin(self.ptr_t(), bs_ir.OP_ADD, expr, offset)
+      offset := xtc_ir.NewBin(self.ptrdiff_t(), xtc_ir.OP_MUL, self.size(int64(node.GetElementSize())), self.transformIndex(node))
+      addr := xtc_ir.NewBin(self.ptr_t(), xtc_ir.OP_ADD, expr, offset)
       return self.mem2(addr, node.GetType())
     }
-    case *bs_ast.MemberNode: {
+    case *xtc_ast.MemberNode: {
       expr := self.addressOf(self.transformExpr(node.GetExpr()))
       offset := self.ptrdiff(int64(node.GetOffset()))
-      addr := bs_ir.NewBin(self.ptr_t(), bs_ir.OP_ADD, expr, offset)
+      addr := xtc_ir.NewBin(self.ptr_t(), xtc_ir.OP_ADD, expr, offset)
       if node.IsLoadable() {
         return self.mem2(addr, node.GetType())
       } else {
         return addr
       }
     }
-    case *bs_ast.PtrMemberNode: {
+    case *xtc_ast.PtrMemberNode: {
       expr := self.transformExpr(node.GetExpr())
       offset := self.ptrdiff(int64(node.GetOffset()))
-      addr := bs_ir.NewBin(self.ptr_t(), bs_ir.OP_ADD, expr, offset)
+      addr := xtc_ir.NewBin(self.ptr_t(), xtc_ir.OP_ADD, expr, offset)
       if node.IsLoadable() {
         return self.mem2(addr, node.GetType())
       } else {
         return addr
       }
     }
-    case *bs_ast.DereferenceNode: {
+    case *xtc_ast.DereferenceNode: {
       addr := self.transformExpr(node.GetExpr())
       if node.IsLoadable() {
         return self.mem2(addr, node.GetType())
@@ -704,7 +704,7 @@ func (self *IRGenerator) VisitExprNode(unknown bs_core.IExprNode) interface{} {
         return addr
       }
     }
-    case *bs_ast.AddressNode: {
+    case *xtc_ast.AddressNode: {
       e := self.transformExpr(node.GetExpr())
       if node.GetExpr().IsLoadable() {
         return self.addressOf(e)
@@ -712,12 +712,12 @@ func (self *IRGenerator) VisitExprNode(unknown bs_core.IExprNode) interface{} {
         return e
       }
     }
-    case *bs_ast.CastNode: {
+    case *xtc_ast.CastNode: {
       if node.IsEffectiveCast() {
         if node.GetExpr().GetType().IsSigned() {
-          return bs_ir.NewUni(self.asmType(node.GetType()), bs_ir.OP_S_CAST, self.transformExpr(node.GetExpr()))
+          return xtc_ir.NewUni(self.asmType(node.GetType()), xtc_ir.OP_S_CAST, self.transformExpr(node.GetExpr()))
         } else {
-          return bs_ir.NewUni(self.asmType(node.GetType()), bs_ir.OP_U_CAST, self.transformExpr(node.GetExpr()))
+          return xtc_ir.NewUni(self.asmType(node.GetType()), xtc_ir.OP_U_CAST, self.transformExpr(node.GetExpr()))
         }
       } else {
         if self.isStatement() {
@@ -727,13 +727,13 @@ func (self *IRGenerator) VisitExprNode(unknown bs_core.IExprNode) interface{} {
         }
       }
     }
-    case *bs_ast.SizeofExprNode: {
-      return bs_ir.NewInt(self.size_t(), int64(node.GetExpr().GetType().AllocSize()))
+    case *xtc_ast.SizeofExprNode: {
+      return xtc_ir.NewInt(self.size_t(), int64(node.GetExpr().GetType().AllocSize()))
     }
-    case *bs_ast.SizeofTypeNode: {
-      return bs_ir.NewInt(self.size_t(), int64(node.GetOperandType().AllocSize()))
+    case *xtc_ast.SizeofTypeNode: {
+      return xtc_ir.NewInt(self.size_t(), int64(node.GetOperandType().AllocSize()))
     }
-    case *bs_ast.VariableNode: {
+    case *xtc_ast.VariableNode: {
       if node.GetEntity().IsConstant() {
         return self.transformExpr(node.GetEntity().GetValue())
       } else {
@@ -745,11 +745,11 @@ func (self *IRGenerator) VisitExprNode(unknown bs_core.IExprNode) interface{} {
         }
       }
     }
-    case *bs_ast.IntegerLiteralNode: {
-      return bs_ir.NewInt(self.asmType(node.GetType()), node.GetValue())
+    case *xtc_ast.IntegerLiteralNode: {
+      return xtc_ir.NewInt(self.asmType(node.GetType()), node.GetValue())
     }
-    case *bs_ast.StringLiteralNode: {
-      return bs_ir.NewStr(self.asmType(node.GetType()), node.GetEntry())
+    case *xtc_ast.StringLiteralNode: {
+      return xtc_ir.NewStr(self.asmType(node.GetType()), node.GetEntry())
     }
     default: {
       visitExprNode(self, unknown)
@@ -758,7 +758,7 @@ func (self *IRGenerator) VisitExprNode(unknown bs_core.IExprNode) interface{} {
   return nil
 }
 
-func (self *IRGenerator) VisitTypeDefinition(unknown bs_core.ITypeDefinition) interface{} {
+func (self *IRGenerator) VisitTypeDefinition(unknown xtc_core.ITypeDefinition) interface{} {
   visitTypeDefinition(self, unknown)
   return nil
 }

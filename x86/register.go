@@ -2,8 +2,8 @@ package x86
 
 import (
   "fmt"
-  bs_asm "bitbucket.org/yyuu/bs/asm"
-  bs_core "bitbucket.org/yyuu/bs/core"
+  xtc_asm "bitbucket.org/yyuu/xtc/asm"
+  xtc_core "bitbucket.org/yyuu/xtc/core"
 )
 
 const (
@@ -26,11 +26,11 @@ func NewRegister(klass int, t int) *Register {
   return &Register { klass, t }
 }
 
-func (self *Register) AsOperand() bs_core.IOperand {
+func (self *Register) AsOperand() xtc_core.IOperand {
   return self
 }
 
-func (self *Register) AsRegister() bs_core.IRegister {
+func (self *Register) AsRegister() xtc_core.IRegister {
   return self
 }
 
@@ -66,20 +66,20 @@ func (self Register) ForType(t int) *Register {
   return NewRegister(self.Class, t)
 }
 
-func (self *Register) CollectStatistics(stats bs_core.IStatistics) {
+func (self *Register) CollectStatistics(stats xtc_core.IStatistics) {
   stats.RegisterUsed(self)
 }
 
-func (self *Register) ToSource(table bs_core.ISymbolTable) string {
+func (self *Register) ToSource(table xtc_core.ISymbolTable) string {
   return fmt.Sprintf("%%%s", self.GetTypedName())
 }
 
 func (self *Register) GetTypedName() string {
   switch self.TypeId {
-    case bs_asm.TYPE_INT8:  return self.lowerByteRegister()
-    case bs_asm.TYPE_INT16: return self.GetBaseName()
-    case bs_asm.TYPE_INT32: return fmt.Sprintf("e%s", self.GetBaseName())
-    case bs_asm.TYPE_INT64: return fmt.Sprintf("r%s", self.GetBaseName())
+    case xtc_asm.TYPE_INT8:  return self.lowerByteRegister()
+    case xtc_asm.TYPE_INT16: return self.GetBaseName()
+    case xtc_asm.TYPE_INT32: return fmt.Sprintf("e%s", self.GetBaseName())
+    case xtc_asm.TYPE_INT64: return fmt.Sprintf("r%s", self.GetBaseName())
     default: {
       panic(fmt.Errorf("unknown register type: %d", self.TypeId))
     }
