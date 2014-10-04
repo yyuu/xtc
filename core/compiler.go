@@ -89,10 +89,6 @@ func (self SourceFile) Remove() error {
   return os.Remove(self.GetPath())
 }
 
-func (self SourceFile) Rename(s string) error {
-  return os.Rename(self.GetPath(), s)
-}
-
 func (self SourceFile) IsGenerated() bool {
   return self.generated
 }

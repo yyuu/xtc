@@ -12,7 +12,10 @@ func main() {
   compiler := bs_compiler.NewCompiler(os.Args[0], os.Args[1:])
   files := compiler.SourceFiles()
   if 0 < len(files) {
-    compiler.Compile()
+    _, err := compiler.Compile()
+    if err != nil {
+      fmt.Fprintln(os.Stderr, err)
+    }
   } else {
     repl(compiler)
   }
@@ -60,7 +63,10 @@ func repl(compiler *bs_compiler.Compiler) {
       case "r": fallthrough
       case "ru": fallthrough
       case "run": {
-        compiler.CompileString(strings.Join(sources, ""))
+        _, err := compiler.CompileString(strings.Join(sources, ""))
+        if err != nil {
+          fmt.Fprintln(os.Stderr, err)
+        }
       }
       case "ex": fallthrough
       case "exi": fallthrough

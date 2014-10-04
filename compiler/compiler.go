@@ -3,6 +3,7 @@ package compiler
 import (
   "encoding/json"
   "fmt"
+  "os"
   "os/exec"
   bs_ast "bitbucket.org/yyuu/bs/ast"
   bs_core "bitbucket.org/yyuu/bs/core"
@@ -36,25 +37,36 @@ func (self *Compiler) SourceFiles() []*bs_core.SourceFile {
   return sources
 }
 
-func (self *Compiler) Compile() {
-  _, err := self.phase1(self.SourceFiles())
+func (self *Compiler) Compile() (string, error) {
+  dst, err := self.phase1(self.SourceFiles())
   if err != nil {
     self.errorHandler.Fatal(err)
-    return
+    return "", err
   }
+  path := dst.GetPath()
+  if self.options.OutputFilename() != "" {
+    err := os.Rename(path, self.options.OutputFilename())
+    if err != nil {
+      self.errorHandler.Fatal(err)
+      return "", err
+    }
+    path = self.options.OutputFilename()
+  }
+  return path, nil
 }
 
-func (self *Compiler) CompileString(s string) {
+func (self *Compiler) CompileString(s string) (string, error) {
   src, err := bs_core.NewTemporarySourceFile("", bs_core.EXT_PROGRAM_SOURCE, []byte(s))
   if err != nil {
     self.errorHandler.Fatal(err)
-    return
+    return "", err
   }
-  _, err = self.phase1([]*bs_core.SourceFile { src })
+  dst, err := self.phase1([]*bs_core.SourceFile { src })
   if err != nil {
     self.errorHandler.Fatal(err)
-    return
+    return "", err
   }
+  return dst.GetPath(), nil
 }
 
 func (self *Compiler) phase1(sources []*bs_core.SourceFile) (*bs_core.SourceFile, error) {
@@ -195,6 +207,7 @@ func (self *Compiler) assemble(src *bs_core.SourceFile) (*bs_core.SourceFile, er
 func (self *Compiler) link(src *bs_core.SourceFile) (*bs_core.SourceFile, error) {
   dst := src.ToExecutableFile()
   self.errorHandler.Warn("FIXME: Compiler#link: not implemented")
+  dst.WriteAll([]byte { })
   return dst, nil
 }
 

@@ -213,3 +213,7 @@ func (self *Options) GetLibraryPath() []string {
   libraryPath = append(libraryPath, "xtcpath")
   return libraryPath
 }
+
+func (self *Options) OutputFilename() string {
+  return *self.output
+}
