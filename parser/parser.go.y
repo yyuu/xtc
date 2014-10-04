@@ -924,17 +924,27 @@ func (self *lexer) Error(s string) {
   self.errorHandler.Error(s)
 }
 
-type sourceReader interface {
-  GetName() string
-  Read() ([]byte, error)
+func ParseExpr(s string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
+  src, err := core.NewTemporarySourceFile(core.EXT_PROGRAM_SOURCE, []byte(s))
+  if err != nil {
+    return nil, err
+  }
+  defer func() {
+    src.Remove()
+  }()
+  return Parse(src, errorHandler, options)
 }
 
-func Parse(src sourceReader, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
+func ParseFile(path string, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
+  return Parse(core.NewSourceFile(path), errorHandler, options)
+}
+
+func Parse(src *core.SourceFile, errorHandler *core.ErrorHandler, options *core.Options) (*ast.AST, error) {
   if options.IsVerboseMode() {
     yyDebug = 4 // TODO: configurable
   }
   loader := newLibraryLoader(errorHandler, options)
-  bytes, err := src.Read()
+  bytes, err := src.ReadAll()
   if err != nil {
     return nil, err
   }

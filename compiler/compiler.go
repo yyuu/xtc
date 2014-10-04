@@ -3,8 +3,6 @@ package compiler
 import (
   "encoding/json"
   "fmt"
-  "io/ioutil"
-  "os"
   bs_ast "bitbucket.org/yyuu/bs/ast"
   bs_core "bitbucket.org/yyuu/bs/core"
   bs_ir "bitbucket.org/yyuu/bs/ir"
@@ -35,7 +33,7 @@ func (self *Compiler) SourceFiles() []string {
 func (self *Compiler) Compile() {
   files := self.SourceFiles()
   for i := range files {
-    err := self.phase1(NewSourceFile(files[i]))
+    err := self.phase1(bs_core.NewSourceFile(files[i]))
     if err != nil {
       self.errorHandler.Fatal(err)
     }
@@ -43,28 +41,23 @@ func (self *Compiler) Compile() {
 }
 
 func (self *Compiler) CompileString(s string) {
-  tmpdir, err := ioutil.TempDir("/tmp", "xtc.")
+  src, err := bs_core.NewTemporarySourceFile(bs_core.EXT_PROGRAM_SOURCE, []byte(s))
   if err != nil {
     self.errorHandler.Fatal(err)
+    return
   }
-  defer func() {
-    err := os.RemoveAll(tmpdir)
-    if err != nil {
-      self.errorHandler.Fatal(err)
-    }
-  }()
-  tempfile := tmpdir + "/a.xtc"
-  err = ioutil.WriteFile(tempfile, []byte(s), 0644)
-  if err != nil {
-    self.errorHandler.Fatal(err)
-  }
-  err = self.phase1(NewSourceFile(tempfile))
+  err = self.phase1(src)
   if err != nil {
     self.errorHandler.Fatal(err)
   }
 }
 
-func (self *Compiler) phase1(src *SourceFile) error {
+func (self *Compiler) phase1(src *bs_core.SourceFile) error {
+  defer func() {
+    if src != nil && src.IsTemporary() {
+      src.Remove()
+    }
+  }()
   if src.IsProgramSource() {
     dst := src.ToAssemblySource()
     err := self.compile(src, dst)
@@ -77,7 +70,12 @@ func (self *Compiler) phase1(src *SourceFile) error {
   }
 }
 
-func (self *Compiler) phase2(src *SourceFile) error {
+func (self *Compiler) phase2(src *bs_core.SourceFile) error {
+  defer func() {
+    if src != nil && src.IsTemporary() {
+      src.Remove()
+    }
+  }()
   if src.IsAssemblySource() {
     dst := src.ToObjectFile()
     err := self.assemble(src, dst)
@@ -90,7 +88,12 @@ func (self *Compiler) phase2(src *SourceFile) error {
   }
 }
 
-func (self *Compiler) phase3(src *SourceFile) error {
+func (self *Compiler) phase3(src *bs_core.SourceFile) error {
+  defer func() {
+    if src != nil && src.IsTemporary() {
+      src.Remove()
+    }
+  }()
   if src.IsObjectFile() {
     return self.link(src)
   } else {
@@ -98,7 +101,7 @@ func (self *Compiler) phase3(src *SourceFile) error {
   }
 }
 
-func (self *Compiler) compile(src *SourceFile, dst *SourceFile) error {
+func (self *Compiler) compile(src *bs_core.SourceFile, dst *bs_core.SourceFile) error {
   ast, err := bs_parser.Parse(src, self.errorHandler, self.options)
   if err != nil {
     return err
@@ -121,7 +124,7 @@ func (self *Compiler) compile(src *SourceFile, dst *SourceFile) error {
   }
   self.dumpAsm(asm)
   self.printAsm(asm)
-  dst.Write([]byte(asm.ToSource()))
+  dst.WriteAll([]byte(asm.ToSource()))
   return nil
 }
 
@@ -147,11 +150,11 @@ func (self *Compiler) generateAssembly(ir *bs_ir.IR) (bs_sysdep.AssemblyCode, er
   return code_generator.Generate(ir)
 }
 
-func (self *Compiler) assemble(src *SourceFile, dst *SourceFile) error {
+func (self *Compiler) assemble(src *bs_core.SourceFile, dst *bs_core.SourceFile) error {
   return fmt.Errorf("not implemented")
 }
 
-func (self *Compiler) link(src *SourceFile) error {
+func (self *Compiler) link(src *bs_core.SourceFile) error {
   return fmt.Errorf("not implemented")
 }
 
