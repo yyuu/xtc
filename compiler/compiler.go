@@ -5,6 +5,7 @@ import (
   "fmt"
   "os"
   "os/exec"
+  "strings"
   xtc_ast "bitbucket.org/yyuu/xtc/ast"
   xtc_core "bitbucket.org/yyuu/xtc/core"
   xtc_ir "bitbucket.org/yyuu/xtc/ir"
@@ -217,7 +218,15 @@ func (self *Compiler) generateAssembly(ir *xtc_ir.IR) (xtc_core.IAssemblyCode, e
 
 func (self *Compiler) assemble(src *xtc_core.SourceFile) (*xtc_core.SourceFile, error) {
   dst := src.ToObjectFile()
-  err := exec.Command("/usr/bin/as", "--32", "-o", fmt.Sprint(dst), fmt.Sprint(src)).Run()
+  cmd := []string {
+    "/usr/bin/as",
+    "--32",
+    "-o",
+    fmt.Sprint(dst),
+    fmt.Sprint(src),
+  }
+  self.errorHandler.Info(strings.Join(cmd, " "))
+  err := exec.Command(cmd[0], cmd[1:]...).Run()
   if err != nil {
     return nil, err
   }
@@ -226,9 +235,24 @@ func (self *Compiler) assemble(src *xtc_core.SourceFile) (*xtc_core.SourceFile, 
 
 func (self *Compiler) link(src *xtc_core.SourceFile) (*xtc_core.SourceFile, error) {
   dst := src.ToExecutableFile()
-  self.errorHandler.Warn("FIXME: Compiler#link: not implemented")
-  dst.WriteAll([]byte { })
-  os.Chmod(dst.GetPath(), 0755) // FIXME: support umask
+  cmd := []string {
+    "/usr/bin/ld",
+    "-melf_i386",
+    "-dynamic-linker",
+    "/lib32/ld-linux.so.2", // dynamic linker
+    "/usr/lib32/crt1.o", // C runtime start (libc6-dev-i386)
+    "/usr/lib32/crti.o", // C runtime init (libc6-dev-i386)
+    "-lc",
+    "/usr/lib32/crtn.o", // C runtime finish (libc6-dev-i386)
+    "-o",
+    fmt.Sprint(dst),
+    fmt.Sprint(src),
+  }
+  self.errorHandler.Info(strings.Join(cmd, " "))
+  err := exec.Command(cmd[0], cmd[1:]...).Run()
+  if err != nil {
+    return nil, err
+  }
   return dst, nil
 }
 
