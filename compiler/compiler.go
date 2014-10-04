@@ -128,9 +128,8 @@ func (self *Compiler) phase3(src *bs_core.SourceFile) (*bs_core.SourceFile, erro
       }
     }()
     return self.link(src)
-  } else {
-    return nil, fmt.Errorf("not an object file: %s", src)
   }
+  return src, nil
 }
 
 func (self *Compiler) compile(sources []*bs_core.SourceFile) (*bs_core.SourceFile, error) {
@@ -153,7 +152,7 @@ func (self *Compiler) compile(sources []*bs_core.SourceFile) (*bs_core.SourceFil
   }
   if self.options.DumpAST() {
     self.dumpAST(ast)
-    return dst, nil
+    return sources[0], nil
   }
   types := bs_typesys.NewTypeTableFor(self.options.TargetPlatform())
   sem, err := self.semanticAnalyze(ast, types)
@@ -162,7 +161,7 @@ func (self *Compiler) compile(sources []*bs_core.SourceFile) (*bs_core.SourceFil
   }
   if self.options.DumpSemantic() {
     self.dumpSemant(sem)
-    return dst, nil
+    return sources[0], nil
   }
   ir, err := NewIRGenerator(self.errorHandler, self.options, types).Generate(sem)
   if err != nil {
@@ -170,7 +169,7 @@ func (self *Compiler) compile(sources []*bs_core.SourceFile) (*bs_core.SourceFil
   }
   if self.options.DumpIR() {
     self.dumpIR(ir)
-    return dst, nil
+    return sources[0], nil
   }
   asm, err := self.generateAssembly(ir)
   if err != nil {
@@ -178,11 +177,11 @@ func (self *Compiler) compile(sources []*bs_core.SourceFile) (*bs_core.SourceFil
   }
   if self.options.DumpAsm() {
     self.dumpAsm(asm)
-    return dst, nil
+    return sources[0], nil
   }
   if self.options.PrintAsm() {
     self.printAsm(asm)
-    return dst, nil
+    return sources[0], nil
   }
   dst.WriteAll([]byte(asm.ToSource()))
   return dst, nil
