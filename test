@@ -32,5 +32,8 @@ go test -v ./asm
 go test -i ./compiler
 go test -v ./compiler
 
-go test -i ./sysdep
-go test -v ./sysdep
+go test -i ./x86
+go test -v ./x86
+
+go test -i ./x86/linux
+go test -v ./x86/linux
