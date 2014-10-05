@@ -360,3 +360,81 @@ func TestTypeResolverWithFunctionArguments(t *testing.T) {
     }
   }()
 }
+
+func TestTypeResolverNestedBlocks(t *testing.T) {
+/*
+  int main(int argc, char*[] argv) {
+    int i;
+    char* arg;
+    for (i=0; i<argc; i++) {
+      arg = argv[i];
+      printf("argv[%d]=%s\n", i, arg);
+    }
+  }
+ */
+  loc := xtc_core.NewLocation("", 0, 0)
+  a := xtc_ast.NewAST(loc,
+    xtc_ast.NewDeclaration(
+      xtc_entity.NewDefinedVariables(),
+      xtc_entity.NewUndefinedVariables(),
+      xtc_entity.NewDefinedFunctions(
+        xtc_entity.NewDefinedFunction(
+          false,
+          xtc_ast.NewTypeNode(loc, xtc_typesys.NewIntTypeRef(loc)),
+          "main",
+          xtc_entity.NewParams(loc,
+            xtc_entity.NewParameters(
+              xtc_entity.NewParameter(xtc_ast.NewTypeNode(loc, xtc_typesys.NewIntTypeRef(loc)), "argc"),
+              xtc_entity.NewParameter(xtc_ast.NewTypeNode(loc, xtc_typesys.NewArrayTypeRef(xtc_typesys.NewPointerTypeRef(xtc_typesys.NewCharTypeRef(loc)), 0)), "argv"),
+            ),
+            false,
+          ),
+          xtc_ast.NewBlockNode(loc,
+            xtc_entity.NewDefinedVariables(
+              xtc_entity.NewDefinedVariable(false, xtc_ast.NewTypeNode(loc, xtc_typesys.NewIntTypeRef(loc)), "i", nil),
+              xtc_entity.NewDefinedVariable(false, xtc_ast.NewTypeNode(loc, xtc_typesys.NewPointerTypeRef(xtc_typesys.NewCharTypeRef(loc))), "arg", nil),
+            ),
+            []xtc_core.IStmtNode {
+              xtc_ast.NewForNode(loc,
+                xtc_ast.NewAssignNode(loc, xtc_ast.NewVariableNode(loc, "i"), xtc_ast.NewIntegerLiteralNode(loc, "0")),
+                xtc_ast.NewBinaryOpNode(loc, "<", xtc_ast.NewVariableNode(loc, "i"), xtc_ast.NewVariableNode(loc, "n")),
+                xtc_ast.NewSuffixOpNode(loc, "++", xtc_ast.NewVariableNode(loc, "i")),
+                xtc_ast.NewBlockNode(loc,
+                  xtc_entity.NewDefinedVariables(),
+                  []xtc_core.IStmtNode {
+                    xtc_ast.NewExprStmtNode(loc,
+                      xtc_ast.NewAssignNode(loc,
+                        xtc_ast.NewVariableNode(loc, "arg"),
+                        xtc_ast.NewArefNode(loc, xtc_ast.NewVariableNode(loc, "argv"), xtc_ast.NewVariableNode(loc, "i")),
+                      ),
+                    ),
+                    xtc_ast.NewExprStmtNode(loc,
+                      xtc_ast.NewFuncallNode(loc,
+                        xtc_ast.NewVariableNode(loc, "printf"),
+                        []xtc_core.IExprNode {
+                          xtc_ast.NewVariableNode(loc, "argv[%d]=%s\n"),
+                          xtc_ast.NewVariableNode(loc, "i"),
+                          xtc_ast.NewVariableNode(loc, "arg"),
+                        },
+                      ),
+                    ),
+                  },
+                ),
+              ),
+            },
+          ),
+        ),
+      ),
+      xtc_entity.NewUndefinedFunctions(),
+      xtc_entity.NewConstants(),
+      xtc_ast.NewStructNodes(),
+      xtc_ast.NewUnionNodes(),
+      xtc_ast.NewTypedefNodes(),
+    ),
+  )
+  table := xtc_typesys.NewTypeTableFor(xtc_core.PLATFORM_X86_LINUX)
+  _, resolver := setupTypeResolver(a, table)
+
+  xtc_entity.VisitEntities(resolver, a.ListEntities())
+  assertTypeResolved(t, "nested blocks", a)
+}
