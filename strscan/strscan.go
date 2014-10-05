@@ -149,8 +149,7 @@ func (self *StringScanner) SkipUntil(pattern string) int {
 }
 
 func mustCompile(pattern string) *regexp.Regexp {
-  // FIXME: bad naming
-  return regexp.MustCompile("\\A" + pattern)
+  return regexp.MustCompile("^(?ms)" + pattern)
 }
 
 func (self *StringScanner) skipRune() {
