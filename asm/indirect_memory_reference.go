@@ -50,9 +50,9 @@ func (self *IndirectMemoryReference) ToSource(table core.ISymbolTable) string {
     panic("must not happen: writing unfixed variable")
   } else {
     if self.Offset.IsZero() {
-      return fmt.Sprintf("%s(%s)", self.Offset.ToSource(table), self.Base.ToSource(table))
-    } else {
       return fmt.Sprintf("(%s)", self.Base.ToSource(table))
+    } else {
+      return fmt.Sprintf("%s(%s)", self.Offset.ToSource(table), self.Base.ToSource(table))
     }
   }
 }
