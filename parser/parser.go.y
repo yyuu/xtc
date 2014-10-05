@@ -951,7 +951,7 @@ func (self *lexer) Lex(lval *yySymType) int {
 }
 
 func (self *lexer) Error(s string) {
-  self.errorHandler.Error(s)
+  self.errorHandler.Errorf("%s %s", self.pos(), s)
 }
 
 func ParseExpr(s string, errorHandler *xtc_core.ErrorHandler, options *xtc_core.Options) (*xtc_ast.AST, error) {

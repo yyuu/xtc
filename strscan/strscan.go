@@ -2,6 +2,7 @@ package strscan
 
 import (
   "regexp"
+  "strings"
   "unicode/utf8"
 )
 
@@ -156,5 +157,16 @@ func (self *StringScanner) skipRune() {
   if !self.IsEOS() {
     _, size := utf8.DecodeRuneInString(self.String[self.offset:])
     self.offset += size
+  }
+}
+
+func (self *StringScanner) LineInfo() (int, int) {
+  // FIXME: inefficient
+  s := self.String[0:self.offset]
+  n := strings.LastIndex(s, "\n")
+  if n == -1 {
+    return 1, len(s)
+  } else {
+    return 1+strings.Count(s, "\n"), len(s[1+n:])
   }
 }
