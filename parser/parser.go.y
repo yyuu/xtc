@@ -838,6 +838,14 @@ unary: PLUSPLUS unary
      {
        $$._node = xtc_ast.NewUnaryOpNode($1._token.location, "~", xtc_ast.AsExprNode($2._node))
      }
+     | '*' term
+     {
+       $$._node = xtc_ast.NewDereferenceNode($1._token.location, xtc_ast.AsExprNode($2._node))
+     }
+     | '&' term
+     {
+       $$._node = xtc_ast.NewAddressNode($1._token.location, xtc_ast.AsExprNode($2._node))
+     }
      | SIZEOF '(' type ')'
      {
        $$._node = xtc_ast.NewSizeofTypeNode($1._token.location, xtc_ast.AsTypeNode($3._node), xtc_typesys.NewUnsignedLongTypeRef($1._token.location))
