@@ -27,8 +27,8 @@ func (self *ToplevelScope) GetParent() core.IScope {
   return nil
 }
 
-func (self *ToplevelScope) AddChild(scope *LocalScope) {
-  self.Children = append(self.Children, scope)
+func (self *ToplevelScope) AddChild(scope core.IScope) {
+  self.Children = append(self.Children, scope.(*LocalScope))
 }
 
 func (self *ToplevelScope) GetByName(name string) core.IEntity {

@@ -12,7 +12,9 @@ type LocalScope struct {
 }
 
 func NewLocalScope(parent core.IScope) *LocalScope {
-  return &LocalScope { parent, []*LocalScope { }, make(map[string]*DefinedVariable) }
+  scope := &LocalScope { parent, []*LocalScope { }, make(map[string]*DefinedVariable) }
+  parent.AddChild(scope)
+  return scope
 }
 
 func (self *LocalScope) IsToplevel() bool {
@@ -31,8 +33,8 @@ func (self *LocalScope) GetChildren() []*LocalScope {
   return self.Children
 }
 
-func (self *LocalScope) AddChild(scope *LocalScope) {
-  self.Children = append(self.Children, scope)
+func (self *LocalScope) AddChild(scope core.IScope) {
+  self.Children = append(self.Children, scope.(*LocalScope))
 }
 
 func (self *LocalScope) GetByName(name string) core.IEntity {

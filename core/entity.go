@@ -40,4 +40,5 @@ type IScope interface {
   GetParent() IScope
   GetByName(string) IEntity
   CheckReferences(*ErrorHandler)
+  AddChild(IScope)
 }
