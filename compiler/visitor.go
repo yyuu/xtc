@@ -29,7 +29,9 @@ func visitBinaryOpNode(v xtc_ast.INodeVisitor, node *xtc_ast.BinaryOpNode) {
 func visitBlockNode(v xtc_ast.INodeVisitor, node *xtc_ast.BlockNode) {
   vars := node.GetVariables()
   for i := range vars {
-    xtc_ast.VisitExprNode(v, vars[i].GetInitializer())
+    if vars[i].HasInitializer() {
+      xtc_ast.VisitExprNode(v, vars[i].GetInitializer())
+    }
   }
   xtc_ast.VisitStmtNodes(v, node.GetStmts())
 }

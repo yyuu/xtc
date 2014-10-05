@@ -292,10 +292,20 @@ static_typeref_name: STATIC typeref_name
                    }
                    ;
 
-defvars: typeref_name '=' expr ';'
+defvars: typeref_name ';'
+       {
+         ref := $1._typeref
+         $$._entity = xtc_entity.NewDefinedVariable(false, xtc_ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, nil)
+       }
+       | typeref_name '=' expr ';'
        {
          ref := $1._typeref
          $$._entity = xtc_entity.NewDefinedVariable(false, xtc_ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, xtc_ast.AsExprNode($3._node))
+       }
+       | static_typeref_name ';'
+       {
+         ref := $1._typeref
+         $$._entity = xtc_entity.NewDefinedVariable(true, xtc_ast.NewTypeNode(ref.GetLocation(), ref), $1._token.literal, nil)
        }
        | static_typeref_name '=' expr ';'
        {
