@@ -42,7 +42,7 @@ func AsUndefinedFunction(x core.IEntity) *UndefinedFunction {
 }
 
 func (self *UndefinedFunction) String() string {
-  return fmt.Sprintf("<entity.UndefinedFunction Name=%s TypeNode=%s Params=%s>", self.Name, self.TypeNode, self.Params)
+  return fmt.Sprintf("extern %s %s(%s) { ... } /* ref=%d */", self.TypeNode.GetTypeRef(), self.Name, self.Params, self.numRefered)
 }
 
 func (self *UndefinedFunction) IsDefined() bool {

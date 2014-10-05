@@ -1,7 +1,6 @@
 package entity
 
 import (
-  "fmt"
   "bitbucket.org/yyuu/xtc/core"
 )
 
@@ -28,7 +27,7 @@ func AsParameter(x core.IEntity) *Parameter {
 }
 
 func (self *Parameter) String() string {
-  return fmt.Sprintf("<entity.Parameter Name=%s TypeNode=%s>", self.DefinedVariable.Name, self.DefinedVariable.TypeNode)
+  return self.DefinedVariable.String()
 }
 
 func (self *Parameter) IsPrivate() bool {

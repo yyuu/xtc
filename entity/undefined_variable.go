@@ -40,7 +40,7 @@ func AsUndefinedVariable(x core.IEntity) *UndefinedVariable {
 }
 
 func (self *UndefinedVariable) String() string {
-  return fmt.Sprintf("<entity.UndefinedVariable Name=%s Private=%v TypeNode=%s>", self.Name, self.Private, self.TypeNode)
+  return fmt.Sprintf("extern %s %s; // ref=%d", self.TypeNode.GetTypeRef(), self.Name, self.numRefered)
 }
 
 func (self *UndefinedVariable) IsDefined() bool {

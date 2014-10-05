@@ -1,7 +1,7 @@
 package entity
 
 import (
-  "fmt"
+  "strings"
   "bitbucket.org/yyuu/xtc/core"
 )
 
@@ -21,7 +21,15 @@ func AsParams(x core.IEntity) *Params {
 }
 
 func (self *Params) String() string {
-  return fmt.Sprintf("<entity.Params Location=%s ParamDescs=%s>", self.Location, self.ParamDescs)
+  ps := make([]string, len(self.ParamDescs))
+  for i := range self.ParamDescs {
+    ps[i] = self.ParamDescs[i].String()
+  }
+  if self.Vararg {
+    return strings.Join(ps, ", ") + ", ..."
+  } else {
+    return strings.Join(ps, ", ")
+  }
 }
 
 func (self *Params) IsDefined() bool {
