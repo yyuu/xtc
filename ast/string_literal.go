@@ -1,6 +1,7 @@
 package ast
 
 import (
+  "fmt"
   "bitbucket.org/yyuu/xtc/core"
   "bitbucket.org/yyuu/xtc/entity"
   "bitbucket.org/yyuu/xtc/typesys"
@@ -22,7 +23,7 @@ func NewStringLiteralNode(loc core.Location, literal string) *StringLiteralNode 
 }
 
 func (self StringLiteralNode) String() string {
-  return self.Value
+  return fmt.Sprintf("%q", self.Value)
 }
 
 func (self *StringLiteralNode) AsExprNode() core.IExprNode {
