@@ -39,6 +39,7 @@ func (self *SymbolTable) SymbolString(sym core.ISymbol) string {
 }
 
 func (self *SymbolTable) newString() string {
+  s := self.Base + strconv.Itoa(self.Seq)
   self.Seq++
-  return self.Base + strconv.Itoa(self.Seq)
+  return s
 }

@@ -150,7 +150,7 @@ func (self *AssemblyCode) typeSuffix(t int) string {
 }
 
 func (self *AssemblyCode) _file(name string) {
-  self.directive(fmt.Sprintf(".file\t%q", name))
+  self.directive(fmt.Sprintf("\t.file\t%q", name))
 }
 
 func (self *AssemblyCode) _text() {
@@ -171,7 +171,7 @@ func (self *AssemblyCode) _section2(name, flags, t, group, linkage string) {
 
 func (self *AssemblyCode) _globl(sym xtc_core.ISymbol) {
   if sym == nil { panic("sym is nil") }
-  self.directive(fmt.Sprintf(".globl %s", sym.GetName()))
+  self.directive(fmt.Sprintf("\t.globl %s", sym.GetName()))
 }
 
 func (self *AssemblyCode) _local(sym xtc_core.ISymbol) {
@@ -186,7 +186,7 @@ func (self *AssemblyCode) _hidden(sym xtc_core.ISymbol) {
 
 func (self *AssemblyCode) _comm(sym xtc_core.ISymbol, size, alignment int64) {
   if sym == nil { panic("sym is nil") }
-  self.directive(fmt.Sprintf("\t.comm\t%s,%d,%d", sym.GetName(), size, alignment))
+  self.directive(fmt.Sprintf("\t.comm\t%s, %d, %d", sym.GetName(), size, alignment))
 }
 
 func (self *AssemblyCode) _align(n int64) {
@@ -195,12 +195,12 @@ func (self *AssemblyCode) _align(n int64) {
 
 func (self *AssemblyCode) _type(sym xtc_core.ISymbol, t string) {
   if sym == nil { panic("sym is nil") }
-  self.directive(fmt.Sprintf("\t.type\t%s,%s", sym.GetName(), t))
+  self.directive(fmt.Sprintf("\t.type\t%s, %s", sym.GetName(), t))
 }
 
 func (self *AssemblyCode) _size(sym xtc_core.ISymbol, size string) {
   if sym == nil { panic("sym is nil") }
-  self.directive(fmt.Sprintf("\t.size\t%s,%s", sym.GetName(), size))
+  self.directive(fmt.Sprintf("\t.size\t%s, %s", sym.GetName(), size))
 }
 
 func (self *AssemblyCode) _byte(val xtc_core.ILiteral) {
