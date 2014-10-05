@@ -379,7 +379,7 @@ func (self *IRGenerator) VisitStmtNode(unknown xtc_core.IStmtNode) interface{} {
       endLabel := xtc_asm.NewUnnamedLabel()
       cond := self.transformExpr(node.GetCond())
       if node.HasElseBody() {
-        self.cjump(node.GetLocation(), cond, thenLabel, endLabel)
+        self.cjump(node.GetLocation(), cond, thenLabel, elseLabel)
         self.label(thenLabel)
         self.transformStmt(node.GetThenBody())
         self.jump(endLabel)
