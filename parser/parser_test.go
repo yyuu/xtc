@@ -551,3 +551,77 @@ func TestIfWithoutElse(t *testing.T) {
   xt.AssertStringEqualsDiff(t, "if w/o else", xt.JSON(y), xt.JSON(x))
 //xt.AssertDeepEquals(t, "", y, x)
 }
+
+func TestUndefinedFunctions(t *testing.T) {
+  s := `
+    extern int printf(char* format, ...);
+    extern int scanf(char* format, ...);
+`
+  x := xtc_ast.NewAST(loc(1,1),
+    xtc_ast.NewDeclaration(
+      xtc_entity.NewDefinedVariables(),
+      xtc_entity.NewUndefinedVariables(),
+      xtc_entity.NewDefinedFunctions(),
+      xtc_entity.NewUndefinedFunctions(
+        xtc_entity.NewUndefinedFunction(
+          xtc_ast.NewTypeNode(loc(2,12),
+            xtc_typesys.NewFunctionTypeRef(
+              xtc_typesys.NewIntTypeRef(loc(2,23)),
+              xtc_typesys.NewParamTypeRefs(loc(2,23),
+                xtc_typesys.NewTypeRefs(
+                  xtc_typesys.NewPointerTypeRef(xtc_typesys.NewCharTypeRef(loc(1,1))),
+                ),
+                true,
+              ),
+            ),
+          ),
+          "printf",
+          xtc_entity.NewParams(loc(2,23),
+            xtc_entity.NewParameters(
+              xtc_entity.NewParameter(
+                xtc_ast.NewTypeNode(loc(2,23),
+                  xtc_typesys.NewPointerTypeRef(xtc_typesys.NewCharTypeRef(loc(1,1))),
+                ),
+                "format",
+              ),
+            ),
+            true,
+          ),
+        ),
+        xtc_entity.NewUndefinedFunction(
+          xtc_ast.NewTypeNode(loc(3,12),
+            xtc_typesys.NewFunctionTypeRef(
+              xtc_typesys.NewIntTypeRef(loc(3,22)),
+              xtc_typesys.NewParamTypeRefs(loc(3,22),
+                xtc_typesys.NewTypeRefs(
+                  xtc_typesys.NewPointerTypeRef(xtc_typesys.NewCharTypeRef(loc(1,1))),
+                ),
+                true,
+              ),
+            ),
+          ),
+          "scanf",
+          xtc_entity.NewParams(loc(3,22),
+            xtc_entity.NewParameters(
+              xtc_entity.NewParameter(
+                xtc_ast.NewTypeNode(loc(3,22),
+                  xtc_typesys.NewPointerTypeRef(xtc_typesys.NewCharTypeRef(loc(1,1))),
+                ),
+                "format",
+              ),
+            ),
+            true,
+          ),
+        ),
+      ),
+      xtc_entity.NewConstants(),
+      xtc_ast.NewStructNodes(),
+      xtc_ast.NewUnionNodes(),
+      xtc_ast.NewTypedefNodes(),
+    ),
+  )
+  y, err := testParseExpr(s)
+  xt.AssertNil(t, "", err)
+  xt.AssertStringEqualsDiff(t, "undefined functions", xt.JSON(y), xt.JSON(x))
+//xt.AssertDeepEquals(t, "", y, x)
+}
