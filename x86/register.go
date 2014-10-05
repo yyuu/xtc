@@ -97,3 +97,7 @@ func (self *Register) lowerByteRegister() string {
     }
   }
 }
+
+func (self Register) String() string {
+  return fmt.Sprintf("%%%s", self.GetTypedName())
+}
