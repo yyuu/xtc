@@ -52,7 +52,7 @@ func (self *Constant) IsDefined() bool {
 }
 
 func (self *Constant) IsPrivate() bool {
-  return false
+  return true
 }
 
 func (self *Constant) IsParameter() bool {

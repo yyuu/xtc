@@ -41,7 +41,7 @@ func (self *Params) IsConstant() bool {
 }
 
 func (self *Params) IsPrivate() bool {
-  return true
+  return false
 }
 
 func (self *Params) IsParameter() bool {

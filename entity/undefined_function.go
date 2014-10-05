@@ -54,7 +54,7 @@ func (self *UndefinedFunction) IsConstant() bool {
 }
 
 func (self *UndefinedFunction) IsPrivate() bool {
-  return true
+  return false
 }
 
 func (self *UndefinedFunction) IsParameter() bool {

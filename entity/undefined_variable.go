@@ -7,7 +7,6 @@ import (
 
 type UndefinedVariable struct {
   ClassName string
-  Private bool
   Name string
   TypeNode core.ITypeNode
   numRefered int
@@ -18,7 +17,6 @@ type UndefinedVariable struct {
 func NewUndefinedVariable(t core.ITypeNode, name string) *UndefinedVariable {
   return &UndefinedVariable {
     ClassName: "entity.UndefinedVariable",
-    Private: false,
     Name: name,
     TypeNode: t,
     numRefered: 0,
@@ -52,7 +50,7 @@ func (self *UndefinedVariable) IsConstant() bool {
 }
 
 func (self *UndefinedVariable) IsPrivate() bool {
-  return true
+  return false
 }
 
 func (self *UndefinedVariable) IsParameter() bool {
