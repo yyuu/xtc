@@ -40,7 +40,7 @@ func AsConstant(x core.IEntity) *Constant {
 }
 
 func (self *Constant) String() string {
-  return fmt.Sprintf("<entity.Constant Name=%s TypeNode=%s Value=%s>", self.Name, self.TypeNode, self.Value)
+  return fmt.Sprintf("const %s %s = %s; /* ref=%d */", self.TypeNode.GetTypeRef(), self.Name, self.Value, self.numRefered)
 }
 
 func (self *Constant) IsConstant() bool {

@@ -60,7 +60,15 @@ func temporaryDefinedVariable(t core.ITypeNode) *DefinedVariable {
 }
 
 func (self *DefinedVariable) String() string {
-  return fmt.Sprintf("<entity.DefinedVariable Name=%s Private=%v TypeNode=%s NumRefered=%d Initializer=%s>", self.Name, self.Private, self.TypeNode, self.numRefered, self.Initializer)
+  var storage string
+  if self.Private {
+    storage = "static "
+  }
+  var init string
+  if self.HasInitializer() {
+    init = fmt.Sprintf(" = %s", self.Initializer)
+  }
+  return fmt.Sprintf("%s%s %s%s; /* ref=%d */", storage, self.TypeNode.GetTypeRef(), self.Name, init, self.numRefered)
 }
 
 func (self *DefinedVariable) IsDefined() bool {

@@ -50,7 +50,11 @@ func AsDefinedFunction(x core.IEntity) *DefinedFunction {
 }
 
 func (self *DefinedFunction) String() string {
-  return fmt.Sprintf("<entity.DefinedFunction Name=%s Private=%v TypeNode=%s Params=%s Body=%s>", self.Name, self.Private, self.TypeNode, self.Params, self.Body)
+  var storage string
+  if self.Private {
+    storage = "static "
+  }
+  return fmt.Sprintf("%s%s %s(%s) { ... } /* ref=%d */", storage, self.TypeNode.GetTypeRef(), self.Name, self.Params, self.numRefered)
 }
 
 func (self *DefinedFunction) IsPrivate() bool {
