@@ -619,8 +619,7 @@ func (self *IRGenerator) VisitExprNode(unknown xtc_core.IExprNode) interface{} {
       numArgs := node.NumArgs()
       args := make([]xtc_core.IExpr, numArgs)
       for i := range args {
-        a := node.GetArg(numArgs-1-i)
-        args[i] = self.transformExpr(a)
+        args[i] = self.transformExpr(node.GetArg(i))
       }
       call := xtc_ir.NewCall(self.asmType(node.GetType()),
                          self.transformExpr(node.GetExpr()),
