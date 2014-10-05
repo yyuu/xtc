@@ -866,6 +866,18 @@ postfix: primary
        {
          $$._node = xtc_ast.NewSuffixOpNode($1._token.location, "--", xtc_ast.AsExprNode($1._node))
        }
+       | primary '[' expr ']'
+       {
+         $$._node = xtc_ast.NewArefNode($1._token.location, xtc_ast.AsExprNode($1._node), xtc_ast.AsExprNode($3._node))
+       }
+       | primary '.' name
+       {
+         $$._node = xtc_ast.NewMemberNode($1._token.location, xtc_ast.AsExprNode($1._node), $3._token.literal)
+       }
+       | primary ARROW name
+       {
+         $$._node = xtc_ast.NewPtrMemberNode($1._token.location, xtc_ast.AsExprNode($1._node), $3._token.literal)
+       }
        | primary '(' ')'
        {
          $$._node = xtc_ast.NewFuncallNode($1._token.location, xtc_ast.AsExprNode($1._node), xtc_ast.NewExprNodes())
