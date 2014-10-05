@@ -27,8 +27,7 @@ func TestOpAssignNode(t *testing.T) {
       "Type": null
     },
     "Value": 12345
-  },
-  "Type": null
+  }
 }`
   xt.AssertStringEqualsDiff(t, "OpAssignNode", xt.JSON(x), s)
 }

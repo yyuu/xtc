@@ -41,8 +41,7 @@ func TestFor(t *testing.T) {
         "Type": null
       },
       "Value": 0
-    },
-    "Type": null
+    }
   },
   "Cond": {
     "ClassName": "ast.BinaryOpNode",

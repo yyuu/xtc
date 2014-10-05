@@ -11,13 +11,12 @@ type AssignNode struct {
   Location core.Location
   LHS core.IExprNode
   RHS core.IExprNode
-  Type core.IType
 }
 
 func NewAssignNode(loc core.Location, lhs core.IExprNode, rhs core.IExprNode) *AssignNode {
   if lhs == nil { panic("lhs is nil") }
   if rhs == nil { panic("rhs is nil") }
-  return &AssignNode { "ast.AssignNode", loc, lhs, rhs, nil }
+  return &AssignNode { "ast.AssignNode", loc, lhs, rhs }
 }
 
 func (self AssignNode) String() string {
@@ -49,17 +48,11 @@ func (self *AssignNode) SetRHS(expr core.IExprNode) {
 }
 
 func (self *AssignNode) GetType() core.IType {
-  if self.Type == nil {
-    panic(fmt.Errorf("%s type is nil", self.Location))
-  }
-  return self.Type
+  return self.LHS.GetType()
 }
 
 func (self *AssignNode) SetType(t core.IType) {
-  if self.Type != nil {
-    panic("#SetType called twice")
-  }
-  self.Type = t
+  panic("#SetType called")
 }
 
 func (self *AssignNode) GetOrigType() core.IType {
