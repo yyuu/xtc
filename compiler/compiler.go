@@ -218,25 +218,35 @@ func (self *Compiler) generateAssembly(ir *xtc_ir.IR) (xtc_core.IAssemblyCode, e
 
 func (self *Compiler) assemble(src *xtc_core.SourceFile) (*xtc_core.SourceFile, error) {
   dst := src.ToObjectFile()
-  cmd := []string {
-    "/usr/bin/as",
+  name := "/usr/bin/as"
+  args := []string {
     "--32",
     "-o",
     fmt.Sprint(dst),
     fmt.Sprint(src),
   }
-  self.errorHandler.Info(strings.Join(cmd, " "))
-  err := exec.Command(cmd[0], cmd[1:]...).Run()
+  self.errorHandler.Info(name + strings.Join(args, " "))
+  cmd := exec.Command(name, args...)
+
+  out, err := cmd.CombinedOutput()
+  s := string(out)
   if err != nil {
+    if s != "" {
+      self.errorHandler.Error(s)
+    }
     return nil, err
   }
+  if s != "" {
+    self.errorHandler.Info(s)
+  }
+
   return dst, nil
 }
 
 func (self *Compiler) link(src *xtc_core.SourceFile) (*xtc_core.SourceFile, error) {
   dst := src.ToExecutableFile()
-  cmd := []string {
-    "/usr/bin/ld",
+  name := "/usr/bin/ld"
+  args := []string {
     "-melf_i386",
     "-dynamic-linker",
     "/lib32/ld-linux.so.2", // dynamic linker
@@ -248,11 +258,21 @@ func (self *Compiler) link(src *xtc_core.SourceFile) (*xtc_core.SourceFile, erro
     fmt.Sprint(dst),
     fmt.Sprint(src),
   }
-  self.errorHandler.Info(strings.Join(cmd, " "))
-  err := exec.Command(cmd[0], cmd[1:]...).Run()
+  self.errorHandler.Info(name + strings.Join(args, " "))
+  cmd := exec.Command(name, args...)
+
+  out, err := cmd.CombinedOutput()
+  s := string(out)
   if err != nil {
+    if s != "" {
+      self.errorHandler.Error(s)
+    }
     return nil, err
   }
+  if s != "" {
+    self.errorHandler.Info(s)
+  }
+
   return dst, nil
 }
 
