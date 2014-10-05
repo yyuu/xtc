@@ -60,5 +60,5 @@ func (self Mem) GetEntityForce() core.IEntity {
 }
 
 func (self Mem) String() string {
-  return fmt.Sprintf("Mem(%d)", self.Expr)
+  return fmt.Sprintf("Mem(%s)", self.Expr)
 }
