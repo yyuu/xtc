@@ -85,6 +85,21 @@ func repl(compiler *xtc_compiler.Compiler) {
         case "show": {
           fmt.Print(strings.Join(sources, ""))
         }
+        case "del": fallthrough
+        case "delete": {
+          var lineno int
+          fmt.Print("line number: ")
+          fmt.Scanf("%d", &lineno)
+          if lineno <= len(sources) {
+            if lineno == 1 {
+              sources = sources[1:]
+            } else {
+              sources = append(sources[0:lineno-1], sources[lineno:]...)
+            }
+          } else {
+            fmt.Fprintln(os.Stderr, "out of range")
+          }
+        }
         default: {
           fmt.Fprintln(os.Stderr, "available commands:")
           fmt.Fprintln(os.Stderr, "clean, clear, cls, reset, eval, run, exit, quit, list, ls, show")
