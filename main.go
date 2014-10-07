@@ -37,57 +37,61 @@ func repl(compiler *xtc_compiler.Compiler) {
   for {
     stdout.WriteString("> ")
     stdout.Flush()
-    source, err := stdin.ReadString('\n')
+    line, err := stdin.ReadString('\n')
     if err != nil {
       os.Exit(1)
     }
+    trimedLine := strings.TrimSpace(line)
     // FIXME: should not use such a stupid command-line
-    switch strings.TrimSpace(source) {
-      case "": {
-        continue
-      }
-      case "clear": fallthrough
-      case "cls": fallthrough
-      case "reset": {
-        sources = []string { }
-      }
-      case "eval": fallthrough
-      case "run": {
-        dst, err := compiler.CompileString(strings.Join(sources, ""))
-        if err != nil {
-          fmt.Fprintln(os.Stderr, err)
-          continue
+    if 0 < len(trimedLine) && strings.Index(trimedLine, ":") == 0 {
+      switch trimedLine[1:] {
+        case "clear": fallthrough
+        case "cls": fallthrough
+        case "reset": {
+          sources = []string { }
         }
-        _, err = os.Stat(dst)
-        if os.IsNotExist(err) {
-          fmt.Fprintln(os.Stderr, err)
-          continue
+        case "eval": fallthrough
+        case "run": {
+          dst, err := compiler.CompileString(strings.Join(sources, ""))
+          if err != nil {
+            fmt.Fprintln(os.Stderr, err)
+            continue
+          }
+          _, err = os.Stat(dst)
+          if os.IsNotExist(err) {
+            fmt.Fprintln(os.Stderr, err)
+            continue
+          }
+          abspath, err := filepath.Abs(dst)
+          if err != nil {
+            fmt.Fprintln(os.Stderr, err)
+            continue
+          }
+          cmd := exec.Command(abspath)
+          out, err := cmd.CombinedOutput()
+          if err != nil {
+            fmt.Fprint(os.Stderr, string(out))
+            fmt.Fprintln(os.Stderr, err)
+            continue
+          }
+          fmt.Fprint(os.Stdout, string(out))
         }
-        abspath, err := filepath.Abs(dst)
-        if err != nil {
-          fmt.Fprintln(os.Stderr, err)
-          continue
+        case "exit": fallthrough
+        case "quit": {
+          os.Exit(0)
         }
-        cmd := exec.Command(abspath)
-        out, err := cmd.CombinedOutput()
-        if err != nil {
-          fmt.Fprint(os.Stderr, string(out))
-          fmt.Fprint(os.Stderr, err)
-          continue
+        case "list": fallthrough
+        case "ls": fallthrough
+        case "show": {
+          fmt.Print(strings.Join(sources, ""))
         }
-        fmt.Fprint(os.Stdout, string(out))
+        default: {
+          fmt.Fprintln(os.Stderr, "available commands:")
+          fmt.Fprintln(os.Stderr, "clean, clear, cls, reset, eval, run, exit, quit, list, ls, show")
+        }
       }
-      case "exit": {
-        os.Exit(0)
-      }
-      case "list": fallthrough
-      case "ls": fallthrough
-      case "show": {
-        fmt.Print(strings.Join(sources, ""))
-      }
-      default: {
-        sources = append(sources, source)
-      }
+    } else {
+      sources = append(sources, line)
     }
   }
 }
