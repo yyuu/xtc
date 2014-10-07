@@ -46,24 +46,12 @@ func repl(compiler *xtc_compiler.Compiler) {
       case "": {
         continue
       }
-      case "c": fallthrough
-      case "cl": fallthrough
-      case "cle": fallthrough
-      case "clea": fallthrough
       case "clear": fallthrough
       case "cls": fallthrough
-      case "re": fallthrough
-      case "res": fallthrough
-      case "rese": fallthrough
       case "reset": {
         sources = []string { }
       }
-      case "e": fallthrough
-      case "ev": fallthrough
-      case "eva": fallthrough
       case "eval": fallthrough
-      case "r": fallthrough
-      case "ru": fallthrough
       case "run": {
         dst, err := compiler.CompileString(strings.Join(sources, ""))
         if err != nil {
@@ -89,19 +77,11 @@ func repl(compiler *xtc_compiler.Compiler) {
         }
         fmt.Fprint(os.Stdout, string(out))
       }
-      case "ex": fallthrough
-      case "exi": fallthrough
       case "exit": {
         os.Exit(0)
       }
-      case "l": fallthrough
-      case "li": fallthrough
-      case "lis": fallthrough
       case "list": fallthrough
       case "ls": fallthrough
-      case "s": fallthrough
-      case "sh": fallthrough
-      case "sho": fallthrough
       case "show": {
         fmt.Print(strings.Join(sources, ""))
       }
