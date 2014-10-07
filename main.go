@@ -65,26 +65,29 @@ func repl(compiler *xtc_compiler.Compiler) {
       case "r": fallthrough
       case "ru": fallthrough
       case "run": {
-        out, err := compiler.CompileString(strings.Join(sources, ""))
+        dst, err := compiler.CompileString(strings.Join(sources, ""))
         if err != nil {
           fmt.Fprintln(os.Stderr, err)
           continue
         }
-        _, err = os.Stat(out)
+        _, err = os.Stat(dst)
         if os.IsNotExist(err) {
           fmt.Fprintln(os.Stderr, err)
           continue
         }
-        abspath, err := filepath.Abs(out)
+        abspath, err := filepath.Abs(dst)
         if err != nil {
           fmt.Fprintln(os.Stderr, err)
           continue
         }
-        err = exec.Command(abspath).Run()
+        cmd := exec.Command(abspath)
+        out, err := cmd.CombinedOutput()
         if err != nil {
-          fmt.Fprintln(os.Stderr, err)
+          fmt.Fprint(os.Stderr, string(out))
+          fmt.Fprint(os.Stderr, err)
           continue
         }
+        fmt.Fprint(os.Stdout, string(out))
       }
       case "ex": fallthrough
       case "exi": fallthrough
