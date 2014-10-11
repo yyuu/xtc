@@ -812,7 +812,7 @@ func (self *CodeGenerator) VisitStmt(unknown xtc_core.IStmt) interface{} {
       as.label1(node.GetLabel())
     }
     case *xtc_ir.Return: {
-      if node.GetExpr() != nil {
+      if node.HasExpr() {
         self.compile(node.GetExpr())
       }
       as.jmp(epilogue)

@@ -22,6 +22,10 @@ func (self Return) GetLocation() core.Location {
   return self.Location
 }
 
+func (self Return) HasExpr() bool {
+  return self.Expr != nil
+}
+
 func (self Return) GetExpr() core.IExpr {
   return self.Expr
 }
