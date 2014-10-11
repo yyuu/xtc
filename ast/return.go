@@ -13,7 +13,6 @@ type ReturnNode struct {
 }
 
 func NewReturnNode(loc core.Location, expr core.IExprNode) *ReturnNode {
-  if expr == nil { panic("expr is nil") }
   return &ReturnNode { "ast.ReturnNode", loc, expr }
 }
 
@@ -27,6 +26,10 @@ func (self *ReturnNode) AsStmtNode() core.IStmtNode {
 
 func (self ReturnNode) GetLocation() core.Location {
   return self.Location
+}
+
+func (self ReturnNode) HasExpr() bool {
+  return self.Expr != nil
 }
 
 func (self *ReturnNode) GetExpr() core.IExprNode {

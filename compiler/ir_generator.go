@@ -498,7 +498,7 @@ func (self *IRGenerator) VisitStmtNode(unknown xtc_core.IStmtNode) interface{} {
     }
     case *xtc_ast.ReturnNode: {
       var expr xtc_core.IExpr
-      if node.GetExpr() != nil {
+      if node.HasExpr() {
         expr = self.transformExpr(node.GetExpr())
       }
       self.stmts = append(self.stmts, xtc_ir.NewReturn(node.GetLocation(), expr))

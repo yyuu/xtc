@@ -134,7 +134,7 @@ func visitPtrMemberNode(v xtc_ast.INodeVisitor, node *xtc_ast.PtrMemberNode) {
 }
 
 func visitReturnNode(v xtc_ast.INodeVisitor, node *xtc_ast.ReturnNode) {
-  if node.GetExpr() != nil {
+  if node.HasExpr() {
     xtc_ast.VisitExprNode(v, node.GetExpr())
   }
 }

@@ -365,13 +365,13 @@ func (self *TypeChecker) VisitStmtNode(unknown xtc_core.IStmtNode) interface{} {
     case *xtc_ast.ReturnNode: {
       visitReturnNode(self, node)
       if self.currentFunction.IsVoid() {
-        if node.GetExpr() != nil {
+        if node.HasExpr() {
           self.errorHandler.Errorf("%s returning value from void function", node.GetLocation())
+          if node.GetExpr().GetType().IsVoid() {
+            self.errorHandler.Errorf("%s returning void", node.GetLocation())
+          }
+          node.SetExpr(self.implicitCast(self.currentFunction.GetReturnType(), node.GetExpr()))
         }
-        if node.GetExpr().GetType().IsVoid() {
-          self.errorHandler.Errorf("%s returning void", node.GetLocation())
-        }
-        node.SetExpr(self.implicitCast(self.currentFunction.GetReturnType(), node.GetExpr()))
       }
     }
     default: {

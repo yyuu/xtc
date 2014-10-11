@@ -662,7 +662,11 @@ continue_stmt: CONTINUE ';'
              }
              ;
 
-return_stmt: RETURN expr ';'
+return_stmt: RETURN ';'
+           {
+             $$._node = xtc_ast.NewReturnNode($1._token.location, nil)
+           }
+           | RETURN expr ';'
            {
              $$._node = xtc_ast.NewReturnNode($1._token.location, xtc_ast.AsExprNode($2._node))
            }

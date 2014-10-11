@@ -19,3 +19,13 @@ func TestReturn(t *testing.T) {
 }`
   xt.AssertStringEqualsDiff(t, "VariableNode", xt.JSON(x), s)
 }
+
+func TestReturnVoid(t *testing.T) {
+  x := NewReturnNode(loc(0,0), nil)
+  s := `{
+  "ClassName": "ast.ReturnNode",
+  "Location": "[:0,0]",
+  "Expr": null
+}`
+  xt.AssertStringEqualsDiff(t, "VariableNode", xt.JSON(x), s)
+}
