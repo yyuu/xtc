@@ -11,8 +11,8 @@ type IR struct {
   Defvars []*xtc_entity.DefinedVariable
   Defuns []*xtc_entity.DefinedFunction
   Funcdecls []*xtc_entity.UndefinedFunction
-  Scope *xtc_entity.ToplevelScope
-  ConstantTable *xtc_entity.ConstantTable
+  scope *xtc_entity.ToplevelScope
+  constantTable *xtc_entity.ConstantTable
 }
 
 func NewIR(loc xtc_core.Location, defvars []*xtc_entity.DefinedVariable, defuns []*xtc_entity.DefinedFunction, funcdecls []*xtc_entity.UndefinedFunction, scope *xtc_entity.ToplevelScope, constantTable *xtc_entity.ConstantTable) *IR {
@@ -40,7 +40,7 @@ func (self *IR) GetDefinedFunctions() []*xtc_entity.DefinedFunction {
 }
 
 func (self *IR) GetScope() *xtc_entity.ToplevelScope {
-  return self.Scope
+  return self.scope
 }
 
 func (self *IR) AllFunctions() []xtc_core.IFunction {
@@ -55,7 +55,7 @@ func (self *IR) AllFunctions() []xtc_core.IFunction {
 }
 
 func (self *IR) AllGlobalVariables() []xtc_core.IVariable {
-  return self.Scope.AllGlobalVariables()
+  return self.scope.AllGlobalVariables()
 }
 
 func (self *IR) IsGlobalVariableDefined() bool {
@@ -65,7 +65,7 @@ func (self *IR) IsGlobalVariableDefined() bool {
 
 func (self *IR) GetDefinedGlobalVariables() []*xtc_entity.DefinedVariable {
   gvars := []*xtc_entity.DefinedVariable { }
-  vs := self.Scope.GetDefinedGlobalScopeVariables()
+  vs := self.scope.GetDefinedGlobalScopeVariables()
   for i := range vs {
     if vs[i].HasInitializer() {
       gvars = append(gvars, vs[i])
@@ -81,7 +81,7 @@ func (self *IR) IsCommonSymbolDefined() bool {
 
 func (self *IR) GetDefinedCommonSymbols() []*xtc_entity.DefinedVariable {
   comms := []*xtc_entity.DefinedVariable { }
-  vs := self.Scope.GetDefinedGlobalScopeVariables()
+  vs := self.scope.GetDefinedGlobalScopeVariables()
   for i := range vs {
     if ! vs[i].HasInitializer() {
       comms = append(comms, vs[i])
@@ -91,9 +91,9 @@ func (self *IR) GetDefinedCommonSymbols() []*xtc_entity.DefinedVariable {
 }
 
 func (self *IR) IsStringLiteralDefined() bool {
-  return ! self.ConstantTable.IsEmpty()
+  return ! self.constantTable.IsEmpty()
 }
 
 func (self *IR) GetConstantTable() *xtc_entity.ConstantTable {
-  return self.ConstantTable
+  return self.constantTable
 }
