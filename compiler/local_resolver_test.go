@@ -256,7 +256,17 @@ func TestLocalResolverWithFunctions1(t *testing.T) {
       xtc_entity.NewDefinedFunctions(
         xtc_entity.NewDefinedFunction(
           true,
-          xtc_ast.NewTypeNode(loc, xtc_typesys.NewIntTypeRef(loc)),
+          xtc_ast.NewTypeNode(loc,
+            xtc_typesys.NewFunctionTypeRef(
+              xtc_typesys.NewIntTypeRef(loc),
+              xtc_typesys.NewParamTypeRefs(loc,
+                []xtc_core.ITypeRef {
+                  xtc_typesys.NewIntTypeRef(loc),
+                },
+                false,
+              ),
+            ),
+          ),
           "foo",
           xtc_entity.NewParams(loc,
             xtc_entity.NewParameters(
@@ -279,7 +289,17 @@ func TestLocalResolverWithFunctions1(t *testing.T) {
         ),
         xtc_entity.NewDefinedFunction(
           true,
-          xtc_ast.NewTypeNode(loc, xtc_typesys.NewIntTypeRef(loc)),
+          xtc_ast.NewTypeNode(loc,
+            xtc_typesys.NewFunctionTypeRef(
+              xtc_typesys.NewIntTypeRef(loc),
+              xtc_typesys.NewParamTypeRefs(loc,
+                []xtc_core.ITypeRef {
+                  xtc_typesys.NewIntTypeRef(loc),
+                },
+                false,
+              ),
+            ),
+          ),
           "bar",
           xtc_entity.NewParams(loc,
             xtc_entity.NewParameters(

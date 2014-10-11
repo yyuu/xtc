@@ -24,7 +24,7 @@ type DefinedFunction struct {
 func NewDefinedFunction(priv bool, t core.ITypeNode, name string, params *Params, body core.IStmtNode) *DefinedFunction {
   _, ok := t.GetTypeRef().(*typesys.FunctionTypeRef)
   if ! ok {
-    panic("not a function type ref: " + t.String())
+    panic("not a function type ref: " + t.GetTypeRef().String())
   }
   return &DefinedFunction {
     ClassName: "entity.DefinedFunction",

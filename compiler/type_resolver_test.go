@@ -185,7 +185,12 @@ func TestTypeResolverWithFunctionWithoutArguments(t *testing.T) {
       xtc_entity.NewDefinedFunctions(
         xtc_entity.NewDefinedFunction(
           false,
-          xtc_ast.NewTypeNode(loc, xtc_typesys.NewVoidTypeRef(loc)),
+          xtc_ast.NewTypeNode(loc,
+            xtc_typesys.NewFunctionTypeRef(
+              xtc_typesys.NewVoidTypeRef(loc),
+              xtc_typesys.NewParamTypeRefs(loc, []xtc_core.ITypeRef { }, false),
+            ),
+          ),
           "hello",
           xtc_entity.NewParams(loc,
             xtc_entity.NewParameters(),
@@ -234,7 +239,18 @@ func TestTypeResolverWithFunctionWithArguments(t *testing.T) {
       xtc_entity.NewDefinedFunctions(
         xtc_entity.NewDefinedFunction(
           false,
-          xtc_ast.NewTypeNode(loc, xtc_typesys.NewIntTypeRef(loc)),
+          xtc_ast.NewTypeNode(loc,
+            xtc_typesys.NewFunctionTypeRef(
+              xtc_typesys.NewIntTypeRef(loc),
+              xtc_typesys.NewParamTypeRefs(loc,
+                []xtc_core.ITypeRef {
+                  xtc_typesys.NewIntTypeRef(loc),
+                  xtc_typesys.NewArrayTypeRef(xtc_typesys.NewPointerTypeRef(xtc_typesys.NewCharTypeRef(loc)), 0),
+                },
+                false,
+              ),
+            ),
+          ),
           "main",
           xtc_entity.NewParams(loc,
             xtc_entity.NewParameters(
@@ -290,7 +306,17 @@ func TestTypeResolverWithFunctionArguments(t *testing.T) {
       xtc_entity.NewDefinedFunctions(
         xtc_entity.NewDefinedFunction(
           false,
-          xtc_ast.NewTypeNode(loc, xtc_typesys.NewIntTypeRef(loc)),
+          xtc_ast.NewTypeNode(loc,
+            xtc_typesys.NewFunctionTypeRef(
+              xtc_typesys.NewIntTypeRef(loc),
+              xtc_typesys.NewParamTypeRefs(loc,
+                []xtc_core.ITypeRef {
+                  xtc_typesys.NewIntTypeRef(loc),
+                },
+                false,
+              ),
+            ),
+          ),
           "f",
           xtc_entity.NewParams(loc,
             xtc_entity.NewParameters(
@@ -307,7 +333,17 @@ func TestTypeResolverWithFunctionArguments(t *testing.T) {
         ),
         xtc_entity.NewDefinedFunction(
           false,
-          xtc_ast.NewTypeNode(loc, xtc_typesys.NewIntTypeRef(loc)),
+          xtc_ast.NewTypeNode(loc,
+            xtc_typesys.NewFunctionTypeRef(
+              xtc_typesys.NewIntTypeRef(loc),
+              xtc_typesys.NewParamTypeRefs(loc,
+                []xtc_core.ITypeRef {
+                  xtc_typesys.NewIntTypeRef(loc),
+                },
+                false,
+              ),
+            ),
+          ),
           "g",
           xtc_entity.NewParams(loc,
             xtc_entity.NewParameters(
@@ -380,7 +416,18 @@ func TestTypeResolverNestedBlocks(t *testing.T) {
       xtc_entity.NewDefinedFunctions(
         xtc_entity.NewDefinedFunction(
           false,
-          xtc_ast.NewTypeNode(loc, xtc_typesys.NewIntTypeRef(loc)),
+          xtc_ast.NewTypeNode(loc,
+            xtc_typesys.NewFunctionTypeRef(
+              xtc_typesys.NewIntTypeRef(loc),
+              xtc_typesys.NewParamTypeRefs(loc,
+                []xtc_core.ITypeRef {
+                  xtc_typesys.NewIntTypeRef(loc),
+                  xtc_typesys.NewArrayTypeRef(xtc_typesys.NewPointerTypeRef(xtc_typesys.NewCharTypeRef(loc)), 0),
+                },
+                false,
+              ),
+            ),
+          ),
           "main",
           xtc_entity.NewParams(loc,
             xtc_entity.NewParameters(

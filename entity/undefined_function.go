@@ -20,7 +20,7 @@ type UndefinedFunction struct {
 func NewUndefinedFunction(t core.ITypeNode, name string, params *Params) *UndefinedFunction {
   _, ok := t.GetTypeRef().(*typesys.FunctionTypeRef)
   if ! ok {
-    panic("not a function type ref: " + t.String())
+    panic("not a function type ref: " + t.GetTypeRef().String())
   }
   return &UndefinedFunction {
     ClassName: "entity.UndefinedFunction",
