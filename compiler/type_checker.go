@@ -372,6 +372,18 @@ func (self *TypeChecker) VisitStmtNode(unknown xtc_core.IStmtNode) interface{} {
           }
           node.SetExpr(self.implicitCast(self.currentFunction.GetReturnType(), node.GetExpr()))
         }
+      } else {
+        if node.HasExpr() {
+          returnType := self.currentFunction.GetReturnType()
+          returningType := node.GetExpr().GetType()
+          if returningType.IsCompatible(returnType) {
+            node.SetExpr(self.implicitCast(returnType, node.GetExpr()))
+          } else {
+            self.errorHandler.Errorf("%s returning %s value from %s function", node.GetLocation(), returningType, returnType)
+          }
+        } else {
+          self.errorHandler.Errorf("%s returning void", node.GetLocation())
+        }
       }
     }
     default: {
