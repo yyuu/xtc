@@ -853,7 +853,7 @@ func TestIRGeneratorIfStatement(t *testing.T) {
         },
         {
           "ClassName": "ir.LabelStmt",
-          "Location": "[[builtin:ir_generator]:0,0]",
+          "Location": "[builtin:compiler/ir_generator.go:0,0]",
           "Label": {
             "ClassName": "asm.Label",
             "Symbol": {
@@ -912,7 +912,7 @@ func TestIRGeneratorIfStatement(t *testing.T) {
         },
         {
           "ClassName": "ir.Jump",
-          "Location": "[[builtin:ir_generator]:0,0]",
+          "Location": "[builtin:compiler/ir_generator.go:0,0]",
           "Label": {
             "ClassName": "asm.Label",
             "Symbol": {
@@ -922,7 +922,7 @@ func TestIRGeneratorIfStatement(t *testing.T) {
         },
         {
           "ClassName": "ir.LabelStmt",
-          "Location": "[[builtin:ir_generator]:0,0]",
+          "Location": "[builtin:compiler/ir_generator.go:0,0]",
           "Label": {
             "ClassName": "asm.Label",
             "Symbol": {
@@ -981,7 +981,7 @@ func TestIRGeneratorIfStatement(t *testing.T) {
         },
         {
           "ClassName": "ir.LabelStmt",
-          "Location": "[[builtin:ir_generator]:0,0]",
+          "Location": "[builtin:compiler/ir_generator.go:0,0]",
           "Label": {
             "ClassName": "asm.Label",
             "Symbol": {

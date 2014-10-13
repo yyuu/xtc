@@ -10,6 +10,9 @@ import (
   xtc_typesys "bitbucket.org/yyuu/xtc/typesys"
 )
 
+// FIXME: should use proper location for IR
+var irDummyLocation = xtc_core.NewLocation("builtin:compiler/ir_generator.go", 0, 0)
+
 type IRGenerator struct {
   errorHandler *xtc_core.ErrorHandler
   options *xtc_core.Options
@@ -30,8 +33,7 @@ type jumpEntry struct {
 }
 
 func newJumpEntry(label *xtc_asm.Label) *jumpEntry {
-  loc := xtc_core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
-  return &jumpEntry { label, 0, false, loc }
+  return &jumpEntry { label, 0, false, irDummyLocation }
 }
 
 func NewIRGenerator(errorHandler *xtc_core.ErrorHandler, options *xtc_core.Options, table *xtc_typesys.TypeTable) *IRGenerator {
@@ -97,19 +99,17 @@ func (self *IRGenerator) assign(loc xtc_core.Location, lhs xtc_core.IExpr, rhs x
 
 func (self *IRGenerator) tmpVar(t xtc_core.IType) *xtc_entity.DefinedVariable {
   ref := self.typeTable.GetTypeRef(t)
-  typeNode := xtc_ast.NewTypeNode(xtc_core.NewLocation("[builtin:ir_generator]", 0, 0), ref)
+  typeNode := xtc_ast.NewTypeNode(irDummyLocation, ref)
   typeNode.SetType(t)
   return self.currentScope().AllocateTmp(typeNode)
 }
 
 func (self *IRGenerator) label(label *xtc_asm.Label) {
-  loc := xtc_core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
-  self.stmts = append(self.stmts, xtc_ir.NewLabelStmt(loc, label))
+  self.stmts = append(self.stmts, xtc_ir.NewLabelStmt(irDummyLocation, label))
 }
 
 func (self *IRGenerator) jump(target *xtc_asm.Label) {
-  loc := xtc_core.NewLocation("[builtin:ir_generator]", 0, 0) // FIXME:
-  self.stmts = append(self.stmts, xtc_ir.NewJump(loc, target))
+  self.stmts = append(self.stmts, xtc_ir.NewJump(irDummyLocation, target))
 }
 
 func (self *IRGenerator) cjump(loc xtc_core.Location, cond xtc_core.IExpr, thenLabel *xtc_asm.Label, elseLabel *xtc_asm.Label) {
