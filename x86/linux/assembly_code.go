@@ -13,8 +13,8 @@ type AssemblyCode struct {
   LabelSymbols *xtc_asm.SymbolTable
   virtualStack *x86.VirtualStack
   Assemblies []xtc_core.IAssembly
-  CommentIndentLevel int
-  Statistics *xtc_asm.Statistics
+  commentIndentLevel int
+  statistics *xtc_asm.Statistics
 }
 
 func NewAssemblyCode(naturalType int, labelSymbols *xtc_asm.SymbolTable) *AssemblyCode {
@@ -23,8 +23,8 @@ func NewAssemblyCode(naturalType int, labelSymbols *xtc_asm.SymbolTable) *Assemb
     LabelSymbols: labelSymbols,
     virtualStack: x86.NewVirtualStack(naturalType),
     Assemblies: []xtc_core.IAssembly { },
-    CommentIndentLevel: 0,
-    Statistics: nil,
+    commentIndentLevel: 0,
+    statistics: nil,
   }
 }
 
@@ -45,10 +45,10 @@ func (self *AssemblyCode) ToSource() string {
 }
 
 func (self *AssemblyCode) GetStatistics() *xtc_asm.Statistics {
-  if self.Statistics == nil {
-    self.Statistics = xtc_asm.CollectStatistics(self.Assemblies)
+  if self.statistics == nil {
+    self.statistics = xtc_asm.CollectStatistics(self.Assemblies)
   }
-  return self.Statistics
+  return self.statistics
 }
 
 func (self *AssemblyCode) doesUses(reg *x86.Register) bool {
@@ -57,15 +57,15 @@ func (self *AssemblyCode) doesUses(reg *x86.Register) bool {
 }
 
 func (self *AssemblyCode) comment(str string) {
-  self.Assemblies = append(self.Assemblies, xtc_asm.NewComment(str, self.CommentIndentLevel))
+  self.Assemblies = append(self.Assemblies, xtc_asm.NewComment(str, self.commentIndentLevel))
 }
 
 func (self *AssemblyCode) indentComment() {
-  self.CommentIndentLevel++
+  self.commentIndentLevel++
 }
 
 func (self *AssemblyCode) unindentComment() {
-  self.CommentIndentLevel--
+  self.commentIndentLevel--
 }
 
 func (self *AssemblyCode) label1(label *xtc_asm.Label) {
