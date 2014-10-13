@@ -3,14 +3,15 @@ package core
 import (
   "flag"
   "os"
+  "os/exec"
+  "strings"
 )
 
 type assemblerOptions struct {
 }
 
 func newAssemblerOptions(flagSet *flag.FlagSet) *assemblerOptions {
-  return &assemblerOptions {
-  }
+  return &assemblerOptions { }
 }
 
 type codeGeneratorOptions struct {
@@ -46,6 +47,7 @@ func newLinkerOptions(flagSet *flag.FlagSet) *linkerOptions {
 }
 
 type Options struct {
+  targetPlatform int
   flagSet *flag.FlagSet
   *assemblerOptions
   *codeGeneratorOptions
@@ -70,6 +72,7 @@ type Options struct {
 func NewOptions(name string) *Options {
   flagSet := flag.NewFlagSet(name, flag.ExitOnError)
   return &Options {
+    detectTargetPlatform(),
     flagSet,
     newAssemblerOptions(flagSet),
     newCodeGeneratorOptions(flagSet),
@@ -94,6 +97,72 @@ func NewOptions(name string) *Options {
 
 func ParseOptions(name string, args []string) *Options {
   return NewOptions(name).Parse(args)
+}
+
+func detectTargetPlatform() int {
+  env_arch := strings.ToLower(strings.TrimSpace(os.Getenv("XTCARCH")))
+  env_os := strings.ToLower(strings.TrimSpace(os.Getenv("XTCOS")))
+  switch env_arch {
+    case "amd64": switch env_os {
+      case "linux": return PLATFORM_AMD64_LINUX
+      default: {
+        // FIXME: detect current operating system
+        return PLATFORM_AMD64_LINUX
+      }
+    }
+    case "x86": switch env_os {
+      case "linux": return PLATFORM_X86_LINUX
+      default: {
+        // FIXME: detect current operating system
+        return PLATFORM_X86_LINUX
+      }
+    }
+    default: {
+//    return detectSourcePlatform()
+      return PLATFORM_X86_LINUX // FIXME: only x86-linux has been implemented
+    }
+  }
+}
+
+func detectSourcePlatform() int {
+  // FIXME: should support platforms other than POSIX
+  cmd_m := exec.Command("uname", "-m")
+  out_m, err := cmd_m.Output()
+  if err != nil {
+    panic(err)
+  }
+
+  cmd_s := exec.Command("uname", "-s")
+  out_s, err := cmd_s.Output()
+  if err != nil {
+    panic(err)
+  }
+
+  uname_m := strings.ToLower(strings.TrimSpace(string(out_m)))
+  uname_s := strings.ToLower(strings.TrimSpace(string(out_s)))
+  switch uname_m {
+    case "amd64": fallthrough
+    case "x86_64": switch uname_s {
+      case "linux": return PLATFORM_AMD64_LINUX
+      default: {
+        panic("unknown operating system: " + uname_s)
+      }
+    }
+    case "i386": fallthrough
+    case "i486": fallthrough
+    case "i586": fallthrough
+    case "i686": fallthrough
+    case "i786": fallthrough
+    case "x86": switch uname_s {
+      case "linux": return PLATFORM_X86_LINUX
+      default: {
+        panic("unknown operating system: " + uname_s)
+      }
+    }
+    default: {
+      panic("unknown architecture: " + uname_m)
+    }
+  }
 }
 
 func (self *Options) Parse(args []string) *Options {
@@ -141,7 +210,7 @@ func (self *Options) IsVerboseAsm() bool {
 }
 
 func (self *Options) TargetPlatform() int {
-  return PLATFORM_X86_LINUX
+  return self.targetPlatform
 }
 
 func (self *Options) IsGenratingSharedLibrary() bool {
