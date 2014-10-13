@@ -13,13 +13,21 @@ func NewExprNodes(xs...core.IExprNode) []core.IExprNode {
 }
 
 func AsExprNode(x core.INode) core.IExprNode {
-  return x.(core.IExprNode)
+  if x == nil {
+    return nil
+  } else {
+    return x.(core.IExprNode)
+  }
 }
 
 func AsExprNodes(xs []core.INode) []core.IExprNode {
   ys := make([]core.IExprNode, len(xs))
   for i := range xs {
-    ys[i] = xs[i].(core.IExprNode)
+    if xs[i] == nil {
+      ys[i] = nil
+    } else {
+      ys[i] = xs[i].(core.IExprNode)
+    }
   }
   return ys
 }

@@ -382,6 +382,70 @@ func TestFor1(t *testing.T) {
 //xt.AssertDeepEquals(t, "", y, x)
 }
 
+func TestFor2(t *testing.T) {
+  s := `
+    void forever() {
+      for ( ; ; ) {
+        sleep(1);
+      }
+    }
+`
+  x := xtc_ast.NewAST(loc(1,1),
+    xtc_ast.NewDeclaration(
+      xtc_entity.NewDefinedVariables(),
+      xtc_entity.NewUndefinedVariables(),
+      xtc_entity.NewDefinedFunctions(
+        xtc_entity.NewDefinedFunction(
+          false,
+          xtc_ast.NewTypeNode(loc(2,5),
+            xtc_typesys.NewFunctionTypeRef(
+              xtc_typesys.NewVoidTypeRef(loc(2,5)),
+              xtc_typesys.NewParamTypeRefs(loc(2,17), []xtc_core.ITypeRef { }, false),
+            ),
+          ),
+          "forever",
+          xtc_entity.NewParams(loc(2,17),
+            xtc_entity.NewParameters(),
+            false,
+          ),
+          xtc_ast.NewBlockNode(loc(2,20),
+            xtc_entity.NewDefinedVariables(),
+            []xtc_core.IStmtNode {
+              xtc_ast.NewForNode(loc(3,7),
+                nil,
+                nil,
+                nil,
+                xtc_ast.NewBlockNode(loc(3,19),
+                  xtc_entity.NewDefinedVariables(),
+                  []xtc_core.IStmtNode {
+                    xtc_ast.NewExprStmtNode(loc(4,9),
+                      xtc_ast.NewFuncallNode(loc(4,9),
+                        xtc_ast.NewVariableNode(loc(4,9), "sleep"),
+                        []xtc_core.IExprNode {
+                          xtc_ast.NewIntegerLiteralNode(loc(4,15), "1"),
+                        },
+                      ),
+                    ),
+                  },
+                ),
+              ),
+            },
+          ),
+        ),
+      ),
+      xtc_entity.NewUndefinedFunctions(),
+      xtc_entity.NewConstants(),
+      xtc_ast.NewStructNodes(),
+      xtc_ast.NewUnionNodes(),
+      xtc_ast.NewTypedefNodes(),
+    ),
+  )
+  y, err := testParseExpr(s)
+  xt.AssertNil(t, "", err)
+  xt.AssertStringEqualsDiff(t, "for2", xt.JSON(y), xt.JSON(x))
+//xt.AssertDeepEquals(t, "", y, x)
+}
+
 func TestIfWithElse(t *testing.T) {
   s := `
     int even_p(int n) {

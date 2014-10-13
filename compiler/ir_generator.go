@@ -462,9 +462,13 @@ func (self *IRGenerator) VisitStmtNode(unknown xtc_core.IStmtNode) interface{} {
       bodyLabel := xtc_asm.NewUnnamedLabel()
       contLabel := xtc_asm.NewUnnamedLabel()
       endLabel := xtc_asm.NewUnnamedLabel()
-      self.transformStmtExpr(node.GetInit())
+      if node.HasInit() {
+        self.transformStmtExpr(node.GetInit())
+      }
       self.label(begLabel)
-      self.cjump(node.GetLocation(), self.transformExpr(node.GetCond()), bodyLabel, endLabel)
+      if node.HasCond() {
+        self.cjump(node.GetLocation(), self.transformExpr(node.GetCond()), bodyLabel, endLabel)
+      }
       self.label(bodyLabel)
       self.pushContinue(contLabel)
       self.pushBreak(endLabel)
@@ -472,7 +476,9 @@ func (self *IRGenerator) VisitStmtNode(unknown xtc_core.IStmtNode) interface{} {
       self.popBreak()
       self.popContinue()
       self.label(contLabel)
-      self.transformStmtExpr(node.GetIncr())
+      if node.HasIncr() {
+        self.transformStmtExpr(node.GetIncr())
+      }
       self.jump(begLabel)
       self.label(endLabel)
       return nil

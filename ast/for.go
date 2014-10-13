@@ -16,15 +16,18 @@ type ForNode struct {
 }
 
 func NewForNode(loc core.Location, init core.IExprNode, cond core.IExprNode, incr core.IExprNode, body core.IStmtNode) *ForNode {
-  if init == nil { panic("init is nil") }
-  if cond == nil { panic("cond is nil") }
-  if incr == nil { panic("incr is nil") }
   if body == nil { panic("body is nil") }
   return &ForNode { "ast.ForNode", loc, init, cond, incr, body }
 }
 
 func (self ForNode) String() string {
-  return fmt.Sprintf("(let for-loop (%s) (if %s (begin %s (for-loop %s))))", self.Init, self.Cond, self.Body, self.Incr)
+  init := "()"
+  if self.Init != nil { init = fmt.Sprint(self.Init) }
+  cond := "()"
+  if self.Cond != nil { cond = fmt.Sprint(self.Cond) }
+  incr := "()"
+  if self.Incr != nil { incr = fmt.Sprint(self.Incr) }
+  return fmt.Sprintf("(let for-loop (%s) (if %s (begin %s (for-loop %s))))", init, cond, self.Body, incr)
 }
 
 func (self *ForNode) AsStmtNode() core.IStmtNode {
@@ -35,12 +38,24 @@ func (self ForNode) GetLocation() core.Location {
   return self.Location
 }
 
+func (self ForNode) HasInit() bool {
+  return self.Init != nil
+}
+
 func (self *ForNode) GetInit() core.IExprNode {
   return self.Init
 }
 
+func (self ForNode) HasCond() bool {
+  return self.Cond != nil
+}
+
 func (self *ForNode) GetCond() core.IExprNode {
   return self.Cond
+}
+
+func (self ForNode) HasIncr() bool {
+  return self.Incr != nil
 }
 
 func (self *ForNode) GetIncr() core.IExprNode {

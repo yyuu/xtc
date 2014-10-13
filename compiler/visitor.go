@@ -75,9 +75,15 @@ func visitExprStmtNode(v xtc_ast.INodeVisitor, node *xtc_ast.ExprStmtNode) {
 }
 
 func visitForNode(v xtc_ast.INodeVisitor, node *xtc_ast.ForNode) {
-  xtc_ast.VisitExprNode(v, node.GetInit())
-  xtc_ast.VisitExprNode(v, node.GetCond())
-  xtc_ast.VisitExprNode(v, node.GetIncr())
+  if node.HasInit() {
+    xtc_ast.VisitExprNode(v, node.GetInit())
+  }
+  if node.HasCond() {
+    xtc_ast.VisitExprNode(v, node.GetCond())
+  }
+  if node.HasIncr() {
+    xtc_ast.VisitExprNode(v, node.GetIncr())
+  }
   xtc_ast.VisitStmtNode(v, node.GetBody())
 }
 

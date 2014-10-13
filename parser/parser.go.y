@@ -599,7 +599,11 @@ dowhile_stmt: DO stmt WHILE '(' expr ')' ';'
             }
             ;
 
-for_stmt: FOR '(' expr ';' expr ';' expr ')' stmt
+for_expr:
+        | expr
+        ;
+
+for_stmt: FOR '(' for_expr ';' for_expr ';' for_expr ')' stmt
         {
           $$._node = xtc_ast.NewForNode($1._token.location, xtc_ast.AsExprNode($3._node), xtc_ast.AsExprNode($5._node), xtc_ast.AsExprNode($7._node), xtc_ast.AsStmtNode($9._node))
         }

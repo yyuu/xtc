@@ -356,7 +356,9 @@ func (self *TypeChecker) VisitStmtNode(unknown xtc_core.IStmtNode) interface{} {
     }
     case *xtc_ast.ForNode: {
       visitForNode(self, node)
-      self.checkCond(node.GetCond())
+      if node.HasCond() {
+        self.checkCond(node.GetCond())
+      }
     }
     case *xtc_ast.SwitchNode: {
       visitSwitchNode(self, node)
