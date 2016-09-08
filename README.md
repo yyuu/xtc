@@ -1,5 +1,7 @@
 # xtc - an eXtremely Tentative Compiler
 
+[![Build Status](https://travis-ci.org/yyuu/xtc.svg?branch=master)](https://travis-ci.org/yyuu/xtc)
+
 An experimental pseudo-C compiler implementation written in [Go](http://golang.org/).
 
 For now, most of the concept are brought from [Cflat Compiler](http://i.loveruby.net/archive/cbc/cbc-1.0.tar.gz) (licensed under 3-clause BSD license) by [Minero Aoki](http://i.loveruby.net/).
