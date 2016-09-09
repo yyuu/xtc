@@ -193,7 +193,7 @@ func TestCharacter2(t *testing.T) {
 }
 
 func TestCharacter3(t *testing.T) {
-  lex := testNewLexer(`{'\u0009','\\','\''}`)
+  lex := testNewLexer(`{'\t','\\','\''}`)
   assertToken(t, lex, '{', "{")
   assertToken(t, lex, CHARACTER, "9")
   assertToken(t, lex, ',', ",")

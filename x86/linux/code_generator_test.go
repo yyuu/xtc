@@ -33,7 +33,7 @@ func TestCodeGeneratorEmpty(t *testing.T) {
   "Assemblies": [
     {
       "ClassName": "asm.Directive",
-      "Content": "\u0009.file\u0009\"foo\""
+      "Content": "\t.file\t\"foo\""
     }
   ]
 }`

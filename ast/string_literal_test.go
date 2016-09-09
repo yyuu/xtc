@@ -32,7 +32,7 @@ func TestStringLiteral2(t *testing.T) {
     "TypeRef": "char*",
     "Type": null
   },
-  "Value": "foo\u0009bar\r\nbaz\r\n"
+  "Value": "foo\tbar\r\nbaz\r\n"
 }`
   xt.AssertStringEqualsDiff(t, "string literal2", xt.JSON(x), s)
 }
